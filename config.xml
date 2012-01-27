@@ -112,9 +112,6 @@
 	<Script filename="antigam_lang_de.user.js" name="AntiGam_lang_de" namespace="greasefire.userscripts.org" description="AntiGame Übersetzung (Muss VOR dem AntiGame Script laufen) - 1.13.8" enabled="true" basedir="antigam_lang_de">
 		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 	</Script>
-	<Script filename="antigame.user.js" name="AntiGame" namespace="antikiller" description="A couple of Neogame functions for Ogame Redesign - v1.13.9" enabled="true" basedir="antigame">
-		<Include>http://*.ogame.*/game/index.php?page=*</Include>
-	</Script>
 	<Script filename="download_from_youtube.user.js" name="Download from YouTube" namespace="greasefire.userscripts.org" description="Adds FLV, MP4, 3GP, and 720p download links to YouTube." enabled="false" basedir="download_from_youtube">
 		<Include>http://*.youtube.com/watch*v=*</Include>
 		<Include>http://youtube.com/watch*v=*</Include>
@@ -347,9 +344,6 @@
 	<Script filename="otr_-_suchwort_im_titel.user.js" name="OTR - Suchwort im Titel" namespace="Woems" description="Zeigt das Suchwort im Titel" enabled="true" basedir="otr_-_suchwort_im_titel">
 		<Include>http://epg.onlinetvrecorder.com/broadcasts/search*</Include>
 	</Script>
-	<Script filename="kinopolis_-_uebersichtli.user.js" name="Kinopolis - uebersichtlicher" namespace="Woems" description="" enabled="true" basedir="kinopolis_-_uebersichtli">
-		<Include>http://www.kinopolis.de/bn/programm_wochenansicht*</Include>
-	</Script>
 	<Script filename="kinopolis_-_reservierung.user.js" name="Kinopolis - Reservierung Mailen" namespace="Woems" description="" enabled="true" basedir="kinopolis_-_reservierung">
 		<Include>http://mail.google.com*</Include>
 		<Include>http://www.kinopolis.de*</Include>
@@ -388,7 +382,7 @@
 		<Include>http://www.onlinetvrecorder.com/?aktion=click_confirmation</Include>
 		<Include>*</Include>
 	</Script>
-	<Script filename="onlinetvrecorder_-_direk.user.js" name="OnlineTVRecorder - Direkt Download Links" namespace="Woems" description="" enabled="false" basedir="onlinetvrecorder_-_direk">
+	<Script filename="onlinetvrecorder_-_direk.user.js" name="OnlineTVRecorder - Direkt Download Links" namespace="Woems" description="" enabled="true" basedir="onlinetvrecorder_-_direk">
 		<Include>http://otr.datenkeller.at*</Include>
 		<Include>http://www.otr-files.de*</Include>
 		<Include>http://filebase.to*</Include>
@@ -421,5 +415,34 @@
 	</Script>
 	<Script filename="sprichwortrekombinator.user.js" name="Sprichwortrekombinator" namespace="Woems" description="" enabled="true" basedir="sprichwortrekombinator">
 		<Include>http://sprichwortrekombinator.de/*</Include>
+	</Script>
+	<Script filename="brettspiele.user.js" name="Brettspiele" namespace="Woems" description="" enabled="true" basedir="brettspiele">
+		<Include>*</Include>
+	</Script>
+	<Script filename="kinopolis_-_uebersichtli.user.js" name="Kinopolis - uebersichtlicher" namespace="Woems" description="" enabled="true" basedir="kinopolis_-_uebersichtli">
+		<Include>http://www.kinopolis.de/bn/programm_wochenansicht*</Include>
+	</Script>
+	<Script filename="boardgamegeek.user.js" name="BoardGameGeek" namespace="Woems" description="" enabled="true" basedir="boardgamegeek">
+		<Include>http://*boardgamegeek.com*</Include>
+	</Script>
+	<Script filename="antigame.user.js" name="AntiGame" namespace="antikiller" description="Extends Ogame with many functions." enabled="true" basedir="antigame">
+		<Include>http://*.ogame.*/game/index.php?page=*</Include>
+		<Include>http://*/secret/*.php*</Include>
+		<Include>http://*.gamestats.org/*</Include>
+		<Include>http://ogametools.com/*</Include>
+		<Include>http://*.ogametools.com/*</Include>
+		<Include>http://galaxy.ddns.us/*</Include>
+		<Include>http://logserver.net/*</Include>
+		<Include>http://war-riders.de/*</Include>
+		<Include>http://*.war-riders.de/*</Include>
+		<Include>http://kb.un1matr1x.de/*</Include>
+		<Include>http://savekb.de/*</Include>
+		<Include>http://*.savekb.de/*</Include>
+		<Include>http://ogame-pb.net/*</Include>
+		<Include>http://ood.giftsua.com/tool/*</Include>
+		<Include>http://shahterov.net/tool/*</Include>
+	</Script>
+	<Script filename="ogame_redesign__short_he.user.js" name="OGame Redesign : Short Header (V. 1.03)" namespace="Gollaoum" description="Minimize the header when is possible." enabled="true" basedir="ogame_redesign__short_he">
+		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 	</Script>
 </UserScriptConfig>

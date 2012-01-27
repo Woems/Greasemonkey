@@ -167,7 +167,7 @@ runtimer();
     switch (location.pathname)
     {
       case "/buyclicks/weasel.php": weasel(); break;
-      case "/buyclicks/bcbf.php": werbeseiten(); break;
+      case "/buyclicks/bcbf.php": close("Werbung ..."); break;
       case "/buyclicks/adbrite.php": break; // Keine Klickbare Werbung mehr
       case "/buyclicks/newrunningcampaigns_with_adult.php": GM_openInTab("http://www.onlinetvrecorder.com/buyclicks/weasel.php"); break;
       case "/": case "/index.php": startseite(); break;
@@ -238,33 +238,47 @@ function runtimer() // ** einmal pro Tag OTR aufrufen **
 
 function startseite() // ** Weasel starten? JA! **
 {
-  var JaButton=$xs("id('container')//td[contains(text(),'Wiesel')]/a[text()='Ja']");
-  if (JaButton) createElement("input",{ type:"button", onClick:JaButton.getAttribute("onclick"), style:"display:none" }, JaButton).click();
+  var JaButton=$xs("id('container')//td[contains(text(),'Wiesel')]/a[text()='Ja'] | id('container')//td[contains(text(),'GWP')]/a[b[text()='Yes']]");
+  if (JaButton)
+  {
+    var Button=createElement("input",{ type:"button", style:"display:none" }, JaButton);
+    Button.onclick=JaButton.getAttribute("onclick");
+    Button.click();
+  }
 }
 
 function weasel() // ** Banner klicken **
 {
  if (!$("warning") || $("warning").textContent.indexOf("Sie können noch 0 Banner anklicken.")==-1)
  {
-  //Interval(function () {
+  Timeout(function () {
     var Banner=$x("id('weaselcontent')//div[@onmouseup][img]");
-    //GM_log("Anz Banner: "+Banner.length);
-    var Bannergeklickt=false;
+    GM_log("Anz Banner: "+Banner.length);
+    var Bannergeklickt=0;
     for (var i=0; i<Banner.length; i++) if (Banner[i])
     {
+      GM_log("Banner: "+Banner[i]);
       var link1=Banner[i].getAttribute("onmouseup");
       var ow=link1.match(/openbcbfwindow\('([^']*)','([^']*)','([^']*)','([^']*)','([^']*)','([^']*)','([^']*)','([^']*)'\)/);
       unsafeWindow.openbcbfwindow(ow[1],ow[2],ow[3],ow[4],ow[5],ow[6],ow[7],ow[8]);
       unsafeWindow.setCSession();
-      Bannergeklickt=true;
-      //break;
+      Bannergeklickt+=1;
+      document.title=Bannergeklickt;
+      if (Bannergeklickt>=4) break;
     }
-    if (!Bannergeklickt) window.close();
-  //}, 10);
+    if (!Bannergeklickt) close("Keine Banner zum Klicken...");
+  }, 2000); // warten bis Banner geladen... (10 milisec reicht auch)
  } else {
-  location.href="http://www.onlinetvrecorder.com/index.php";
-  window.close();
+  close("Keine Werbung mehr...");
  }
 }
 
+function close(titel)
+{
+  document.title=titel;
+  Timeout(function () {
+    location.href="about:blank";
+    window.close();
+  },20000);
+}
 

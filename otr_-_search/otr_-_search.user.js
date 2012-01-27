@@ -84,10 +84,13 @@ $x("id('links')/table/tbody/tr").forEach(function (line) {
     line.cells[1].innerHTML=line.cells[1].innerHTML.replace(/(18[0-9]{2}|19[0-8][0-9])/,"$1".bold().fontcolor("red"));
     line.style.backgroundColor="lightgray";
   }
-  if (line.cells[1].textContent.match(/19[3-8][0-9]/))
-    line.style.backgroundColor="lightgreen";
-  if (line.cells[1].textContent.match(/19[5-7][0-9]/))
+  if (line.cells[1].textContent.match(/19[3-3][0-9]/))
+    line.style.backgroundColor="#FCC";
+  if (line.cells[1].textContent.match(/19[4-6][0-9]/))
     line.style.backgroundColor="green";
+
+  if (line.cells[1].textContent.match(/19[7-8][0-9]/))
+    line.style.backgroundColor="#CFF";
 });
 
 // **** Aufgenommene Filme Grau einfärben ****

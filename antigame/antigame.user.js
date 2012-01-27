@@ -1,4519 +1,567 @@
 // ==UserScript==
-// @name           AntiGame
-// @namespace      antikiller
-// @description    A couple of Neogame functions for Ogame Redesign - v1.13.9
-// @version	1.13.9
-// @include        http://*.ogame.*/game/index.php?page=*
+// @run-at		document-end
+// @name		AntiGame
+// @namespace	antikiller
+// @description	Extends Ogame with many functions.
+// @version		2.02.8
+// @vOGgame		3.0.0|3.1.0
+// @author		Francolino & Origin.team (original by Tarja)
+// @include		http://*.ogame.*/game/index.php?page=*
+// @include		http://*/secret/*.php*
+// @include		http://*.gamestats.org/*
+// @include		http://ogametools.com/*
+// @include		http://*.ogametools.com/*
+// @include		http://galaxy.ddns.us/*
+// @include		http://logserver.net/*
+// @include		http://war-riders.de/*
+// @include		http://*.war-riders.de/*
+// @include		http://kb.un1matr1x.de/*
+// @include		http://savekb.de/*
+// @include		http://*.savekb.de/*
+// @include		http://ogame-pb.net/*
+// @include		http://ood.giftsua.com/tool/*
+// @include		http://shahterov.net/tool/*
 // ==/UserScript==
-
-// Changelog:
-
-/*
-29.11.2009	v1.13.8
-	- Bug with shortlinks ordering
-
-28.11.2009	v1.13.8
-	+ Alt text for resources on top and resources in building cost
-	+ Show research names on Techtree page
-	+ User specified colors for names depending on their state (available, not available, not eanough resources)
-	+ Button for resetting of the remembered coordinates
-	* Fixed time on Reversal button
-
-23.11.2009	v1.13.7
-	- Ext. resources layout fixed (left-side)
-
-21.11.2009	v1.13.6
-	+ Option added: Kill tooltips (Fleet dispatch 1, Messages)
-	+ Option added: show item names over images
-	* Option modified: show extended resources info - now can choose layout 
-	-  Rounding issue in production calculation for speeded universes
-	- Temperature wasn't read if there was only 1 planet at the account
-	= Strings to translate:
-		opt_showNames: 'Show ship/building/research names over images'
-		opt_killTips: 'Kill tooltips' - instead of opt_galaxy_killTips
-		lbl_onLeft: 'On left'
-
-16.11.2009	v1.13.5
-	+ Option added: Uni speed factor
-	= Strings to translate:
-		opt_uni_SpeedFactor: 'Speed factor of this universe'
-
-14.11.2009	v1.13.4
-	+ shows local time in phalanx scans
-
-08.11.2009	v1.13.3
-	+ players/allys highlighting on Statistics page
-	* ACS time is not displayed any more on Fleet3 page
-	- bug with  production of buildings
-
-06.11.2009	v1.13.2
-	- players/allys highlighting fixed
-	- shows missing resources for Defense
-
-05.11.2009	v1.13.1
-	+ Option added: EventList position on the screen
-	- RU Localization string fixed: lbl_missHold
-	- Planet management controls were unavailable on Overview page with 'Show EventList' option
-	= Strings to translate:
-		opt_evt_showOnTop: 'Position of the Event list on the screen',
-		opt_evt_noScroll: 'No frame scrollbars appear when tooltips are displayed',
-		lbl_sectionEventList: 'Event list',
-		lbl_onTop: 'On top',
-		lbl_onBottom: 'On bottom'
-
-04.11.2009	v1.13.0
-	+ Option added: Kill tooltips on Galaxy page
-	= Strings to translate:
-		opt_galaxy_killTips: 'Kill all tooltips on Galaxy page',
-		opt_galaxy_keepTipsPlanets: 'Keep tooltips for planets and moons',
-		opt_galaxy_keepTipsDebris: 'Keep tooltips for debris fields'
-
-04.11.2009	v1.12.2
-	* EventBox layout fixed  - scrollbars do not appear when cluetip goes out of the iframe box
-
-02.11.2009	v1.12.1
-	* Embedded EventBox layout changed
-	* In order for storage capacity to fit the screen (Resources page) TechTree is made hidden for storages
-	* All numbers formatting uses appropriate thousand separator (taken from Ogame code) instead of hard-coded '.'
-
-02.11.2009	v1.12.0
-	+ Option added: Show unfolded Event list on Overview
-	= Strings to translate:
-		opt_showEventList: 'Show unfolded Event list on Overview'
-
-02.11.2009	v1.11.1
-	* ACS time is marked orange when the ACS will be slowed down and red when it's too late to join the ACS
-
-02.11.2009	v1.11.0
-	* New time processing after Ogame update
-
-01.11.2009	v1.10.4
-	* Support for HR servers
-
-29.10.2009	v1.10.3
-	* 'Set target to DF' logic changed - now it works independently on coords auto-insertion
-
-28.10.2009	v1.10.2
-	* 'Fix briefing layout' option is now universe-specific
-	* Brifing layout changed to reach the desired effect at BG servers
-	* Shortlinks ordering changed
-	- Shortlinks didn't work at non-RU servers
-	- Bug with storage capacity displaying
-
-28.10.2009	v1.10.1
-	- A few minor fixes
-	= Strings to translate:
-		lbl_sectionFleetDispatch: 'Fleet dispatch'
-		(instead of incorrect lbl_sectionFleetDeparture in 1.10.0)
-		
-28.10.2009	v1.10.0
-	+ Option added: Hide Moon picture
-	+ Option added: Show ships capacity and speed
-	+ Option added: Set target to DF if the fleet includes recyclers
-	+ Option added: Fix briefing layout
-	+ Option added: Target shortlinks
-	+ Options added: Highlight players and alliances
-	+ Option added: Keep server time for top-right Ogame clock
-	+ Some options are now universe-specific
-	+ Shows storage capacity
-	* Plunder calculator shows alternative ships names to avoid problems with Speedsim
-	- Antigame options button opened a new blank tab
-
-	= Strings to translate:
-		opt_fleet_showCapacity: 'Show ships capacity and speed',
-		opt_fleet2_setTargetDF: 'Set target to DF if the fleet includes recyclers',
-		opt_fleet2_fixLayout: 'Fix briefing layout',
-		opt_fleet2_ShortLinks: 'Target shortlinks',
-		lbl_sectionFleetDeparture: 'Fleet departure',
-		opt_galaxyHideMoon: 'Hide Moon picture (display moon size instead)',
-		lbl_optionsNote1: 'The option is stored for this universe only',
-		opt_galaxy_Players: 'Highlight the following players',
-		opt_galaxy_PlayerColors: 'Colors for player highlighting',
-		opt_galaxy_Allys: 'Highlight the following alliances',
-		opt_galaxy_AllyColors: 'Colors for alliance highlighting',
-		opt_showServerOgameClock: 'Keep server time for top-right Ogame clock',
-		lbl_shipSCargoAlt: 'SC',
-		lbl_shipLCargoAlt: 'LC',
-		lbl_shipRecyclerAlt: 'Recs',
-
-// 19.10.2009	v1.9.0
-//	+ Replaces Moon image with Moon:<moon size> text
-//	= Strings to translate:
-//		Interface.lbl_Moon: 'Moon'
-
-// 19.10.2009	v1.8.4
-//	- A bug with planet production in speed unis
-
-// 18.10.2009	v1.8.3
-//	- Missing energy doesn't require cargoes :)
-
-// 18.10.2009	v1.8.2
-//	* Mines production and reactor consumption calculated correctly for 42org (speed x2)
-//	* Antigame version is displayed on 'Antigame' button
-//	- Labels fixed for EN localizaton
-//	- Now shows missing energy for GraviTech and Terraformer
-
-// 17.10.2009	v1.8.1
-//	- Bug with techs remembering in Opera
-
-// 16.10.2009	v1.8.0
-//	+ Shows production/consumption changes for new mines/plants
-//	+ Shows speed for each type of ships on FLEET1 page
-//	* Finish time is displayed on DEFENCE page
-//  = Strings to translate:
-//		Interface.lbl_MinSpeed: 'Minimal speed'
-//		Interface.lbl_Production: 'Production',
-//		Labels.lbl_RequiredEnergy: 'Energy required' - should be exactly the same as written at Mine building details
-
-// 15.10.2009	v1.7.3
-//	- Bugfix: PlunderThreshold/DebrisThreshold were not checked correctly against plunder in reports
-
-// 14.10.2009	v1.7.2
-//	* Missing resources now are not displayed for constructions already being in process
-//	* Missing res layout slightly changed
-//	- Bugfix: Extended res info at Statistics page
-//	- Bugfix: Missing resources were calculated even if that type of resources was not present in the cost
-
-// 14.10.2009	v1.7.1
-//	+ Shows total res and needed cargoes on FLEET1 page even if there is no ships on the planet
-
-// 14.10.2009	v1.7.0
-//	+ Threshold for debris added
-//	+ Option added: show boxes with resource information at the bottom of the left menu
-//	* Missing resources view changed
-//	* Some options window changes
-//	- When coords were auto-inserted the target remained 'Moon' if the fleet was sent from the moon; now it is alway set to 'Planet'
-
-// 12.10.2009	v1.7b0
-//	+ Folding spy reports with theoretical plunder < threshold
-//	+ Additional button: delete spy reports with theoretical plunder < threshold
-
-// 12.10.2009	v1.6.3
-//	- 'Mission color: Harvest' was listed twice in the options
-//	- Missing resources were calculated incorrectly with values like 1.231kk
-//	* Namespace changed in the header
-
-// 10.10.2009	v1.6.2
-//	+ Fleet ships are displayed in the message body for 'fleet returned' messages.
-
-// 10.10.2009	v1.6.1
-//	+ Tooltips added to message control buttons
-
-// 10.10.2009	v1.6.0
-//	+ Message control buttons on Messages page: Mark as read, Mark all as read, Delete, Delete all
-//	* Messages processing optimized
-
-// 09.10.2009	v1.5.1
-// + Buttons instead of drop-down box in Messages
-
-// 09.10.2009	v1.5.1
-// - Bugfix: server language was detected as EN for servers like FI.OGAME.ORG
-
-// 08.10.2009	v1.5.0
-// * Got rid of DOM getElementsByClassName - works in Firefox 2.x now
-// * Changed lbl_resourses to lbl_resourses in localization vars and the code
-// * Finishing time is displayed in server timezone if showLocalTime is unset
-// * Seconds in finishing time are according to server time
-// + Shows ACS arrival time (fleet3 page)
-
-// 07.10.2009	v1.4.2
-//	- Real bugfix for Coords now :)
-
-// 07.10.2009	v1.4.1
-//	- Bugfix: Coords were auto-inserted each time even if they had already been set (non-Russian servers)
-//	* SendFleet functions (fleet1/fleet2/fleet3 pages) now don't use getElementsByClassName any more
-
-// 07.10.2009	v1.4.0
-//	+ Option added: show deficient resources
-//	+ Total resources on planet are shown at FLEET1 page together with total ships capacity
-//	* runScript and runEventHandler are rewritten
-
-// 05.10.2009	v1.3.4
-//	- Time in battle reports (short view) was not changed to local
-
-// 04.10.2009	v1.3.3
-//	- Bug with server language setting
-
-// 04.10.2009	v1.3.2
-//	+ Loot/Debris section in spy reports translated
-//	+ Check is added to avoid double executing of the script
-
-// 03.10.2009	v1.3.1
-//	- Bug with Harvest color
-
-// 03.10.2009	v1.3
-//	+ Language pack moved to a separate file (script). Main script contains RU and EN only
-//	+ Language detection for all (I hope) official Ogame servers - thanks to Bontchev
-//	+ Text boxes with color settings are highlighted with the corresponding color in Options window
-//	* 'Until' label is removed due to problems on some servers
-
-// 03.10.2009	v1.2
-//	* Minor changes in language selection
-
-// 03.10.2009	v1.2.b2
-//	+ Shows local time in Event list
-//	+ Interface language is set to server language if it is not found in the saved options
-//	- Bug with player rank in Galaxy view at BG servers
-
-// 02.10.2009	v1.2.b1
-//	* Localization split into Labels (auto-selected for a server) and Interface
-//	+ Bulgarian servers and interface language
-
-// 02.10.2009	v1.1.1
-//	- Bug with reversal time - now start time is retrieved prior to Server2Local changes
-
-// 02.10.2009	v1.1
-//	+ Servers with Redesign are recognized
-//	+ Option added: Show ranks in Galaxy view
-//  + Option added: Rank color (only for players with rank>800 and alliances)
-//	+ Option added: Show reversal time (now it is separated from "expand fleets" feature)
-//  + Shows local time in Messages
-//	+ Autodetection of server language
-//	* Improved 'fleetDetails' node selecting (use XPath now)
-//	* Current planet highlighting (Galaxy) now works with both address formats
-//	- Debris calculation in spy reports - solar satellite was missing
-//	- 'Language' option removed
-//
-
-// 01.10.2009	v1.0
-//	Initial release
-*/
-
-
-(function () {
-	var version = '1.13.9';
-	
-	var mywindow;
-	try { mywindow = unsafeWindow; }
-	catch (e) { mywindow = window; }
-	
-	if (mywindow.AntiGame_started) return;
-	mywindow.AntiGame_started = 1;
-	
-	var AntiGame_lang = {};
-	
-	AntiGame_lang.LabelsEN =
-	{
-		lbl_missAttack: 'Attack',
-		lbl_missColony: 'Colonization',
-		lbl_missDeploy: 'Deployment',
-		lbl_missDestroy: 'Moon Destruction',
-		lbl_missEspionage: 'Espionage',
-		lbl_missExpedition: 'Expedition',
-		lbl_missFederation: 'ACS Attack',
-		lbl_missHarvest: 'Harvest',
-		lbl_missHold: 'ACS Defend',
-		lbl_missTransport: 'Transport',
-		
-		lbl_shipSCargo: 'Small Cargo',
-		lbl_shipLCargo: 'Large Cargo',
-		lbl_shipLFighter: 'Light Fighter',
-		lbl_shipHFighter: 'Heavy Fighter',
-		lbl_shipCruiser: 'Cruiser',
-		lbl_shipBattleship: 'Battleship',
-		lbl_shipColonizator: 'Colony Ship',
-		lbl_shipRecycler: 'Recycler',
-		lbl_shipSpy: 'Espionage Probe',
-		lbl_shipBomber: 'Bomber',
-		lbl_shipDestroyer: 'Destroyer',
-		lbl_shipRIP: 'Deathstar',
-		lbl_shipBCruiser: 'Battlecruiser',
-		lbl_shipSatellite: 'Solar Satellite',
-		
-		lbl_RequiredEnergy: 'Energy needed'
-		
-	}
-	
-	AntiGame_lang.InterfaceEN =
-	{
-		opt_languageName: 'English',
-	
-		opt_title: 'AntiGame Options',
-		opt_btnOk: 'OK',
-		opt_btnCancel: 'Cancel',
-		opt_btnDefault: 'Default',
-
-		opt_language: 'Language',
-		opt_autocopyCoords: 'Auto-copy coordinates',
-		opt_showLocalTime: "Show local time instead of server's (hours only)",
-		opt_showServerOgameClock: 'Keep server time for top-right Ogame clock',
-		opt_blockAutoComplete: 'Block Auto-Complete in Firefox',
-		
-		opt_showDeficient: 'Show missing resources',
-		opt_showResources: 'Show extended resources information',
-		opt_showNames: 'Show ship/building/research names over images',
-		opt_nameColorOn: 'Name color: available',
-		opt_nameColorOff: 'Name color: unavailable',
-		opt_nameColorDisabled: 'Name color: not enough resources',
-
-		opt_uni_SpeedFactor: 'Speed factor of this universe',
-		
-		opt_killTips: 'Kill tooltips',
-
-		opt_showEventList: 'Show unfolded Event list on Overview',
-		opt_evt_showOnTop: 'Position of the Event list on the screen',
-		opt_evt_noScroll: 'No frame scrollbars appear when tooltips are displayed',
-		
-		opt_galaxyShowRank: 'Show player/alliance ranks in Galaxy view',
-		opt_galaxyRankColor: 'Player/alliance ranks color',
-		opt_galaxyDebrisMin: 'Minimal size of debris to highlight (0 to turn off)',
-		opt_galaxyDebrisColor: 'Color of highlighted debris',
-		opt_galaxyHideMoon: 'Hide Moon picture (display moon size instead)',
-		opt_galaxy_Players: 'Highlight the following players',
-		opt_galaxy_PlayerColors: 'Colors for player highlighting',
-		opt_galaxy_Allys: 'Highlight the following alliances',
-		opt_galaxy_AllyColors: 'Colors for alliance highlighting',
-		opt_galaxy_keepTipsPlanets: 'Keep tooltips for planets and moons',
-		opt_galaxy_keepTipsDebris: 'Keep tooltips for debris fields',
-		
-		opt_msg_PlunderThreshold: 'Low limit for theoretical plunder (x1000)',
-		opt_msg_DebrisThreshold: 'Low limit for theoretical debris (x1000)',
-		opt_msg_foldSmallPlunder: 'Fold reports with plunder and debris less than the limit',
-		opt_msg_showPlunder: 'Show plunder in spy reports',
-		opt_msg_addButtons: 'Additional buttons on Messages',
-		opt_msg_fixColors: 'Fix colors of combat reports',
-		
-		opt_fleet_showCapacity: 'Show ships capacity and speed',
-		opt_fleet2_setTargetDF: 'Set target to DF if the fleet includes recyclers',
-		opt_fleet2_fixLayout: 'Fix briefing layout',
-		opt_fleet2_ShortLinks: 'Target shortlinks',
-		
-		opt_missionPriority: 'Mission priority',
-		
-		opt_mvmt_expandFleets: 'Show fleet ships and cargo',
-		opt_mvmt_showReversal: 'Show reversal time for fleets',
-		
-		opt_missAttack: 'Mission color: Attack',
-		opt_missColony: 'Mission color: Colonization',
-		opt_missDeploy: 'Mission color: Deploy',
-		opt_missDestroy: 'Mission color: Destroy',
-		opt_missEspionage: 'Mission color: Espionage',
-		opt_missExpedition: 'Mission color: Expedition',
-		opt_missFederation: 'Mission color: Federation',
-		opt_missHarvest: 'Mission color: Harvest',
-		opt_missHold: 'Mission color: Hold',
-		opt_missTransport: 'Mission color: Transport',
-		
-		// these label are shown in Options
-		lbl_missAttack: 'Attack',
-		lbl_missColony: 'Colonization',
-		lbl_missDeploy: 'Deployment',
-		lbl_missDestroy: 'Moon Destruction',
-		lbl_missEspionage: 'Espionage',
-		lbl_missExpedition: 'Expedition',
-		lbl_missFederation: 'ACS Attack',
-		lbl_missHarvest: 'Harvest',
-		lbl_missHold: 'ACS Defend',
-		lbl_missTransport: 'Transport',
-		//
-		
-		lbl_sectionGeneral: 'General',
-		lbl_sectionEventList: 'Event list',
-		lbl_sectionGalaxy: 'Galaxy',
-		lbl_sectionMessages: 'Messages',
-		lbl_sectionFleetDispatch: 'Fleet dispatch',
-		lbl_sectionFleetMovement: 'Fleet movement',
-		
-		lbl_optionsNote1: 'The option is stored for this universe only',
-		
-		lbl_resetCoords: 'Reset - ',
-		
-		lbl_TotalCapacity: 'Total capacity',
-		lbl_MinSpeed: 'Minimal speed',
-		lbl_mvmt_Return: 'R',
-		lbl_mvmt_Expedition: 'E',
-		
-		lbl_resources: 'Resources',
-		lbl_debris: 'Debris',
-		lbl_total: 'Total',
-		lbl_loot: 'Loot',
-		lbl_metal: 'Metal',
-		lbl_crystal: 'Crystal',
-		
-		lbl_shipSCargoAlt: 'SC',
-		lbl_shipLCargoAlt: 'LC',
-		lbl_shipRecyclerAlt: 'Recs',
-		
-		lbl_deficientRes: 'Missing resources',
-		lbl_Production: 'Production',
-		lbl_ArrivalACS: 'Arrival (ACS)',
-		
-		lbl_btnMarkReadAll: 'Mark all displayed messages as read',
-		lbl_btnDeleteSmallPlunder: 'Delete spy reports with plunder < $plunder and debris < $debris',
-		
-		lbl_Moon: 'Moon',
-		
-		lbl_onTop: 'On top',
-		lbl_onBottom: 'On bottom',
-		lbl_onLeft: 'On left'
-	}
-	
-	AntiGame_lang.LabelsRU =
-	{
-		lbl_missAttack: 'Атака',
-		lbl_missColony: 'Колонизировать',
-		lbl_missDeploy: 'Оставить',
-		lbl_missDestroy: 'Уничтожить',
-		lbl_missEspionage: 'Шпионаж',
-		lbl_missExpedition: 'Экспедиция',
-		lbl_missFederation: 'Совместная атака',
-		lbl_missHarvest: 'Переработать',
-		lbl_missHold: 'Держаться',
-		lbl_missTransport: 'Транспорт',
-		
-		lbl_shipSCargo: 'Малый транспорт',
-		lbl_shipLCargo: 'Большой транспорт',
-		lbl_shipLFighter: 'Лёгкий истребитель',
-		lbl_shipHFighter: 'Тяжёлый истребитель',
-		lbl_shipCruiser: 'Крейсер',
-		lbl_shipBattleship: 'Линкор',
-		lbl_shipColonizator: 'Колонизатор',
-		lbl_shipRecycler: 'Переработчик',
-		lbl_shipSpy: 'Шпионский зонд',
-		lbl_shipBomber: 'Бомбардировщик',
-		lbl_shipDestroyer: 'Уничтожитель',
-		lbl_shipRIP: 'Звезда смерти',
-		lbl_shipBCruiser: 'Линейный крейсер',
-		lbl_shipSatellite: 'Солнечный спутник',
-		
-		lbl_RequiredEnergy: 'Необходимо энергии'
-	}
-	
-	AntiGame_lang.InterfaceRU =
-	{
-		opt_languageName: 'Русский',
-				
-		opt_title: 'Настройки AntiGame',
-		opt_btnOk: 'OK',
-		opt_btnCancel: 'Отмена',
-		opt_btnDefault: 'По умолчанию',
-
-		opt_language: 'Язык',
-		opt_autocopyCoords: 'Авто-вставка координат',
-		opt_showLocalTime: 'Показывать локальное время вместо серверного (только часы)',
-		opt_showServerOgameClock: 'Оставить серверное время для часов Огейм вверху справа',
-		opt_blockAutoComplete: 'Отключить Авто-Заполнение в Firefox',
-		
-		opt_showDeficient: 'Показывать недостающие ресурсы',
-		opt_showResources: 'Показывать расширенную информацию о ресурсах',
-		opt_showNames: 'Показывать названия кораблей/строений/исследований поверх картинок',
-		opt_nameColorOn: 'Цвет названия: доступно',
-		opt_nameColorOff: 'Цвет названия: недоступно',
-		opt_nameColorDisabled: 'Цвет названия: не хватает ресурсов',
-		
-		opt_uni_SpeedFactor: 'Коэффициент ускорения в этой вселенной',
-		
-		opt_killTips: 'Заблокировать всплывающие подсказки',
-
-		opt_showEventList: 'Показывать развернутый список событий в Обзоре',
-		opt_evt_showOnTop: 'Расположение списка событий на экране',
-		opt_evt_noScroll: 'Не показывать полосы прокрутки фрейма при отображении тултипов',
-		
-		opt_galaxyShowRank: 'Показывать рейтинг игрока/альянса в Галактике',
-		opt_galaxyRankColor: 'Цвет для рейтинга игрока/альянса',
-		opt_galaxyDebrisMin: 'Минимальный размер ПО для подсветки (0 - не подсвечивать)',
-		opt_galaxyDebrisColor: 'Цвет подсвеченного ПО',
-		opt_galaxyHideMoon: 'Скрывать картинку Луны (вместо нее выводить размер луны)',
-		opt_galaxy_Players: 'Подсвечивать следующих игроков',
-		opt_galaxy_PlayerColors: 'Цвета для подсветки игроков',
-		opt_galaxy_Allys: 'Подсвечивать следующие альянсы',
-		opt_galaxy_AllyColors: 'Цвета для подсветки альянсов',
-		opt_galaxy_keepTipsPlanets: 'Сохранить тултипы для планет и лун',
-		opt_galaxy_keepTipsDebris: 'Сохранить тултипы для поля обломков',
-
-		opt_msg_PlunderThreshold: 'Нижний предел для возможной добычи (x1000)',
-		opt_msg_DebrisThreshold: 'Нижний предел для возможного лома (x1000)',
-		opt_msg_foldSmallPlunder: 'Сворачивать доклады с добычей и ломом меньше предела',
-		opt_msg_showPlunder: 'Показывать возможную добычу в шпионских докладах',
-		opt_msg_fixColors: 'Исправить цвета боевых докладов',
-		opt_msg_addButtons: 'Дополнительные кнопки в Сообщениях',
-		
-		opt_missionPriority: 'Приоритет задания',
-		
-		opt_fleet_showCapacity: 'Показывать вместимость и скорость кораблей',
-		opt_fleet2_setTargetDF: 'Отправлять на ПО, если во флоте есть переработчики',
-		opt_fleet2_fixLayout: 'Исправить расположение информации о задании',
-		opt_fleet2_ShortLinks: 'Список целей для быстрой вставки',
-		
-		opt_mvmt_expandFleets: 'Показывать состав и груз флотов',
-		opt_mvmt_showReversal: 'Показывать время возврата флота при отзыве',
-		
-		opt_missAttack: 'Цвет флота, задание: Атака',
-		opt_missColony: 'Цвет флота, задание: Колонизировать',
-		opt_missDeploy: 'Цвет флота, задание: Оставить',
-		opt_missDestroy: 'Цвет флота, задание: Уничтожить',
-		opt_missEspionage: 'Цвет флота, задание: Шпионаж',
-		opt_missExpedition: 'Цвет флота, задание: Экспедиция',
-		opt_missFederation: 'Цвет флота, задание: Совместная атака',
-		opt_missHarvest: 'Цвет флота, задание: Переработать',
-		opt_missHold: 'Цвет флота, задание: Удержать',
-		opt_missTransport: 'Цвет флота, задание: Транспорт',
-
-		// these label are shown in Options
-		lbl_missAttack: 'Атака',
-		lbl_missColony: 'Колонизировать',
-		lbl_missDeploy: 'Оставить',
-		lbl_missDestroy: 'Уничтожить',
-		lbl_missEspionage: 'Шпионаж',
-		lbl_missExpedition: 'Экспедиция',
-		lbl_missFederation: 'Совместная атака',
-		lbl_missHarvest: 'Переработать',
-		lbl_missHold: 'Держаться',
-		lbl_missTransport: 'Транспорт',
-		//
-		
-		lbl_sectionGeneral: 'Общие',
-		lbl_sectionEventList: 'Список событий',
-		lbl_sectionGalaxy: 'Галактика',
-		lbl_sectionMessages: 'Сообщения',
-		lbl_sectionFleetDispatch: 'Отправка флота',
-		lbl_sectionFleetMovement: 'Список флотов',
-		
-		lbl_optionsNote1: 'Настройка сохраняется только для этой вселенной',
-		
-		lbl_resetCoords: 'Сбросить - ',
-		
-		lbl_TotalCapacity: 'Суммарная вместимость',
-		lbl_MinSpeed: 'Минимальная скорость',
-		lbl_mvmt_Return: 'В',
-		lbl_mvmt_Expedition: 'Э',
-		
-		lbl_resources: 'Ресурсы',
-		lbl_debris: 'Лом',
-		lbl_total: 'Всего',
-		lbl_loot: 'Добыча',
-		lbl_metal: 'Металл',
-		lbl_crystal: 'Кристалл',
-		
-		lbl_shipSCargoAlt: 'МТ',
-		lbl_shipLCargoAlt: 'БТ',
-		lbl_shipRecyclerAlt: 'Рабов',
-		
-		lbl_deficientRes: 'Ресурсов не хватает',
-		lbl_Production: 'Производство',
-		lbl_ArrivalACS: 'Прибытие (САБ)',
-		
-		lbl_btnMarkReadAll: 'Пометить все показанные сообщения как прочитанные',
-		lbl_btnDeleteSmallPlunder: 'Удалить шпионские доклады с добычей < $plunder и ломом < $debris',
-		
-		lbl_Moon: 'Луна',
-		lbl_onTop: 'Вверху',
-		lbl_onBottom: 'Внизу',
-		lbl_onLeft: 'Слева'
-	}
-
-
-	var Options =
-	{
-		language: '',
-		blockAutoComplete: true,
-		showLocalTime: true,
-		showServerOgameClock: false,
-		showFinishTime: true,
-		showDeficient : true,
-		showResources : 1,
-		showNames: true,
-		nameColorOn: '#FFFFFF',
-		nameColorOff: '#777777',
-		nameColorDisabled: '#D43635',
-		
-		uni_SpeedFactor: 1,
-		
-		showEventList: true,
-		evt_showOnTop: 0,
-		evt_noScroll: false,
-		
-		// 1 - attack		2 - federation	3 - transport	4 - deploy	5 - hold	6 - espionage
-		// 7 - colonization	8 - recycle		9 - destroy		15 - expedition
-		mission1: 6,
-		mission2: 1,
-		mission3: 4,
-		mission4: 3,
-		mission5: 9,
-		
-		missAttack: '#66CC33',
-		missColony: '#C1C1C1',
-		missDeploy: '#666666',
-		missDestroy: '#FFFF99',
-		missEspionage: '#FFCC66',
-		missExpedition: '#5555BB',
-		missFederation: '#CC6666',
-		missHarvest: '#CEFF68',
-		missHold: '#80A0C0',
-		missTransport: '#A0FFA0',
-		missMissile: '#FFCC66',
-		
-		mvmt_expandFleets: true,
-		mvmt_showReversal: true,
-		
-		fleet_showCapacity: true,
-		fleet1_killTips: false,
-		fleet2_fixLayout: true,
-		autocopyCoords: true,
-		fleet2_setTargetDF: false,
-		fleet2_ShortLinks: "1#1#2#3#Legor's moon",
-
-		galaxyShowRank: true,
-		galaxyRankColor: '#DDDDDD',
-
-		galaxyRank10: '#FFFF40',
-		galaxyRank50: '#FFDF00',
-		galaxyRank100: '#FFBF00',
-		galaxyRank200: '#FF8F00',
-		galaxyRank800: '#33FF33',
-		galaxyRank0: '#305060',
-
-		galaxyDebrisMin: 10000,
-		galaxyDebrisColor: '#FF0000',
-		galaxyHideMoon: false,
-		galaxy_killTips: false,
-		galaxy_keepTipsPlanets: true,
-		galaxy_keepTipsDebris: true,
-		
-		galaxy_Players: 'Legor,player 2',
-		galaxy_PlayerColors: '#FF0000,#2222FF',
-		galaxy_Allys: 'alliance 1,alliance 2',
-		galaxy_AllyColors: '#FF00FF,#00FFFF',
-		
-		msg_PlunderThreshold: 10,
-		msg_DebrisThreshold: 20,
-		msg_foldSmallPlunder: true,
-		msg_showPlunder: true,
-		msg_fixColors: true,
-		msg_addButtons: true,
-		msg_killTips: false,
-
-		Labels: null,
-		Interface: null,
-		
-		uni_options: 
-		{
-			fleet2_ShortLinks:1, galaxyDebrisMin:1, msg_PlunderThreshold:1, msg_DebrisThreshold:1, 
-			galaxy_Players:1, galaxy_PlayerColors:1, galaxy_Allys:1, galaxy_AllyColors:1, fleet2_fixLayout:1,
-			uni_SpeedFactor:1
-		},
-		
-		firefox_options: 
-		{
-			fleet2_setTargetDF:1
-		},
-
-		saveOptions: function()
-		{
-			try {
-				var str = '';
-				var str_uni = '';
-
-				for (var i in Options) {
-					var param = Options[i];
-					if (this.firefox_options[i] && !Utils.isFirefox) continue;
-					
-					var type = typeof(param);
-					if (type == 'number' || type == 'string' || type == 'boolean') {
-					
-						// uni-specific options
-						if (this.uni_options[i]) {
-							if (str_uni != '') str_uni +='&';
-							str_uni += i+'='+param;
-						}
-						
-						// global options
-						else {
-							if (str != '') str +='&';
-							str += i+'='+param;
-						}
-					}
-				}
-				
-				if (Utils.isFirefox){
-					Utils.setValue('antigame', str);
-					Utils.setValueUni('antigame', str_uni);
-				}
-				else {
-					str += '&' + str_uni;
-					Utils.setValue('antigame', str);
-				}
-			}
-			catch (e) { Utils.log(e); }
-		},
-		
-		loadOptions: function()
-		{
-			try {
-				var str = Utils.getValue('antigame');
-				if (!str) return;
-				
-				var str_uni = Utils.getValueUni('antigame');
-				if (str_uni) str += '&' + str_uni;
-				
-				str = str.split('&');
-
-				for (var i=0; i<str.length; i++) {
-					var pair = str[i].split('=');
-					if (!pair || pair.length != 2) continue;
-
-					var param = Options[pair[0]];
-					switch (typeof(param))
-					{
-						case('number'): if ( !isNaN(parseInt(pair[1],10)) ) Options[pair[0]] = parseInt(pair[1],10); break;
-						case('string'): Options[pair[0]] = pair[1]; break;
-						case('boolean'): Options[pair[0]] = (pair[1]=='true' ? true: false); break;
-						default: ;
-					}
-				}
-			}
-			catch (e) { Utils.log(e); }
-
-		},
-		
-		setOptionWithValidation: function(name, value)
-		{
-			var oldtype = this.getValueType(Options[name]);
-			var newtype = this.getValueType(value);
-			var ok = false;
-
-			if (name=='galaxy_PlayerColors' || name=='galaxy_AllyColors') {
-				ok = true;
-			}
-			else if ( (oldtype != 'number' && oldtype != 'color') || oldtype == newtype )
-			{	
-				if (oldtype == 'color')
-					value = value.toUpperCase();
-				
-				ok = true;
-			}
-			
-			if (ok) Options[name] = value;
-		},
-		
-		getValueType: function(value)
-		{
-			if (!value) return typeof(value);
-			
-			var val = value.toString();
-			
-			if ( val.replace(/\d{1,10}/i, '') == '' ) return 'number';
-			if ( val.replace(/#[A-F\d]{6,6}/i, '') == '' ) return 'color';
-			
-			return 'string';
-		},
-		
-		insertCSSRules: function()
-		{
-			Utils.insertCSSRule('#anti_options_window { \
-				position:absolute; \
-				left: 200px; \
-				top:100px; \
-				width:600px; \
-				background:#202025; \
-				border: 1px solid #555555; \
-				z-index:1000; \
-				}');
-
-			Utils.insertCSSRule('#anti_options_window div[id] { ' +
-				'padding: 10px; ' +
-				'}');
-				
-			Utils.insertCSSRule('#anti_options_window div#note { \
-				text-align: left; \
-				padding-bottom: 0; \
-				font-size: 10px; \
-				}');
-				
-			Utils.insertCSSRule('#anti_options_window span.notemark, div#note { \
-				color: #3344CC; \
-				}');
-
-			Utils.insertCSSRule('#anti_options_window #content { \
-				text-align: left; \
-				max-height: 400px; \
-				overflow:auto; \
-				border-top: 1px #555555 dashed; \
-				border-bottom: 1px #555555 dashed; \
-				}');
-				
-			Utils.insertCSSRule('#anti_options_window #content .sectiontitle {\
-				text-align: center;\
-				border: 1px solid #772277;\
-				}');
-
-			Utils.insertCSSRule('#anti_options_window .section table {\
-				width: 100%;\
-				}');
-
-			Utils.insertCSSRule('#anti_options_window .section td.input {\
-				width: 20em;\
-				}');
-
-
-			Utils.insertCSSRule('#anti_options_window #content td { ' +
-				'padding: 0.2em;' +
-				'text-align: left;' +
-				'font-size: 11px;' +
-				'}');
-
-			Utils.insertCSSRule('#anti_options_window input[type="text"] { ' +
-				'width: 8em;' +
-				'}');
-				
-			Utils.insertCSSRule('#anti_options_window input[type="text"].long { ' +
-				'width: 18em;' +
-				'}');
-				
-			Utils.insertCSSRule('#anti_options_window option { ' +
-				'width: 7em;' +
-				'}');
-
-
-			Utils.insertCSSRule('.anti_button { \
-				display: block; \
-				float: left; \
-				width: 50px; \
-				background:#442233; \
-				border: 2px black solid; \
-				text-decoration: none; \
-				margin: 0px 5px 5px 5px; \
-				padding: 2px 5px; \
-				}');
-			Utils.insertCSSRule('.anti_button:hover { \
-				background:#664466; \
-				}');
-				
-			Utils.insertCSSRule('#btnHomePage { \
-				width: 80px; \
-				}');
-		},
-
-		addOptionsButton: function()
-		{
-			try {
-				var $ = Utils.$;
-				var item = $('#menuTable li:first').clone(true);
-				
-				var img = 				
-				item.find('.menu_icon')
-				.find('a')
-					.attr({
-						'class':'',
-						'href':'javascript:void(0)'
-					})
-					.unbind('click')
-					.click(function(){ setTimeout( function(){
-							Coords.reset();
-							Coords.initImg(null,true);
-
-						}, 0) })
-				.find('img')
-					.attr({
-						'id':'btnCoords',
-						'width':'27',
-						'height':'27'
-						})
-					.get(0)
-				;
-				
-				Coords.initImg(img);
-				
-				item.find('.menubutton')
-					.attr('href','javascript:void(0)')
-					.attr('id','btnAntiOptions')
-					.attr('target','_self')
-					.removeClass('selected')
-					.bind('click', Options.showWindow)
-					.find('.textlabel').html('Antigame v'+version);
-				item.appendTo('#menuTable');
-				
-				
-				
-			}
-			catch (e) { Utils.log(e); }
-		},
-
-		hideWindow: function(save)
-		{
-			try {
-				var $ = Utils.unsafeWindow.$;
-				
-				if (save) {
-					var inputs = $('#anti_options_window input, #anti_options_window select');
-
-					for (var i=0; i<inputs.length; i++) {
-						var item = inputs.eq(i);
-						var id = item.attr('id');
-						var param = Options[id];
-
-						if (typeof(param) == 'boolean')
-							Options[id] = item.attr('checked');
-
-						else if ( (typeof(param) == 'string' || typeof(param) == 'number') ) {
-							Options.setOptionWithValidation(id, item.attr('value'))
-						}
-					}
-					
-					Options.saveOptions();
-				}
-
-				$('#anti_options_window').addClass('hidden');
-			}
-			catch (e) { Utils.log(e); }
-		},
-
-		showWindow: function()
-		{
-			try {
-				var $ = Utils.unsafeWindow.$;
-				
-				if ($('#anti_options_window').length == 0) Options.createWindow();
-
-				var inputs = $('#anti_options_window input, #anti_options_window select');
-				
-				for (var i=0; i<inputs.length; i++) {
-					var item = inputs.eq(i);
-					var param = Options[item.attr('id')];
-					
-					if (typeof(param) == 'boolean' && param)
-						item.attr('checked', param);
-
-					else if ( (typeof(param) == 'string' || typeof(param) == 'number') )
-						item.attr('value', param);
-				}
-
-				$('#anti_options_window .color').trigger('keyup');
-
-				$('#anti_options_window').removeClass('hidden');
-			}
-			catch (e) { Utils.log(e); }
-		},
-
-		changeInputColor: function(e)
-		{
-			try {
-				var value = e.target.value.split(',').pop();
-				if (Options.getValueType(value) == 'color')
-					e.target.style.backgroundColor = value;
-			}
-			catch (e) {Utils.log(e); }
-			return true;
-		},
-
-		createWindow: function()
-		{
-			var notemark = '<span class="notemark">(*)</span>';
-			
-			function createButton(id) {
-				var str = '<a class="anti_button" id="'+id+'" href="javascript:void(0)">' +	Options.Interface['opt_'+id] + '</a>';
-				return str;
-			}
-			
-			function createButtonHref(id, href, label) {
-				var str = '<a class="anti_button" target="_blank" id="'+id+'" href="' + href + '">' +
-					(label || Options.Interface['opt_'+id]) + '</a>';
-				return str;
-			}
-			
-			function addItem(label, content, newrow) {
-				if(typeof(newrow) == 'undefined') newrow = true;
-
-				var str = '<td class="label">'+label+'</td><td class="input">'+content+'</td>';
-				if (newrow) str = '<tr>' + str + '</tr>';
-
-				return str;
-			}
-
-			function createSelect(id, options, label, newrow) {
-				if(typeof(newrow) == 'undefined') newrow = true;
-				if(typeof(label) == 'undefined' || label == '-auto-') label = Options.Interface['opt_'+id];
-
-				var str = '';
-
-				for (var i=0; i<options.length; i++) {
-					str += '<option value="'+options[i].value+'">'+options[i].text+'</option>';
-				}
-
-				str = '<select id="'+id+'">' + str + '</select>';
-				str = addItem(label, str, newrow);
-				return str;
-			}
-
-			function createInput(id,label,newrow) {
-				if (Options.firefox_options[id] && !Utils.isFirefox) return;
-				
-				var param = Options[id];
-				var type, class_attr='';
-				if (typeof(param)=='boolean') type = 'checkbox';
-				if ((typeof(param) == 'string' || typeof(param) == 'number') ) type = 'text';
-
-				if(!type) return;
-				
-				if (id == 'galaxy_PlayerColors' || id == 'galaxy_AllyColors') class_attr = 'class="color long"';
-				else if (Options.getValueType(param) == 'color') class_attr = 'class="color"';
-				else if (typeof(param) == 'string') class_attr = 'class="long"';
-
-				if(typeof(newrow) == 'undefined') newrow = true;
-				
-				if(typeof(label) == 'undefined' || label == '-auto-') label = Options.Interface['opt_'+id];
-				if (Options.uni_options[id]) label += ' ' + notemark;
-				
-				var str = addItem(label, '<input id="'+id+'" type="'+type+'" '+class_attr+'>', newrow);
-				return str;
-			}
-			
-			function startSection(title, classname) {
-				classname = classname || '';
-				classname += ' section';
-				var str = '<div class="'+classname+'"><table>';
-				if (title) str += '<tr><td colspan="4" class="sectiontitle">'+title+'</td></tr>';
-				
-				return str;
-			}
-
-			function endSection() {
-				return '</table></div>';
-			}
-
-			var $ = Utils.unsafeWindow.$;
-
-			// prepare dropdown boxes
-			
-			// missions
-			var missions = [
-				{value:1, text:Options.Interface.lbl_missAttack},
-				{value:3, text:Options.Interface.lbl_missTransport},
-				{value:4, text:Options.Interface.lbl_missDeploy},
-				{value:5, text:Options.Interface.lbl_missHold},
-				{value:6, text:Options.Interface.lbl_missEspionage},
-				{value:9, text:Options.Interface.lbl_missDestroy},
-				];
-				
-			missions.sort( function (a,b) { return (a.text==b.text) ? 0 :  (a.text<b.text) ? -1 : 1 } );
-				
-			// language
-			var language_list = [];
-			for (var i in AntiGame_lang) {
-				var str = i.toString().match(/^Interface([A-Z]{2,3})$/);
-				if (str)
-					language_list.push( {value: str[1], text: AntiGame_lang[i].opt_languageName} );
-			}
-			
-			// EventList position
-			var evt_positions = [ 
-				{value:1, text: Options.Interface.lbl_onTop}, 
-				{value:0, text: Options.Interface.lbl_onBottom}
-				];
-				
-			// Resources info position
-			var res_positions = [ 
-				{value:0, text: ' - '}, 
-				{value:1, text: Options.Interface.lbl_onBottom},
-				{value:2, text: Options.Interface.lbl_onLeft}
-				];
-
-			var div = document.createElement('div');
-			div.className = 'hidden';
-			div.id = 'anti_options_window';
-			div.innerHTML =
-				'<div id="title">'+Options.Interface.opt_title+'</div>' + 
-				'<div id="content">' +
-				startSection(Options.Interface.lbl_sectionGeneral) +
-					createSelect('language', language_list) +
-					createInput('showLocalTime') +
-					createInput('showServerOgameClock') +
-					createInput('blockAutoComplete') +
-					createSelect('showResources', res_positions) +
-					createInput('showDeficient') +
-					createInput('showNames') +
-					createInput('nameColorOn') +
-					createInput('nameColorOff') +
-					createInput('nameColorDisabled') +
-					createInput('uni_SpeedFactor') +
-				endSection() +
-				startSection(Options.Interface.lbl_sectionEventList) +
-					createInput('showEventList') +
-					createSelect('evt_showOnTop', evt_positions) +
-					createInput('evt_noScroll') +
-				endSection() +
-				startSection(Options.Interface.lbl_sectionGalaxy) +
-					createInput('galaxyShowRank') +
-					createInput('galaxyRankColor') +
-					createInput('galaxyDebrisMin') +
-					createInput('galaxyDebrisColor') +
-					createInput('galaxyHideMoon') +
-					createInput('galaxy_Players') +
-					createInput('galaxy_PlayerColors') +
-					createInput('galaxy_Allys') +
-					createInput('galaxy_AllyColors') +
-					createInput('galaxy_killTips') +
-					createInput('galaxy_keepTipsPlanets') +
-					createInput('galaxy_keepTipsDebris') +
-				endSection() +
-				startSection(Options.Interface.lbl_sectionMessages) +
-					createInput('msg_PlunderThreshold') +
-					createInput('msg_DebrisThreshold') +
-					createInput('msg_foldSmallPlunder') +
-					createInput('msg_showPlunder') +
-					createInput('msg_addButtons') +
-					createInput('msg_fixColors') +
-					createInput('msg_killTips') +
-				endSection() +
-				startSection(Options.Interface.lbl_sectionFleetDispatch) +
-					createInput('fleet_showCapacity') +
-					createInput('fleet1_killTips') +
-					createInput('autocopyCoords') +
-					createInput('fleet2_setTargetDF') +
-					createInput('fleet2_fixLayout') +
-					createInput('fleet2_ShortLinks') +
-					createSelect('mission1', missions, Options.Interface.opt_missionPriority) +
-					createSelect('mission2', missions, '') +
-					createSelect('mission3', missions, '') +
-					createSelect('mission4', missions, '') +
-					createSelect('mission5', missions, '') +
-				endSection() +
-				startSection(Options.Interface.lbl_sectionFleetMovement) +
-					createInput('mvmt_expandFleets') +
-					createInput('mvmt_showReversal') +
-					createInput('missAttack') +
-					createInput('missColony') +
-					createInput('missDeploy') +
-					createInput('missDestroy') +
-					createInput('missEspionage') +
-					createInput('missExpedition') +
-					createInput('missFederation') +
-					createInput('missHarvest') +
-					createInput('missHold') +
-					createInput('missTransport') +
-				endSection() +
-				'</div>' +
-				'<div id="note"> ' + notemark + ' ' + this.Interface.lbl_optionsNote1 + ' (Firefox)</div>' +
-				'<div id="control">' + 
-					createButton('btnOk') + createButton('btnCancel') + 
-					createButtonHref('btnHomePage','http://userscripts.org/scripts/show/58952', 'Home page')
-				'<div style="clear:both; padding: 0px"></div></div>';
-			document.body.appendChild(div);
-			
-			$('#btnOk').bind('click', function() { setTimeout( function () {Options.hideWindow(true);}, 0)} );
-			$('#btnCancel').bind('click', function() { Options.hideWindow(false);} );
-			$('#anti_options_window .color')
-				.bind('change', Options.changeInputColor)
-				.bind('keyup', Options.changeInputColor);
-		},
-		
-		copyMissingProperties: function(src, parent, strChild)
-		{
-			var dst = parent[strChild];
-			if (!dst) {
-				parent[strChild] = src;
-				return;
-			}
-			
-			if (src === dst) return;
-
-			for (i in src) {
-				if ( !dst[i] || typeof(src[i]) != typeof(dst[i]) )
-					dst[i] = src[i];
-			}
-		},
-
-		readResLabels: function()
-		{
-			function getValueFromId(id) {
-				var node = document.getElementById(id);
-				if (!node || !node.title) return;
-				
-				return node.title.match(/\|<B>\s*(.+):\s*<\/B>/i)[1];
-			}
-			
-			this.Labels.lbl_metal = getValueFromId('metal_box');
-			this.Labels.lbl_crystal = getValueFromId('crystal_box');
-			this.Labels.lbl_deuterium = getValueFromId('deuterium_box');
-			this.Labels.lbl_energy = getValueFromId('energy_box');
-			this.Labels.lbl_darkmatter = getValueFromId('darkmatter_box');
-		},
-
-		initLang: function()
-		{
-			if (!this.language) this.language = Utils.server_lang;
-			
-			var external_langpack = Utils.unsafeWindow.AntiGame_lang;
-			if (external_langpack)
-				for (var i in external_langpack)
-					AntiGame_lang[i] = external_langpack[i];
-
-			this.Interface = AntiGame_lang['Interface'+this.language];
-			this.Labels = AntiGame_lang['Labels'+Utils.server_lang];
-						
-			this.copyMissingProperties(AntiGame_lang.LabelsEN, this, 'Labels');
-			this.copyMissingProperties(AntiGame_lang.InterfaceEN, this, 'Interface');
-			
-			this.readResLabels();
-		},
-
-		Init: function()
-		{
-			this.insertCSSRules();
-			
-			if (Utils.uni_prefix == 'UNI42_ORG') this.uni_SpeedFactor = 2;
-			else if (Utils.uni_prefix == 'ELECTRA_ORG') this.uni_SpeedFactor = 4;
-			else if (Utils.uni_prefix == 'CAPELLA_RU') this.uni_SpeedFactor = 4;
-			
-			this.loadOptions();
-			
-			this.initLang();
-			this.addOptionsButton();
-			
-			this.Interface.lbl_btnDeleteSmallPlunder = this.Interface.lbl_btnDeleteSmallPlunder
-				.replace( '$plunder', Utils.formatNumber(this.msg_PlunderThreshold*1000) )
-				.replace( '$debris', Utils.formatNumber(this.msg_DebrisThreshold*1000) )
-				;
-				
-			this.Interface.opt_galaxy_killTips = this.Interface.opt_killTips + ' ('+this.Interface.lbl_sectionGalaxy+')';
-			this.Interface.opt_fleet1_killTips = this.Interface.opt_killTips + ' ('+this.Interface.lbl_sectionFleetDispatch+' 1)';
-			this.Interface.opt_msg_killTips = this.Interface.opt_killTips + ' ('+this.Interface.lbl_sectionMessages+')';
-
-		}
-	}
-
-
-	// =======================================================================
-	// Date/Time functions
-	// =======================================================================
-
-	var DateTime = 
-	{
-		TimeDelta: 0,
-		TimeZoneDelta: 0,
-		InitialServerTime: 0,
-
-		getTimeDelta: function()
-		{
-			if (Utils.isCurrentPage('showmessage,eventList,phalanx'))
-			{
-				this.TimeZoneDelta = parseInt(Utils.getValueUni('TimeZoneDelta', 0), 10);
-				return;
-			}
-
-			this.TimeDelta = 0;
-			if (!Utils.script) return;
-
-			this.InitialServerTime = Utils.unsafeWindow.serverTime;
-
-			if (!this.InitialServerTime) return;
-			this.InitialServerTime = this.InitialServerTime.getTime();
-
-			var now = new Date();
-
-			// server time (using current timezone) - local time
-			this.TimeDelta = now.getTime() - this.InitialServerTime;
-
-			// timezone correction
-			this.TimeZoneDelta = - ( now.getTimezoneOffset()/60 + Utils.unsafeWindow.TimezoneOffset ) *60*60*1000;
-
-			if (!Utils.isCurrentPage('showmessage,eventList'))
-				Utils.setValueUni('TimeZoneDelta', this.TimeZoneDelta);
-		},
-
-		LZ: function(x)
-		{
-			return (x<0||x>9?"":"0") + x;
-		},
-
-		getDatePart: function (date)
-		{ 
-			return Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()); 
-		},
-		
-		getFinishTime: function(tick)
-		{
-			var date = new Date();
-			date.setTime(this.InitialServerTime + parseInt(tick)*1000, 10);
-			return date;
-		},
-		
-		formatDate: function (date, format)
-		{
-			var str = "";
-			try {
-				if (!format || format=="") {
-					format = '[H]:[i]:[s]';
-					var now = new Date();
-
-					if (this.getDatePart(now) != this.getDatePart(date) )
-						format = '[d]/[m] ' + format;
-				}
-				
-				var str = format;
-				
-				str = str.replace("[d]",this.LZ(date.getDate()));
-				str = str.replace("[m]", this.LZ(date.getMonth()+1));
-				str = str.replace("[Y]", date.getFullYear());
-				str = str.replace("[y]", date.getFullYear().toString().substr(2,4));
-				str = str.replace("[H]", this.LZ(date.getHours()));
-				str = str.replace("[i]", this.LZ(date.getMinutes()));
-				str = str.replace("[s]",this.LZ(date.getSeconds()));
-			}
-			catch (e) { Utils.log(e); }
-
-			return str;
-		},
-		
-		formatDate2: function (date, format)
-		{
-			if (Options.showLocalTime)
-				return DateTime.formatDate(date, format);
-			else
-				return DateTime.formatDateServer(date, format);
-		},
-		
-		formatDateServer: function (date, format)
-		{
-			if (!format || format=="") {
-				format = '[H]:[i]:[s]';
-				var now = new Date();
-
-				if (this.getDatePart(now) != this.getDatePart(date) )
-					format = '[d]/[m] ' + format;
-			}
-
-			
-			date.setTime (date.getTime() - this.TimeZoneDelta );
-			return DateTime.formatDate( date, format);
-		},
-		
-		parseTime: function (strTime)
-		{
-			if (!strTime) return 0;
-			
-			strTime = strTime.replace(/[^0-9:]/,'');
-			var parts = strTime.split(':');
-			
-			if (!parts || parts.length != 3) return 0;
-			
-			return (parseInt(parts[0],10)*60*60 + parseInt(parts[1],10)*60 + parseInt(parts[2],10)) * 1000;
-		},
-
-		// d = day, m = month, y = year (2 digits), Y = year (4 digits), H = hour (2 digits), i = minutes, s = seconds
-		parse: function (strDate, format)
-		{
-			strDate = strDate.toString();
-			var str = format.match(/\[[dmyYHis]\]/g);
-			
-			if (!str || !str.length) return null;
-
-			var rx = format;
-			rx = rx.replace(/\./g,'\\.');
-			rx = rx.replace(/\//g,'\\/');
-			rx = rx.replace(/\-/g,'\\-');
-			
-			var index = {};
-
-			for (var i=0; i<str.length; i++) {
-				var token = str[i];
-				if (token == '[Y]') rx = rx.replace(token, '(\\d{4,4})');
-				else if (token == '[y]') rx = rx.replace(token, '(\\d{2,2})');
-				else rx = rx.replace(token, '(\\d{1,2})');
-
-				token = token.substr(1,1);
-				index[token] = i+1;
-			}
-			
-			str = strDate.match(new RegExp(rx, ''));
-			
-			
-			if (!str || !str.length) return null;
-			
-			
-			var date = new Date();
-			date.setSeconds(0); date.setMinutes(0); date.setHours(0);
-			
-			if (str[index.s]) date.setSeconds(str[index.s]);
-			if (str[index.i]) date.setMinutes(str[index.i]);
-			if (str[index.H]) date.setHours(str[index.H]);
-			
-			if (str[index.Y]) date.setFullYear(str[index.Y]);
-			else if (str[index.y]) {
-				var year = date.getFullYear();
-				year = Math.floor(year / 100) * 100 + str[index.y];
-				if (year > date.getFullYear()) year -= 100;
-				date.setFullYear(year);
-			}
-			
-			if (str[index.m]) date.setMonth(str[index.m] - 1);
-			if (str[index.d]) date.setDate(str[index.d]);
-			
-			return date;
-		},
-		
-		parse2: function(strDate, timeFormat, dateFormat)
-		{
-			if (!strDate) return null;
-			
-			if (!timeFormat) {
-				timeFormat = '[H]:[i]:[s]';
-				dateFormat = '[d].[m].[Y]';
-			}
-
-			var str = strDate.toString();
-
-			if (!dateFormat)
-			{
-				return this.parse(str, timeFormat, true);
-			}
-			else 
-			{
-				var time = this.parse(str, timeFormat);
-				var date = this.parse(str, dateFormat);
-
-				if (!date && !time) return null;
-
-				var newDate = new Date();
-
-				if (date) {
-					newDate.setFullYear(date.getFullYear());
-					newDate.setMonth(date.getMonth());
-					newDate.setDate(date.getDate());
-				}
-
-				if (time) {
-					newDate.setHours(time.getHours());
-					newDate.setMinutes(time.getMinutes());
-					newDate.setSeconds(time.getSeconds());
-				}
-				
-				return newDate;
-			}
-		},
-		
-		convertDateServer2Local: function(date)
-		{
-			var newDate = new Date();
-			newDate.setTime( date.getTime() + this.TimeZoneDelta );
-			return newDate;
-		},
-		
-		convertStringServer2Local: function (strDate, timeFormat, dateFormat)
-		{
-			if (!timeFormat) {
-				timeFormat = '[H]:[i]:[s]';
-				dateFormat = '[d].[m].[Y]';
-			}
-
-			var oldDate = this.parse2(strDate, timeFormat, dateFormat);
-			if (!oldDate) return strDate;
-
-			var newDate = this.convertDateServer2Local(oldDate);
-			
-			var str = strDate.toString();
-			str = str.replace(this.formatDate(oldDate,timeFormat), this.formatDate(newDate,timeFormat));
-			
-			if (dateFormat) str = str.replace(this.formatDate(oldDate,dateFormat), this.formatDate(newDate,dateFormat));
-			
-			return str;
-		},
-		
-		changeOgameClocks2Server: function()
-		{
-			var code = ' \
-				function UhrzeitAnzeigen() { \
-				var Sekunden = serverTime.getSeconds(); \
-				serverTime.setSeconds(Sekunden+1); \
-				Uhrzeitanzeige = getFormatedDate(serverTime.getTime() - ' + this.TimeZoneDelta + ', "[d].[m].[Y] <span>[H]:[i]:[s]</span>"); \
-				if(document.getElementById) \
-					document.getElementById("OGameClock").innerHTML = Uhrzeitanzeige; \
-				else if(document.all) \
-					Uhrzeit.innerHTML = Uhrzeitanzeige; \
-				} ';
-				
-			Utils.runScript(code);
-		},
-		
-		changeNodesTime: function (xpath, format)
-		{
-			var nodes = Utils.XPath(xpath);
-			
-			for (var i = 0; i < nodes.snapshotLength; i++)
-				{
-					var node = nodes.snapshotItem(i);
-					node.innerHTML = DateTime.convertStringServer2Local(node.innerHTML, format);
-				}
-		},
-		
-		Init: function()
-		{
-			this.getTimeDelta();
-			
-			//if (Options.showLocalTime)
-			//	this.changeOgameClocks2Local();
-			
-			if (Options.showServerOgameClock)
-				this.changeOgameClocks2Server();
-		}
-	}
-
-	
-	// =======================================================================
-	// misc functions
-	// =======================================================================
-	var Utils =
-	{
-		page: "",
-		unsafeWindow: window,
-		bg: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAALHRFWHRDcmVhdGlvbiBUaW1lAHPhYiAzMSBPdXQgMjAwOSAxODoyNjowOSAtMDAwMBvBwloAAAAHdElNRQfZCh8SGy7RbQlkAAAACXBIWXMAAB7BAAAewQHDaVRTAAAABGdBTUEAALGPC/xhBQAAAA1JREFUeNpjYGBgmAEAAJ0AmeuxAnUAAAAASUVORK5CYII=",
-		
-		// wrappers for GM functions
-		setValue: function ( cookieName, cookieValue )
-		{
-			if (Utils.isFirefox)
-				GM_setValue(cookieName, cookieValue);
-				
-			else {
-			if( !cookieName ) { return; }
-				var lifeTime = 31536000;
-				document.cookie = escape( cookieName ) + "=" + escape( Utils.getRecoverableString( cookieValue ) ) +
-					";expires=" + ( new Date( ( new Date() ).getTime() + ( 1000 * lifeTime ) ) ).toGMTString() + ";path=/";
-			}
-		},
-		
-		getValue: function ( cookieName, oDefault )
-		{
-			if (Utils.isFirefox)
-				return GM_getValue(cookieName, oDefault);
-				
-			else {
-				var cookieJar = document.cookie.split( "; " );
-				for( var x = 0; x < cookieJar.length; x++ ) {
-					var oneCookie = cookieJar[x].split( "=" );
-					if( oneCookie[0] == escape( cookieName ) ) {
-						try {
-							eval('var footm = '+unescape( oneCookie[1] ));
-						} catch(e) { return oDefault; }
-						return footm;
-					}
-				}
-				return oDefault;
-			}
-		},
-		
-		setValueUni: function ( name, value )
-		{
-			Utils.setValue(Utils.uni_prefix + name, value);
-		},
-
-		getValueUni: function ( name, def )
-		{
-			return Utils.getValue(Utils.uni_prefix + name, def);
-		},
-
-		log: function (str)
-		{
-			if (Utils.isFirefox)
-				GM_log(str);
-			else if (Utils.isOpera)
-				window.opera.postError(str);
-		},
-		
-		dump: function(obj, proplist, showUndefined)
-		{
-			if ( typeof(showUndefined) == 'undefined' ) showUndefined = true;
-			
-			if (typeof(obj) != 'object') {
-				var label = ( proplist ? proplist+': ' : '' );
-				Utils.log(''+label+obj);
-			}
-
-			else if (!proplist) {
-				for (var i in obj)
-					try {
-						if (typeof(obj[i]) != 'function')
-							Utils.log(i+': '+obj[i])
-					} catch(e) {}
-
-			}
-			else {
-				var props = proplist.split(',');
-				for (var i=0; i<props.length; i++)
-					try {
-						var prop = props[i];
-						if (showUndefined || typeof(obj[prop]) != 'undefined') Utils.log(prop+': '+obj[props[i]])
-					} catch(e) {}
-			}
-		},
-		
-		getRecoverableString: function(oVar,notFirst)
-		{
-			var oType = typeof(oVar);
-			if( ( oType == 'null' ) || ( oType == 'object' && !oVar ) ) {
-				//most browsers say that the typeof for null is 'object', but unlike a real
-				//object, it will not have any overall value
-				return 'null';
-			}
-			if( oType == 'undefined' ) { return 'window.uDfXZ0_d'; }
-			if( oType == 'object' ) {
-				//Safari throws errors when comparing non-objects with window/document/etc
-				if( oVar == window ) { return 'window'; }
-				if( oVar == document ) { return 'document'; }
-				if( oVar == document.body ) { return 'document.body'; }
-				if( oVar == document.documentElement ) { return 'document.documentElement'; }
-			}
-			if( oVar.nodeType && ( oVar.childNodes || oVar.ownerElement ) ) { return '{error:\'DOM node\'}'; }
-			if( !notFirst ) {
-				Object.prototype.toRecoverableString = function (oBn) {
-					if( this.tempLockIgnoreMe ) { return '{\'LoopBack\'}'; }
-					this.tempLockIgnoreMe = true;
-					var retVal = '{', sepChar = '', j;
-					for( var i in this ) {
-						if( i == 'toRecoverableString' || i == 'tempLockIgnoreMe' || i == 'prototype' || i == 'constructor' ) { continue; }
-						if( oBn && ( i == 'index' || i == 'input' || i == 'length' || i == 'toRecoverableObString' ) ) { continue; }
-						j = this[i];
-						if( !i.match(basicObPropNameValStr) ) {
-							//for some reason, you cannot use unescape when defining peoperty names inline
-							for( var x = 0; x < cleanStrFromAr.length; x++ ) {
-								i = i.replace(cleanStrFromAr[x],cleanStrToAr[x]);
-							}
-							i = '\''+i+'\'';
-						} else if( window.ActiveXObject && navigator.userAgent.indexOf('Mac') + 1 && !navigator.__ice_version && window.ScriptEngine && ScriptEngine() == 'JScript' && i.match(/^\d+$/) ) {
-							//IE mac does not allow numerical property names to be used unless they are quoted
-							i = '\''+i+'\'';
-						}
-						retVal += sepChar+i+':'+getRecoverableString(j,true);
-						sepChar = ',';
-					}
-					retVal += '}';
-					this.tempLockIgnoreMe = false;
-					return retVal;
-				};
-				Array.prototype.toRecoverableObString = Object.prototype.toRecoverableString;
-				Array.prototype.toRecoverableString = function () {
-					if( this.tempLock ) { return '[\'LoopBack\']'; }
-					if( !this.length ) {
-						var oCountProp = 0;
-						for( var i in this ) { if( i != 'toRecoverableString' && i != 'toRecoverableObString' && i != 'tempLockIgnoreMe' && i != 'prototype' && i != 'constructor' && i != 'index' && i != 'input' && i != 'length' ) { oCountProp++; } }
-						if( oCountProp ) { return this.toRecoverableObString(true); }
-					}
-					this.tempLock = true;
-					var retVal = '[';
-					for( var i = 0; i < this.length; i++ ) {
-						retVal += (i?',':'')+getRecoverableString(this[i],true);
-					}
-					retVal += ']';
-					delete this.tempLock;
-					return retVal;
-				};
-				Boolean.prototype.toRecoverableString = function () {
-					return ''+this+'';
-				};
-				Date.prototype.toRecoverableString = function () {
-					return 'new Date('+this.getTime()+')';
-				};
-				Function.prototype.toRecoverableString = function () {
-					return this.toString().replace(/^\s+|\s+$/g,'').replace(/^function\s*\w*\([^\)]*\)\s*\{\s*\[native\s+code\]\s*\}$/i,'function () {[\'native code\'];}');
-				};
-				Number.prototype.toRecoverableString = function () {
-					if( isNaN(this) ) { return 'Number.NaN'; }
-					if( this == Number.POSITIVE_INFINITY ) { return 'Number.POSITIVE_INFINITY'; }
-					if( this == Number.NEGATIVE_INFINITY ) { return 'Number.NEGATIVE_INFINITY'; }
-					return ''+this+'';
-				};
-				RegExp.prototype.toRecoverableString = function () {
-					return '\/'+this.source+'\/'+(this.global?'g':'')+(this.ignoreCase?'i':'');
-				};
-				String.prototype.toRecoverableString = function () {
-					var oTmp = escape(this);
-					if( oTmp == this ) { return '\''+this+'\''; }
-					return 'unescape(\''+oTmp+'\')';
-				};
-			}
-			if( !oVar.toRecoverableString ) { return '{error:\'internal object\'}'; }
-			var oTmp = oVar.toRecoverableString();
-			if( !notFirst ) {
-				//prevent it from changing for...in loops that the page may be using
-				delete Object.prototype.toRecoverableString;
-				delete Array.prototype.toRecoverableObString;
-				delete Array.prototype.toRecoverableString;
-				delete Boolean.prototype.toRecoverableString;
-				delete Date.prototype.toRecoverableString;
-				delete Function.prototype.toRecoverableString;
-				delete Number.prototype.toRecoverableString;
-				delete RegExp.prototype.toRecoverableString;
-				delete String.prototype.toRecoverableString;
-			}
-			return oTmp;
-		},
-				
-		addSpanMark: function(value, content)
-		{
-			var className = !value ? 'middlemark' : value > 0 ? 'undermark' : 'overmark';
-			content = content || ('(' + ( (value>0)?'+':'' ) + Utils.formatNumber(value) + ')' );
-			return '<span class="'+className+'">'+content+'</span>';
-		},
-		
-		blockAutocomplete: function()
-		{
-			var forms = document.getElementsByTagName('form');
-			for (var i=0; i<forms.length; i++) 
-				forms[i].setAttribute('autocomplete','off');
-		},
-
-		checkRedesign: function()
-		{
-			return (this.unsafeWindow.$ || this.isCurrentPage('showmessage')) ? true : false;
-		},
-		
-		createStyleSheet: function()
-		{
-			document.getElementsByTagName('head')[0].appendChild(document.createElement("style"));
-			Utils.stylesheet = document.styleSheets[document.styleSheets.length-1];
-		},
-		
-		formatNumber: function (num)
-		{
-			var str = '' + num;
-			var rgx = /(\d+)(\d{3})/;
-			while (rgx.test(str)) {
-				str = str.replace(rgx, '$1' + this.separator + '$2');
-			}
-
-			return str;
-		},
-		
-		trim: function(str)
-		{
-			return str ? str.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1") : null;
-		},
-		
-		getDocScript: function()
-		{
-			var scripts = document.getElementsByTagName('script');
-			this.script = null;
-			
-			var n = 0;
-
-			for (var i=0; i<scripts.length; i++)
-				if (!scripts[i].src && ! (this.isCurrentPage('messages') && n++ == 0)) {
-					this.script = scripts[i];
-					break;
-				}
-
-		},
-
-	    insertAfter: function (newElement,targetElement)
-		{
-			if (!newElement || !targetElement) return;
-			
-			var parent = targetElement.parentNode;
-			if(parent.lastchild == targetElement)
-				parent.appendChild(newElement);
-			else
-				parent.insertBefore(newElement, targetElement.nextSibling);
-		},
-		
-		deleteNode: function(node)
-		{
-			if(node) node.parentNode.removeChild(node);
-		},
-
-		insertCSSRule: function (rule)
-		{
-			Utils.stylesheet.insertRule(rule, 0);
-		},
-		
-		isCurrentPage: function (page)
-		{
-			var pages = page.toLowerCase().split(',');
-			for (var i=0; i<pages.length; i++)
-				if (pages[i] == this.page )
-					return true;
-					
-			return false;
-		},
-		
-		runScript: function (code)
-		{
-			if (!code || code=="") return;
-			document.location.href = 'javascript:'+code+';void(0);';
-		},
-		
-		trigger: function (id, event)
-		{
-			
-			var node = ( (typeof(id) == 'string') ? document.getElementById(id) : id );
-			if (!node) return;
-			
-			var evt;
-			if (event == 'click' || event == 'mouseup') {
-				evt = document.createEvent("MouseEvents");
-				evt.initMouseEvent(event, true, true, Utils.unsafeWindow,  0, 0, 0, 0, 0, false, false, false, false, 0, null);
-			}
-			else if (event == 'change' || event == 'focus') {
-				var evt = document.createEvent("HTMLEvents");
-				evt.initEvent(event, true, false);
-			}
-			else if (event == 'keyup' || event == 'keypress') {
-			}
-			
-			if (evt) node.dispatchEvent(evt);
-			
-		},
-		
-		killCluetips: function(selector)
-		{
-			selector = selector || '.tips';
-			Utils.$(selector).cluetip('destroy').unbind('mouseover').each(function(){this.title = this.title.replace('|','')});
-		},
-		
-		XPath: function(path, context, type)
-		{
-			try {
-				if (!context) context = document;
-				mydoc = context.ownerDocument || document;
-				if (!type) type = XPathResult.ORDERED_NODE_SNAPSHOT_TYPE;
-				return mydoc.evaluate(path, context, null, type, null)
-			}
-			catch (e) {Utils.log(e); }
-		},
-		
-		XPathSingle: function(path, context)
-		{
-			return this.XPath(path, context, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE).snapshotItem(0);
-		},
-		
-		getElementsByClassName: function(className, context)
-		{
-			var path = '';
-			var classes = className.match(/\S+/gi);
-			for (var i=0; i<classes.length; i++) {
-				var c = classes[i];
-				if (path) path += ' and ';
-				if (c.substr(0,1) == '!') {
-					path += 'false=';
-					c = c.substr(1);
-				}
-
-				path += 'contains(concat(" ", normalize-space(@class), " "), " ' + c + ' ")';
-			}
-			
-			return this.XPath('descendant::*['+path+']', context);
-		},
-		
-		getElementByClassName: function(className, context)
-		{
-			return this.getElementsByClassName(className,context).snapshotItem(0);
-		},
-		
-		parseInt: function(str)
-		{
-			if (!str) return null;
-			//str = str.replace(/(\d+)kk/i, '$1'+'000000');
-			return parseInt(str.replace(/[^\d\-]/g, ''), 10);
-		},
-
-		extractInt: function(str, rx)
-		{
-			if (!str) return null;
-			str = str.toString();
-			
-			if (!rx)
-				return Utils.parseInt(str);
-
-			str = str.match(rx);
-			if (!str) return null;
-			else return Utils.parseInt(str[1]);
-		},
-		
-		getIntById: function(id, property, rx) {
-			var node = document.getElementById(id);
-			property = property || 'innerHTML';
-			if (!node || !node[property]) return null;
-			return Utils.extractInt(node[property], rx);
-		},
-		
-		getIntByXPath: function(xpath, property, rx)
-		{
-			property = property || 'innerHTML';
-			var node = Utils.XPathSingle(xpath);
-			if (!node) return null;
-			return Utils.extractInt(node[property], rx);
-		},
-
-		initUni: function()
-		{
-			this.server = "EN";
-			
-			var url = document.location.href;
-			server = url.match(/http:\/\/([^\\\/]+[\\\/])/i);
-			
-			if (server) server = server[1].toUpperCase();
-			server = server.replace(/\\/i, '/');
-			
-			if 		(server.indexOf('AR.OGAME.ORG/') > -1)  this.server = 'AR'; // Argentina
-			else if (server.indexOf('BA.OGAME.ORG/') > -1)  this.server = 'BA'; // Balkan countries
-			else if (server.indexOf('BG.OGAME.ORG/') > -1)  this.server = 'BG'; // Bulgaria
-			else if (server.indexOf('OGAME.COM.BR/') > -1)  this.server = 'BR'; // Brasil
-			else if (server.indexOf('CN.OGAME.ORG/') > -1)  this.server = 'CN'; // China
-			else if (server.indexOf('OGAME.CZ/') > -1)  this.server = 'CZ'; // Czech Republic
-			else if (server.indexOf('OGAME.DE/') > -1)  this.server = 'DE'; // Germany
-			else if (server.indexOf('OGAME.DK/') > -1)  this.server = 'DK'; // Denmark
-			else if (server.indexOf('OGAME.COM.ES/') > -1)  this.server = 'ES'; // Spain
-			else if (server.indexOf('FI.OGAME.ORG/') > -1)  this.server = 'FI'; // Finnland
-			else if (server.indexOf('OGAME.FR/') > -1)  this.server = 'FR'; // France
-			else if (server.indexOf('OGAME.GR/') > -1)  this.server = 'GR'; // Greece
-			else if (server.indexOf('OGAME.COM.HR/') > -1)  this.server = 'HR'; // Croatia
-			else if (server.indexOf('OGAME.HU/') > -1)  this.server = 'HU'; // Hungary
-			else if (server.indexOf('OGAME.IT/') > -1)  this.server = 'IT'; // Italy
-			else if (server.indexOf('OGAME.JP/') > -1)  this.server = 'JP'; // Japan
-			else if (server.indexOf('OGAME2.CO.KR/') > -1)  this.server = 'KR'; // Korea
-			else if (server.indexOf('OGAME.LT/') > -1)  this.server = 'LT'; // Lithuania
-			else if (server.indexOf('OGAME.LV/') > -1)  this.server = 'LV'; // Latvia
-			else if (server.indexOf('MX.OGAME.ORG/') > -1)  this.server = 'MX'; // Mexico
-			else if (server.indexOf('OGAME.NL/') > -1)  this.server = 'NL'; // Netherlands
-			else if (server.indexOf('OGAME.NO/') > -1)  this.server = 'NO'; // Norway
-			else if (server.indexOf('OGAME.ONET.PL/') > -1)  this.server = 'PL'; // Poland
-			else if (server.indexOf('OGAME.COM.PT/') > -1)  this.server = 'PT'; // Portugal
-			else if (server.indexOf('OGAME.RO/') > -1)  this.server = 'RO'; // Romania
-			else if (server.indexOf('OGAME.RU/') > -1)  this.server = 'RU'; // Russia
-			else if (server.indexOf('OGAME.SE/') > -1)  this.server = 'SE'; // Sweden
-			else if (server.indexOf('OGAME.SI/') > -1)  this.server = 'SI'; // Slovenia
-			else if (server.indexOf('OGAME.SK/') > -1)  this.server = 'SK'; // Slovakia
-			else if (server.indexOf('OGAME.COM.TR/') > -1)  this.server = 'TR'; // Turkey
-			else if (server.indexOf('OGAME.TW/') > -1)  this.server = 'TW'; // Taiwan
-			else if (server.indexOf('OGAME.US/') > -1 ) this.server = 'US'; // USA
-			else if (server.indexOf('OGAME.ORG/') > -1) this.server = 'ORG'; // UK
-			
-			this.server_lang = this.server;
-			if (this.server == 'US' && this.server == 'ORG') this.server_lang = 'EN';
-
-			this.uni = url.toUpperCase().match(/:\/\/([a-z0-9]+)\./i);
-			this.uni = this.uni ? this.uni[1] : '0';
-			
-			var uni_server = this.uni + '.' + this.server;
-			
-			this.uni_prefix = uni_server.replace(/[\.\-]/g, '_');
-			
-			this.page = document.location.search.match(/page=(\w+)/i);
-			this.page = this.page ? this.page[1].toLowerCase() : "";
-		},
-		
-		Init: function()
-		{
-			this.createStyleSheet();
-
-			this.isOpera = (window.opera) ? true : false;
-			this.isFirefox = (window.navigator.userAgent.indexOf('Firefox') > -1 ) ? true : false;
-			
-			this.getDocScript();
-			
-			try { this.unsafeWindow = unsafeWindow; }
-			catch (e) { this.unsafeWindow = window; }
-			
-			this.$ = this.unsafeWindow.$;
-			
-			try { this.separator = this.unsafeWindow.LocalizationStrings['thousandSeperator'] || '.' }
-			catch (e) { this.separator = '.' }
-			
-			
-			// server abbr, server language, uni, speedfactor, page name
-			this.initUni();
-		}
-	}
-
-
-	// =======================================================================
-	// Ogame formulas and functions
-	// =======================================================================
-	
-	var Ogame =
-	{
-		TECH_ENERGY: 113,
-		TECH_COMB_DRIVE: 115,
-		TECH_IMPULSE_DRIVE: 117,
-		TECH_HYPER_DRIVE: 118,
-		
-		used_techs: [113, 115, 117, 118],
-
-		createShip: function (id, name, metal, crystal, drive, speed, capacity)
-		{
-			var ship = new Object();
-			ship.name = name;
-			ship.metal = metal;
-			ship.crystal = crystal;
-			
-			switch (drive) {
-				case 1: drive = this.TECH_COMB_DRIVE; break;
-				case 2: drive = this.TECH_IMPULSE_DRIVE; break;
-				case 3: drive = this.TECH_HYPER_DRIVE; break;
-				default: drive = this.TECH_COMB_DRIVE; break;
-			}
-			ship.drive = drive;
-			ship.speed = speed;
-			ship.capacity = capacity;
-			
-			this.ships[id] = ship;
-		},
-
-		readTechs: function()
-		{
-			try {
-				this.techs = [];
-				Utils.$('#buttonz a.detail_button').each(
-					function() {
-						Ogame.techs[this.getAttribute('ref')] = 
-							Utils.parseInt( Utils.$(this).find('.level').get(0).lastChild.nodeValue );
-					} );
-				
-				this.saveTechs();
-			} catch (e) { Utils.log(e) }
-		},
-
-		readTemperature: function()
-		{
-			// ---------
-			// min t * 2
-			// ---------
-			this.temperature = 0;
-			
-			var node;
-			var nodes = Utils.XPath('//A[contains(@class,"planetlink")][@title]');
-			if (!nodes) return;
-			
-			if (nodes.snapshotLength == 1) node = nodes.snapshotItem(0);
-			else 
-				for (var i=0; i<nodes.snapshotLength; i++)
-					if ( nodes.snapshotItem(i).className.indexOf('active') > -1 ) {
-						node = nodes.snapshotItem(i);
-						break;
-					}
-			
-			if (!node) return;
-			
-			var t = node.title.match(/<br>.*<br>[^\d\-]*([\d\-]+)/i);
-			if (!t) return;
-
-			this.temperature = t[1] * 2;
-		},
-
-		readOfficers: function()
-		{
-			function checkOfficer(i) {
-				return officers.get(i).src.indexOf('_un.gif') == -1;
-			}
-			
-			var officers = Utils.$('#officers a img');
-			this.engineer = checkOfficer(2);
-			this.geologist = checkOfficer(3);
-		},
-		
-		getTech: function(id)
-		{
-			if (this.techs == null) this.loadTechs();
-			return this.techs[id];
-		},
-		
-		getTemperature: function()
-		{
-			if (this.temperature == null) this.readTemperature();
-			return this.temperature;
-		},
-		
-		getGeologist: function()
-		{
-			if (this.geologist == null) this.readOfficers();
-			return this.geologist;
-		},
-
-		getEngineer: function()
-		{
-			if (this.engineer == null) this.readOfficers();
-			return this.engineer;
-		},
-
-		getConsumption: function(id, level)
-		{
-			if (!id || level<0) return;
-			
-			if (level == 0) return 0;
-			
-			var res = 0;
-			
-			if (id == 12)
-				res = Math.floor( 10 * level * Math.pow(1.1, level) ) * Options.uni_SpeedFactor;
-				
-			return Math.floor(res);
-		},
-		
-		getProduction: function(id, level)
-		{
-			if (!id || level<0) return;
-
-			if (level == 0)
-				return (id==1) ? 20 * Options.uni_SpeedFactor :
-								(id==2) ? 10  * Options.uni_SpeedFactor : 0;
-			
-			var res = 0;
-
-			if (id == 1)
-				res = 30 * level * Math.pow(1.1, level);
-			else if (id == 2)
-				res = 20 * level * Math.pow(1.1, level);
-			else if (id == 3)
-				res = 10 * level * Math.pow(1.1, level) * (1.28 - 0.002 * this.getTemperature());
-			else if (id == 4)
-				res = 20 * level * Math.pow(1.1, level);
-			else if (id == 12)
-				res = 30 * level * Math.pow( 1.05 + this.getTech(this.TECH_ENERGY) * 0.01, level);
-			
-			if (id==1 || id==2 || id==3)
-				res = Math.floor(res) * Options.uni_SpeedFactor;
-				
-			if (id <=3 && this.getGeologist())
-				res = Math.floor(res) * 1.1;
-			else if (id>3 && this.getEngineer())
-				res = Math.floor(res) * 1.1;
-
-				
-			return Math.floor( res + this.getProduction(id, 0) );
-			
-		},
-		
-		getStorageCapacity: function(id, level)
-		{
-			if (!id || level<0) return;
-			if (id != 22 && id != 23 && id != 24) return;
-			var res;
-			
-			switch (level) {
-				case 0: res = 10; break;
-				case 1: res = 20; break;
-				case 2: res = 40; break;
-				case 3: res = 75; break;
-				case 4: res = 140; break;
-				case 5: res = 255; break;
-				case 6: res = 470; break;
-				case 7: res = 865; break;
-				case 8: res = 1590; break;
-				case 9: res = 2920; break;
-				case 10: res = 5355; break;
-				case 11: res = 9820; break;
-				case 12: res = 18005; break;
-				case 13: res = 33005; break;
-				case 14: res = 60510; break;
-				case 15: res = 110925; break;
-				case 16: res = 203350; break;
-				case 17: res = 372785; break;
-				case 18: res = 683385; break;
-				case 19: res = 1297589; break;
-				case 20: res = 2296600; break;
-				default: res = 0;
-			}
-			
-			return res*1000;
-		},
-		
-		loadTechs: function()
-		{
-			try {
-				//if (!Utils.isFirefox) return;
-				//restore saved values
-
-				this.techs = [];
-				
-				var str = Utils.getValueUni('techs');
-				if (!str) return;
-				
-				str = str.split('&');
-				for (var i=0; i<str.length; i++) {
-					var pair = str[i].split('=');
-					this.techs[ parseInt(pair[0],10) ] = parseInt(pair[1],10);
-				}
-			} catch (e) { Utils.log(e) }
-		},
-		
-		saveTechs: function()
-		{
-			//if (!Utils.isFirefox) return;
-
-			var str = '';
-			for (var i in this.used_techs) {
-				var id = this.used_techs[i];
-				if (str) str += '&';
-				str += ''+id+'='+this.techs[id];
-			}
-			
-			Utils.setValueUni('techs', str);
-		},
-
-		updateShipSpeed: function()
-		{
-			if (this.getTech(this.TECH_IMPULSE_DRIVE) >= 5) {
-				this.ships[202].speed = 10000;
-				this.ships[202].drive = this.TECH_IMPULSE_DRIVE;
-			}
-
-			if (this.getTech(this.TECH_HYPER_DRIVE) >= 8) {
-				this.ships[211].speed = 5000;
-				this.ships[211].drive = this.TECH_HYPER_DRIVE;
-			}
-
-			for (var i in this.ships) {
-				var ship = this.ships[i];
-				var factor = (ship.drive == this.TECH_COMB_DRIVE) ? 0.1 : (ship.drive == this.TECH_IMPULSE_DRIVE) ? 0.2 : 0.3;
-				ship.speed = Math.floor( ship.speed * (1 + this.getTech(ship.drive) * factor) );
-				
-			}
-			
-		},
-		
-		Init: function()
-		{
-			this.temperature = this.geologist = this.engineer = this.techs = null;
-
-			var str = document.location.href.match(/:\/\/([^\/]+)\//);
-			this.prefix = str ? str[1].toUpperCase().replace(/[\.\-]/g, '') : '';
-
-			this.ships = [];
-			// id, name, metal, crystal, drive, speed, capacity
-			this.createShip(202, 'SCargo',		2000,	2000,	1, 5000,	5000);
-			this.createShip(203, 'LCargo',		6000,	6000,	1, 7500,	25000);
-			this.createShip(204, 'LFighter',	3000,	1000,	1, 12500,	50);
-			this.createShip(205, 'HFighter',	6000,	4000,	2, 10000,	100);
-			this.createShip(206, 'Cruiser',		20000,	7000,	2, 15000,	800);
-			this.createShip(207, 'Battleship',	45000,	15000,	3, 10000,	1500);
-			this.createShip(208, 'Colonizator',	10000,	20000,	2, 2500,	7500);
-			this.createShip(209, 'Recycler',	10000,	6000,	1, 2000,	20000);
-			this.createShip(210, 'Spy',			0,		1000,	1, 100000000, 0);
-			this.createShip(211, 'Bomber',		50000,	25000,	2, 4000,	500);
-			this.createShip(213, 'Destroyer',	60000,	50000,	3, 5000,	2000);
-			this.createShip(214, 'RIP',			5000000,4000000,3, 100,		1000000);
-			this.createShip(215, 'BCruiser',	30000,	40000,	3, 10000,	750);
-			this.createShip(212, 'Satellite',	0,		2000,	1, 0,		0);
-		}
-	}
-
-
-	
-	// =======================================================================
-	// A few functions for player/ally highlighting
-	// =======================================================================
-	var Colorer = 
-	{
-		PLAYER: 'Player',
-		ALLY: 'Ally',
-		
-		prepare: function(who, names, colors)
-		{
-			try {
-				if (!names || !colors) return;
-				
-				names = names.split(',');
-				colors = colors.split(',');
-				
-				this[who+'Colors'] = [];
-				
-				for (var i=0; i<names.length; i++)
-					if (names[i] || colors[i]) this[who+'Colors'][names[i]] = colors[i];
-			} catch(e) { Utils.log(e) }
-		},
-		
-		highlight: function(who, xpath, context, parser)
-		{
-			try {
-				if ( !this[who+'Colors'] ) return;
-				var node = Utils.XPathSingle(xpath, context);
-				if(!node || !node.firstChild) return;
-				
-				var name = Utils.trim(node.firstChild.nodeValue);
-				if (typeof parser == 'function') name = parser(name);
-				if(!name) return;
-
-				var color = this[who+'Colors'][name];
-				if (color) node.style.color = color;
-			} catch(e) { Utils.log(e) }
-		},
-		
-		Init: function()
-		{
-			this.prepare(this.PLAYER, Options['galaxy_Players'], Options['galaxy_PlayerColors'] );
-			this.prepare(this.ALLY, Options['galaxy_Allys'], Options['galaxy_AllyColors'] );
-		}
-	}
-
-	
-	// functions to create simple table like 
-	// 		<title>
-	// <label:> <value>
-	// <label:> <value>
-	
-	var SimpleTable =
-	{
-		addCell: function(_key, _value, _value_class, _id)
-		{
-			if (typeof(_key) == 'undefined') _key = '';
-			if (typeof(_value) == 'undefined') _value = '';
-			
-			this.data[this.data.length] = { key: _key, value: _value, value_class: _value_class, id: _id, attr: '' };
-			this.lastCell = this.data[this.data.length-1];
-		},
-		
-		addHref: function (key, value, id)
-		{
-			if (typeof(key) == 'undefined') key = '';
-			if (typeof(value) == 'undefined') value = '';
-			var str = '<a href="javascript:void(0)" id="'+id+'">'+value+'</a>';
-			this.addCell(key, str, this.href_class || '', id);
-		},
-		
-		createTableString: function(values_in_row)
-		{
-			function addAttr(attr, value) {
-				return (value ? attr+'="'+value+'" ' : '');
-			}
-			
-			values_in_row = values_in_row || 1;
-			var str = '';
-			for (var i=0; i<Math.ceil(this.data.length/values_in_row); i++)
-			{
-				str += '<tr>';
-				for (var j=0; j<values_in_row; j++) {
-					var cell = this.data[i*values_in_row+j];
-					if (!cell) continue;
-					str +=	'<td '+addAttr('class', this.key_class)+'>' + (cell.key ? cell.key+':' : ' ') + '</td>' +
-							'<td '+ addAttr('class', cell.value_class || this.value_class) +
-									addAttr('id', cell.id)+' '+cell.attr+'>' + Utils.formatNumber(cell.value) + '</td>';
-				}
-				
-				str += '</tr>';
-			}
-			str = '<tbody><tr>' + 
-						'<th class="'+this.title_class+'" colspan="'+values_in_row*2+'">' + this.title +'</th>' +
-					'</tr>' + str + '</tbody>';
-			return str;
-		},
-
-		init: function(title, title_class, key_class, value_class)
-		{
-			this.title = title || '';
-			this.title_class = title_class || '';
-			this.key_class = key_class || '';
-			this.value_class = value_class || '';
-			this.data = new Array();
-		}
-	};
-	
-	
-	// =======================================================================
-	// functions for Coords storing
-	// =======================================================================
-	var Coords = 
-	{
-		img_on: 'data:image/gif;base64,R0lGODlhGwAbAOYAAAAAAP///wkJDAYHCQcICgkLDgoMDwsNEA0PEg8SFhIVGRwgJQoNEAcJCwsOEQkLDQ8SFQoMDhATFhYaHhcbHx0iJx8kKRoeIhsfIyowNiMoLQcICRseIRIUFgkKCx8lKjhARzE4PltncVRfaBAUFxEVGBIWGRsgJBwhJT9IT0pUXGJveT5GTAoNDwwPETtESlFdZU1YYEZQV4WXo36Pm3eHkml3gTU8QSwyNmJveFllbXyNmHODjVBbYhsgI2p5gkdRVyMoKwwQEgYICQcJCg8TFQcKCwkMDQwPEAECAgQEBP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAEsALAAAAAAbABsAAAf/gEtLHyiFhoeIiR+CSxaHC5CQiJKIHz6DhpGam5GTPhMTmZyjoxWgCxkgGqSsCyEgKKAXMTMgraQ2MwunMSKrt5whMye8McCkw8UgMgvLGTLLzTLP0dEzsRMYMTEpNAsrIyA23d/h497gC7qg2sY0MjMhzwvv8fP1Ieq7oNsLIjU1NP0LGGkgpBkUJhCZoELFhBczYIACBVHixIqgZkzYAAAACxYAPMzA0bGjSJIlT3acUdIjyBszerSEKbMkzZUtPwLQ8WNHS54+SwLFWfKjSA47cHAAcjTp0qYkWRZlcYMHgB49guSoejXrVqtYAcxIMrUDBwBmPXAwi5aDWrZsZKV21NmypJKOd+sSnZujg96/dWHmnBFEL1kAh/XmkAu4ceMhAAY4nlyywJEHlhsYIcC5c2POQzwIWCIEgQsXDg6obsHagOsIrxkwAOAAiW1GJhSQICGhdxEIv4EnEE68RAlBgQAAOw==',
-		img_off: 'data:image/gif;base64,R0lGODlhGwAbAOYAAAAAAP///wkJDAcHCAsLDAYHCQcICiMmKwkLDgoMDwsNEA0PEg8SFhIVGSgrLysuMhwgJR8jKAoNEAcJCwsOEQkLDQ8SFQoMDhATFhYaHhcbHx0iJx8kKRoeIhsfIwcICR4iJiElKSQoLAkKCycqLS0wMzM2OSMlJycpKxUWFxkaGx8lKhAUFxEVGBIWGRsgJBwhJSAkJyQoKyYqLSktMAoNDwwPETI1NzE0NjU4OhsgIwwQEgYICQcJCg8TFS4yNBweHyAiIwcKCwkMDQwPECotLi4xMgECAg4PDxITEwQEBP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAEsALAAAAAAbABsAAAf/gEtLKzCFhoeIiSuCSxyHEJCQiJKIKzqDhpGam5GTOhkZmZyjoxugEBEHIKSsECEHMKAdDjkHraQ/ORCnDg+rt5whOS+8DsCkw8UHMxDLETPLzTPP0dE5sRkeDg4iJhAlNAc/3d/h497gELqg2sYmMzkhzxDv8fP1Ieq7oNsQDzc3NP0LGGkgpBwaMvTIIENGhhg5SIACBVHixIqgcmT4AACAChUAlORI0rGjSJIlT3bMUdIjyBQ5grSEKbMkzZUtPwI4UQRHS54+SwLFWfKjSAI4khAAcjTp0qYkWRZVkcIIgCBBkKCoejXrVqtYAeQ4MnUAAQBmlRAwi5aAWrZsYqV21Nkypcm6JeV6RDEAr9+6MHPmQIKXLADDeFHo/cv4Lw8ABRpLLolgSIXKE4QY2MyZ8WYeIwQs2bHAhg0KClLXWJ2g9QXXEiQAoECkNiMXDViwwMDbhwXfvxkEH96ihaBAADs=',
-		img_hl: 'data:image/gif;base64,R0lGODlhGwAbAOYAAAAAAP///wkJDAYHCQcICgkLDgoMDwsNEA0PEg8SFhIVGRwgJQoNEAcJCwsOEQkLDQ8SFQoMDhATFhYaHhcbHx0iJx8kKRoeIhsfIwcICQkKCx8lKhAUFxEVGBIWGRsgJBwhJQoNDwwPERsgIwwQEgYICQcJCg8TFQcKCwkMDQwPEAECAmlNMVpCKks3IzwsHC0hFR4WDg8LB62BVoNkRXheRDYyLpdtRYhiPnlXN+KkaNOZYcSOWrWDU6Z4TNWbZMiSX6B4UpNvTYZmSXVaQWtVQFpIN15MO1FDN0Q6MikpKQQEBP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAEwALAAAAAAbABsAAAf/gExMGyCFhoeIiRuCTBaHC5CQiJKIGyODhpGam5GTIxMTmZyjoxWgCzZISqSsC0lIIKAXNTpIraQzOgunNUKrt5xJOh+8NcCkw8VIRQvLNkXLzUXP0dE6sRMYNTVHPwtBQ0gz3d/h497gC7qg2sY/RTpJzwvv8fP1Seq7oNsLQkBANP0LGGkgJB0UJpiYQITIBCM6aIACBVHixIqgdEzIAAAACxYAZOhw0bGjSJIlT3bUUdIjyBY6cLSEKbMkzZUtPwK40WNHS54+SwLFWfKjSBg7XMDIcTTp0qYkWRZl0YIHABw4XvioejXrVqtYAehYMTUGDABmZcAwixaGWrZsZKV21Nmy5JKOd+sSnesjht6/dWHm1PFCL1kAh/X6kAu4ceMSAAY4nlyyQIoHlhugIMC5c2POJTQIYEICgQgRDg6oDsHagOsIrxkwAOBAhW1GHhRw4CCh9wkIv4EnEE68QwdBgQAAOw==',
-	
-		get: function ()
-			{
-				return Utils.getValueUni('Coords');
-			},
-
-		parse: function (str, reg, extract, save)
-			{
-				var found = false;
-				var matches = str.match(reg);
-				if (!matches) return false;
-
-				for (var i=0; i<matches.length; i++)
-				{
-					var coords = matches[i].toString();
-					if (extract) coords = coords.replace(reg,"$1");
-
-
-					var temp = coords.split(':');
-					var g = parseInt(temp[0],10);
-					var s = parseInt(temp[1],10);
-					var p = parseInt(temp[2],10);
-					if (g+"" == temp[0] && s+"" == temp[1] && p+"" == temp[2] &&
-						!(g < 1 || g > 50) && !(s < 1 || s > 499 || (s > 100 && g > 9)) && !(p < 1 || p > 16))
-					{
-						if (save) 
-							this.set(coords);
-						found = true;
-						break;
-					}
-				}
-
-				return found;
-			},
-			
-		read: function(str, save)
-			{
-				if (typeof(save) == 'undefined') save = true;
-				
-				if(str.length > 0)
-				{
-					if (this.parse(str, /\[(\d{1,2}:\d{1,3}:\d{1,2})\]/gi,true, save))
-						return true;
-					else if (this.parse(str, /\d{1,2}:\d{1,3}:\d{1,2}/gi,false, save))
-						return true;
-					else {
-						str = str.replace(/[>\s\[\(](\d{1,2})[:\.\-\/\s](\d{1,3})[:\.\-\/\s](\d{1,2})[\s\]\)<,\.]/gi,"$1:$2:$3");
-						str = str.replace(/^(\d{1,2})[:\.\-\/\s](\d{1,3})[:\.\-\/\s](\d{1,2})[\s\]\)<,\.]/gi,"$1:$2:$3");
-						str = str.replace(/[>\s\[\(](\d{1,2})[:\.\-\/\s](\d{1,3})[:\.\-\/\s](\d{1,2})$/gi,"$1:$2:$3");
-						str = str.replace(/^(\d{1,2})[:\.\-\/\s](\d{1,3})[:\.\-\/\s](\d{1,2})$/gi,"$1:$2:$3");
-						return this.parse(str, /\d{1,2}:\d{1,3}:\d{1,2}/gi,false, save);
-					}
-				}
-				return false;
-			},
-			
-		saved: function()
-			{
-				return (Utils.getValueUni('CoordsFlag') == '1');
-			},
-			
-		set: function (value)
-			{
-				Utils.setValueUni('Coords', value); 
-				Utils.setValueUni('CoordsFlag', '1');
-				
-				this.initImg();
-			},
-			
-		reset: function()
-			{
-				Utils.setValueUni('Coords', ''); 
-				Utils.setValueUni('CoordsFlag', '0');
-			},
-			
-		initImg: function(img,mouseover)
-		{
-			img = img || document.getElementById('btnCoords');
-			if (!img) return;
-			var saved = this.saved();
-			
-			if (mouseover) {
-				img.setAttribute('rel', (saved?this.img_on:this.img_off) );
-				
-				if (!saved)
-					img.setAttribute('src', this.img_off );
-			}
-			else {
-				img.setAttribute('src', (saved?this.img_on:this.img_off) );
-				img.setAttribute('rel', (saved?this.img_hl:this.img_off) );
-			}
-			img.setAttribute('title',(saved?Options.Interface.lbl_resetCoords+this.get():''));
-			img.parentNode.style.cursor = saved ? 'pointer': 'default';
-		},
-			
-		onMouseUp: function(e) {
-			if ((!e) || ((e.ctrlKey) && (!e.keyCode))) return;
-			
-			var targetclassname = e.target.toString();
-
-			try {
-				if(targetclassname.match(/InputElement|SelectElement|OptionElement/i) || targetclassname.match(/object XUL/i))
-					return;
-				/*
-				if(e.target.ownerDocument.designMode)
-					if(e.target.ownerDocument.designMode.match(/on/i))
-						return;
-				*/
-				Coords.read(window.getSelection().toString());
-			}
-			catch(e) {
-				Utils.log(e);
-			}
-		},
-		
-		Init: function()
-		{
-			document.addEventListener('mouseup', function (e){ Coords.onMouseUp(e); }, false);
-		}
-	
-	}
-	
-	
-	var EventList =
-	{
-		maxClueHeight: (5+14) * 12,
-		
-		changeTime: function()
-		{
-			/*var nodes = Utils.XPath('//LI[@class="arrivalTime"]');
-			
-			for (var i=0; i<nodes.snapshotLength; i++) {
-				var node = nodes.snapshotItem(i);
-				node.innerHTML = DateTime.convertStringServer2Local(node.innerHTML, '[H]:[i]:[s]');
-			}
-			*/
-			DateTime.changeNodesTime('//LI[@class="arrivalTime"]', '[H]:[i]:[s]');
-		},
-		
-		processPro: function()
-		{
-			function putElementDown(el, delta){
-				el.style.top = (el.offsetTop + delta) + 'px';
-			}
-		
-			try{
-				Utils.insertCSSRule('#eventListWrap { margin-left: 0 !important}');
-				
-				var parent = window.parent;
-				if (parent) {
-
-					parent = parent.document;
-					var h = document.body.offsetHeight;
-
-					var newEventBox = parent.getElementById('newEventBox');
-					delta = h - newEventBox.clientHeight;
-
-					if (Options.evt_noScroll)
-						h += this.maxClueHeight;
-					
-					newEventBox.style.height = h  + 'px';
-					
-					if (Options.evt_showOnTop) {
-						putElementDown(Utils.getElementByClassName('c-left', parent.body), delta);
-						putElementDown(Utils.getElementByClassName('c-right', parent.body), delta);
-					}
-					
-					if (Options.evt_noScroll && Options.evt_showOnTop)
-						parent.getElementById('planet').style.marginTop = (-this.maxClueHeight) + 'px';
-
-				}
-			}
-			catch (e) { Utils.log(e) }
-		},
-		
-		iframeReady: function()
-		{
-			try {
-				var body = this.iframe.contentWindow.document.body;
-				document.getElementById('eventboxLoading').style.display = 'none';
-				
-				if (!body || !body.firstChild)
-					document.getElementById('eventboxBlank').style.display = 'block';
-
-			} catch (e) { Utils.log(e) }
-		},
-		
-		showEventList: function ()
-		{
-			try {
-				this.insertCSSRules();
-				var div = document.createElement('div');
-				div.id = 'newEventBox';
-				div.innerHTML = '<iframe id="iframeEventBox" src="index.php?page=eventList&pro=1&session='+ Utils.unsafeWindow.session +'"></iframe>';
-				
-				if (Options.evt_showOnTop) {
-					var next = document.getElementById('planet');
-					next.parentNode.insertBefore(div, next);
-				}
-				else {
-					var prev = Utils.XPathSingle('//*[@class="content-box-s"][last()]');
-					Utils.insertAfter(div, prev);
-				}
-				
-				this.iframe = document.getElementById("iframeEventBox");
-				this.iframe.contentWindow.addEventListener('load', function() { EventList.iframeReady() }, false)
-				
-			} catch (e) { Utils.log(e) }
-		},
-
-		insertCSSRules: function ()
-		{
-			Utils.insertCSSRule(' \
-			#newEventBox{ \
-				height: 0; \
-				width: 720px; \
-				margin-left: 0px; \
-			} \
-			');
-			
-			Utils.insertCSSRule(' \
-			#newEventBox iframe{ \
-				width: 100%; \
-				height: 100%; \
-			} \
-			');
-			
-			Utils.insertCSSRule(' \
-				#rechts{ \
-					margin-left: 20px; \
-				} \
-			');
-			
-			if (!Options.evt_showOnTop) {
-				Utils.insertCSSRule(' \
-				#newEventBox { \
-					float: left; \
-				} \
-				');
-			}
-
-			if (Options.evt_showOnTop && Options.evt_noScroll) {
-				Utils.insertCSSRule(' \
-				#planetdata { \
-					float: left !important; \
-					margin-left: 30px !important; \
-				} \
-				');
-			}
-
-		},
-
-		Run: function()
-		{
-			if (Options.showLocalTime)
-				this.changeTime();
-				
-			if ( document.location.href.indexOf('pro=1') > -1 ) {
-				this.processPro();
-				
-				Utils.unsafeWindow.old_hideRows = Utils.unsafeWindow.hideRows;
-				Utils.unsafeWindow.hideRows = function (data) {
-					Utils.unsafeWindow.old_hideRows(data);
-					EventList.processPro();
-				}
-			}
-			
-		}
-	}
-	
-	
-	var FinishTime = 
-	{
-		addConstructionTime: function (id, time)
-		{
-			if ( !id || !time || isNaN(time)) return;
-
-
-			var tbody = document.getElementById(id).parentNode.parentNode.parentNode;
-
-			var newRow = document.createElement('tr');
-			newRow.className = 'data green';
-			newRow.appendChild(document.createElement('td'));
-			newRow.appendChild(document.createElement('td'));
-			
-			newRow.firstChild.className = 'text_align_right';
-			newRow.lastChild.innerHTML = DateTime.formatDate2(DateTime.getFinishTime(time));
-			newRow.lastChild.className = 'finishTime';
-			tbody.appendChild(newRow);
-		},
-		
-		
-		ShowConstructions: function ()
-		{
-			var script = Utils.script;
-			if (!script) return;
-
-			Utils.insertCSSRule('.finishTime { padding-left: 12px }');
-			Utils.insertCSSRule('.green { color: green; }');
-
-			// buildings and research
-			var str = script.innerHTML.match(/baulisteCountdown\(getElementByIdWithCache\(["']\w+["']\)\,\s*\d*/gi);
-
-			if (str)
-				for (var i=0; i<str.length; i++)
-				{
-					var res = str[i].match(/["'](\w+)["']\)\,\s*(\d*)/i);
-					FinishTime.addConstructionTime(res[1], res[2]);
-				}
-
-			// shipyard
-			str = script.innerHTML.match(/shipCountdown\((\s*getElementByIdWithCache\(["']\w+["']\)\,)+(\s*\d*\,){3,3}/i);
-
-			if (str) {
-				str[2] = str[2].match(/(\d+)/)[0];
-				FinishTime.addConstructionTime('shipAllCountdown', str[2]);
-			}
-		}
-	}
-
-
-	// =======================================================================
-	// functions for Fleet movement view
-	// =======================================================================
-	var FleetMovement = 
-	{
-		fleetXPath: '//*[@id="inhalt"]/descendant::*[contains(concat(" ",@class," ")," fleetDetails ") and contains(@id,"fleet")]',
-		
-		addReversalTimeBox: function(fleet)
-		{
-			if (! Utils.getElementsByClassName('reversal',fleet).snapshotLength ) return;
-
-			var tip = Utils.XPathSingle('//*[@id="'+ fleet.id +'"]/descendant::*[contains(@class,"origin")]/*[@class="tips4"]');
-			if(!tip) return;
-
-			var str = tip.getAttribute('title');
-			if (!str) return;
-
-			var date = DateTime.parse2(str);
-			if (!date) return;
-			
-			date = DateTime.convertDateServer2Local(date);
-
-			var span = document.createElement('span');
-			span.className = 'reversalTime';
-			span.setAttribute('title', date.getTime());
-
-			fleet.appendChild(span);
-			this.updateReversalClock();
-		},
-
-		updateReversalClock: function()
-		{
-			try {
-				var spans = Utils.getElementsByClassName('reversalTime');
-				for (var i=0; i<spans.snapshotLength; i++)
-				{
-					var node = spans.snapshotItem(i);
-					var date = new Date();
-					var start = node.getAttribute('title');
-					if (!start) continue;
-
-					start = parseInt(start,10);
-					
-					date.setTime( (date.getTime() - DateTime.TimeDelta) * 2 - start );
-					node.innerHTML = DateTime.formatDate2(date);
-				}
-			}
-			catch (e) { Utils.log(e); }
-		},
-		
-		correctTimes: function(fleet)
-		{
-			var times = Utils.XPath(
-				'descendant::*[contains(@class,"absTime")] | ' +
-				'*[@class="starStreak"]/descendant::*[@class="tips4"] | ' +
-				'*[contains(@class, "reversal")]',
-			fleet);
-					
-			for (var i=0 ; i < times.snapshotLength; i++ )
-			{
-				var node = times.snapshotItem(i);
-				var property = (node.className.indexOf('tips4')>-1 ? 'title' : 'innerHTML');
-				node[property] = DateTime.convertStringServer2Local(node[property]);
-			}
-		},
-		
-		getDetails: function (div)
-		{
-			var result = new Object();
-			var string = "";
-
-			var cells = div.getElementsByTagName('td');
-
-			for (var i=0; i<cells.length; i++) {
-				if (cells[i].colSpan=="2") {
-					result.ships = string;
-					string = "";
-				}
-				else {
-					if (cells[i].className!="value" && string!="") string += " ";
-					string += cells[i].innerHTML;
-				}
-			}
-
-			result.cargo = string;
-			return result;
-		},
-
-		getMissionClass: function (fleet)
-		{
-			var mission = Utils.getElementByClassName("mission", fleet);
-			var mclass = "";
-			
-			switch(mission.innerHTML) {
-				case (Options.Labels.lbl_missAttack): mclass = "ownattack"; break;
-				case (Options.Labels.lbl_missHold): mclass = "ownhold"; break;
-				case (Options.Labels.lbl_missColony): mclass = "owncolony"; break;
-				case (Options.Labels.lbl_missDeploy): mclass = "owndeploy"; break;
-				case (Options.Labels.lbl_missHarvest): mclass = "ownharvest"; break;
-				case (Options.Labels.lbl_missTransport): mclass = "owntransport"; break;
-				case (Options.Labels.lbl_missFederation): mclass = "ownfederation"; break;
-				case (Options.Labels.lbl_missDestroy): mclass = "owndestroy"; break;
-				case (Options.Labels.lbl_missEspionage): mclass = "ownespionage"; break;
-				case (Options.Labels.lbl_missExpedition): mclass = "ownexpedition"; break;
-				default: mclass = "owntransport";
-			}
-			
-			return mclass;
-		},
-
-		insertCSSRules: function ()
-		{
-			if (Options.mvmt_expandFleets) {
-				Utils.insertCSSRule(".detailsOpened .starStreak  {background:none}");
-				Utils.insertCSSRule(".anti_fleetDetails {left:60px; width:290px; white-space:normal; padding:0px 7px; font-size:0.9em; text-align:left; line-height:1.2em}");
-
-				Utils.insertCSSRule(".ownattack { color: "+Options.missAttack+" }");
-				Utils.insertCSSRule(".owncolony { color: "+Options.missColony+" }");
-				Utils.insertCSSRule(".owndeploy { color: "+Options.missDeploy+" }");
-				Utils.insertCSSRule(".owndestroy { color: "+Options.missDestroy+" }");
-				Utils.insertCSSRule(".ownespionage { color: "+Options.missEspionage+" }");
-				Utils.insertCSSRule(".ownexpedition { color: "+Options.missExpedition+" }");
-				Utils.insertCSSRule(".ownfederation { color: "+Options.missFederation+" }");
-				Utils.insertCSSRule(".ownharvest { color: "+Options.missHarvest+" }");
-				Utils.insertCSSRule(".ownhold { color: "+Options.missHold+" }");
-				Utils.insertCSSRule(".owntransport { color: "+Options.missTransport+" } ");
-				Utils.insertCSSRule(".ownmissile { color: "+Options.missMissile+" } ");
-			}
-			
-			if (Options.mvmt_showReversal)
-				Utils.insertCSSRule(".reversalTime { position: absolute; top: 43px; left: 555px; color: yellow;} ");
-		},
-
-		myOpenCloseFleet: function (id, change)
-		{
-			var fleet = document.getElementById(id);
-			var span = Utils.getElementByClassName('starStreak', fleet);
-			var details = Utils.getElementByClassName('anti_fleetDetails', fleet);
-
-			var opened = fleet.className.match('detailsOpened') ? 1 : 0;
-			
-			// original OGame handler will be executed first
-			// so if change=true then className has been already changed
-
-			if ( change && !opened ) {
-
-				span.removeAttribute("style");
-				fleet.removeAttribute("style");
-
-			}
-			else if ( opened ) {
-				var details_height = parseInt(details.offsetHeight, 10);
-				var span_height = parseInt(span.offsetHeight, 10);
-				var fleet_height = parseInt(fleet.offsetHeight, 10);
-				var dif = details_height - span_height + 2;
-
-				if (dif>0) {
-					span_height += dif;
-					fleet_height += dif;
-					
-					span.setAttribute("style","height:"+span_height+"px");
-					fleet.setAttribute("style","height:"+fleet_height+"px");
-				}
-			}
-		},
-		
-		myOpenCloseAll: function ()
-		{
-			var fleets = Utils.XPath(FleetMovement.fleetXPath);
-
-			for (var i=0; i<fleets.snapshotLength; i++) {
-				FleetMovement.myOpenCloseFleet(fleets.snapshotItem(i).id, 1);
-			}
-		},
-
-
-		expandFleet: function (fleet)
-		{
-				var id = fleet.id.replace(/\D+/g, '');
-
-				if (!id) return;
-
-				var details = document.getElementById('details'+id);
-
-				var newNode = document.createElement('div');
-				newNode.setAttribute('class', 'anti_fleetDetails fixed '+this.getMissionClass(fleet));
-
-				var res = this.getDetails(details);
-				newNode.innerHTML = res.ships+'<br/><br/>'+res.cargo;
-
-				var picto = Utils.XPathSingle(
-					'descendant::*[contains(@class,"starStreak")]/' +
-					'descendant::*[contains(@class,"route")]', fleet);
-
-				picto.parentNode.replaceChild(newNode, picto);
-				
-				var mission = Utils.getElementByClassName('mission', fleet);
-				var reversal = Utils.getElementByClassName('reversal', fleet);
-				var next = Utils.getElementByClassName('nextMission', fleet);
-
-				if (!reversal && next)
-					mission.innerHTML += ' ('+Options.Interface.lbl_mvmt_Expedition+')';
-				else if (!reversal)
-					mission.innerHTML += ' ('+Options.Interface.lbl_mvmt_Return+')';
-
-				// set 'openDetails' button handler
-				var btn = Utils.XPathSingle('descendant::*[contains(@class,"openDetails")]/A', fleet);
-				btn.addEventListener("click", function (){ setTimeout(function (){ FleetMovement.myOpenCloseFleet(fleet.id, 1); }, 0); }, false);
-
-				// invoke the handler
-				this.myOpenCloseFleet(fleet.id, 0);
-		},
-
-		Run: function()
-		{
-			if (!Options.mvmt_expandFleets && !Options.mvmt_showReversal) return;
-
-			this.insertCSSRules();
-
-			var fleets = Utils.XPath(FleetMovement.fleetXPath);
-
-			for (var i=0; i<fleets.snapshotLength; i++) {
-				var fleet = fleets.snapshotItem(i);
-				if (Options.mvmt_expandFleets) this.expandFleet(fleet);
-				if (Options.mvmt_showReversal) this.addReversalTimeBox(fleet);
-				if (Options.showLocalTime) this.correctTimes(fleet);
-
-			}
-
-			if (Options.mvmt_expandFleets) {
-				// set 'closeAll' button handler
-				var btn = Utils.XPath('//*[@id="inhalt"]/descendant::*[contains(@class,"closeAll")]/A');
-				btn = btn.snapshotItem(0);
-				btn.addEventListener("click", function (){ setTimeout(FleetMovement.myOpenCloseAll, 0); }, false);
-			}
-			
-			if (Options.mvmt_showReversal)
-				setInterval(FleetMovement.updateReversalClock, 200);
-		}
-	}
-
-
-	// =======================================================================
-	// functions for Send fleet pages
-	// =======================================================================
-	var FleetSend = 
-	{
-		Capacity_insertCSSRules: function()
-		{
-			Utils.insertCSSRule('.total_capacity td {padding: 2px 5px; color: #A1A1A1; font-size: 11px;}');
-			Utils.insertCSSRule('.total_capacity #total_capacity {color: green;}');
-			Utils.insertCSSRule('.total_capacity td.capacity_href {text-decoration: underline; color: #5577EE;}');
-			
-			var top = Options.showNames ? 34 : 8;
-			
-			Utils.insertCSSRule('.speed { \
-				position: absolute; \
-				top: '+top+'px; \
-				right: 3px; \
-				max-width: 76px; \
-				color: white; \
-				background: transparent url("'+Utils.bg+'") repeat;\
-				text-align: right; \
-				font-size: 10px; \
-			}');
-		},
-		
-		addSpeed: function(node)
-		{
-			var id = node.id.replace(/\D/g, '');
-			var speed = Ogame.ships[id].speed;
-			speed = Utils.formatNumber(speed);
-			
-			var a = Utils.XPathSingle('descendant::DIV/descendant::A', node);
-			if (!a) return;
-			
-			var div = document.createElement('div');
-			div.className = 'speed';
-			div.innerHTML = speed;
-			
-			a.appendChild(div);
-		},
-		
-		showCapacity: function (node)
-		{
-			try {
-				var txtFields = Utils.getElementsByClassName('fleetValues');
-
-				var sum = 0, minspeed = 0;
-				
-				for ( var i=0; i<txtFields.snapshotLength; i++ ) {
-					txt = txtFields.snapshotItem(i);
-					var id = txt.id.replace('ship_','');
-					if (! (id in Ogame.ships) ) continue;
-					
-					capacity = Ogame.ships[id].capacity;
-
-					if (!isNaN(txt.value) && txt.value>0) {
-						sum += txt.value * capacity;
-						minspeed = Math.min(minspeed, Ogame.ships[id].speed) || Ogame.ships[id].speed;
-					}
-				}
-
-				document.getElementById('total_capacity').innerHTML = Utils.formatNumber(sum);
-				document.getElementById('min_speed').innerHTML = Utils.formatNumber(minspeed);
-			}
-			catch (e) {Utils.log(e);}
-			
-			return true;
-		},
-		
-		setShips: function(ship_id, cnt)
-		{
-			var node = document.getElementById(ship_id);
-			if (!node || node.disabled) return;
-			node.value = cnt;
-			Utils.trigger(ship_id,'change');
-		},
-		
-		checkRecyclers: function()
-		{
-			var recyclers = false;
-			var value = document.getElementById('ship_209').value;
-			if (value && !isNaN(value) && parseInt(value, 10)>0) recyclers = true;
-			
-			setTimeout( function(){ Utils.setValueUni('fleet1_recyclers', recyclers) }, 0);
-		},
-		
-		Fleet1_Run: function()
-		{
-			try {
-				var unsafe = Utils.unsafeWindow;
-				
-				if (Utils.isFirefox && Options.fleet2_setTargetDF) {
-					unsafe.old_trySubmit = unsafe.trySubmit;
-					unsafe.trySubmit = function () { FleetSend.checkRecyclers(); unsafe.old_trySubmit() };
-				}
-				
-				if (Options.fleet1_killTips)
-					Utils.killCluetips();
-			
-				if (!Options.fleet_showCapacity) return;
-				var no_fleet = false;
-				
-				var parent = Utils.getElementByClassName('allornonewrap');
-				
-				if(!parent) {
-					no_fleet = true;
-					parent = document.getElementById('warning');
-					if(!parent) return;
-				}
-
-				this.Capacity_insertCSSRules();
-				
-				var res = Utils.getIntById('resources_metal') + Utils.getIntById('resources_crystal') + Utils.getIntById('resources_deuterium');
-				var scargo = Math.ceil(res/5000);
-				var lcargo = Math.ceil(res/25000);
-				
-				var newDiv = document.createElement('div');
-				newDiv.className = 'fleft total_capacity';
-				SimpleTable.init();
-				SimpleTable.key_class = 'capacity_key';
-				SimpleTable.href_class = 'capacity_href';
-				SimpleTable.addCell(Options.Interface.lbl_resources, res);
-				SimpleTable.lastCell.attr = 'colspan="2"';
-				SimpleTable.addCell();
-				
-				if (no_fleet) {
-					Utils.insertCSSRule('.total_capacity {margin: 2px 25px;}');
-					
-					SimpleTable.addCell(Options.Labels.lbl_shipSCargo, scargo);
-					SimpleTable.addCell(Options.Labels.lbl_shipLCargo, lcargo);
-					newDiv.innerHTML = '<table>' + SimpleTable.createTableString(2) + '</table>';
-					parent.appendChild(newDiv);
-				}
-				else {
-					Ogame.updateShipSpeed();
-					Utils.$('form li')
-						.filter( function() {return !isNaN(this.id.replace('button','')) } )
-						.each( function(){FleetSend.addSpeed(this)});
-
-					SimpleTable.addHref(Options.Labels.lbl_shipSCargo, scargo, 'SCargo');
-					SimpleTable.addHref(Options.Labels.lbl_shipLCargo, lcargo, 'LCargo');
-					SimpleTable.addCell(Options.Interface.lbl_TotalCapacity,0, '', 'total_capacity');
-					SimpleTable.addCell();
-					SimpleTable.addCell(Options.Interface.lbl_MinSpeed,0, '', 'min_speed');
-					SimpleTable.lastCell.attr = 'colspan="2"';
-					newDiv.innerHTML = '<table>' + SimpleTable.createTableString(2) + '</table>';
-
-					Utils.insertAfter(newDiv, parent.firstChild.nextSibling);
-
-					document.getElementById('SCargo').addEventListener('click', function (){ FleetSend.setShips('ship_202', scargo); return true; }, false );
-					document.getElementById('LCargo').addEventListener('click', function (){ FleetSend.setShips('ship_203', lcargo); return true; }, false );
-
-					//this.setCapacityHandler();
-					unsafe.old_checkShips = unsafe.checkShips;
-					unsafe.checkShips = function(form) { FleetSend.showCapacity(); unsafe.old_checkShips(form) }
-
-				}
-			} catch (e) { Utils.log(e) }
-		},
-
-		getPartsFromLink: function(link)
-		{
-			var parts = link.split('#');
-			if (parts.length < 4) return null;
-			
-			var res = {};
-			res.galaxy = parseInt(parts[0], 10);
-			res.system = parseInt(parts[1], 10);
-			res.planet = parseInt(parts[2], 10);
-			res.type = parseInt(parts[3], 10);
-			res.name = parts[4] || '';
-			res.weight = res.galaxy * 1000000 + res.system*1000 + res.planet*10 + res.type;
-			
-			return res;
-		},
-
-		insertShortLink: function(link,nextlink)
-		{
-			try {
-				var parts = this.getPartsFromLink(link);
-				if (!parts) return;
-				if (!parts.name) link += '#';
-				
-				var slbox = document.getElementById('slbox');
-				if (!slbox) return;
-				var options = slbox.getElementsByTagName('option');
-				var next;
-				
-				
-				var nextparts = nextlink ? this.getPartsFromLink(nextlink) : null;
-				
-				for (var i=1; i<options.length; i++) {
-					if (nextlink) {
-						var curparts = this.getPartsFromLink(options[i].value);
-						if (curparts.galaxy == nextparts.galaxy && curparts.system == nextparts.system && 
-							curparts.planet == nextparts.planet && curparts.type == nextparts.type
-							) 
-							next = options[i];
-					}
-					if (link == options[i].value) return;
-				}
-				
-				var opt = document.createElement('option');
-				opt.value = link;
-				opt.innerHTML = parts.name + ' [' + parts.galaxy + ':' + parts.system + ':' + parts.planet + ']';
-				
-				if (next) slbox.insertBefore(opt,next)
-				else slbox.appendChild(opt);
-				
-			} catch (e) { Utils.log(e) }
-		},
-		
-		getSLinkFromPlanet: function(planet)
-		{
-			try {
-				var name = Utils.XPathSingle('SPAN[@class="planet-name"]', planet).innerHTML;
-				var coords = Utils.XPathSingle('SPAN[@class="planet-koords"]', planet).innerHTML;
-				var type = 1;
-				coords = coords.replace(/[\[\]]/g,'').split(':');
-				var res = coords[0] + '#' + coords[1] + '#' + coords[2] + '#' + type + '#' + name;
-				return res;
-			} catch (e) { Utils.log(e) }
-		},
-		
-		isTargetEmpty: function()
-		{
-			//check whether the coords have been already set
-			var items = Utils.XPath('//*[@id="inhalt"]/descendant::*[@class="fleetStatus"]/UL/LI');
-			
-			for (var i=0; i<items.snapshotLength; i++)
-				if ( Coords.read(items.snapshotItem(i).innerHTML, false) )
-					return false;
-					
-			return true;
-		},
-		
-		SetCoords: function ()
-		{
-			if (!Coords.saved()) return;
-
-			var coords = Coords.get().split(':');
-			
-			document.getElementById('galaxy').value = coords[0];
-			document.getElementById('system').value = coords[1];
-			document.getElementById('position').value = coords[2];
-
-			Utils.trigger('galaxy', 'change');
-			
-			var df = document.getElementById('dbutton');
-			if ( !df || df.className.indexOf('selected') == -1 )			
-				Utils.trigger('pbutton', 'click');
-		},
-		
-		Fleet2_Run: function()
-		{
-			if (Options.fleet2_fixLayout) {
-				var nodes = Utils.XPath('//DIV[@id="buttonz"]/DIV/UL');
-				if (nodes.snapshotLength) {
-					nodes.snapshotItem(0).style.marginLeft = "20px";
-					nodes.snapshotItem(1).style.marginLeft = "20px";
-				}
-			}
-			
-			var unsafe = Utils.unsafeWindow;
-			
-			var activelink, nextlink;
-			
-			var activePlanet = Utils.XPathSingle('//A[contains(@class,"active") and contains(@class,"planetlink")]');
-			activelink = this.getSLinkFromPlanet(activePlanet);
-			
-			var nextPlanet = Utils.XPathSingle('parent::*/following-sibling::*/A[contains(@class,"planetlink")]', activePlanet);
-			if (nextPlanet) nextlink = this.getSLinkFromPlanet(nextPlanet);
-			
-			this.insertShortLink(activelink, nextlink);
-			
-			var shortlinks = Options.fleet2_ShortLinks.split(',');
-			for (var i=0; i<shortlinks.length; i++)
-				this.insertShortLink(shortlinks[i]);
-		
-			if (Options.fleet2_setTargetDF && Utils.getValueUni('fleet1_recyclers'))
-				Utils.trigger('dbutton', 'click');
-
-			if (Options.autocopyCoords && this.isTargetEmpty())
-				this.SetCoords();
-		},
-		
-		setMission: function ()
-		{
-			// if mission is set then do nothing
-			if (Utils.XPath('//*[@id="missions"]/descendant::*[contains(@id,"missionButton") and contains(@class,"selected")]').snapshotLength > 0)
-				return;
-
-			// look for the first 'on' mission
-			var missions = new Array(
-				Options.mission1, Options.mission2, Options.mission3, Options.mission4, Options.mission5,
-				1,3,4,5,6,9
-				);
-
-			for (var i=0; i<missions.length; i++) {
-				if (missions[i]>0 && document.getElementById('button' + missions[i]).className == 'on' )
-				{
-					Utils.trigger('missionButton' + missions[i], 'click');
-					break;
-				}
-			}
-		},
-		
-		checkACStime: function()
-		{
-			var now = new Date();
-			var durationAKS = ( this.dateACS.getTime() - (now.getTime() - DateTime.TimeDelta) ) / 1000;
-			var duration = Utils.unsafeWindow.duration;
-			var className = "";
-			
-			if ( duration/durationAKS >= 1.3 ) 
-			{
-				clearInterval(this.intervalACS);
-				className = 'overmark';
-			}
-			else if ( duration >= durationAKS && this.stateACS == 0 ) {
-				this.stateACS = 1;
-				className = 'middlemark';
-			}
-			
-			if (className) document.getElementById('timeACS').className = className;
-		},
-		
-		showACStime: function()
-		{
-			if (!Utils.script) return;
-			
-			var str = Utils.script.innerHTML.match(/durationAKS\s*=\s*(\d+)\s*\;/i);
-			if (!str || !Utils.XPathSingle('//*[@id="button2" and @class="on"]') ) return;
-			
-			var tick = parseInt(str[1], 10);
-			if (!tick) return;
-			this.dateACS = DateTime.getFinishTime(tick);
-			
-			this.stateACS = 0;
-			this.intervalACS = setInterval(function(){FleetSend.checkACStime() }, 1000);
-			
-			var li = document.createElement('li');
-			li.style.color = 'yellow';
-			li.innerHTML = Options.Interface.lbl_ArrivalACS+': <span class="value" id="timeACS">'+DateTime.formatDate2(this.dateACS)+'</span>';
-			Utils.insertAfter(li, document.getElementById('aks') );
-			
-			// fixing layout
-			var h = Utils.XPathSingle('//*[@id="roundup"]/descendant::UL').offsetHeight;
-			if (h > 125) {
-				h -= 125;
-				var div = Utils.XPathSingle('//*[@id="sendfleet"]/DIV');
-				if (div) div.style.paddingTop = '' + (parseInt(div.style.paddingTop) + h) + 'px';
-			}
-			
-		},
-		
-		Fleet3_Run: function()
-		{
-			this.setMission();
-			//this.showACStime();
-		}
-	}
-	
-	
-	// =======================================================================
-	// functions for Galaxy view
-	// =======================================================================
-	var Galaxy =
-	{
-		highlightAllyPlayer: function(row)
-		{
-			
-			Colorer.highlight(Colorer.PLAYER, 'descendant::*[contains(@class,"status_abbr")]', row);
-			
-			if (Options.galaxy_killTips)
-				Colorer.highlight(Colorer.ALLY, 'descendant::SPAN[contains(@rel,"alliance")]/A', row);
-			else 
-				Colorer.highlight(Colorer.ALLY, 'descendant::SPAN[contains(@rel,"alliance")]', row);
-		},
-				
-		showCurrent: function(row)
-		{
-			try {
-				var url = window.location.href;
-				coords = url.match(/galaxy=(\d{1,2})&system=(\d{1,3})&position=(\d{1,2})/i);
-				if (!coords) coords = url.match(/galaxy=(\d{1,2})&system=(\d{1,3})&planet=(\d{1,2})/i);
-				
-				if (!coords) return;
-
-				var galaxy = document.getElementById('galaxy_input').value;
-				var system = document.getElementById('system_input').value;
-				var position = Utils.getElementByClassName('position', row).innerHTML;
-
-				if (coords[1]!=galaxy || coords[2]!=system || coords[3]!=position)
-					return;
-
-				row.style.borderStyle = 'dashed';
-				row.style.borderColor = 'yellow';
-				row.style.borderWidth = '1px';
-				document.getElementById('galaxytable').style.borderCollapse='collapse';
-			}
-			catch (e) { Utils.log(e) }
-		},
-		
-		showDebris: function (row)
-		{
-			try {
-				var debris = Utils.getElementByClassName('debris', row);
-
-				var link = Utils.getElementByClassName('TTgalaxy', debris);
-				if(!link) return;
-
-				var img = link.getElementsByTagName('img')[0];
-
-				// getting resources of this DF
-				var content = Utils.getElementsByClassName('debris-content',debris);
-				var resources = new Array();
-				var sum = 0;
-
-				for ( var i=0; i<content.snapshotLength; i++) {
-					var res = ''+content.snapshotItem(i).innerHTML.split(' ')[1];
-
-					resources[i] = res;
-					res = res.replace(/\./g, '');
-
-					sum += parseInt(res, 10);
-				}
-
-				// creating a new DIV element
-				newNode = document.createElement('div');
-				newNode.className = 'anti_debris';
-
-				var style = 'color:#CCCCCC; padding: 1px; text-align:center;';
-				if (sum>Options.galaxyDebrisMin && Options.galaxyDebrisMin>0) style += 'background-color:'+Options.galaxyDebrisColor+';';
-
-				newNode.setAttribute('style', style);
-				newNode.innerHTML = ''+resources[0]+'<br/>'+resources[1];
-				
-				link.replaceChild(newNode, img);
-			} catch (e) { Utils.log(e) }
-		},
-
-		showMoon: function (row)
-		{
-			try {
-				var size = Utils.XPathSingle('TD[@class="moon"]/DIV/DIV/DIV/UL/LI[3]/SPAN', row);
-				if (!size) return;
-				
-				size = Options.Interface.lbl_Moon + ': ' + Utils.parseInt(size.innerHTML);
-				var img = Utils.XPathSingle('TD[@class="moon"]/A/IMG',row);
-				img.parentNode.style.color = '#CCCCCC';
-				img.alt = size;
-				
-				if (!Names.showImgAlt(img) && Options.galaxyHideMoon)
-					img.src = '';
-
-			} catch (e) { Utils.log(e) }
-		},
-
-		showRank: function (row) 
-		{
-			try {
-				var player = Utils.getElementByClassName('playername', row);
-				var rank = Utils.getElementByClassName('rank', player);
-
-				if (!rank) return;
-				rank = Utils.parseInt(rank.innerHTML);
-
-				if (rank)
-				{
-					var newNode;
-					
-					if (Options.galaxy_killTips) {
-						newNode = document.createElement('a');
-						newNode.href = 'index.php?page=statistics&session='+Utils.unsafeWindow.session+'&start='+rank;
-					}
-					else
-						newNode = document.createElement('span');
-						
-					newNode.setAttribute('class','anti_rank');
-					newNode.innerHTML = ' #'+rank;
-					
-					var color=Options.galaxyRankColor;
-					
-					if (rank==0) color=Options.constRank0;
-					else if (rank<=10) color=Options.galaxyRank10;
-					else if (rank<=50) color=Options.galaxyRank50;
-					else if (rank<=100) color=Options.galaxyRank100;
-					else if (rank<=200) color=Options.galaxyRank200;
-					else if (rank<=800) color=Options.galaxyRank800;
-					
-					newNode.style.color = color;
-					
-					player.appendChild(newNode);
-				}
-			} catch (e) { Utils.log(e) }
-		},
-
-		showAllyRank: function (row) 
-		{
-			var ally = Utils.getElementByClassName('allytag', row);
-			if(!ally) return;
-			
-			var rank = Utils.getElementByClassName('rank', ally);
-			var members = Utils.getElementByClassName('members', ally);
-
-			if (!rank) return;
-
-			// Killing tooltip body and inserting links to ally info and stats
-			if (Options.galaxy_killTips) {
-				var tooltip = Utils.XPathSingle('descendant::DIV[contains(@id,"alliance")]', ally);
-				var allyname = tooltip.parentNode;
-				var siteurl = Utils.XPathSingle('descendant::A[@target="_ally" or contains(@href,"network")]', ally);
-				if (siteurl) {
-					siteurl = siteurl.href;
-					allyname.removeChild(tooltip);
-					allyname.innerHTML = '<a href="' + siteurl + '">' + allyname.innerHTML + '</a>';
-				}
-			}
-
-
-			// Displaying rank
-			rank = Utils.parseInt(rank.innerHTML);
-			members = Utils.parseInt(members.innerHTML);
-			
-			var str = '';
-			if (rank && !isNaN(rank)) str += '#'+rank;
-			if (members && !isNaN(members)) str += '/'+members;
-
-			if (str)
-			{
-				var newNode;
-					
-					if (Options.galaxy_killTips) {
-						newNode = document.createElement('a');
-						newNode.href = 'index.php?page=statistics&session='+Utils.unsafeWindow.session+'&who=ally&start='+rank;
-					}
-					else
-						newNode = document.createElement('span');
-
-				newNode.className = 'anti_allyrank';
-				newNode.innerHTML = ' '+str;
-
-				color=Options.galaxyRankColor;
-				newNode.style.color = color;
-
-				ally.appendChild(newNode);
-			}
-			
-		},
-		
-		killTips: function()
-		{
-			Utils.unsafeWindow.AjaxCluetip = function() {
-				var selector = "";
-				if (Options.galaxy_keepTipsPlanets) selector = '.microplanet, .moon .TTgalaxy';
-				if (Options.galaxy_keepTipsDebris) selector += (selector?',':'') + '.debris .TTgalaxy';
-				if (selector)
-					Utils.unsafeWindow.$(selector).cluetip("destroy").cluetip({local:true,cluetipClass:"galaxy",width:250,showTitle:false,closeDelay:250,mouseOutClose:true,hoverIntent:false})
-
-			}
-		},
-		
-		onDOMNodeInserted: function(e)
-		{
-			if(!e || !e.target || !e.target.id) return;
-			if( e.target.id == "galaxytable")  Galaxy.redrawGalaxy();
-		},
-
-		insertCSSRules: function()
-		{
-			if (Options.galaxy_killTips) {
-				Utils.insertCSSRule('.allytag a {text-decoration:none; color:#CFCBC2;}');
-			}
-		},
-
-		redrawGalaxy: function ()
-		{
-			try {
-				document.body.removeEventListener("DOMNodeInserted", Galaxy.onDOMNodeInserted, false);
-			
-				var rows = Utils.XPath('//*[@id="galaxyContent"]/descendant::*[@class="row"]');
-				for ( var i=0; i<rows.snapshotLength; i++ ) {
-					var row = rows.snapshotItem(i);
-					
-					if (Options.galaxyShowRank) {
-						this.showRank(row);
-						this.showAllyRank(row);
-					}
-					this.showDebris(row);
-					this.showCurrent(row);
-					this.showMoon(row);
-					
-					this.highlightAllyPlayer(row);
-
-				}
-				
-				document.body.addEventListener("DOMNodeInserted", Galaxy.onDOMNodeInserted, false);	
-			}
-			catch(e) { Utils.log(e); }
-		},
-		
-		Run: function()
-		{
-			this.insertCSSRules();
-			
-			if (Options.galaxy_killTips)
-				this.killTips();
-			
-			document.body.addEventListener("DOMNodeInserted", Galaxy.onDOMNodeInserted, false);
-			
-		}
-	}
-
-
-
-	var Names = 
-	{
-		// workaround for weird Firefox behaviour with images containing NO alt attribute
-		showImgAlt: function(img)
-		{
-			if (Utils.isFirefox && img.clientWidth == 0) {
-				img.style.display = 'none';
-				setTimeout(function(){img.style.display = 'inline'}, 150);
-				return true;
-			}
-			return false;
-		},
-	
-		insertCSSRules: function()
-		{
-			Utils.insertCSSRule('.itemname { \
-				position: absolute; \
-				top: 8px; \
-				right: 3px; \
-				max-width: 76px; \
-				height: auto !important; \
-				background: transparent url("'+Utils.bg+'") repeat !important;\
-				text-align: right; \
-				font-size: 10px; \
-				overflow: hidden; \
-			}');
-			
-			if (Utils.page == 'techtree'){
-				Utils.insertCSSRule('.redBorder .itemname { color: '+Options.nameColorOff+'; }');
-				Utils.insertCSSRule('.greenBorder .itemname { color: '+Options.nameColorOn+'; }');
-			}
-			
-			else {
-				Utils.insertCSSRule('.off .itemname { color: '+Options.nameColorOff+'; }');
-				Utils.insertCSSRule('.on .itemname { color: '+Options.nameColorOn+'; }');
-				Utils.insertCSSRule('.disabled .itemname { color: '+Options.nameColorDisabled+'; }');
-			}
-		},
-		
-		showBuildingResNames: function()
-		{
-			try {
-				var images = Utils.XPath('//*[@id="costs"]/descendant::*[contains(@class,"metal")][@title]/IMG');
-				if (!images) return;
-				
-				for (var i=0; i<images.snapshotLength; i++) {
-					var img = images.snapshotItem(i);
-					if (img.getAttribute('alt'))
-						continue;
-					
-					var title = img.parentNode.title;
-					title = title.match(/\s([^\s]+)$/);
-					
-					img.setAttribute('alt',title[1]);
-					this.showImgAlt(img);
-				}
-			} catch (e) { Utils.log(e) }
-		},
-		
-		showResNames: function()
-		{
-			try {
-				var images = Utils.XPath('//*[@id="resources"]/*[contains(@id,"_box")]');
-				if (!images) return;
-				
-				for (var i=0; i<images.snapshotLength; i++) {
-					var img = Utils.XPathSingle('descendant::IMG', images.snapshotItem(i));
-					if (!img || img.getAttribute('alt'))
-						continue;
-					
-					var id = images.snapshotItem(i).id;
-					id = id.substr(0, id.indexOf('_'));
-					if (!id) continue;
-					
-					
-					img.setAttribute('alt',  Options.Labels['lbl_'+id]);
-					this.showImgAlt(img);
-				}
-			} catch (e) { Utils.log(e) }
-		},
-		
-		showBuildingNames: function()
-		{
-			try {
-				this.insertCSSRules();
-				
-				var xpath;
-				
-				if ( Utils.isCurrentPage('fleet1') ) xpath = '//*[@class="buildingimg"]/A';
-				else if ( Utils.isCurrentPage('techtree') ) xpath = '//A/DIV[contains(@class,"Border")]';
-				else xpath = '//A[@ref]';
-				
-				xpath += '[@title]';
-				var nodes = Utils.XPath(xpath);
-				var div, title, node;
-				var rx='\\|([^<\\(]+)';
-				if ( Utils.isCurrentPage('techtree') )
-					rx='([^<\\(|]+)';
-				
-				rx = new RegExp(rx,'');
-				
-				for (var i=0; i<nodes.snapshotLength; i++) {
-					node = nodes.snapshotItem(i);
-					title = node.title.match(rx);
-					if (!title) continue;
-					
-					div = document.createElement('div');
-					div.className = 'itemname';
-					
-					if (Utils.page=='resources') { 
-						var ref = node.getAttribute('ref');
-						if (ref == '1' || ref == '2' || ref == '3' || ref == '4' || ref == '12' || ref == '212')
-							div.style.maxWidth = '96px';
-					}
-						
-					div.innerHTML = title[1];
-					node.appendChild(div);
-					
-				}
-				
-			} catch (e) { Utils.log(e) }
-		},
-		
-		Show: function()
-		{
-			if (Utils.isCurrentPage('fleet1,resources,station,research,shipyard,defense,techtree') )
-				this.showBuildingNames();
-				
-			this.showResNames();
-		}
-		
-	}
-
-	
-	// =======================================================================
-	// functions for Plunder calculation
-	// =======================================================================
-
-	var Plunder = 
-	{
-		readValue: function(cell)
-		{
-			return parseInt(cell.innerHTML.replace(/\D/g, ''), 10);
-		},
-
-		insertTable: function(container, mytable)
-		{
-			var table = document.createElement('table');
-			table.className = 'fleetdefbuildings spy plunder';
-			mytable.title_class = 'area plunder';	
-			mytable.key_class = 'plkey plunder';
-			mytable.value_class = 'plvalue plunder';
-			table.innerHTML = mytable.createTableString(2);
-
-			container.appendChild(table);
-		},
-		
-		calculatePlunder: function(report)
-		{
-			this.plunder_metal = this.plunder_crystal = this.plunder_deuterium = 0;
-			
-			var cells = Utils.XPath('descendant::*[contains(@class,"fragment")]/descendant::TD', report);
-
-			this.plunder_metal = Plunder.readValue(cells.snapshotItem(1)) / 2;
-			this.plunder_crystal = Plunder.readValue(cells.snapshotItem(3)) / 2;
-			this.plunder_deuterium = Plunder.readValue(cells.snapshotItem(5)) / 2;
-		},
-		
-		calculateDebris: function(report)
-		{
-			this.debris_metal = this.debris_crystal = 0;
-			
-			var fleet = Utils.getElementByClassName('fleetdefbuildings spy !plunder', report);
-			if (!fleet) return;
-
-			var cells = Utils.getElementsByClassName('key', fleet);
-
-			var first = 0, metal = 0, crystal = 0;
-			for (var i=0; i<cells.snapshotLength; i++) 
-			{
-				var cell = cells.snapshotItem(i);
-				var txt = cell.innerHTML;
-				var cntNode  = cell.nextSibling;
-
-				for (var j in Ogame.ships)
-				{ 	
-					var ship = Ogame.ships[j];
-					var label = Options.Labels['lbl_ship'+ship.name];
-
-					if (label && txt.indexOf(label) > -1)
-					{
-						var cnt = Plunder.readValue(cntNode);
-						metal += cnt * ship.metal;
-						crystal += cnt * ship.crystal;
-						first = j;
-						break;
-					}
-				}
-			}
-			
-			this.debris_metal = metal * 0.3;
-			this.debris_crystal = crystal * 0.3;
-
-		},
-
-		showPlunder: function (report)
-		{
-			var total = (this.plunder_metal + this.plunder_crystal + this.plunder_deuterium) * 2;
-
-			var capacity_needed =
-				Math.max(	this.plunder_metal + this.plunder_crystal + this.plunder_deuterium,
-							Math.min(	(2 * this.plunder_metal + this.plunder_crystal + this.plunder_deuterium) * 3 / 4,
-										(2 * this.plunder_metal + this.plunder_deuterium)
-									)
-						);
-
-			var small_cargos = Math.ceil(capacity_needed/5000);
-			var large_cargos = Math.ceil(capacity_needed/25000);
-
-			SimpleTable.init(Options.Interface.lbl_resources);
-			SimpleTable.addCell(Options.Interface.lbl_total, total);
-			SimpleTable.addCell(Options.Interface.lbl_loot, Math.floor(total/2));
-			SimpleTable.addCell(Options.Interface.lbl_shipLCargoAlt, large_cargos);
-			SimpleTable.addCell(Options.Interface.lbl_shipSCargoAlt, small_cargos);
-			
-			Plunder.insertTable(report, SimpleTable);
-		},
-
-		showDebris: function (report)
-		{
-			var total = this.debris_metal + this.debris_crystal;
-			
-			SimpleTable.init(Options.Interface.lbl_debris);
-			SimpleTable.addCell(Options.Interface.lbl_metal, this.debris_metal);
-			SimpleTable.addCell(Options.Interface.lbl_crystal, this.debris_crystal);
-			SimpleTable.addCell(Options.Interface.lbl_total, total);
-			SimpleTable.addCell(Options.Interface.lbl_shipRecyclerAlt, Math.ceil(total/20000));
-			
-			Plunder.insertTable(report, SimpleTable);
-		},
-
-		Show: function()
-		{
-			var container;
-			if ( Utils.isCurrentPage('showmessage') ) {
-				container = document.getElementById("messagebox");
-			} else {
-				container = document.getElementById("messageContent");
-			}
-
-			var rows = Utils.getElementsByClassName('material spy', container);
-
-			for (var i=0; i<rows.snapshotLength; i++) {
-				var report = rows.snapshotItem(i).parentNode;
-
-				Plunder.calculatePlunder(report);
-				Plunder.calculateDebris(report);
-				
-				if (Options.msg_PlunderThreshold && Utils.isCurrentPage('messages') ) {
-					var total_pl = this.plunder_metal + this.plunder_crystal + this.plunder_deuterium;
-					var total_df = this.debris_metal + this.debris_crystal;
-					if (total_pl < Options.msg_PlunderThreshold*1000 && total_df < Options.msg_DebrisThreshold*1000)
-						document.getElementById( report.parentNode.parentNode.id.replace('spioDetails_','')+'TR' ).className += ' smallplunder';
-				}
-				
-				if (Options.msg_showPlunder) {
-					Plunder.showPlunder(report);
-					Plunder.showDebris(report);
-				}
-			}
-		}
-
-	}
-
-
-	var Messages = 
-	{
-		addButtons: function()
-		{
-			function insertButton(value, mod, title) {
-			
-				if (!title && mod>0) {
-					var opt = Utils.XPathSingle('//SELECT/OPTION[@id="'+mod+'"]');
-					if (opt) title = opt.innerHTML;
-				}
-			
-				var btn = document.createElement('input');
-				btn.type = 'button';
-				btn.value = value;
-				
-				if (mod==12) btn.style.color = '#00CC22';
-				else if (mod==-12) btn.style.color = '#229922';
-				else if (mod==7) btn.style.color = '#660011';
-				else if (mod==-7) btn.style.color = '#993300';
-				else if (mod==9) btn.style.color = '#990000';
-				
-				if (title) btn.title = title;
-				btn.setAttribute('mod', mod);
-				span.appendChild(btn);
-			}
-
-			// Recycle bin
-			if (Utils.unsafeWindow.aktCat == 3) return;
-			
-			var span = document.createElement('span');
-			span.className = 'msgButtons';
-
-			insertButton('V', 12);
-			insertButton('VV', -12, Options.Interface.lbl_btnMarkReadAll);
-			insertButton('X', 7);
-			insertButton('Xx', -7, Options.Interface.lbl_btnDeleteSmallPlunder);
-			insertButton('XX', 9);
-			
-			var form = document.getElementsByTagName('form')[0];
-			form.parentNode.insertBefore(span, form);
-			
-			var $ = Utils.unsafeWindow.$;
-			$('.msgButtons').clone(true).insertAfter('form');
-			$('.msgButtons input').click(Messages.onButtonClick);
-		},
-		
-		onButtonClick: function()
-		{
-			try {
-				var mod = this.getAttribute('mod');
-				
-				if (mod>0) {
-					Utils.unsafeWindow.mod = mod;
-					Utils.trigger(Utils.getElementByClassName('buttonOK deleteIt'), 'click');
-				}
-				
-				else if (mod == -12 || mod == -7) {
-					var delIds = []; 
-					var classname = ( mod == -12) ? 'trigger new' : 'trigger smallplunder';
-					var nodes = Utils.getElementsByClassName(classname);
-					
-					for (var i=0; i<nodes.snapshotLength; i++)
-						delIds.push( nodes.snapshotItem(i).id.toString().replace(/\D/g, '') );
-					
-					Utils.unsafeWindow.executeAction(delIds, -mod);
-				}
-			} catch (e) { Utils.log(e) }
-		},
-		
-		changeTimes: function()
-		{
-			if (Utils.isCurrentPage('messages'))
-			{
-				DateTime.changeNodesTime(
-					'//*[@id="mailz"]/TBODY/TR[contains(@class,"entry")]/*[@class="date"]',
-					'[d].[m].[Y] [H]:[i]:[s]' );
-					
-				DateTime.changeNodesTime(
-					'//*[@id="mailz"]/TBODY/TR[contains(@id,"spioDetails")]/descendant::*[@class="material spy"]/TBODY/TR/TH',
-					'[m]-[d] [H]:[i]:[s]' );
-			}
-
-			else if (Utils.isCurrentPage('showmessage'))
-			{
-				DateTime.changeNodesTime(
-					'//*[contains(@class,"infohead")]/TABLE/TBODY/TR[last()]/TD | '+
-					'//*[@id="battlereport"]/P',
-					'[d].[m].[Y] [H]:[i]:[s]' );
-
-				DateTime.changeNodesTime(
-					'//*[@class="material spy"]/TBODY/TR/TH',
-					'[m]-[d] [H]:[i]:[s]' );
-			}
-
-		},
-
-		Show: function(evt)
-		{
-			try {
-				if (evt && evt.target.tagName != 'FORM')
-					return;
-					
-				var need_plunder = false;
-				if ( Utils.isCurrentPage('messages') && Options.msg_PlunderThreshold && (Options.msg_foldSmallPlunder || Options.msg_addButtons) )
-					need_plunder = true;
-					
-				if (Options.msg_showPlunder || need_plunder) {
-					Plunder.Show();
-				}
-				
-				if (Options.showLocalTime) {
-					Messages.changeTimes();
-				}
-				
-				if ( Utils.isCurrentPage('messages') && Options.msg_PlunderThreshold && Options.msg_foldSmallPlunder)
-					setTimeout( function() { Utils.$('.smallplunder .subject a').trigger('click') }, 0);
-
-				if ( Options.msg_addButtons && Utils.isCurrentPage('messages') ) {
-					Messages.addButtons();
-				}
-				
-				if ( Utils.isCurrentPage('showmessage') ) {
-					var span = Utils.XPathSingle('//DIV[@class="note"]/SPAN[@class="tips" and @title]');
-					if (span) {
-						var text = span.title.toString();
-						text = text.replace(/<br>$/gi, '').replace(/<br>/gi, ', ').replace(/\|/gi, '');
-						if (text) span.innerHTML += ' ('+text+')';
-					}
-				}
-			}
-			catch(e) {
-				Utils.log(e);
-			}
-		},
-		
-		insertCSSRules: function()
-		{
-			Utils.insertCSSRule(".plkey { width: 30% }");
-			Utils.insertCSSRule(".plvalue { width: 20% }");
-			Utils.insertCSSRule(".plunder { border: 1px solid grey !important; }");
-			Utils.insertCSSRule("table.plunder { border-collapse: collapse; }");
-			Utils.insertCSSRule(".plkey, .plvalue { padding: 5px !important; }");
-			
-			if ( Utils.isCurrentPage('messages') ) {
-				Utils.insertCSSRule('.msgButtons input { ' +
-					'-moz-background-clip:border;' +
-					'-moz-background-inline-policy:continuous;' +
-					'-moz-background-origin:padding;' +
-					'background:transparent url(./img/layout/formular_buttons.gif) no-repeat scroll -88px -54px;' +
-					'border:0 none;' +
-					'color:#0D1014;' +
-					'cursor:pointer;' +
-					'font-size:11px;' +
-					'font-weight:700;' +
-					'text-align:center;' +
-					'height: 27px; ' +
-					'width: 42px; ' +
-					'}');
-					
-				Utils.insertCSSRule('.msgButtons input:hover { ' +
-					'background:transparent url(./img/layout/formular_buttons.gif) no-repeat scroll -88px -80px;' +
-					'}');
-
-			}
-
-		},
-
-		
-		Run: function()
-		{
-			this.insertCSSRules();
-			
-			if ( Utils.isCurrentPage('messages') ) {
-				document.getElementById('section2').addEventListener('DOMNodeInserted', this.Show, false);
-				if (Options.msg_killTips)
-					Utils.unsafeWindow.initCluetipEventlist = function(){};
-			}
-			else
-				this.Show();
-
-		}
-
-	}
-
-	
-	var Phalanx = {
-		changeTime: function()
-		{
-			DateTime.changeNodesTime('//LI[@class="arrivalTime"]', '[H]:[i]:[s]');
-		},
-		
-		Run: function()
-		{
-			if (Options.showLocalTime)
-				this.changeTime();
-		}
-
-	}
-	
-	// =======================================================================
-	// Various resources calculation
-	// =======================================================================
-	
-	var Resources = 
-	{
-		res_array: ['metal', 'crystal', 'deuterium', 'energy'],
-		res_array_firstcap: ['Metal', 'Crystal', 'Deuterium', 'Energy'],
-		currentRes: {}, 
-		costRes: {},
-		res_container: null,
-		
-		addCell: function(key, value)
-		{
-			if (this.html) this.html += ' ';
-			this.html += key+':<span class="time" style="padding-right: 0px">'+Utils.formatNumber(value)+'</span>';
-		},
-
-		showMissing: function()
-		{
-			try{
-				// will not show missing res if the construction is already in process
-				if (Utils.getElementByClassName('abort')) return;
-
-				container = Utils.XPathSingle('//*[@id="detail"]/DIV[@class="pic"]');
-				if (!container) return;
-				
-
-				SimpleTable.init(Options.Interface.lbl_deficientRes);
-				
-				var sum = 0, show = false;
-				
-				for (var i=0; i<this.res_array.length; i++) {
-					var attr = this.res_array[i];
-					
-					if (attr != 'energy')
-						this.currentRes[attr] = Utils.getIntById('resources_'+attr);
-					else {
-						var energy = document.getElementById('energy_box').title;
-						energy = energy.match(/\([\-\d\.]+\/([\-\d\.]+)\)/);
-						if (energy) 
-							this.currentRes[attr] = Utils.parseInt(energy[1]);
-					}
-					
-					this.costRes[attr] = Utils.getIntByXPath(
-						'//*[@id="content"]/descendant::*[@id="resources"]/LI[contains(@title,"'+Options.Labels['lbl_'+attr]+'")]',
-						'title');
-
-					if (this.costRes[attr] == null) continue;
-						
-					var def = this.costRes[attr] - this.currentRes[attr];
-
-					if (def>0) {
-						SimpleTable.addCell(Options.Labels['lbl_'+attr], def, attr);
-						show = true;
-						
-						if (attr != 'energy') sum += def;
-					}
-				}
-
-				if (!show) return;
-				
-				var html = '<table>'+SimpleTable.createTableString()+'</table>';
-				
-				SimpleTable.init('');
-				SimpleTable.addCell(Options.Labels.lbl_shipSCargo, Math.ceil(sum/5000));
-				SimpleTable.addCell(Options.Labels.lbl_shipLCargo, Math.ceil(sum/25000));
-				
-				html += '<table>'+SimpleTable.createTableString()+'</table>';
-				
-				var node = document.createElement('div');
-				node.id = 'deficient';
-				
-				node.innerHTML = html;
-				container.appendChild(node);
-			}
-			catch (e) { Utils.log(e) }
-
-		},
-
-		showProduction: function()
-		{
-			try {
-				var id = document.getElementsByName('type')[0];
-				if (!id) return;
-				id = parseInt(id.value,10);
-				
-				var level = Utils.XPathSingle('//*[@ref="'+id+'"]/descendant::*[@class="level"]');
-				if (!level) return;
-				level = Utils.parseInt(level.lastChild.nodeValue);
-
-				var str, oldvalue, newvalue;
-				var $ = Utils.$;
-				
-				// energy consumption
-				var spareEnergy = Utils.getIntById('resources_energy');
-				var energy = $('#action ul li')
-					.filter( function(){return $(this).html().indexOf( Options.Labels.lbl_RequiredEnergy ) >- 1 } )
-					.find('.time')
-				;
-				energy.after( Utils.addSpanMark( spareEnergy - Utils.parseInt( energy.html() ) ) );
-
-				// deuterium consumption in fusion reactor
-				if (id == 12) {
-					oldvalue = -Ogame.getConsumption(id,level);
-					newvalue = -Ogame.getConsumption(id,level+1);
-					str = '<li>'+Options.Labels['lbl_deuterium']+': <span class="time">'+Utils.formatNumber(newvalue)+'</span> '
-						+ Utils.addSpanMark(newvalue-oldvalue)+'</li>';
-					$('#action ul').append(str);
-				}
-
-				// res/energy production
-				oldvalue = Ogame.getProduction(id,level);
-				newvalue = Ogame.getProduction(id,level+1);
-				if (newvalue) {
-					str = '<li>'+Options.Interface.lbl_Production + ': <span class="time">'+Utils.formatNumber(newvalue)+'</span> '
-						+ Utils.addSpanMark(newvalue-oldvalue)+'</li>';
-					
-					$('#action ul').append(str);
-				}
-				
-				// storage capacity
-				oldvalue = Ogame.getStorageCapacity(id,level);
-				newvalue = Ogame.getStorageCapacity(id,level+1);
-				if (newvalue) {
-					var label = $('#description div.display div').get(0).firstChild.nodeValue;
-					str = '<li>'+label+' <span class="time">'+Utils.formatNumber(newvalue)+'</span> '
-						+ Utils.addSpanMark(newvalue-oldvalue)+'</li>';
-					
-					$('#action ul').append(str);
-					$('.techtree').css('display','none');
-				}
-				
-				// if at least 1 line was appended - increase size of the container
-				if (str) $('#action ul').css('padding-top', '0');
-				
-			} catch (e) { Utils.log(e) }
-			
-		},
-		
-		Missing_insertCSSRules: function()
-		{
-			Utils.insertCSSRule(
-			'#deficient table tr td, #deficient table tr th {\
-				padding: 1px;\
-				font-size: 11px;\
-				color: white;\
-				/*font-family: "Arial";*/ \
-				}');
-
-			Utils.insertCSSRule(
-			'#deficient {\
-				background: transparent url("'+Utils.bg+'") repeat;\
-				position: absolute;\
-				bottom: 0;\
-				right: 0;\
-				}\
-				');
-		},
-
-		Resources_insertCSSRules: function()
-		{
-			var width = 160;
-			Utils.insertCSSRule(
-			'.antires {\
-				margin: 2px;\
-				padding: 4px;\
-				display: block;\
-				width: '+width+'px;\
-				float: left;\
-				background-color: #111115;\
-				border: 1px solid #606060;\
-				text-align: center;\
-				font-size: 10px;\
-				list-style: none outside; \
-				' +	((Options.showResources == 1) ? 'margin-left: -40px;' : '') + ' \
-				}');
-				
-			Utils.insertCSSRule(
-			'.finishtime {\
-				color: green;\
-				}');
-				
-			Utils.insertCSSRule(
-			'#links {\
-				overflow: visible;\
-				}');
-				
-			if (Options.showResources == 2)	{
-				Utils.insertCSSRule(
-				'#links {\
-					position: relative;\
-					}');
-					
-				Utils.insertCSSRule(
-				'#antires_cont {\
-					position: absolute;\
-					top: 0; \
-					left: -171px; \
-					width: '+(width+13)+'px;\
-					}');
-			}
-			
-		},
-		
-		Resources_createContainer: function(ul)
-		{
-			/*$('#links').css('position','relative');
-			$('<ul></ul>').attr('id','ttt').appendTo('#links');
-			$('.antires').appendTo('#ttt');
-			$('#ttt').css({'position':'absolute','top':'0','left':'-135px'});
-			*/
-			if (Options.showResources == 1) {
-				var box = document.getElementById('box');
-				if (box) box.style.paddingBottom='0';
-				this.res_container = document.getElementById('menuTable');
-			}
-			else if (Options.showResources == 2) {
-				var links = document.getElementById('links');
-				if (links) {
-					this.res_container = document.createElement('ul');
-					this.res_container.id = 'antires_cont';
-					links.appendChild(this.res_container);
-				}
-				
-			}
-		},
-		
-		Resources_append: function(node)
-		{
-			if (!this.res_container)
-				this.Resources_createContainer();
-				
-			if (this.res_container)
-				this.res_container.appendChild(node);
-		},
-		
-		Resources_Run: function()
-		{
-			if ( !document.getElementById('metal_box') ) return;
-			this.Resources_insertCSSRules();
-			
-			/*var box = document.getElementById('box');
-			if (box) box.style.paddingBottom='0';
-			
-			var menu = document.getElementById('menuTable');*/
-			
-			for (var i=0; i<this.res_array.length; i++)
-			{
-				var res = this.res_array[i];
-				var ticker_name = 'resourceTicker'+this.res_array_firstcap[i];
-				var ticker_id = 'antires_'+res;
-				
-				var node = document.createElement('li');
-				node.className = 'antires';
-				
-				var html = document.getElementById(res+'_box').title;
-				html = html.replace('|','');
-				
-				var rx = new RegExp('([\\d\\'+Utils.separator+']+)\\/','gi');
-				
-				html = html.replace(rx, '<span id="'+ticker_id+'">$1</span> / ');
-				node.innerHTML = html;
-				//menu.appendChild(node);
-				this.Resources_append(node);
-
-				if (res != 'energy') {
-					var t = Utils.unsafeWindow[ticker_name];
-					var time_to_fill = t.production ? Math.floor((t.limit[1] - t.available)/t.production) : -1;
-
-					if (time_to_fill>0) {
-						node.innerHTML += '<br/><span class="finishtime">'+DateTime.formatDate2(DateTime.getFinishTime(time_to_fill))+'</span>';
-					}
-
-					var script = '\
-						var newticker = {};\
-						newticker.available = oldticker.available;\
-						newticker.limit = oldticker.limit;\
-						newticker.production = oldticker.production;\
-						newticker.valueElem = ticker_id;\
-						if (!vacation) new resourceTicker(newticker);\
-					';
-
-					script = script.replace(/oldticker/g, ticker_name);
-					script = script.replace(/newticker/g, ticker_name+'2');
-					script = script.replace(/ticker_id/g, '"'+ticker_id+'"');
-					
-					Utils.runScript(script);
-				}
-
-			}
-		}
-	}
-	
-	var Buildings = 
-	{
-		Show: function(e)
-		{
-			if (e.target.id != 'content') return;
-			
-			if (Options.showDeficient)
-				Resources.showMissing();
-			
-			if (Utils.isCurrentPage('resources'))
-				Resources.showProduction();
-				
-			Names.showBuildingResNames();
-		},
-		
-		
-		Run: function()
-		{
-			if (Options.showDeficient)
-				Resources.Missing_insertCSSRules();
-			
-			document.getElementById('planet').addEventListener(
-				'DOMNodeInserted',
-				function(e){ 
-					setTimeout( function(){Buildings.Show(e) }, 0 )
-				},
-				false);
-		}
-	}
-	
-	var Stats = {
-		highlightAllyPlayer: function(row)
-		{
-			function parseAlly(name) {
-				var res;
-				if (name) {
-					res = name.match(/\[(.+)\]/i);
-					if (res) res = res[1];
-				}
-				return res;
-			}
-
-			Colorer.highlight(Colorer.PLAYER, 'descendant::*[@class="name"]/A', row);
-			Colorer.highlight(Colorer.ALLY, 'descendant::*[@class="ally-tag"]/A', row, parseAlly);
-		},
-		
-		showStatsDifs: function(row)
-		{
-			stats = Utils.XPathSingle('descendant::*[@class="overmark" or @class="undermark"][@title]', row);
-			if (stats) stats.innerHTML = stats.getAttribute ("title");
-		},
-		
-		Show: function(e)
-		{
-			if (!e.relatedNode || !e.target 
-				|| e.relatedNode.getAttribute("id") != "statisticsContent" 
-				|| e.target.getAttribute("class") != "content"
-				)
-				return;
-				
-			try {
-				var paging = document.getElementById('paging').cloneNode(true);
-				Utils.insertAfter( paging, document.getElementById('row') );
-			} catch (e) { Utils.log(e) }
-				
-			var rows = document.getElementById('ranks').getElementsByTagName('tr');
-			for (var i=0; i<rows.length; i++) {
-				this.showStatsDifs(rows[i]);
-				this.highlightAllyPlayer(rows[i]);
-			}
-		},
-
-		Run: function()
-		{
-			document.getElementById ('statisticsContent').addEventListener ("DOMNodeInserted", function (e) { Stats.Show(e); }, false);
-		}
-	}
-	
-
-	try	{
-		// REMINDER: these objects should be initialized strictly in the following order:
-		// Utils, Options, DateTime
-		
-		Utils.Init();
-
-		// checking whether we have redesign at this server
-		if (!Utils.checkRedesign()) return;
-		
-		Options.Init();
-		DateTime.Init();
-		Ogame.Init();
-		
-		if (Options.autocopyCoords)
-			Coords.Init();
-
-		if (Options.blockAutoComplete && !Utils.isCurrentPage('movement')) {
-			Utils.blockAutocomplete();
-		}
-		
-		if (Utils.isCurrentPage('research') /*&& Utils.isFirefox*/)
-			Ogame.readTechs();
-			
-		if ( Utils.isCurrentPage('statistics,galaxy') )
-			Colorer.Init();
-			
-		if ( Options.showNames )
-			Names.Show();
-			
-		if ( Utils.isCurrentPage('fleet1,resources,station,research,shipyard,defense,techtree') && Options.showNames )
-			Names.Show();
-
-		if ( Utils.isCurrentPage('fleet1') ) {
-			FleetSend.Fleet1_Run();
-		}
-		else if ( Utils.isCurrentPage('fleet2') ) {
-			FleetSend.Fleet2_Run();
-		}
-		else if ( Utils.isCurrentPage('fleet3') ) {
-			FleetSend.Fleet3_Run();
-		}
-		else if ( Utils.isCurrentPage('galaxy') ) {
-			Galaxy.Run();
-		}
-		else if ( Utils.isCurrentPage('movement') ) {
-			FleetMovement.Run();
-		}
-		else if ( Utils.isCurrentPage('eventList') ) {
-			EventList.Run();
-		}
-		else if ( Utils.isCurrentPage('phalanx') ) {
-			Phalanx.Run();
-		}
-		else if ( Utils.isCurrentPage('showmessage,messages') ) {
-			if ( Options.msg_fixColors && Utils.isCurrentPage('messages') )
-			{
-				Utils.insertCSSRule('.combatreport_ididattack_iwon { color: #00B000; }');
-				Utils.insertCSSRule('.combatreport_ididattack_ilost { color: #D02222; }');
-				Utils.insertCSSRule('.combatreport_ididattack_draw { color: #C0C000; }');
-			}
-
-			Messages.Run();
-		}
-		else if ( Utils.isCurrentPage('statistics') ) {
-			Stats.Run();
-		}
-		else if ( Utils.isCurrentPage('overview,resources,shipyard,station,defense') ) {
-			if (Options.showFinishTime) FinishTime.ShowConstructions();
-		}
-
-		if ( Utils.isCurrentPage('overview') && Options.showEventList )	
-			EventList.showEventList();
-		
-		if ( Utils.isCurrentPage('resources,station,research,shipyard,defense') )
-			Buildings.Run();
-			
-		if ( Options.showResources )
-			Resources.Resources_Run();
-			
-	}
-	catch (e) { 
-		Utils.log(e);
-	}
-
-
-}) ()
+function AntigameFunc(){function s(a){return isNaN(a)?0:+a}function Q(a,b){return(a=s(a))?a:s(b)}function E(a,b,e){return Math.max(Math.min(s(a),e),b)}function t(a,b){return a?a.toString():b?b.toString():""}function G(a){return a?a.replace(/^\s*(\S*(\s+\S+)*)\s*$/,"$1"):""}var h="undefined"!=typeof unsafeWindow?unsafeWindow.jQuery:window.jQuery,p="undefined"!=typeof unsafeWindow?unsafeWindow:window;if(1!=p.AntiGame_started){p.AntiGame_started=1;var z=window.opera?!0:!1,T=-1<window.navigator.userAgent.indexOf("Firefox")?
+!0:!1,Z=-1<window.navigator.userAgent.indexOf("Chrome")?!0:!1,F=top===self?!1:!0,M="function"==typeof GM_getResourceURL,ga=window.localStorage?!0:!1,R=document.location.href.match(/http:\/\/.+\.ogame\..+\/game\/index\.php\?page=*/i)?!0:!1,H=R&&document.getElementById("links")&&document.getElementById("menuTable")?!0:!1,U=!1,N=document.createElement("style");N.type="text/css";N.media="screen";document.getElementsByTagName("head")[0].appendChild(N);if(Z&&h){for(var $=h.event.props,aa=$.length,ba=[];aa--;){var V=
+$[aa];"layerX"!=V&&"layerY"!=V&&ba.push(V)}h.event.props=ba}var ca={Run:function(){d.logM("Main.Start "+document.readyState+" isOgame: "+R+"  isOgameMain: "+H+"  isFrame: "+F+"  page ");(!R||!h)&&v.InitExtern();if(R&&JSON&&(M||ga)&&h){l.Init();d.Init();f.Init();j.Init();v.Init();H&&q.Init();u.Init();m.Init();y.Init();f.blockAutoComplete&&!z&&d.isCurrentPage("trader,shipyard,defense,fleet1,fleet2,fleet3,alliance")&&h("form").attr("autocomplete","off");ca.insertCSSRules();H&&(f.showPageStartTime&&u.showPageStartTime(),
+f.update_check&&q.checkUpdate(),f.showNames&&W.Show(),f.showConstructionTitle&&W.showPlanetConstruction(),f.showResources&&O.Resources_Run(),f.misc_scrollTitle&&ha.scrollTitle(),f.shortHeader&&d.isCurrentPage("fleet1,fleet2,fleet3,movement,alliance")&&d.getElementByClassName("toggleHeader")&&"shortHeader"!=document.getElementById("planet").className&&h("a.toggleHeader").trigger("click"),f.showFinishTime&&d.isCurrentPage("overview,resources,shipyard,station,station-moon,defense")&&X.ShowConstructions(),
+d.isCurrentPage("resources,station,station-moon,research,shipyard,defense")&&da.Run());H&&(d.isCurrentPage("fleet1")?B.Fleet1_Run():d.isCurrentPage("fleet2")?B.Fleet2_Run():d.isCurrentPage("fleet3")?(j.getMissionLabels("read"),B.Fleet3_Run()):d.isCurrentPage("movement")?K.Run():d.isCurrentPage("galaxy")?I.Run():d.isCurrentPage("alliance")?ea.Run():d.isCurrentPage("highscore")?fa.Run():d.isCurrentPage("research")?m.readTechs():d.isCurrentPage("resourceSettings")&&O.addResButtons());d.isCurrentPage("phalanx")&&
+S.Run();d.isCurrentPage("jumpgatelayer")&&ia.Run();d.isCurrentPage("showmessage,messages")&&P.Run();try{H&&L.Run()}catch(a){d.logC(a)}d.logM("Main.End "+document.readyState)}},insertCSSRules:function(){d.insertCSS([".ownattack { color: "+f.missAttack+" }",".owncolony { color: "+f.missColony+" }",".owndeploy { color: "+f.missDeploy+" }",".owndestroy { color: "+f.missDestroy+" }",".ownespionage { color: "+f.missEspionage+" }",".ownexpedition { color: "+f.missExpedition+" }",".ownfederation { color: "+
+f.missFederation+" }",".ownharvest { color: "+f.missHarvest+" }",".ownhold { color: "+f.missHold+" }",".owntransport { color: "+f.missTransport+" }",".ownmissile { color: "+f.missMissile+" }"]);H&&(d.insertCSS(".adviceWrapper { margin-top: 0px; }"),d.insertCSS("#OGameClock { color:#A1A1A1; }"))}},l={Init:function(){this.versionLabels=this.langVersion=2;this.versionMissionLabels=3;this.InitComs();this.page=document.body.id.toLowerCase();if(!this.page)this.page=(this.page=document.location.search.match(/page=(\w+)/i))?
+this.page[1].toLowerCase():"";this.domain=document.location.hostname.toUpperCase()+"/";this.server="EN";for(c in l.coms)if(""!=l.coms[c].domain&&-1<this.domain.indexOf(l.coms[c].domain)){this.server=c;break}this.uni=this.domain.split(".")[0];this.uni_prefix=(this.uni+"."+this.server).replace(/[\.\-]/g,"_");this.ogame_Version=q.getVersion(d.getElementByNameContent("ogame-version",""));this.ogame_UniverseSpeed=s(d.getElementByNameContent("ogame-universe-speed",1));this.ogame_PlanetCoordinates=d.getElementByNameContent("ogame-planet-coordinates",
+"")},colors:{activeGreen:"#99CC00",activeBorder:"#98bf21",textBlue:"#6F9FC8",textWhite:"#FFFFFF",textNormal:"#848484",textBright:"#D2D2D2",backGreen:"#274650",backGray:"#696969"},cssStyles:{activeBorder:"border-color: #99CC00; border-width: 2px;"},InitComs:function(){this.coms={EN:{domain:"",def_lang:"",wsim:"en",osim:"en",dsim:"",gStats:"",lang_Name:"English"},AE:{domain:"AE.OGAME.ORG/",def_lang:"FR",wsim:"en",osim:"ae",dsim:"",gStats:""},AR:{domain:"AR.OGAME.ORG/",def_lang:"ES",wsim:"sp",osim:"ar",
+dsim:"spanish",gStats:""},BA:{domain:"BA.OGAME.ORG/",def_lang:"HR",wsim:"ba",osim:"hr",dsim:"bosnian",gStats:"",lang_Name:"Bosnian"},BR:{domain:"OGAME.COM.BR/",def_lang:"PT",wsim:"pt",osim:"br",dsim:"brazilian",gStats:"",lang_Name:"Portugu\u00eas do Brasil"},CZ:{domain:"OGAME.CZ/",def_lang:"",wsim:"cz",osim:"cz",dsim:"czech",gStats:"",lang_Name:"\u010ce\u0161tina"},DE:{domain:"OGAME.DE/",def_lang:"",wsim:"de",osim:"de",dsim:"german",gStats:"de",lang_Name:"Deutsch"},DK:{domain:"OGAME.DK/",def_lang:"",
+wsim:"dk",osim:"dk",dsim:"danish",gStats:"",lang_Name:"Dansk"},ES:{domain:"OGAME.COM.ES/",def_lang:"",wsim:"sp",osim:"es",dsim:"spanish",gStats:"es",lang_Name:"Espa\u00f1ol"},FI:{domain:"FI.OGAME.ORG/",def_lang:"",wsim:"fi",osim:"fi",dsim:"",gStats:""},FR:{domain:"OGAME.FR/",def_lang:"",wsim:"fr",osim:"fr",dsim:"french",gStats:"fr",lang_Name:"Fran\u00e7ais"},GR:{domain:"OGAME.GR/",def_lang:"",wsim:"gr",osim:"gr",dsim:"greek",gStats:"",lang_Name:"\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac"},
+HR:{domain:"OGAME.COM.HR/",def_lang:"",wsim:"ba",osim:"hr",dsim:"",gStats:"",lang_Name:"Hrvatski"},HU:{domain:"OGAME.HU/",def_lang:"",wsim:"hu",osim:"hu",dsim:"hungarian",gStats:""},IT:{domain:"OGAME.IT/",def_lang:"FR",wsim:"it",osim:"it",dsim:"italian",gStats:"",lang_Name:"Italiano"},JP:{domain:"OGAME.JP/",def_lang:"",wsim:"jp",osim:"jp",dsim:"",gStats:"",lang_Name:"\u65e5\u672c\u8a9e"},MX:{domain:"MX.OGAME.ORG/",def_lang:"ES",wsim:"sp",osim:"mx",dsim:"spanish",gStats:""},NL:{domain:"OGAME.NL/",
+def_lang:"",wsim:"nl",osim:"nl",dsim:"dutch",gStats:"",lang_Name:"Dutch"},NO:{domain:"OGAME.NO/",def_lang:"",wsim:"no",osim:"no",dsim:"",gStats:"",lang_Name:"Norsk"},PL:{domain:"OGAME.PL/",def_lang:"",wsim:"pl",osim:"pl",dsim:"polish",gStats:"pl",lang_Name:"Polski"},PT:{domain:"OGAME.COM.PT/",def_lang:"",wsim:"pt",osim:"pt",dsim:"portuguese",gStats:"",lang_Name:"Portugu\u00eas"},RO:{domain:"OGAME.RO/",def_lang:"",wsim:"ro",osim:"ro",dsim:"romanian",gStats:"",lang_Name:"Romana"},RU:{domain:"OGAME.RU/",
+def_lang:"",wsim:"ru",osim:"ru",dsim:"russian",gStats:"",lang_Name:"\u0420\u0443\u0441\u0441\u043a\u0438\u0439"},SE:{domain:"OGAME.SE/",def_lang:"",wsim:"sv",osim:"se",dsim:"swedish",gStats:""},SI:{domain:"OGAME.SI/",def_lang:"",wsim:"si",osim:"si",dsim:"",gStats:""},SK:{domain:"OGAME.SK/",def_lang:"",wsim:"sk",osim:"sk",dsim:"slovak",gStats:"",lang_Name:"Sloven\u010dina"},TR:{domain:"OGAME.COM.TR/",def_lang:"",wsim:"tr",osim:"tr",dsim:"turkish",gStats:""},TW:{domain:"OGAME.TW/",def_lang:"",wsim:"tw",
+osim:"tw",dsim:"taiwanese",gStats:""},US:{domain:"OGAME.US/",def_lang:"",wsim:"en",osim:"us",dsim:"",gStats:""},ORG:{domain:"OGAME.ORG/",def_lang:"",wsim:"en",osim:"en",dsim:"",gStats:"org"}}},storageCapacity:[10,20,40,75,140,255,470,865,1590,2920,5355,9820,18005,33005,60510,110925,203350,372785,683385,1297589,2296600,4210115,7717970,14148545,25937050],speedColors:"F00,F30,F60,F90,FC0,FF0,CF0,9F0,6F0,3F0,0F0".split(",")},f={language:"",update_check:1,blockAutoComplete:!0,thousandSeparator:"--",oldBrowser:!1,
+showResources:1,showConstructionTitle:!0,shortHeader:!1,misc_scrollTitle:!1,uni_DFPercent:30,uni_DefenseToDF:0,uni_topPlayerScore:0,uni_systemMetrik:"9:499",timeSetting:1,showServerOgameClock:!1,showServerPhalanx:!1,showPageStartTime:!1,timeAMPM:!1,showFinishTime:!0,showDeficient:!0,showNames:!0,nameColorOn:"#FFFFFF",nameColorOff:"#777777",nameColorDisabled:"#D43635",galaxy_Players:"Legor,player 2",galaxy_PlayerColors:"#FF0000,#2222FF",galaxy_Allys:"alliance 1,alliance 2",galaxy_AllyColors:"#FF00FF,#00FFFF",
+jumpgate_Improve:!0,jumpgate_RequireTarget:!1,evt_dimReverse:!0,phalanx_showDebris:!0,evt_expandFleetsEvt:!0,evt_expandFleetsPhal:!0,phalanx_Layout:!0,missAttack:"#66CC33",missColony:"#C1C1C1",missDeploy:"#666666",missDestroy:"#FFFF99",missEspionage:"#FFCC66",missExpedition:"#5555BB",missFederation:"#CC6666",missHarvest:"#CEFF68",missHold:"#80A0C0",missTransport:"#A0FFA0",missMissile:"#FFCC66",mvmt_expandFleets:!0,mvmt_showReversal:!0,galaxy_Layout:!0,galaxy_shrinkLayout:0,galaxy_clickTips:!0,galaxy_keepTips:!0,
+galaxy_reload:!1,galaxy_DebrisMin:1E4,galaxy_DebrisSize:2,galaxy_ShowRank:!0,galaxy_PlayerRankColors:"#00FF99, #ADFF2F, #D2691E, #FF0000",galaxy_ShowAllyRank:!0,galaxy_AllyRankColors:"#00FF99, #ADFF2F, #D2691E, #FF0000",msg_expandBox:0,msg_killTips:!1,msg_addButtons:!0,msg_EspionageLayout:!1,msg_EspionageSpace:0,msg_PlunderThreshold:10,msg_DebrisThreshold:20,msg_foldSmallPlunder:!0,msg_showPlunder:!0,msg_addSimButton:3,msg_fixColors:!0,fleet1_Layout:!0,fleet_showCapacity:!0,fleet1_showResCalc:!0,
+fleet1_killTips:!1,fleet2_Layout:!0,autocopyCoords:!1,autocopyGlobal:!1,fleet2_setTargetDF:!1,fleet2_ShortLinks:"",fleet2_MoonColor:"#0000FF",fleet2_MoonsToEnd:!1,fleet2_expandLists:!0,fleet2_expandMoonColor:!0,fleet2_checkProbeCapacity:!0,fleet3_Layout:!0,mission1:6,mission2:1,mission3:4,mission4:3,mission5:9,uni_options:{fleet2_ShortLinks:1,galaxy_DebrisMin:1,msg_PlunderThreshold:1,msg_DebrisThreshold:1,galaxy_Players:1,galaxy_PlayerColors:1,galaxy_Allys:1,galaxy_AllyColors:1,uni_DFPercent:1,uni_DefenseToDF:1,
+uni_topPlayerScore:1,uni_systemMetrik:1},new_phalanx_clock:!1,new_eventlist_show:!1,Init:function(){f.loadOptions()},saveOptions:function(){try{var a="",b="",e;for(e in f){var k=f[e],g=typeof k;if("number"==g||"string"==g||"boolean"==g)this.uni_options[e]?(""!=b&&(b+="&"),b+=e+"="+k):(""!=a&&(a+="&"),a+=e+"="+k)}M?(d.setValue("antigame",a,!1),d.setValueUni("antigame",b,!1)):d.setValue("antigame",a+("&"+b),!1)}catch(C){d.logC(C)}},loadOptions:function(){try{var a=d.getValue("antigame"),b=d.getValueUni("antigame");
+if(a){b&&(a+="&"+b);a=a.split("&");for(b=0;b<a.length;b++){var e=a[b].split("=");if(e&&2==e.length)switch(typeof f[e[0]]){case "number":isNaN(parseInt(e[1],10))||(f[e[0]]=parseInt(e[1],10));break;case "string":f[e[0]]=e[1];break;case "boolean":f[e[0]]="true"==e[1]?!0:!1}}}}catch(k){d.logC(k)}},setOptionWithValidation:function(a,b){var e=this.getValueType(f[a]),d=this.getValueType(b),g=!1;if("galaxy_PlayerColors"==a||"galaxy_AllyColors"==a||"galaxy_PlayerRankColors"==a||"galaxy_AllyRankColors"==a)g=
+!0;else if("number"!=e&&"color"!=e||e==d)"color"==e&&(b=b.toUpperCase()),g=!0;g&&(f[a]=b)},getValueType:function(a){if(!a)return typeof a;a=a.toString();return""==a.replace(/\d{1,10}/i,"")?"number":""==a.replace(/#[A-F\d]{6,6}/i,"")?"color":"string"}},q={Init:function(){d.logM("Menu.Init "+document.readyState);this.img_empty="data:image/gif;base64,R0lGODlhGwAbAOYAAAAAAP///wkJDAcHCAsLDAYHCQcICiMmKwkLDgoMDwsNEA0PEg8SFhIVGSgrLysuMhwgJR8jKAoNEAcJCwsOEQkLDQ8SFQoMDhATFhYaHhcbHx0iJx8kKRoeIhsfIwcICR4iJiElKSQoLAkKCycqLS0wMzM2OSMlJycpKxUWFxkaGx8lKhAUFxEVGBIWGRsgJBwhJSAkJyQoKyYqLSktMAoNDwwPETI1NzE0NjU4OhsgIwwQEgYICQcJCg8TFS4yNBweHyAiIwcKCwkMDQwPECotLi4xMgECAg4PDxITEwQEBP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAEsALAAAAAAbABsAAAf/gEtLKzCFhoeIiSuCSxyHEJCQiJKIKzqDhpGam5GTOhkZmZyjoxugEBEHIKSsECEHMKAdDjkHraQ/ORCnDg+rt5whOS+8DsCkw8UHMxDLETPLzTPP0dE5sRkeDg4iJhAlNAc/3d/h497gELqg2sYmMzkhzxDv8fP1Ieq7oNsQDzc3NP0LGGkgpBwaMvTIIENGhhg5SIACBVHixIqgcmT4AACAChUAlORI0rGjSJIlT3bMUdIjyBQ5grSEKbMkzZUtPwI4UQRHS54+SwLFWfKjSAI4khAAcjTp0qYkWRZVkcIIgCBBkKCoejXrVqtYAeQ4MnUAAQBmlRAwi5aAWrZsYqV21Nkypcm6JeV6RDEAr9+6MHPmQIKXLADDeFHo/cv4Lw8ABRpLLolgSIXKE4QY2MyZ8WYeIwQs2bHAhg0KClLXWJ2g9QXXEiQAoECkNiMXDViwwMDbhwXfvxkEH96ihaBAADs=";
+this.img_stored="data:image/gif;base64,R0lGODlhGwAbAOYAAAAAAP///wkJDAYHCQcICgkLDgoMDwsNEA0PEg8SFhIVGRwgJQoNEAcJCwsOEQkLDQ8SFQoMDhATFhYaHhcbHx0iJx8kKRoeIhsfIyowNiMoLQcICRseIRIUFgkKCx8lKjhARzE4PltncVRfaBAUFxEVGBIWGRsgJBwhJT9IT0pUXGJveT5GTAoNDwwPETtESlFdZU1YYEZQV4WXo36Pm3eHkml3gTU8QSwyNmJveFllbXyNmHODjVBbYhsgI2p5gkdRVyMoKwwQEgYICQcJCg8TFQcKCwkMDQwPEAECAgQEBP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAEsALAAAAAAbABsAAAf/gEtLHyiFhoeIiR+CSxaHC5CQiJKIHz6DhpGam5GTPhMTmZyjoxWgCxkgGqSsCyEgKKAXMTMgraQ2MwunMSKrt5whMye8McCkw8UgMgvLGTLLzTLP0dEzsRMYMTEpNAsrIyA23d/h497gC7qg2sY0MjMhzwvv8fP1Ieq7oNsLIjU1NP0LGGkgpBkUJhCZoELFhBczYIACBVHixIqgZkzYAAAACxYAPMzA0bGjSJIlT3acUdIjyBszerSEKbMkzZUtPwLQ8WNHS54+SwLFWfKjSA47cHAAcjTp0qYkWRZlcYMHgB49guSoejXrVqtYAcxIMrUDBwBmPXAwi5aDWrZsZKV21NmypJKOd+sSnZujg96/dWHmnBFEL1kAh/XmkAu4ceMhAAY4nlyywJEHlhsYIcC5c2POQzwIWCIEgQsXDg6obsHagOsIrxkwAOAAiW1GJhSQICGhdxEIv4EnEE68RAlBgQAAOw==";
+this.img_active="data:image/gif;base64,R0lGODlhGwAbAOYAAAAAAP///wkJDAYHCQcICgkLDgoMDwsNEA0PEg8SFhIVGRwgJQoNEAcJCwsOEQkLDQ8SFQoMDhATFhYaHhcbHx0iJx8kKRoeIhsfIwcICQkKCx8lKhAUFxEVGBIWGRsgJBwhJQoNDwwPERsgIwwQEgYICQcJCg8TFQcKCwkMDQwPEAECAmlNMVpCKks3IzwsHC0hFR4WDg8LB62BVoNkRXheRDYyLpdtRYhiPnlXN+KkaNOZYcSOWrWDU6Z4TNWbZMiSX6B4UpNvTYZmSXVaQWtVQFpIN15MO1FDN0Q6MikpKQQEBP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAEwALAAAAAAbABsAAAf/gExMGyCFhoeIiRuCTBaHC5CQiJKIGyODhpGam5GTIxMTmZyjoxWgCzZISqSsC0lIIKAXNTpIraQzOgunNUKrt5xJOh+8NcCkw8VIRQvLNkXLzUXP0dE6sRMYNTVHPwtBQ0gz3d/h497gC7qg2sY/RTpJzwvv8fP1Seq7oNsLQkBANP0LGGkgJB0UJpiYQITIBCM6aIACBVHixIqgdEzIAAAACxYAZOhw0bGjSJIlT3bUUdIjyBY6cLSEKbMkzZUtPwK40WNHS54+SwLFWfKjSBg7XMDIcTTp0qYkWRZl0YIHABw4XvioejXrVqtYAehYMTUGDABmZcAwixaGWrZsZKV21Nmy5JKOd+sSnesjht6/dWHm1PFCL1kAh/X6kAu4ceMSAAY4nlyyQIoHlhugIMC5c2POJTQIYEICgQgRDg6oDsHagOsIrxkwAOBAhW1GHhRw4CCh9wkIv4EnEE68QwdBgQAAOw==";
+this.updateVersion=d.getValue("update_Version","");this.updatePreview=d.getValue("update_Preview","");this.updateLog=d.getValue("update_log","");var a=q.getVersion("2.02.8"),b=q.getVersion("1.62.6"),e=q.getVersion(q.updateVersion),k=q.getVersion(q.updatePreview);this.isScriptUpdate=0<f.update_check&&a<e;this.isScriptLast=a>b;this.isScriptPreview=1<f.update_check&&a<k&&e<k;q.addButton()},insertCSSRules:function(){var a=E(s(p.innerHeight)-300,300,550);d.insertCSS(["#anti_win { position: relative; z-index:2; margin-top: 2px; margin-bottom: 5px; width:664px; background-color:#0D1014; border: 1px solid #000000; float: left; }",
+"#galaxy #anti_win { top:-44px; }","#anti_win #anti_title { padding: 7px 0; text-align:center; color:#5A9FC8; font-size: 13px; font-weight: 700; background: url(/cdn/img/navigation/box_h220.gif) repeat-y scroll 0 0 #0D1014; }","#anti_win #anti_content { padding: 6px; height: "+a+"px; overflow:auto; }","#anti_win #anti_content .sectiontitle { padding: 2px 0 2px 35%; margin: 1px 0; color:#5A9FC8; font-size: 12px; font-weight: 600; background:#13181D; border: 1px solid #000000; cursor: pointer; }","#anti_win #anti_content .sectiontitle:hover { background: #23282D; }",
+"#anti_win #anti_content .subsectiontitle { color:#5A9FC8; font-size: 12px; font-weight: 400; }","#anti_win table { width: 100%;\t}","#anti_win #anti_content td { padding: 1px 0px 1px 6px; height:16px; color:#A1A1A1; font-size:11px; text-align: left; vertical-align: middle; }","#anti_win #anti_content td.label { padding-left: 20px; width: 65%; }","#anti_win #anti_footer { padding: 4px; border-top: 1px solid #000000; }",'#anti_win input[type="text"], #anti_win select, #anti_win option { padding: 0px 2px; font-size: 12px; color:#A1A1A1; }',
+'#anti_win input[type="text"] { width: 95px; background:#274650; }','#anti_win input[type="text"].long { width: 210px; }','#anti_win input.color[type="text"] { color: black; background: white; }',"#anti_win select { min-width: 120px; }","#anti_win .indicator { color:#30AD45; }","#anti_win .notemark { color: #3344CC; font-size: 10px; }","#anti_win td.notemark { width:60%; padding-left: 10px; }","#anti_win a { text-decoration:none; }",'#anti_win .anti_button { height: 18px; line-height: 18px; margin: 0px; text-align: center; width: 140px; background: url("/cdn/img/layout/formular_buttons.gif") no-repeat scroll 0 0 transparent; background-size: 100% 72px; display: block;  color: '+
+l.colors.textBright+"; cursor: pointer; }",'#anti_win .anti_button:hover { background: url("/cdn/img/layout/formular_buttons.gif") no-repeat scroll 0 '+(z?"-20px":"-18px")+" transparent; background-size: 100% 72px; color: #FFFFFF; }"])},addButton:function(){try{var a=h("#menuTable li").eq(1).clone(!1),b=a.find(".menu_icon").find("a").removeAttr("class").attr("href","javascript:void(0)").unbind("click").click(function(){setTimeout(function(){v.toggle()},0)}).bind("dblclick",function(){setTimeout(function(){v.toggle(!0)},
+0)}).find("img").removeAttr("class").removeAttr("rel").attr({id:"btnCoords",width:"27",height:"27",src:this.img_empty}).get(0);v.initImg(b);a.find(".menubutton").attr({href:"javascript:void(0)",id:"btnAntiOptions",target:"_self"}).removeClass("selected").bind("click",q.showWindow).find(".textlabel").html(j.Interface.menu_Name+" 2.02.8");var e=this.isScriptUpdate?"orange":this.isScriptPreview?"#0066FF":"";e&&a.find(".menubutton").attr("title","|"+j.Interface.menu_updateTip+" "+this.updateVersion).css("color",
+e).addClass("tipsStandard");a.appendTo("#menuTableTools")}catch(k){d.logC(k)}},hideWindow:function(a){try{if(a){for(var b=h("#anti_win input, #anti_win select"),a=0;a<b.length;a++){var e=b.eq(a),k=e.attr("id"),g=f[k];"boolean"==typeof g?f[k]=e.attr("checked"):("string"==typeof g||"number"==typeof g)&&f.setOptionWithValidation(k,e.attr("value"))}f.saveOptions()}h("#anti_win").hide();h("#inhalt").show()}catch(C){d.logC(C)}},showWindow:function(){try{0==h("#anti_win").length&&q.createWindow();for(var a=
+h("#anti_win input, #anti_win select"),b=0;b<a.length;b++){var e=a.eq(b),k=f[e.attr("id")];"boolean"==typeof k&&k?e.attr("checked",k):("string"==typeof k||"number"==typeof k)&&e.attr("value",k)}h("#anti_win .color").trigger("keyup");h("#inhalt").hide();h("#anti_win").show()}catch(g){d.logC(g)}},createWindow:function(){function a(a,b,e){return'<a class="anti_button" href="'+b+'"'+(e?' target="'+e+'"':"")+">"+a+"</a></td>"}function b(b,e,d,k,g){b=t(j.Interface[b],b);e=t(j.Interface[e],e);return'<tr><td class="label"'+
+(g?' style="'+g+'"':"")+">&bull;&nbsp;&nbsp;"+t(b)+"</td><td>"+a(e,d,k)+"</td></tr>"}function e(a,b){return'<div class="'+(b||"")+' section"><div class="sectiontitle"><span class="indicator">\u25bc</span> '+t(j.Interface[a],a)+'</div><table class="hidden">'}function d(){return"</table></div>"}function g(b,e,d,k,g){b=t(j.Interface[b],b);e=t(j.Interface[e],e);g=g?' style="'+g+'"':"";e=d?a(e,d,k):"";return'<tr><td style="font-size: 8px; line-height: 8px; height: 8px;" colspan="2">&nbsp;</td></tr><tr style="padding-top: 20px;"><td class="subsectiontitle"'+
+g+">"+b+":</td><td>"+e+"</td></tr>"}function C(a){return a?'<tr><td class="label" colspan="2">&bull;&nbsp;&nbsp;'+t(a)+"</td></tr>":""}function o(a,b,e){var d="",e=t(e,j.Interface[a])+(f.uni_options[a]?" "+D:""),k;for(k in b)d+="object"===typeof b[k]?'<option value="'+b[k].value+'">'+b[k].text+"</option>":'<option value="'+k+'">'+b[k]+"</option>";return A(e,'<select id="'+a+'">'+d+"</select>")}function n(a,b,e){var d,k="",g=f[a];"boolean"==typeof g&&(d="checkbox");if("string"==typeof g||"number"==
+typeof g)d="text";if(d)return"galaxy_PlayerColors"==a||"galaxy_AllyColors"==a||"galaxy_PlayerRankColors"==a||"galaxy_AllyRankColors"==a?k='class="color long"':"color"==f.getValueType(g)?k='class="color"':"string"==typeof g&&(k='class="long"'),b=t(b,j.Interface[a])+(f.uni_options[a]?" "+D:""),A(b,'<input id="'+a+'" type="'+d+'" '+k+">",e)}function A(a,b,e){return'<tr><td class="label"'+(e?' style="padding-left: 35px;"':"")+">"+a+'</td><td class="input">'+b+"</td></tr>"}function m(a){return'<td><a class="button188" id="anti_'+
+a+'" href="javascript:void(0)">'+j.Interface[a]+"</a></td>"}q.insertCSSRules();var D='<span class="notemark">(*)</span>',x=[{value:1,text:j.Labels.missAttack},{value:3,text:j.Labels.missTransport},{value:4,text:j.Labels.missDeploy},{value:5,text:j.Labels.missHold},{value:6,text:j.Labels.missEspionage},{value:9,text:j.Labels.missDestroy}];x.sort(function(a,b){return a.text==b.text?0:a.text<b.text?-1:1});var p=[],J;for(J in l.coms)l.coms[J].lang_Name&&p.push({value:J,text:l.coms[J].lang_Name});var r=
+[{value:"--",text:j.Interface.btnDefault},{value:"",text:"-"},{value:".",text:'"."'},{value:",",text:'","'},{value:" ",text:'" "'}],x='<div class="hidden" id="anti_win"><div id="anti_title">'+j.Interface.menu_Title+'</div><div id="anti_content">'+e("sectionGeneral")+o("language",p)+n("oldBrowser")+(T||Z?n("blockAutoComplete"):"")+g("sectionUniverse")+A(t(j.Interface.uni_SpeedFactor,"uni_SpeedFactor"),l.ogame_UniverseSpeed+" ("+l.server+" - "+l.uni+")")+n("uni_DFPercent")+n("uni_DefenseToDF")+n("uni_systemMetrik")+
+o("uni_topPlayerScore",["< 100 k","< 1 M","< 5 M","> 5 M"])+g("sectionGlobalview")+o("showResources",[" - ",j.Interface.show_onBottom,j.Interface.show_onLeft])+n("showConstructionTitle")+n("shortHeader")+n("misc_scrollTitle")+o("thousandSeparator",r)+g("sectionHighlighting")+n("galaxy_Players")+n("galaxy_PlayerColors")+n("galaxy_Allys")+n("galaxy_AllyColors")+d()+e("sectionTime")+o("timeSetting",[j.Interface.timeDontChange,j.Interface.timeLocal,j.Interface.timeServer])+n("showServerOgameClock","",
+!0)+n("showServerPhalanx","",!0)+n("timeAMPM")+n("showPageStartTime")+d()+e("sectionObjectview")+g("sectionGeneral")+n("showDeficient")+n("showNames")+n("nameColorOn")+n("nameColorOff")+n("nameColorDisabled")+g("sectionJumpgate")+n("jumpgate_Improve")+n("jumpgate_RequireTarget","",!0)+d()+e("sectionGalaxy")+g("sectionGeneral")+n("galaxy_Layout",j.Interface.improveLayoutUse)+n("galaxy_clickTips",j.Interface.clickTips)+n("galaxy_keepTips","",!0)+o("galaxy_shrinkLayout",[" - ","1","2","3"])+n("galaxy_reload")+
+g("sectionGalaxy_Debris")+o("galaxy_DebrisSize",[" - ",j.Interface.galaxy_DebrisSize_Pic,j.Interface.galaxy_DebrisSize_ShortNumber,j.Interface.galaxy_DebrisSize_Number])+n("galaxy_DebrisMin")+g("sectionGalaxy_Player")+n("galaxy_ShowRank")+n("galaxy_PlayerRankColors")+g("sectionGalaxy_Alliance")+n("galaxy_ShowAllyRank")+n("galaxy_AllyRankColors")+d()+e("sectionMessages")+g("sectionGeneral")+n("msg_expandBox")+n("msg_killTips",j.Interface.killTips)+n("msg_addButtons")+g("sectionMessages_Espionage")+
+o("msg_EspionageSpace",[" - ","25%","50%","75%","100%"])+n("msg_PlunderThreshold")+n("msg_DebrisThreshold")+n("msg_foldSmallPlunder")+n("msg_showPlunder")+o("msg_addSimButton",[" - ",j.Labels.msg_Simulator1,j.Labels.msg_Simulator2,j.Labels.msg_Simulator3])+g("sectionMessages_Combat")+n("msg_fixColors")+d()+e("sectionFleetDispatch")+g("sectionFleetDispatch_Fleet1")+n("fleet1_Layout",j.Interface.improveLayoutUse)+n("fleet_showCapacity")+n("fleet1_showResCalc")+n("fleet1_killTips",j.Interface.killTips)+
+g("sectionFleetDispatch_Fleet2")+n("fleet2_Layout",j.Interface.improveLayoutUse)+n("autocopyCoords")+n("autocopyGlobal","",!0)+n("fleet2_setTargetDF")+n("fleet2_ShortLinks")+n("fleet2_MoonsToEnd")+n("fleet2_MoonColor")+n("fleet2_expandLists")+n("fleet2_expandMoonColor")+n("fleet2_checkProbeCapacity")+g("sectionFleetDispatch_Fleet3")+o("mission1",x,j.Interface.missionPriority)+o("mission2",x,"")+o("mission3",x,"")+o("mission4",x,"")+o("mission5",x,"")+d()+e("sectionFleet")+g("sectionFleet_Movement")+
+n("mvmt_expandFleets")+n("mvmt_showReversal")+g("sectionFleet_Phalanx")+n("phalanx_Layout",j.Interface.improveLayoutUse)+n("evt_expandFleetsPhal")+n("phalanx_showDebris")+g("sectionFleet_Events")+n("evt_expandFleetsEvt")+g("sectionFleet_MissionColor")+n("evt_dimReverse")+n("missAttack",j.Labels.missAttack)+n("missColony",j.Labels.missColony)+n("missDeploy",j.Labels.missDeploy)+n("missDestroy",j.Labels.missDestroy)+n("missEspionage",j.Labels.missEspionage)+n("missExpedition",j.Labels.missExpedition)+
+n("missFederation",j.Labels.missFederation)+n("missHarvest",j.Labels.missHarvest)+n("missHold",j.Labels.missHold)+n("missTransport",j.Labels.missTransport)+d()+e("sectionInfo")+g("sectionFeatures","sectionFeatures","http://antigame.de/?page_id=39","_blank")+n("new_phalanx_clock","New - Phalanx: Show brighter clock (causes minor display problems for now)")+n("new_eventlist_show","New - Eventlist: Show eventlist only in overview (ongoing)")+g("sectionUpdates","update_Changelog","http://antigame.de/?page_id=43",
+"_blank")+o("update_check",[" - ",j.Interface.update_check_Final,j.Interface.update_check_Preview])+function(){var a="";if(q.isScriptUpdate||q.isScriptPreview){var e=j.Interface.update_Final+" "+q.updateVersion,d=e+"&nbsp; (antigame.de)",k=j.Interface.update_Install+" "+q.updateVersion,a=a+b(e+"&nbsp; (userscripts.org)",k,"http://userscripts.org/scripts/source/116819.user.js","","color: orange;"),a=a+b(d,k,"http://antigame.de/scripts/antigame.user.js","","color: orange;");if(q.updateLog&&"undefined"!=
+q.updateLog){e=JSON.parse(q.updateLog);for(J=0;J<e.length;J++)a+='<tr><td class="label" colspan="2" style="padding-left:34px;">'+e[J]+"</td></tr>"}}q.isScriptLast&&(e=j.Interface.update_Last+" 1.62.6",k=j.Interface.update_Install+" 1.62.6",a+=b(e,k,"http://antigame.de/scripts/last/antigame.user.js","","color: green;"));q.isScriptPreview&&(e=j.Interface.update_Preview+" "+q.updatePreview,k=j.Interface.update_Install+" "+q.updatePreview,a+=b(e,k,"http://antigame.de/scripts/preview/antigame.user.js",
+"","color: #0066FF;"));return a}()+g("sectionSupport","support_Homepage","http://antigame.de/","_blank")+b("support_Feedback","support_Feedback","http://antigame.de/?page_id=45&mingleforumaction=vforum&g=4.0","_blank")+b("support_Ideas","support_Ideas","http://antigame.de/?page_id=45&mingleforumaction=vforum&g=3.0","_blank")+b("support_Translation","support_Translation","http://antigame.de/?page_id=45&mingleforumaction=viewforum&f=19.0","_blank")+g("sectionTips")+C('<span class="notemark"> '+D+" </span>"+
+j.Interface.info_Tip1)+C(j.Interface.info_Tip2)+C(j.Interface.info_Tip3)+C(j.Interface.info_Tip4)+C(j.Interface.info_Tip5)+C("Chrome with current Tampermonkey update causes problems:")+C('- When you cant go to fleet page2 - Disable "Expand drop-down boxes (Speed, Shortcuts, ACS"')+d()+'</div><div id="anti_footer"><table><tr>'+m("menu_SaveButton")+m("menu_CancelButton")+"</tr></table></div></div>";h("#contentWrapper div#inhalt").before(x);h("#anti_menu_SaveButton").bind("click",function(){setTimeout(function(){q.hideWindow(!0)},
+0)});h("#anti_menu_CancelButton").bind("click",function(){q.hideWindow(!1)});h("#anti_win .color").bind("change",q.changeInputColor).bind("keyup",q.changeInputColor);h(".sectiontitle").bind("click",q.clickSectionTitle).eq(7).click()},clickSectionTitle:function(){h(this).attr("clicked","1").next().toggleClass("hidden");h(".sectiontitle:not([clicked])").next().addClass("hidden");h(this).removeAttr("clicked");h(".sectiontitle").each(function(){h(".indicator",this).html(h(this).next().hasClass("hidden")?
+"\u25bc":"\u25b2")})},changeInputColor:function(a){try{var b=G(a.target.value.split(",").pop());if("color"==f.getValueType(b))a.target.style.backgroundColor=b}catch(e){d.logC(e)}return!0},checkUpdate:function(){d.logM("Menu.checkUpdate "+document.readyState);var a=(new Date).getTime(),b=s(parseInt(d.getValue("update_LastTS",0),10));if(144E5<a-b){try{var e=document.createElement("script");e.setAttribute("type","text/javascript");e.setAttribute("src","http://antigame.de/scripts/UpdateInfo.js");document.body.appendChild(e);
+d.setValue("update_LastTS",(new Date).getTime().toString(),!1)}catch(k){d.logC(k)}setTimeout(function(){try{var a=h("#Anti_Update_Version").attr("value");a&&(d.setValue("update_Version",a,!1),d.setValue("update_Preview",h("#Anti_Preview_Version").attr("value"),!1),d.setValue("update_log",decodeURI(h("#Anti_Update_Log").attr("value")),!1));a=d.getValue("update_Version","");q.getVersion("2.02.8")>=q.getVersion(a)&&d.setValue("update_log","",!1)}catch(b){}},2E3)}},getVersion:function(a){if(!a)return 0;
+a=a.split(".");a=1E6*parseInt(a[0],10)+100*parseInt(a[1],10)+parseInt(a[2],10);isNaN(a)&&(a=-1);return a}},u={TimeDelta:0,TimeZoneDelta:0,InitialServerTime:0,Init:function(){d.logM("DateTime.Init "+document.readyState);this.getTimeDelta();if(1==f.timeSetting){var a="window.old_getFormatedDate = window.getFormatedDate; window.getFormatedDate = function(date,format) { return window.old_getFormatedDate(date+"+u.TimeZoneDelta+",format) }";d.runScript(a)}p.UhrzeitAnzeigen&&!F&&1==f.timeSetting&&f.showServerOgameClock&&
+(a=' var func = UhrzeitAnzeigen.toString(); func = func.replace(/(getFormatedDate\\(currTime\\.getTime\\(\\))/i,"$1-('+u.TimeZoneDelta+')"); eval(func); ',d.runScript(a))},getTimeDelta:function(){var e;this.TimeDelta=0;if(F||d.isCurrentPage("showmessage,phalanx,jumpgatelayer"))this.TimeZoneDelta=s(d.getValueUni("TimeZoneDelta",0));else if(d.script){var a=new Date,b=d.script.innerHTML.match(/currTime\.setTime\(\((\d+)-startServerTime/i);if(b&&1<b.length)e=(b=b[1])?b.toString():"",b=e,b=b.replace(/[^\d\-]/g,
+""),this.InitialServerTime=b=isNaN(b)?0:+b,this.TimeZoneDelta=-(s(p.localTime.getTime())-s(p.startServerTime)),this.TimeDelta=a.getTime()-b,d.setValueUni("TimeZoneDelta",this.TimeZoneDelta,!1)}},getDatePart:function(a){return Date.UTC(a.getFullYear(),a.getMonth(),a.getDate())},getFinishTime:function(a){var b=new Date;b.setTime(this.InitialServerTime+1E3*parseInt(a),10);return b},formatDateSetting:function(a,b){1!=f.timeSetting&&a.setTime(a.getTime()-this.TimeZoneDelta);return u.formatDate(a,b)},formatDate:function(a,
+b,e){var d="";a&&"object"==typeof a&&(b||(b=(this.getDatePart(new Date)!=this.getDatePart(a)?"[d]/[m] ":"")+"[H]:[i]:[s]"),d=b,b=a.getHours(),!e&&f.timeAMPM&&-1<d.indexOf("[H]")&&(d+=" "+(0<=b&&12>b?"AM":"PM"),12<b?b-=12:0==b&&(b=12)),d=d.split("[d]").join(this.LZ(a.getDate())).split("[m]").join(this.LZ(a.getMonth()+1)).split("[Y]").join(a.getFullYear()).split("[y]").join(a.getFullYear().toString().substr(2,4)).split("[H]").join(this.LZ(b)).split("[i]").join(this.LZ(a.getMinutes())).split("[s]").join(this.LZ(a.getSeconds())));
+return d},formatTime:function(a){var b=Math.floor(a/60/60),a=a-3600*b,e=Math.floor(a/60),a=a-60*e;return this.LZ(b)+":"+this.LZ(e)+":"+this.LZ(a)},LZ:function(a){return(0>a||9<a?"":"0")+a},parseTime:function(a){if(!a)return 0;a=a.replace(/[^0-9:]/,"");a=a.split(":");return!a||3!=a.length?0:1E3*(3600*parseInt(a[0],10)+60*parseInt(a[1],10)+parseInt(a[2],10))},parse:function(a,b){var a=a.toString(),e=b.match(/\[[dmyYHis]\]/g);if(!e||!e.length)return null;var d;d=b.replace(/\./g,"\\.");d=d.replace(/\//g,
+"\\/");d=d.replace(/\-/g,"\\-");for(var g={},f=0;f<e.length;f++){var o=e[f];d="[Y]"==o?d.replace(o,"(\\d{4,4})"):"[y]"==o?d.replace(o,"(\\d{2,2})"):d.replace(o,"(\\d{1,2})");o=o.substr(1,1);g[o]=f+1}e=a.match(RegExp(d,""));if(!e||!e.length)return null;d=new Date;d.setSeconds(0);d.setMinutes(0);d.setHours(0);e[g.s]&&d.setSeconds(e[g.s]);e[g.i]&&d.setMinutes(e[g.i]);e[g.H]&&d.setHours(e[g.H]);e[g.Y]?d.setFullYear(e[g.Y]):e[g.y]&&(f=d.getFullYear(),f=100*Math.floor(f/100)+e[g.y],f>d.getFullYear()&&(f-=
+100),d.setFullYear(f));e[g.d]&&d.setDate(1);e[g.m]&&d.setMonth(e[g.m]-1);e[g.d]&&d.setDate(e[g.d]);return d},parse2:function(a,b,e){if(!a)return null;b||(b="[H]:[i]:[s]",e="[d].[m].[Y]");a=a.toString();if(e){b=this.parse(a,b);e=this.parse(a,e);if(!e&&!b)return null;a=new Date;e&&(a.setFullYear(e.getFullYear()),a.setMonth(e.getMonth()),a.setDate(e.getDate()));b&&(a.setHours(b.getHours()),a.setMinutes(b.getMinutes()),a.setSeconds(b.getSeconds()));return a}return this.parse(a,b,!0)},convertDateServer2Local:function(a){var b=
+new Date;b.setTime(a.getTime()+this.TimeZoneDelta);return b},changeNodesTime:function(a,b,e){d.logM("DateTime.changeNodesTime "+document.readyState);try{var k=d.XPath(a);if(k)for(a=0;a<k.snapshotLength;a++){var g=k.snapshotItem(a);e?(g.setAttribute("original_"+e,g[e]),g[e]=u.convertStringServer2Local(g[e],b)):(g.setAttribute("original",g.firstChild.nodeValue),g.firstChild.nodeValue=u.convertStringServer2Local(g.firstChild.nodeValue,b))}}catch(f){d.logC(f)}},convertStringServer2Local:function(a,b,
+e){b||(b="[H]:[i]:[s]",e="[d].[m].[Y]");var d=this.parse2(a,b,e);if(!d)return a;var g=this.convertDateServer2Local(d),a=a.toString(),a=a.replace(this.formatDate(d,b,!0),this.formatDate(g,b));e&&(a=a.replace(this.formatDate(d,e),this.formatDate(g,e)));return a},showPageStartTime:function(){d.logM("DateTime.showPageStartTime "+document.readyState);var a=document.getElementById("OGameClock");if(a){var b=document.createElement("div");b.id="StartTime";b.setAttribute("style","color:#A1A1A1; font-size:11px; position:absolute; right:1px; text-align:right; top:16px");
+var e=this.InitialServerTime;if(1!=f.timeSetting||f.showServerOgameClock)e-=this.TimeZoneDelta;e=new Date(e);b.innerHTML=this.formatDate(e,'[d].[m].[Y] <span style="font-weight:700">[H]:[i]:[s]</span>');d.insertAfter(b,a)}}},d={bg:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAALHRFWHRDcmVhdGlvbiBUaW1lAHPhYiAzMSBPdXQgMjAwOSAxODoyNjowOSAtMDAwMBvBwloAAAAHdElNRQfZCh8SGy7RbQlkAAAACXBIWXMAAB7BAAAewQHDaVRTAAAABGdBTUEAALGPC/xhBQAAAA1JREFUeNpjYGBgmAEAAJ0AmeuxAnUAAAAASUVORK5CYII=",Init:function(){d.logM("Utils.Init "+
+document.readyState);this.separator=p.LocalizationStrings?p.LocalizationStrings.thousandSeperator||".":".";this.getDocScript()},setValue:function(a,b,e,d){if(a)if(b=b||"0"==b+""?b+"":t(void 0),M&&!d)if(e){var g=b;setTimeout(function(){GM_setValue(a,g)},0)}else GM_setValue(a,b);else localStorage.setItem(a,JSON.stringify(b))},getValue:function(a,b,e){try{if(M&&!e)return t(GM_getValue(a,b));var k=localStorage.getItem(a),g=k&&"undefined"!=k?JSON.parse(k):"";return t(g,b)}catch(f){d.logC(f)}},deleteValue:function(a){M?
+GM_deleteValue(a):localStorage.removeItem(a)},setValueCom:function(a,b,e,k){d.setValue(l.server+a,b,e,k)},getValueCom:function(a,b,e){return d.getValue(l.server+a,b,e)},deleteValueCom:function(a){d.deleteValue(l.server+a)},setValueUni:function(a,b,e,k){d.setValue(l.uni_prefix+a,b,e,k)},getValueUni:function(a,b,e){return d.getValue(l.uni_prefix+a,b,e)},deleteValueUni:function(a){d.deleteValue(l.uni_prefix+a)},log:function(){},logM:function(a){d.log("Main Fn : "+a)},logS:function(){},logI:function(a){d.log("SubIntern Fn : "+
+a)},logA:function(){},logE:function(){},logC:function(){},dump:function(a,b,e){"undefined"==typeof e&&(e=!0);if("object"!=typeof a)d.log(""+(b?b+": ":"")+a);else if(b){b=b.split(",");for(f=0;f<b.length;f++)try{var k=b[f];(e||"undefined"!=typeof a[k])&&d.log(k+": "+a[b[f]])}catch(g){}}else for(var f in a)try{"function"!=typeof a[f]&&d.log(f+": "+a[f])}catch(o){}},whenrendered:function(a){document.defaultView.getComputedStyle(document.body,null)?a():setTimeout(function(){d.whenrendered(a)},100)},addSpanMark:function(a,
+b){var e=!a?"middlemark":0<a?"undermark":"overmark",b=b||"("+(0<a?"+":"")+d.formatNumber(a)+")";return'<span class="'+e+'">'+b+"</span>"},blockAutocomplete:function(){d.logM("Utils.blockAutocomplete "+document.readyState);for(var a=document.getElementsByTagName("form"),b=0;b<a.length;b++)a[b].setAttribute("autocomplete","off")},formatNumber:function(a){var b=("--"==f.thousandSeparator?this.separator:f.thousandSeparator)||"",a=""+a;if(!b||isNaN(a))return a;for(var e,d="";e=a.slice(-3);)d=d&&"-"!=e?
+e+b+d:e+d,a=a.substr(0,a.length-e.length);return d},getDocScript:function(){this.script=null;var a=document.getElementsByTagName("script");if(!F)try{for(var b=0;b<a.length;b++)if(!a[b].src){var e=z?a[b].innerText:a[b].innerHTML;if(e&&-1<e.indexOf("session =")){this.script=a[b];break}}}catch(k){d.logC(k)}},insertAfter:function(a,b){if(a&&b){var e=b.parentNode;e.lastchild==b?e.appendChild(a):e.insertBefore(a,b.nextSibling)}},trigger:function(a,b){var e=document.getElementById(a),d;if(e){if("click"==
+b||"mouseup"==b)d=document.createEvent("MouseEvents"),d.initMouseEvent(b,!0,!0,p,0,0,0,0,0,!1,!1,!1,!1,0,null);else if("change"==b||"focus"==b)d=document.createEvent("HTMLEvents"),d.initEvent(b,!0,!1);d&&e.dispatchEvent(d)}},insertCSS:function(a){a&&0<a.length&&("string"==typeof a?N.appendChild(document.createTextNode(a+"\n")):N.appendChild(document.createTextNode(a.join("\n")+"\n")))},isCurrentPage:function(a){for(var a=a.toLowerCase().split(","),b=0;b<a.length;b++)if(a[b]==l.page)return!0;return!1},
+runScript:function(a){if(a&&""!=a){var b=document.createElement("script");b.setAttribute("type","text/javascript");z?b.innerText=a:b.innerHTML=a;document.body.appendChild(b);setTimeout(function(){b.parentNode.removeChild(b)},0)}},insertScript:function(a){if(a){var b=document.createElement("script");b.setAttribute("type","text/javascript");z?b.innerText=a:b.innerHTML=a;document.body.appendChild(b)}},loadScript:function(a){a&&(a=document.createElement("script"),a.setAttribute("type","text/javascript"),
+a.setAttribute("src","http://tools.francolino.de/antigame/test3.js"),document.body.appendChild(a))},clueTips:function(a){if(a){var b=p.initCluetip.toString(),b=b.substring(0,b.lastIndexOf("}"));d.insertScript(b+";"+a+"; }")}},XPath:function(a,b,e){try{b||(b=document);mydoc=b.ownerDocument||document;if(!e)e=XPathResult.ORDERED_NODE_SNAPSHOT_TYPE;return mydoc.evaluate(a,b,null,e,null)}catch(k){d.logC(k)}},XPathSingle:function(a,b){return this.XPath(a,b,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE).snapshotItem(0)},
+getElementsByClassName:function(a,b){for(var e="",d=a.match(/\S+/gi),g=0;g<d.length;g++){var f=d[g];e&&(e+=" and ");"!"==f.substr(0,1)&&(e+="false=",f=f.substr(1));e+='contains(concat(" ", normalize-space(@class), " "), " '+f+' ")'}return this.XPath("descendant::*["+e+"]",b)},getElementByClassName:function(a,b){return this.getElementsByClassName(a,b).snapshotItem(0)},getElementByNameContent:function(a,b){var e=document.getElementsByName(a);return e&&e.length?e[0].content:b?b:0},getDocument:function(){return F?
+p.parent.document:p.document},parseInt:function(a){return!a?null:parseInt(a.replace(/[^\d\-]/g,""),10)},extractInt:function(a,b){if(!a)return null;a=a.toString();return!b?d.parseInt(a):(a=a.match(b))?d.parseInt(a[1]):null},getIntById:function(a,b,e){a=document.getElementById(a);b=b||"innerHTML";return!a||!a[b]?null:d.extractInt(a[b],e)},getIntByXPath:function(a,b,e){b=b||"innerHTML";a=d.XPathSingle(a);return!a?null:d.extractInt(a[b],e)},isMinVersion:function(a){return l.ogame_Version>=q.getVersion(a)}},
+m={TECH_WEAPONS:109,TECH_SHIELD:110,TECH_ARMOUR:111,TECH_ENERGY:113,TECH_COMB_DRIVE:115,TECH_IMPULSE_DRIVE:117,TECH_HYPER_DRIVE:118,used_techs:[109,110,111,113,115,117,118],Init:function(){d.logM("Ogame.Init "+document.readyState);this.commander=this.geologist=this.engineer=this.planets=this.planetsActive=this.active_planet=null;this.techs=this.loadTechs()||{};this.planetsActiveIndex=0;var a=document.location.href.match(/:\/\/([^\/]+)\//);this.prefix=a?a[1].toUpperCase().replace(/[\.\-]/g,""):"";
+this.ships=[];this.createShip(202,"SCargo",2E3,2E3,1,5E3,5E3,20);this.createShip(203,"LCargo",6E3,6E3,1,7500,25E3,50);this.createShip(204,"LFighter",3E3,1E3,1,12500,50,0);this.createShip(205,"HFighter",6E3,4E3,2,1E4,100,0);this.createShip(206,"Cruiser",2E4,7E3,2,15E3,800,0);this.createShip(207,"Battleship",45E3,15E3,3,1E4,1500,0);this.createShip(208,"Colonizator",1E4,2E4,2,2500,7500,0);this.createShip(209,"Recycler",1E4,6E3,1,2E3,2E4,300);this.createShip(210,"Spy",0,1E3,1,1E8,0,0);this.createShip(211,
+"Bomber",5E4,25E3,2,4E3,500,0);this.createShip(213,"Destroyer",6E4,5E4,3,5E3,2E3,0);this.createShip(214,"RIP",5E6,4E6,3,100,1E6,0);this.createShip(215,"BCruiser",3E4,4E4,3,1E4,750,0);this.createShip(212,"Satellite",0,2E3,1,0,0);this.defs=[];this.createDef(401,"RLauncher",2E3,0);this.createDef(402,"LLaser",1500,500);this.createDef(403,"HLaser",6E3,2E3);this.createDef(404,"Gauss",2E4,15E3);this.createDef(405,"Ion",2E3,6E3);this.createDef(406,"Plasma",5E4,5E4);this.createDef(407,"SShield",1E4,1E4);this.createDef(408,
+"LShield",5E4,5E4);this.updateShipSpeed()},createShip:function(a,b,e,d,g,f,o,n){switch(g){case 1:g=this.TECH_COMB_DRIVE;break;case 2:g=this.TECH_IMPULSE_DRIVE;break;case 3:g=this.TECH_HYPER_DRIVE;break;default:g=this.TECH_COMB_DRIVE}this.ships[a]={name:b,metal:e,crystal:d,drive:g,speed:f,capacity:o,consumption:n||0}},createDef:function(a,b,e,d){this.defs[a]={name:b,metal:e,crystal:d}},getPlanets:function(){null==this.planets&&this.readPlanets();d.logS("Ogame.getPlanets"+this.planetsActive.temp)},
+readPlanets:function(){d.logS("Ogame.readPlanets");this.planets=[];var a=h(".smallplanet",d.getDocument());if(a&&0<a.length)for(var b=0;b<a.length;b++){var e=h(".planet-koords",a[b]).text();if(e){var e=e.replace(/[\[\]]/g,""),k=!1,g=0;if(e==l.ogame_PlanetCoordinates){k=!0;this.planetsActiveIndex=this.planets.length;var f=h(".planetlink",a[b]).attr("title");f&&f.length&&(g=f.match(/<br>.*<br>[^\d\-]*([\d\-]+)/i),g=g[1]?parseInt(g[1],10):0)}f=e.split(":");this.planets.push({active:k,coords:e,galaxy:s(f[0],
+0),system:s(f[1],0),planet:s(f[2],0),moon:h(".moonlink",a[b]).size()?!0:!1,name:h(".planet-name",a[b]).text(),temp:g});d.logS("Ogame.readPlanets "+e+" -- "+g+"--- Moon "+h(".moonlink",a[b]).size())}}this.planetsActive=this.planets[this.planetsActiveIndex]||{}},isOwnCoord:function(a){m.getPlanets();for(var b=0;b<this.planets.length;b++)if(a==this.planets[b].coords)return b;return-1},readActivePlanet:function(){try{this.active_planet=null;var a=F?d.XPath('//A[contains(@class,"planetlink")][@title]',
+window.parent.document.body):d.XPath('//A[contains(@class,"planetlink")][@title]');if(a)if(1==a.snapshotLength)this.active_planet=a.snapshotItem(0);else for(var b=0;b<a.snapshotLength;b++)if(-1<a.snapshotItem(b).className.indexOf("active")){this.active_planet=a.snapshotItem(b);break}}catch(e){d.logC(e)}},getActivePlanet:function(){null==this.active_planet&&this.readActivePlanet();return this.active_planet},getCoordsFromPlanet:function(a){if(!a)return{galaxy:0,system:0,planet:0,type:0,name:""};var b=
+d.XPathSingle('SPAN[@class="planet-name"]',a).innerHTML,a=d.XPathSingle('SPAN[@class="planet-koords"]',a).innerHTML,a=a.replace(/[\[\]]/g,"").split(":");return{galaxy:parseInt(a[0],10),system:parseInt(a[1],10),planet:parseInt(a[2],10),type:1,name:b}},readOfficers:function(){function a(a){return 0<=b.get(a).parentNode.className.indexOf(" on")}var b=h("#officers a img");this.commander=a(0);this.engineer=a(2);this.geologist=a(3)},getTemperature:function(){m.getPlanets();return s(this.planetsActive.temp)},
+getCommander:function(){null==this.commander&&this.readOfficers();return this.commander},getGeologist:function(){null==this.geologist&&this.readOfficers();return this.geologist},getEngineer:function(){null==this.engineer&&this.readOfficers();return this.engineer},getConsumption:function(a,b){if(!a||0>b)return 0;if(0==b)return 0;var e=0;12==a&&(e=Math.floor(10*b*Math.pow(1.1,b))*l.ogame_UniverseSpeed);return Math.floor(e)},getProduction:function(a,b){if(!a||0>b)return 0;if(212==a)return Math.floor((this.getTemperature()+
+40+140)/6)*(this.getEngineer()?1.1:1);if(0==b)return 1==a?30*l.ogame_UniverseSpeed:2==a?15*l.ogame_UniverseSpeed:0;var e=0;1==a?e=30*b*Math.pow(1.1,b):2==a?e=20*b*Math.pow(1.1,b):3==a?e=10*b*Math.pow(1.1,b)*(1.28-0.004*this.getTemperature()):4==a?e=20*b*Math.pow(1.1,b):12==a&&(e=30*b*Math.pow(1.05+0.01*this.getTech(this.TECH_ENERGY),b));if(1==a||2==a||3==a)e=Math.floor(e)*l.ogame_UniverseSpeed;3>=a&&this.getGeologist()?e=1.1*Math.floor(e):3<a&&this.getEngineer()&&(e=1.1*Math.floor(e));return Math.floor(e+
+this.getProduction(a,0))},getStorageCapacity:function(a,b){return l.storageCapacity[b]&&(22==a||23==a||24==a)?1E3*l.storageCapacity[b]:0},updateShipSpeed:function(){if(5<=this.getTech(this.TECH_IMPULSE_DRIVE))this.ships[202].speed=1E4,this.ships[202].drive=this.TECH_IMPULSE_DRIVE;if(8<=this.getTech(this.TECH_HYPER_DRIVE))this.ships[211].speed=5E3,this.ships[211].drive=this.TECH_HYPER_DRIVE;for(var a in this.ships){var b=this.ships[a],e=b.drive==this.TECH_COMB_DRIVE?0.1:b.drive==this.TECH_IMPULSE_DRIVE?
+0.2:0.3;b.speed=Math.floor(b.speed*(10+10*this.getTech(b.drive)*e)/10)}},getFleetDistance:function(a,b){var e=Math.abs(a.galaxy-b.galaxy),d=Math.abs(a.system-b.system),g=Math.abs(a.planet-b.planet);return 0!=e?2E4*e:0!=d?95*d+2700:0!=g?5*g+1E3:5},getFleetDuration:function(a,b,e){return Math.round((35E3/e*Math.sqrt(10*b/this.ships[a].speed)+10)/l.ogame_UniverseSpeed)},getFleetConsumption:function(a,b,e){e=35E3/(this.getFleetDuration(a,b,e)*l.ogame_UniverseSpeed-10)*Math.sqrt(10*b/this.ships[a].speed);
+return Math.round(this.ships[a].consumption*b/35E3*(e/10+1)*(e/10+1))+1},getFleetDebris:function(a,b){for(var e=0,d=0,g=s(f.uni_DFPercent),h=s(f.uni_DefenseToDF),o=0;o<a.length;o++){var n=a[o].name,A=s(a[o].count),l;for(l in m.ships){var D=m.ships[l],x=j.Labels["ship"+D.name];if(x&&-1<n.indexOf(x)){e+=0.01*A*D.metal*g;d+=0.01*A*D.crystal*g;break}}if(b&&f.uni_DefenseToDF)for(l in m.defs)if(D=m.defs[l],(x=j.Labels["def"+D.name])&&-1<n.indexOf(x)){e+=0.01*A*D.metal*h;d+=0.01*A*D.crystal*h;break}}e=Math.floor(e);
+d=Math.floor(d);g=Math.ceil((e+d)/2E4);return{metal:e,crystal:d,recs:g}},versionTechs:2,getTech:function(a){return s(m.techs[a])},loadTechs:function(){try{var a=d.getValueUni("techs");return a&&"undefined"!=a?JSON.parse(a):{}}catch(b){d.logC(b)}},readTechs:function(){try{var a={version:m.versionTechs};h("#buttonz a.detail_button").each(function(){a[this.getAttribute("ref")]=d.parseInt(h(this).find(".level").get(0).lastChild.nodeValue)});d.setValueUni("techs",JSON.stringify(a),!0)}catch(b){d.logC(b)}},
+checkTechsUpdate:function(){var a=(new Date).getTime(),b=s(parseInt(d.getValueUni("techs_LastTS",0),10));if(144E5<a-b||m.techs.version!=m.versionTechs)m.readTechsServer(),d.setValueUni("techs_LastTS",(new Date).getTime().toString(),!0)},readTechsServer:function(){h.get("/game/index.php?page=research",function(a){var a=h("<div>"+a+"</div>"),b={version:m.versionTechs};h("#buttonz a.detail_button",a).each(function(){b[this.getAttribute("ref")]=d.parseInt(h(this).find(".level").get(0).lastChild.nodeValue)});
+d.setValueUni("techs",JSON.stringify(b),!0)})},getMissionClass:function(a){var b="";if(a)switch(a){case j.Labels.missAttack:b="ownattack";break;case j.Labels.missHold:b="ownhold";break;case j.Labels.missColony:b="owncolony";break;case j.Labels.missDeploy:b="owndeploy";break;case j.Labels.missHarvest:b="ownharvest";break;case j.Labels.missTransport:b="owntransport";break;case j.Labels.missFederation:b="ownfederation";break;case j.Labels.missDestroy:b="owndestroy";break;case j.Labels.missEspionage:b=
+"ownespionage";break;case j.Labels.missExpedition:b="ownexpedition";break;default:b="ownharvest"}return b}},r={addCell:function(a,b,e,d){"undefined"==typeof a&&(a="");"undefined"==typeof b&&(b="");this.data[this.data.length]={key:a,value:b,value_class:e,id:d,attr:""};this.lastCell=this.data[this.data.length-1]},addHref:function(a,b,e){"undefined"==typeof a&&(a="");"undefined"==typeof b&&(b="");b='<a href="javascript:void(0)" id="'+e+'">'+d.formatNumber(b)+"</a>";this.addCell(a,b,this.href_class||
+"",e)},createTableString:function(a,b){for(var a=a||1,e="",k=0;k<Math.ceil(this.data.length/a);k++){for(var e=e+"<tr>",g=0;g<a;g++){var f=this.data[k*a+g];f&&(e+="<td "+(this.key_class?'class="'+this.key_class+'" ':"")+">"+(f.key?f.key+":":" ")+"</td><td "+(f.value_class||this.value_class?'class="'+(f.value_class||this.value_class)+'" ':"")+(f.id?'id="'+f.id+'" ':"")+" "+f.attr+">"+d.formatNumber(f.value)+"</td>")}e+="</tr>"}return e=b?"<tbody>"+e+"</tbody>":'<tbody><tr><th class="'+this.title_class+
+'" colspan="'+2*a+'">'+this.title+"</th></tr>"+e+"</tbody>"},init:function(a,b,e,d){this.title=a||"";this.title_class=b||"";this.key_class=e||"";this.value_class=d||"";this.data=[]}},v={Init:function(){d.logM("Coords.Init "+document.readyState);d.setValue("CoordsFlag",f.autocopyCoords?f.autocopyGlobal?"2":"1":"0",!1);f.autocopyCoords&&(document.addEventListener("mouseup",function(a){v.onMouseUp(a)},!1),H&&document.addEventListener("focus",function(){v&&v.initImg&&v.initImg()},!1))},InitExtern:function(){d.logM("Coords.InitExtern "+
+document.readyState+" Flag "+d.getValue("CoordsFlag"));"2"==d.getValue("CoordsFlag")&&document.addEventListener("mouseup",function(a){if(v&&v.onMouseUp)v.onMouseUp(a)},!1)},read:function(a,b){"undefined"==typeof b&&(b=!0);if(0<a.length){if(this.parse(a,/\[(\d{1,2}:\d{1,3}:\d{1,2})\]/gi,!0,b))return!0;if(this.parse(a,/\d{1,2}:\d{1,3}:\d{1,2}/gi,!1,b))return!0;a=a.replace(/[>\s\[\(](\d{1,2})[:\.\-\/\s](\d{1,3})[:\.\-\/\s](\d{1,2})[\s\]\)<,\.]/gi,"$1:$2:$3");a=a.replace(/^(\d{1,2})[:\.\-\/\s](\d{1,3})[:\.\-\/\s](\d{1,2})[\s\]\)<,\.]/gi,
+"$1:$2:$3");a=a.replace(/[>\s\[\(](\d{1,2})[:\.\-\/\s](\d{1,3})[:\.\-\/\s](\d{1,2})$/gi,"$1:$2:$3");a=a.replace(/^(\d{1,2})[:\.\-\/\s](\d{1,3})[:\.\-\/\s](\d{1,2})$/gi,"$1:$2:$3");return this.parse(a,/\d{1,2}:\d{1,3}:\d{1,2}/gi,!1,b)}return!1},parse:function(a,b,e,k){var g=!1;if(a=a.match(b)){for(var f=0;f<a.length;f++){var o=a[f].toString();e&&(o=o.replace(b,"$1"));var n=o.split(":");if(n&&3==n.length){var h=parseInt(n[0],10),j=parseInt(n[1],10),l=parseInt(n[2],10);if(h+""==n[0]&&j+""==n[1]&&l+""==
+n[2]&&0<h&&51>h&&0<j&&500>j&&0<l&&17>l){g=!0;break}}}g&&k&&(d.setValue("Coords",o,!1),v.initImg())}return g},toggle:function(a){a?d.setValueUni("Coords","",!1):(a=d.getValueUni("CoordsFlag"),d.setValueUni("CoordsFlag","1"==a?"0":"1",!1));v.initImg()},get:function(){return f.autocopyCoords?d.getValueUni("Coords"):""},isActive:function(){return f.autocopyCoords&&""!=d.getValueUni("Coords")&&"1"==d.getValueUni("CoordsFlag")},initImg:function(a){if(H&&(a=a||document.getElementById("btnCoords"))){var b=
+d.getValue("Coords");if(b){if(f.autocopyCoords&&4<b.length){var e=(t(f.uni_systemMetrik)+"9:499").split(":"),k=Q(e[0],9),e=Q(e[1],499),g=t(b).split(":");g&&3==g.length&&0<g[0]&&g[0]<=k&&0<g[1]&&g[1]<=e&&0<g[2]&&16>=g[2]&&d.setValueUni("Coords",b,!1)}d.setValue("Coords","0",!1)}b=this.get();k=this.isActive();a.setAttribute("src",k?q.img_active:""!=b?q.img_stored:q.img_empty);a.setAttribute("title",b?b:"")}},onMouseUp:function(a){if(a&&a.target&&!a.keyCode&&!a.ctrlKey&&!a.shiftKey){a=window.getSelection?
+window.getSelection().toString():"";if(!a&&T&&document.activeElement&&("textarea"==document.activeElement.tagName.toLowerCase()||"input"==document.activeElement.tagName.toLowerCase()))a=document.activeElement.value.substring(document.activeElement.selectionStart,document.activeElement.selectionEnd);a&&v.read(a)}}},S={maxClueHeight:228,bExpand:!1,Run:function(){d.logM("Phalanx.Run "+document.readyState);if(f.evt_expandFleetsPhal&&d.isCurrentPage("phalanx"))this.bExpand=!0;this.insertCSSRules();f.phalanx_showDebris&&
+document.body.addEventListener("DOMNodeInserted",S.processCluetip,!1);1==f.timeSetting&&!(f.showServerPhalanx&&"phalanx"==l.page)&&(d.log("Phalanx.Run.changeTime"),this.changeTime());this.show3StateIndicator("halten");this.show3StateIndicator("expedition");this.bExpand&&this.expandFleets()},changeTime:function(){u.changeNodesTime('//LI[contains(@class,"arrivalTime")]',"[H]:[i]:[s]")},insertCSSRules:function(){f.phalanx_Layout&&(F||d.insertCSS("body { padding-top: 50px; background: url(/cdn/img/background/background_voll_2.jpg) no-repeat scroll 50% 0 #000000 !important; }"));
+d.insertCSS(".eventFleet .playername, .eventFleet .playername2, .partnerInfo .playername, .partnerInfo .playername2, .partnerInfo .playername3  { top: 38px; font-size: 10px;\tcolor: green; white-space:nowrap; }");d.insertCSS(".eventFleet .playername, .partnerInfo .playername { left: 526px }");d.insertCSS(".eventFleet .playername2, .partnerInfo .playername2, .partnerInfo .playername3 { left: 303px }");d.insertCSS(".coordsOrigin a, .destCoords a { text-decoration:none }");this.bExpand&&d.insertCSS(".antigame_evtDetails{ left: 142px !important; top: 50px !important; text-align: left !important; font-size: 9px; line-height: 9px; padding-top: 1px;\tpadding-bottom: 2px; } ")},
+show3StateIndicator:function(a){function b(a){return a.replace("eventRow-","")}function e(a,b){if("-"==b){var e=d.XPathSingle('//*[@id="eventRow-'+a+'"]/UL/*[@class="missionFleet"]/SPAN');e&&(e.innerHTML+=" ("+e.innerHTML.substr(0,1)+")")}}try{for(var k=d.XPath('//*[@class="missionFleet"]/IMG[contains(@src,"icon-'+a+'")]/ancestor::*[contains(@id,"eventRow")]'),a=[],g=0;g<k.snapshotLength;g++)a[b(k.snapshotItem(g).id)]=k.snapshotItem(g);var k=0,f="",o;"phalanx"==l.page&&(o=document.location.href.match(/galaxy=(\d+).+system=(\d+).+position=(\d+)/i))&&
+(f="["+o[1]+":"+o[2]+":"+o[3]+"]");for(var n in a)if(g=parseInt(n,10),a[g]){var h=d.XPathSingle('UL/LI[@class="countDown"]/SPAN',a[n]);fleetType=1;h&&(-1<h.className.indexOf("neutral")?fleetType=0:-1<h.className.indexOf("hostile")&&(fleetType=-1));"phalanx"==l.page&&f!=d.XPathSingle('UL/*[@class="coordsOrigin"]/A',a[n]).innerHTML||"phalanx"!=l.page&&1!=fleetType?(k++,a[g+1]?(e(g+1,"-"),a[g+1]=null):e(g,"-"),a[g]=null):a[g+1]&&(k++,a[g+2]?(e(g,"+"),e(g+1,"-"),a[g+2]=null):e(g,"-"),a[g]=null,a[g+1]=
+null)}}catch(j){d.logC(j)}},getFleetType:function(a){var a=d.XPathSingle('LI[@class="countDown"]/SPAN',a),b=1;a&&(-1<a.className.indexOf("neutral")?b=0:-1<a.className.indexOf("hostile")&&(b=-1));return b},adjustHeight:function(a,b){b=b||d.getElementByClassName("antigame_evtDetails",a);if("none"==b.style.display&&"none"!=a.style.display){b.style.display="";var e=parseInt(b.offsetHeight,10),k=parseInt(a.offsetHeight,10);if(k+e)a.style.height=k+e+"px"}else if("none"==a.style.display)b.style.display=
+"none"},getMissionClass:function(a){var g;var e;var b="",b=this.getFleetType(a);0==b?b="hostile":1==b?b="neutral":(g=(e=(a=a.querySelector(".missionFleet img"))&&a.getAttribute("title"),a=e)&&a.substr(a.indexOf("|")+1),a=g,a=a.split(" (")[0],b=m.getMissionClass(a));return b},expandFleets:function(){try{for(var a=function(a,b){var e=new XMLHttpRequest;e.open("GET",a,!0);e.onreadystatechange=function(){4==e.readyState&&200==e.status&&d.whenrendered(function(){S.showFleetDetails(b,e.responseText)})};
+e.send(null)},b=d.XPath('//*[contains(@class,"eventFleet")]/UL | //*[contains(@class,"partnerInfo")]/UL'),e=0;e<b.snapshotLength;e++)if(row=b.snapshotItem(e),!(-1<row.parentNode.className.indexOf("acsFleet"))){var k=d.getElementByClassName("tipsTitleArrowClose",row);if(k){var k=k.href||k.getAttribute("rel"),g=document.createElement("li");g.className="antigame_evtDetails "+this.getMissionClass(row);g.style.display="none";row.appendChild(g);a(k,g)}}}catch(f){d.logC(f)}},showFleetDetails:function(a,
+b){function e(){for(var a=d.XPath('//*[contains(@class,"partnerInfo")]'),b=0;b<a.snapshotLength;b++)S.adjustHeight(a.snapshotItem(b))}b=b.replace(/<th colspan="2">.+?<\/th>/gi,"").replace(/(<.+?>\s*)+/gi," ").replace(" &nbsp; ","<br/><br/>").replace(/^\s/,"");a.innerHTML=b;var k=a.parentNode.parentNode;if("none"==k.style.display)for(var k=document.getElementsByClassName("toggleInfos"),g=0;g<k.length;g++)k[g].addEventListener("click",e,!1);else this.adjustHeight(k,a)},processCluetip:function(a){if(a&&
+a.target&&"cluetip-close"==a.target.id){for(var a=a.target.parentNode.nextElementSibling.firstElementChild.firstElementChild,b=a.getElementsByTagName("tr"),e=[],k,g,f=0;f<b.length;f++)k=b[f].firstElementChild,(g=k.nextElementSibling)&&g.innerHTML&&e.push({name:k.innerHTML,count:d.parseInt(g.innerHTML)});b=m.getFleetDebris(e);b='<tr><td colspan="2">&nbsp;</td></tr><tr><th colspan="2">'+j.Labels.debris+":</th></tr><tr><td>"+j.Labels.metal+':</td><td class="value">'+d.formatNumber(b.metal)+"</td></tr><tr><td>"+
+j.Labels.crystal+':</td><td class="value">'+d.formatNumber(b.crystal)+"</td></tr><tr><td>"+j.Labels.shipRecyclerAlt+':</td><td class="value">'+d.formatNumber(b.recs)+"</td></tr>";a.innerHTML+=b}}},L={Run:function(){if(!f.new_eventlist_show||d.isCurrentPage("overview")){d.logM("EventList.Run "+document.readyState);try{this.insertCSSRules();document.getElementById("eventboxContent");var a=document.getElementById("eventListWrap");a&&L.Show(a)}catch(b){d.logC(b)}try{document.body.addEventListener("DOMNodeInserted",
+L.onDOMNodeInserted,!1)}catch(e){d.logC(e)}}else document.getElementById("eventboxContent").style.display="none"},onDOMNodeInserted:function(a){a&&a.target&&a.target.id&&"eventListWrap"==a.target.id&&L.Show(a.target)},Show:function(a){d.logS("EventList.Show");try{1==f.timeSetting&&u.changeNodesTime('//*[@id="eventboxContent"]/descendant::*[contains(@class,"arrivalTime")]',"[H]:[i]:[s]");L.addReloadButton();setTimeout(this.addArrivalDate,0);for(var b=d.XPath('descendant::*[contains(@class,"eventFleet") or contains(@class,"partnerInfo") or contains(@class,"allianceAttack")]',
+a),e,k,a=["hostile","neutral","friendly"],g=0;g<b.snapshotLength;g++){e=b.snapshotItem(g);k=this.getFleetType(e);2!=k&&(e.className+=" "+a[k]);if(f.evt_expandFleetsEvt&&-1==e.className.indexOf("allianceAttack")){var h=d.getElementByClassName("tipsTitleArrowClose",e);(h=h&&h.getAttribute("href"))&&function(a,b){var e=new XMLHttpRequest;e.open("GET",a,!0);e.onreadystatechange=function(){4==e.readyState&&200==e.status&&L.showFleetDetails(b,e.responseText)};e.send(null)}(h,e)}e.querySelector(".icon_movement_reserve")&&
+(e.className+=" reverse")}}catch(o){d.logC(o)}d.logS("EventList.Show - End")},insertCSSRules:function(){d.logS("EventList.insertCSSRules");d.insertCSS(".antigame_evtDetails2 .fleetContents { text-align: left !important; font-size: 9px !important; line-height: 9px !important; padding-top: 1px !important; padding-bottom: 2px !important; }");d.insertCSS('tr.eventFleet[style="display: none;"] + tr.antigame_evtDetails2, tr.eventFleet[style="display: none; "] + tr.antigame_evtDetails2 { display: none;\t}');
+d.insertCSS(".antigame_evtDetails2 .missionName\t{ text-align: left; padding-left: 10px; vertical-align: top; }");d.insertCSS(".antigame_evtDetails2 .playername { text-align: right !important; font-size: 10px !important; color: green !important; white-space:nowrap !important; }");if(f.evt_dimReverse&&!f.oldBrowser){var a=z?" td":"";d.insertCSS("#eventContent .reverse"+a+" { opacity: 0.3; }");d.insertCSS("#eventContent .reverse + .antigame_evtDetails2"+a+" { opacity: 0.5; }")}d.logS("EventList.insertCSSRules - End")},
+show3StateIndicator:function(a){function b(a){return a.replace("eventRow-","")}function e(a,b){if("-"==b){var e=d.XPathSingle('//*[@id="eventRow-'+a+'"]/UL/*[@class="missionFleet"]/SPAN');e&&(e.innerHTML+=" ("+e.innerHTML.substr(0,1)+")")}}d.logS("EventList.show3StateIndicator");try{for(var k=d.XPath('//*[@class="missionFleet"]/IMG[contains(@src,"icon-'+a+'")]/ancestor::*[contains(@id,"eventRow")]'),a=[],g=0;g<k.snapshotLength;g++)a[b(k.snapshotItem(g).id)]=k.snapshotItem(g);var k=0,f="",o;"phalanx"==
+l.page&&(o=document.location.href.match(/galaxy=(\d+).+system=(\d+).+position=(\d+)/i))&&(f="["+o[1]+":"+o[2]+":"+o[3]+"]");for(var h in a)if(g=parseInt(h,10),a[g]){var j=d.XPathSingle('UL/LI[@class="countDown"]/SPAN',a[h]);fleetType=1;j&&(-1<j.className.indexOf("neutral")?fleetType=0:-1<j.className.indexOf("hostile")&&(fleetType=-1));"phalanx"==l.page&&f!=d.XPathSingle('UL/*[@class="coordsOrigin"]/A',a[h]).innerHTML||"phalanx"!=l.page&&1!=fleetType?(k++,a[g+1]?(e(g+1,"-"),a[g+1]=null):e(g,"-"),a[g]=
+null):a[g+1]&&(k++,a[g+2]?(e(g,"+"),e(g+1,"-"),a[g+2]=null):e(g,"-"),a[g]=null,a[g+1]=null)}}catch(m){d.logC(m)}d.logS("EventList.show3StateIndicator - End")},getFleetType:function(a){try{var b=d.XPathSingle('TD[@class="countDown" or contains(@id, "counter-")]',a),a=2;b&&(-1<b.className.indexOf("neutral")?a=1:-1<b.className.indexOf("hostile")&&(a=0));return a}catch(e){d.logC(e)}},getMissionClass:function(a){try{var b="",e=this.getFleetType(a);if(0==e)b="hostile";else if(1==e)b="neutral";else var k=
+a.querySelector(".missionFleet img"),k=(k=k&&k.getAttribute("title"))&&k.substr(k.indexOf("|")+1),k=k.split(" (")[0],b=m.getMissionClass(k);return b}catch(g){d.logC(g)}},showFleetDetails:function(a,b){d.logS("EventList.showFleetDetails");try{var e=b.replace(/<th colspan="2">.+?<\/th>/gi,"").replace(/(<.+?>\s*)+/gi," ").replace(" &nbsp; ","<br/><br/>").replace(/^\s/,""),k=a.className.match(/\bunion\d+\b/),g=d.XPathSingle('*[@class="sendMail"]/A',a),f=RegExp(j.Labels.rx_sendMail.source),g=(g=g&&g.title.match(f))&&
+g[1],o=a.querySelector(".missionFleet img"),o=(o=o&&o.getAttribute("title"))&&o.substr(o.indexOf("|")+1),h=document.createElement("tr");h.className="antigame_evtDetails2 "+this.getMissionClass(a);if(k&&(h.className+=" "+k,"none"==a.style.display))h.style.display="none";var l=document.createElement("td");l.setAttribute("colspan","2");l.className="missionName";l.innerHTML=o;var m=document.createElement("td");m.setAttribute("colspan","6");m.className="fleetContents";m.innerHTML=e;var p=document.createElement("td");
+p.setAttribute("colspan","3");p.className="playername";if(g)p.innerHTML=g;h.appendChild(l);h.appendChild(m);h.appendChild(p);d.insertAfter(h,a)}catch(x){d.logC(x)}d.logS("EventList.showFleetDetails - End")},addReloadButton:function(){d.logS("EventList.addReloadButton");try{0==h("#eventListWrap h4 .refresh_details").length&&h("#eventListWrap h4").prepend("&nbsp;&nbsp;").prepend('<a href="javascript:void(0);" class="refresh_details"><img src="/cdn/img/icons/refresh.gif"></a>').bind("click",function(){document.location.href=
+"javascript:(function(){$.get('/game/index.php?page=eventList&ajax=1', function(response) {window.DOM_GET_ELEMENT_BY_ID_CACHE = new Array();$('#eventboxContent').html(response);$('#eventHeader .close_details').click(toggleEvents);})})()"})}catch(a){d.logC(a)}d.logS("EventList.addReloadButton - End")},addArrivalDate:function(){d.logS("EventList.addArrivalDate");try{d.runScript('$("<div>").attr("id","initEventList_text").html($("#initEventlist", window).toString()).css("display","none").appendTo("body");');
+var a=document.getElementById("initEventList_text");if(a)a=a.innerHTML;if(!a)return;for(var b=a.split(";"),a=0;a<b.length;a++){var e=b[a].match(/getElementByIdWithCache\("(.*?)"\),\s*(\d+)/i);if(e){var k=document.getElementById(e[1]);if(k){var g=u.getFinishTime(e[2]),g=u.formatDate(new Date(g),"[Y]-[m]-[d] [H]:[i]:[s]");k.setAttribute("title",g);k.nextElementSibling&&k.nextElementSibling.setAttribute("title",g)}}}}catch(f){d.logC(f)}d.logS("EventList.addArrivalDate - End")}},X={addConstructionTime:function(a,
+b){if(a&&b&&!isNaN(b)){var e=document.getElementById(a).parentNode.parentNode.parentNode,d=document.createElement("tr");d.className="data green";d.appendChild(document.createElement("td"));d.appendChild(document.createElement("td"));d.firstChild.className="text_align_right";d.lastChild.innerHTML=u.formatDateSetting(u.getFinishTime(b));d.lastChild.className="finishTime";e.appendChild(d)}},ShowConstructions:function(){d.logM("FinishTime.ShowConstructions "+document.readyState);try{var a=d.script;if(a){d.insertCSS(".finishTime { padding-left: 12px }");
+d.insertCSS(".green { color: green; }");var b=a.innerHTML.match(/baulisteCountdown\(getElementByIdWithCache\(["']\w+["']\)\,\s*\d*/gi);if(b)for(var e=0;e<b.length;e++){var k=b[e].match(/["'](\w+)["']\)\,\s*(\d*)/i);X.addConstructionTime(k[1],k[2])}if(b=a.innerHTML.match(/shipCountdown\((\s*getElementByIdWithCache\(["']\w+["']\)\,)+(\s*\d*\,){3,3}/i))b[2]=b[2].match(/(\d+)/)[0],X.addConstructionTime("shipAllCountdown",b[2])}}catch(g){d.logC(g)}}},K={fleetXPath:'//*[@id="inhalt"]/descendant::*[contains(concat(" ",@class," ")," fleetDetails ") and contains(@id,"fleet")]',
+tipsClass:"tips4",addReversalTimeBox:function(a){if(d.getElementsByClassName("reversal",a).snapshotLength){var b=d.XPathSingle('//*[@id="'+a.id+'"]/descendant::*[contains(@class,"origin")]/*[@class="'+this.tipsClass+'"]');if(b&&(b=b.getAttribute("title")))if(b=u.parse2(b)){var b=u.convertDateServer2Local(b),e=document.createElement("span");e.className="reversalTime";e.setAttribute("title",b.getTime());a.appendChild(e);this.updateReversalClock()}}},updateReversalClock:function(){try{for(var a=d.getElementsByClassName("reversalTime"),
+b=0;b<a.snapshotLength;b++){var e=a.snapshotItem(b),k=new Date,g=e.getAttribute("title");if(g)g=parseInt(g,10),k.setTime(2*(k.getTime()-u.TimeDelta)-g),e.innerHTML=u.formatDateSetting(k)}}catch(f){d.logC(f)}},correctTimes:function(){var a=this.fleetXPath+'/descendant::*[contains(@class,"absTime")] | '+this.fleetXPath+'/*[contains(@class, "reversal") and @class!="reversalTime"]';u.changeNodesTime(a);a=this.fleetXPath+'/*[@class="starStreak"]/descendant::*[@class="'+this.tipsClass+'"]';u.changeNodesTime(a,
+null,"title")},getDetails:function(a){for(var b={},e="",a=a.getElementsByTagName("td"),d=0;d<a.length;d++)"2"==a[d].colSpan?(b.ships=e,e=""):("value"!=a[d].className&&""!=e&&(e+=" "),e+=a[d].innerHTML);b.cargo=e;return b},getMissionClass:function(a){a=d.getElementByClassName("mission",a);return m.getMissionClass(a.innerHTML)},insertCSSRules:function(){f.mvmt_expandFleets&&(d.insertCSS(".detailsOpened .starStreak  {background:none}"),d.insertCSS(".anti_fleetDetails {left:60px; width:290px; white-space:normal; padding:0px 7px; font-size:0.9em; text-align:left; line-height:1.2em}"));
+f.mvmt_showReversal&&d.insertCSS(".reversalTime { position: absolute; top: 43px; left: 555px; color: yellow;} ");d.insertCSS(".targetName { position:absolute; top:45px; left:7px; color:green;} ")},myOpenCloseFleet:function(a,b){var e=document.getElementById(a),k=d.getElementByClassName("starStreak",e),g=d.getElementByClassName("anti_fleetDetails",e),f=e.className.match("detailsOpened")?1:0;if(b&&!f)k.removeAttribute("style"),e.removeAttribute("style");else if(f){var h=parseInt(g.offsetHeight,10),
+g=parseInt(k.offsetHeight,10),f=parseInt(e.offsetHeight,10),h=h-g+2;0<h&&(f+=h,k.setAttribute("style","height:"+(g+h)+"px"),e.setAttribute("style","height:"+f+"px"))}},myOpenCloseAll:function(){for(var a=d.XPath(K.fleetXPath),b=0;b<a.snapshotLength;b++)K.myOpenCloseFleet(a.snapshotItem(b).id,1)},expandFleet:function(a){try{var b=a.id.replace(/\D+/g,"");if(b){var e=d.getElementByClassName("mission",a),k=d.getElementByClassName("reversal",a),g=d.getElementByClassName("nextMission",a),f=document.getElementById("bl"+
+b);if(f){var h=document.createElement("div");h.setAttribute("class","anti_fleetDetails fixed "+this.getMissionClass(a));!k&&g?e.innerHTML+=" ("+e.innerHTML.substr(0,1)+")":k||(e.innerHTML+=" ("+j.Labels.mvmt_Return+")");var n=this.getDetails(f);h.innerHTML=n.ships+"<br/><br/>"+n.cargo;var l=d.XPathSingle('descendant::*[contains(@class,"starStreak")]/descendant::*[contains(@class,"route")]',a);l.parentNode.insertBefore(h,l);l.style.display="none";d.XPathSingle('descendant::*[contains(@class,"openDetails")]/A',
+a).addEventListener("click",function(){setTimeout(function(){K.myOpenCloseFleet(a.id,1)},0)},!1);this.myOpenCloseFleet(a.id,0)}}}catch(m){d.logC(m)}},showTargetName:function(a){try{var b=d.getElementByClassName("destinationCoords",a);if(b&&b.title&&"|"!=!b.title){var b=b.title.slice(1),e=document.createElement("span");e.className="targetName";e.innerHTML=b;var k=d.getElementByClassName("mission",a);d.insertAfter(e,k)}}catch(g){d.logC(g)}},Run:function(){d.logM("FleetMovement.Run "+document.readyState);
+if(f.mvmt_expandFleets||f.mvmt_showReversal){this.insertCSSRules();this.tipsClass="tipsTitleSmall";for(var a=d.XPath(K.fleetXPath),b=0;b<a.snapshotLength;b++){var e=a.snapshotItem(b);f.mvmt_expandFleets&&this.expandFleet(e);f.mvmt_showReversal&&this.addReversalTimeBox(e);this.showTargetName(e)}1==f.timeSetting&&this.correctTimes();f.mvmt_expandFleets&&(a=d.XPath('//*[@id="inhalt"]/descendant::*[contains(@class,"closeAll")]/A'),a=a.snapshotItem(0),a.addEventListener("click",function(){setTimeout(K.myOpenCloseAll,
+0)},!1));f.mvmt_showReversal&&setInterval(K.updateReversalClock,200)}}},w={insertCSSRules:function(){d.insertCSS(["#calculator { margin: 3px 0; padding: 1px 0; background-color: #13181D; border: 3px double black; width: 633px; }","#calculator table { width:620px; margin: 0 auto; }","#calculator td, #calculator th, #calculator input { text-align:right;}","#calculator select, #calculator option { text-align:center;}","#calculator #calc_res input, #calculator #calculator #calc_coords { width:100px; }",
+"#calculator #calc_sl { font-size:11px;}","#calculator option { padding-right:3px;}","#buttonz { height:auto !important; }","#fleet1 #buttonz #calculator a { text-decoration:underline !important; color:#5577EE; }","#calculator td, #calculator th { border:1px solid grey; padding: 1px 3px;}","#calculator #calc_g {width:14px;}","#calculator #calc_s {width:27px;}","#calculator #calc_p {width:16px;}"])},readValue:function(a,b){b=b||!1;"string"==typeof a&&(a=document.getElementById(a));if("object"==typeof a){var e=
+d.parseInt(a.value);if(isNaN(e)||!e&&0!=e)e=b?"":0;return e}},writeValue:function(a,b){"string"==typeof a&&(a=document.getElementById(a));if("object"==typeof a)a.value=b},getResources:function(){var a=d.XPath('descendant::TR[@id="calc_res"]/descendant::INPUT',this.container),b={};b.metal=this.readValue(a.snapshotItem(0));b.crystal=this.readValue(a.snapshotItem(1));b.deuterium=this.readValue(a.snapshotItem(2));return b},getTarget:function(){return{galaxy:this.readValue("calc_g"),system:this.readValue("calc_s"),
+planet:this.readValue("calc_p")}},getShipCount:function(a){a=d.XPathSingle('//*[@id="button'+a+'"]/descendant::*[@class="level"]');return d.parseInt(a.lastChild.nodeValue)},checkInput:function(a){var b=this.readValue(a,!0);if(!isNaN(b)&&""!==b){var e,d;switch(a.id){case "calc_g":e=1;d=9;break;case "calc_s":e=1;d=499;break;case "calc_p":e=1;d=16;break;default:d=e=0}d&&b>d&&(b=d);b<e&&(b=e)}a.value=""+b},calculate:function(){try{var a=this.getResources(),b=a.metal+a.crystal+a.deuterium,e=this.getTarget(),
+k=m.getFleetDistance(this.ActiveCoords,e);document.getElementById("calc_total").innerHTML=d.formatNumber(b);for(var g,a=[202,203,209,214],e=0;e<a.length;e++){var h=a[e],o=m.getFleetDuration(h,k,10),j=m.getFleetConsumption(h,k,10),l=Math.max(0,Math.ceil(b/(m.ships[h].capacity-j)));g=d.XPathSingle('descendant::TR[@id="calc_ships"]/descendant::*[@ref="'+h+'"]',this.container);g.innerHTML=d.formatNumber(l);var p=this.getShipCount(h);if(l<=p)g.style.color="";else if(p){if(l>p)g.style.color=f.nameColorDisabled}else g.style.color=
+f.nameColorOff;g=d.XPathSingle('descendant::TR[@id="calc_dur"]/descendant::*[@ref="'+h+'"]',this.container);g.innerHTML=u.formatTime(o);g=d.XPathSingle('descendant::TR[@id="calc_cons"]/descendant::*[@ref="'+h+'"]',this.container);g.innerHTML=d.formatNumber(j*l)}}catch(q){d.logC(q)}},save:function(){var a=this.getTarget(),b=this.getResources();d.setValueUni("calc_res",b.metal+":"+b.crystal+":"+b.deuterium,!1);d.setValueUni("calc_coords",a.galaxy+":"+a.system+":"+a.planet,!1)},reset:function(){d.logM("Calculator.reset "+
+document.readyState);d.deleteValueUni("calc_res");d.deleteValueUni("calc_coords")},getStoredRes:function(){return d.getValueUni("calc_res","")},getStoredCoords:function(){return d.getValueUni("calc_coords","")},clear:function(){this.getResources();this.writeValue("calc_metal",0);this.writeValue("calc_crystal",0);this.writeValue("calc_deuterium",0);this.writeValue("calc_g",this.ActiveCoords.galaxy);this.writeValue("calc_s",this.ActiveCoords.system);this.writeValue("calc_p",this.ActiveCoords.planet);
+this.calculate();this.reset()},show:function(a){function b(a){return'<td colspan="3"><a href="javascript:void(0);" ref="'+a+'">0</a></td>'}function e(a){return'<th colspan="4"><a href="javascript:void(0);" id="calc_hdr_'+a+'">'+j.Labels[a]+"</a></th>"}function k(a){return'<td colspan="4"><input type="text" id="calc_'+a+'" value="0"></td>'}function g(a){return'<td colspan="3" ref="'+a+'"></td>'}function l(a){return'<td colspan="3" ref="'+a+'"></td>'}function o(){for(var a='<option value="">-</option>',
+b=[],e=d.getElementsByClassName("planetlink"),g=0;g<e.snapshotLength;g++)b.push(m.getCoordsFromPlanet(e.snapshotItem(g)));try{for(var k=f.fleet2_ShortLinks.split(","),g=0;g<k.length;g++){var h=k[g].split("#");h&&!(4>h.length)&&b.push({galaxy:h[0],system:h[1],planet:h[2],name:h[4]||""})}}catch(o){d.logC(o)}b.sort(function(a,b){return a.galaxy-b.galaxy||a.system-b.system||a.planet-b.planet});e=n;for(g=0;g<b.length;g++)k=b[g],a+="<option "+(k.galaxy==e.galaxy&&k.system==e.system&&k.planet==e.planet?
+"selected":"")+' value="'+k.galaxy+"#"+k.system+"#"+k.planet+'">'+k.name+" ("+k.galaxy+":"+k.system+":"+k.planet+")</option>";return'<td><select id="calc_sl">'+a+"</select></td>"}try{this.insertCSSRules();m.getPlanets();this.ActiveCoords=m.planetsActive;var n;if(v.isActive()){var A=v.get().split(":");n={galaxy:A[0],system:A[1],planet:A[2]}}else n={galaxy:this.ActiveCoords.galaxy,system:this.ActiveCoords.system,planet:this.ActiveCoords.planet};var A='<div id="calc_coords"><input id="calc_g" value="'+
+n.galaxy+'"> : <input id="calc_s" value="'+n.system+'"> : <input id="calc_p" value="'+n.planet+'"></div>',p='<td><a id="calc_save" href="javascript:void(0);">'+j.Labels.Save+"</a></td>",q='<td><a id="calc_clear" href="javascript:void(0);">'+j.Labels.Clear+"</a></td>",x=document.createElement("div");x.id="calculator";x.innerHTML='<table><tr id="calc_res_hdr"><th></th>'+e("metal")+e("crystal")+e("deuterium")+"<th>"+j.Labels.total+'</th></tr><tr id="calc_res"><td></td>'+k("metal")+k("crystal")+k("deuterium")+
+'<td id="calc_total">0</td></tr><tr><th></th><th colspan="3">'+j.Labels.shipSCargoAlt+'</th><th colspan="3">'+j.Labels.shipLCargoAlt+'</th><th colspan="3">'+j.Labels.shipRecyclerAlt+'</th><th colspan="3">'+j.Labels.shipRIPAlt+"</th><th>"+A+'</th></tr><tr id="calc_ships"><th>'+j.Labels.Quantity+"</th>"+b(202)+b(203)+b(209)+b(214)+o()+'</tr><tr id="calc_cons"><th>'+j.Labels.Consumption+"</th>"+g(202)+g(203)+g(209)+g(214)+q+'</tr><tr id="calc_dur"><th>'+j.Labels.Duration+"</th>"+l(202)+l(203)+l(209)+
+l(214)+p+"</tr></table>";a.appendChild(x);this.container=x;h("#calculator input").bind("keyup",function(){w.checkInput(this);w.calculate()}).bind("focus",function(){this.value="";w.calculate()}).bind("blur",function(){if(!this.value)this.value="0"});h("#calculator #calc_ships a").bind("click",function(){B.setShips("ship_"+this.getAttribute("ref"),d.parseInt(this.innerHTML))});h("#calculator #calc_res_hdr a").bind("click",function(){var a=this.id.replace("calc_hdr_",""),b=d.getIntById("resources_"+
+a);document.getElementById("calc_"+a).value=b;w.calculate()}).trigger("click");h("#calc_save").bind("click",function(){setTimeout(function(){w.save()},0)});h("#calc_clear").bind("click",function(){setTimeout(function(){w.clear()},0)});h("#calc_sl").bind("change",function(){if(this.value){var a=this.value.split("#");w.writeValue("calc_g",a[0]);w.writeValue("calc_s",a[1]);w.writeValue("calc_p",a[2]);w.calculate()}})}catch(r){d.logC(r)}}},B={Fleet1_Run:function(){d.logM("FleetSend.Fleet1_Run "+document.readyState);
+w.reset();try{f.fleet1_Layout&&(d.insertCSS("a.max.tipsStandard { display:none !important; }"),d.insertCSS("#fleet1 #buttonz div ul li input { width: 66px; height: 12px; line-height: 12px; font-size: 11px; top: 83px; left: 6px; }"),d.insertCSS("div.secondcol.fleft { margin-right:70px; }"),d.insertCSS("#fleet1 #buttonz div li input:focus {border-color:#98bf21; border-width:2px}"));if(f.fleet2_setTargetDF)p.old_trySubmit=p.trySubmit,p.trySubmit=function(){B.checkRecyclers();p.old_trySubmit()};f.fleet1_killTips&&
+setTimeout(function(){h(".tipsStandard").cluetip("destroy").unbind("mouseover").each(function(){this.title=this.title.replace("|","")})},1E3);var a;f.fleet1_showResCalc&&(a=document.getElementById("allornone"))&&w.show(a);if(f.fleet_showCapacity){a=!1;var b=d.getElementByClassName("allornonewrap");if(!b&&(a=!0,b=document.getElementById("warning"),!b))return;this.Capacity_insertCSSRules();var e=d.getIntById("resources_metal")+d.getIntById("resources_crystal")+d.getIntById("resources_deuterium"),k=
+Math.ceil(e/5E3),g=Math.ceil(e/25E3),l=document.createElement("div");l.className="fleft total_capacity";r.init();r.key_class="capacity_key";r.href_class="capacity_href";r.addCell(j.Labels.resources,e);if(a)d.insertCSS(".total_capacity {margin: 2px 25px;}"),r.addCell(j.Labels.shipSCargo,k),r.addCell(j.Labels.shipLCargo,g),l.innerHTML="<table>"+r.createTableString(1)+"</table>",b.appendChild(l);else{h("form li").filter(function(){return!isNaN(this.id.replace("button",""))}).each(function(){B.addSpeed(this)});
+r.addCell(j.Labels.TotalCapacity,0,"","total_capacity");f.fleet1_showResCalc||(r.addHref(j.Labels.shipSCargo,k,"SCargo"),r.addHref(j.Labels.shipLCargo,g,"LCargo"));r.addCell(j.Labels.ExPoints,0,"","expoints");r.addCell(j.Labels.MinSpeed,0,"","min_speed");l.innerHTML="<table>"+r.createTableString(1)+"</table>";var o=d.getElementByClassName("combatunits",b)||d.getElementByClassName("secondcol",b);d.insertAfter(l,o);f.fleet1_showResCalc||(document.getElementById("SCargo").addEventListener("click",function(){B.setShips("ship_202",
+k);return!0},!1),document.getElementById("LCargo").addEventListener("click",function(){B.setShips("ship_203",g);return!0},!1));p.old_checkShips=p.checkShips;p.checkShips=function(a){B.showCapacity();p.old_checkShips(a)};h("input.fleetValues").bind("focus",function(){B.showCapacity()})}}}catch(n){d.logC(n)}},checkRecyclers:function(){var a=!1,b=document.getElementById("ship_209").value;b&&!isNaN(b)&&0<parseInt(b,10)&&(a=!0);d.setValueUni("fleet1_recyclers",a,!0)},Capacity_insertCSSRules:function(){d.insertCSS(".total_capacity td {padding: 2px 5px; /*color: #A1A1A1;*/ font-size: 11px;}");
+d.insertCSS(".total_capacity #total_capacity {color: green;}");d.insertCSS(".total_capacity td.capacity_href {text-decoration: underline; color: #5577EE;}");d.insertCSS(".speed { position: absolute; top: "+(f.showNames?34:8)+'px; right: 3px; max-width: 76px; color: white; text-align: right; font-size: 10px; background: transparent url("'+d.bg+'") repeat; }')},addSpeed:function(a){var b=a.id.replace(/\D/g,""),b=m.ships[b].speed,b=d.formatNumber(b);if(a=d.XPathSingle("descendant::DIV/descendant::A",
+a)){var e=document.createElement("div");e.className="speed";e.innerHTML=b;a.appendChild(e)}},setShips:function(a,b){var e=document.getElementById(a);if(e&&!e.disabled)e.value=b,h("#"+a).trigger("change")},showCapacity:function(){try{var a=0,b=0,e=0;h(".fleetValues").each(function(){var d=s(h(this).val()),g=h(this).attr("id").replace("ship_","");0<d&&m.ships[g]&&(a+=d*m.ships[g].capacity,e+=d*((m.ships[g].metal+m.ships[g].crystal)/200),b=Math.min(b,m.ships[g].speed)||m.ships[g].speed)});h("#total_capacity").html(d.formatNumber(a));
+h("#min_speed").html(d.formatNumber(b));var k=[2500,6E3,9E3,12E3][E(f.uni_topPlayerScore,0,3)],g="middlemark";e>k?g="overmark":e<k&&(g="undermark");h("#expoints").html(d.formatNumber(e)).attr("class",g)}catch(j){d.logC(j)}return!0},Fleet2_Run:function(){d.logM("FleetSend.Fleet2_Run "+document.readyState);var a=d.getValueUni("fleet1_recyclers");this.Fleet2_insertCSSRules();if(f.fleet2_checkProbeCapacity)p.getFreeStorage=function(){var a=p.storageCapacity,b=p.consumption,e=p.probeStorageCapacity;return a==
+e?a-b:a-b-(e-p.getConsumption(210))};var b=m.getActivePlanet(),e=this.Fleet2_getSLinkFromPlanet(b),b=(b=d.XPathSingle('parent::*/following-sibling::*/A[contains(@class,"planetlink")]',b))?this.Fleet2_getSLinkFromPlanet(b):"";this.Fleet2_insertShortLink(e,b);e=f.fleet2_ShortLinks.split(",");for(b=0;b<e.length;b++)this.Fleet2_insertShortLink(e[b]);f.fleet2_setTargetDF&&a&&setTimeout(function(){h("#dbutton").click()},100);this.Fleet2_isTargetEmpty()&&this.Fleet2_setCoords();e=d.XPath('//*[@id="slbox"]/option');
+for(b=0;b<e.snapshotLength;b++)if(a=e.snapshotItem(b),3==a.value.split("#")[3])a.className="anti_moon",f.fleet2_MoonsToEnd&&a.parentNode.appendChild(a);f.fleet2_Layout&&h("#speed").click(function(){this.style.color="#848484"});h("#speed option").mouseover(function(){this.parentNode.value=this.value;p.updateVariables()});f.fleet2_expandLists&&(this.Fleet2_expandSpeed(),this.Fleet2_expandShortLinks())},Fleet2_insertCSSRules:function(){d.insertCSS(".anti_moon { background-color: "+f.fleet2_MoonColor+
+"; }");f.fleet2_expandLists&&(d.insertCSS("#fleetBriefingPart1, #fleetBriefingPart1_2 { margin-left:40px; }"),d.insertCSS("#fleetBriefingPart1, #fleetBriefingPart1_2 { margin-bottom:-5px; }"),d.insertCSS("#speed_plain { list-style-type: none; position: relative; top: 15px; }"),d.insertCSS("#slPanel a, #speed_plain a { text-decoration: none; font-weight: 100; color: #AAAAAA; }"),d.insertCSS("#slPanel a { font-size: 11px; padding: 1px 0px; }"),d.insertCSS("#speed_plain a { font-size: 12px; padding: 3px 1px; }"),
+d.insertCSS("#slPanel a:hover, #speed_plain a:hover { color: white; background-color: #0A246A;}"),d.insertCSS('#slPanel {\twidth: 669px; padding: 0px; margin: 0px auto; background-image: url("/cdn/img/layout/wrap-body.gif"); }'),d.insertCSS("#slPanel table { width: 640px; margin: 0px auto; padding: 0px; }"),d.insertCSS("#slPanel th { color: #6F9FC8; font-weight: bold; padding: 7px 0px 5px 10px; min-width: 180px; text-align: center; }"),d.insertCSS("#slPanel td { padding: 1px 0px; padding-left: 5px; white-space: nowrap; }"),
+f.fleet2_expandMoonColor&&d.insertCSS(".slMoon a { background-color: "+f.fleet2_MoonColor+"; }"))},Fleet2_insertShortLink:function(a,b){try{var e=this.Fleet2_getPartsFromLink(a);if(e){e.name||(a+="#");var k=document.getElementById("slbox");if(k){for(var g=k.getElementsByTagName("option"),f,h=b?this.Fleet2_getPartsFromLink(b):null,j=1;j<g.length;j++){if(b){var l=this.Fleet2_getPartsFromLink(g[j].value);l.galaxy==h.galaxy&&l.system==h.system&&l.planet==h.planet&&l.type==h.type&&(f=g[j])}if(a==g[j].value)return}var m=
+document.createElement("option");m.value=a;m.innerHTML=e.name+" ["+e.galaxy+":"+e.system+":"+e.planet+"]";f?k.insertBefore(m,f):k.appendChild(m)}}}catch(p){d.logC(p)}},Fleet2_getPartsFromLink:function(a){a=a.split("#");if(4>a.length)return null;var b={};b.galaxy=parseInt(a[0],10);b.system=parseInt(a[1],10);b.planet=parseInt(a[2],10);b.type=parseInt(a[3],10);b.name=a[4]||"";b.weight=1E6*b.galaxy+1E3*b.system+10*b.planet+b.type;return b},Fleet2_getSLinkFromPlanet:function(a){try{var b=m.getCoordsFromPlanet(a);
+return b.galaxy+"#"+b.system+"#"+b.planet+"#"+b.type+"#"+b.name}catch(e){d.logC(e)}},Fleet2_isTargetEmpty:function(){for(var a=d.XPath('//*[@id="inhalt"]/descendant::*[@class="fleetStatus"]/UL/LI'),b=0;b<a.snapshotLength;b++)if(v.read(a.snapshotItem(b).innerHTML,!1))return!1;return!0},Fleet2_setCoords:function(){var a=w.getStoredCoords()||(v.isActive()?v.get():"");if(a)a=a.split(":"),document.getElementById("galaxy").value=a[0],document.getElementById("system").value=a[1],document.getElementById("position").value=
+a[2],h("#galaxy").trigger("change"),a=document.getElementById("dbutton"),(!a||-1==a.className.indexOf("selected"))&&h("#pbutton").trigger("click")},Fleet2_expandSpeed:function(){for(var a="",b=1;10>=b;b++)a+='<a href="javascript:void(0);" rel="'+b+'"',a+=f.fleet2_Layout?' style="color: #'+l.speedColors[b]+';">':">",a+=10*b+"&nbsp;</a>";h("<li>").attr("id","speed_plain").html(a+"%").appendTo("#fleetBriefingPart1");h("#speed_plain a").click(function(){h("#speed").val(h(this).attr("rel"));if(f.fleet2_Layout)document.getElementById("speed").style.color=
+this.style.color;p.updateVariables()})},Fleet2_expandShortLinks:function(){function a(a,b){return'<a class="'+(b||"slHref")+'" href="javascript:void(0)" rel="'+a.index+'">'+a.name+"</a>"}try{for(var b=d.XPath('//*[@id="slbox"]/option[@value!="-"]'),e=[],k=[],g=0,f,h,j,l,m=0;m<b.snapshotLength;m++)f=b.snapshotItem(m).value,h=this.Fleet2_getPartsFromLink(f),j=1E5*h.galaxy+100*h.system+h.planet,2==h.type?(l=g++,e[l]=[]):"undefined"==typeof k[j]?(l=g++,k[j]=l,e[l]=[]):l=k[j],e[l][2==h.type?1:h.type]=
+{sl:f,name:b.snapshotItem(m).innerHTML,index:m};b=d.XPath('//*[@id="aksbox"]/option[@value!="-"]');for(m=0;m<b.snapshotLength;m++)f=b.snapshotItem(m).value,h=this.Fleet2_getPartsFromLink(f),"undefined"==typeof e[m]&&(e[m]=[]),e[m][5]={sl:f,name:h.name+" ["+h.galaxy+":"+h.system+":"+h.planet+"] - "+b.snapshotItem(m).innerHTML,index:m,type:h.type};for(var b="",p,m=0;m<e.length;m++){var q=e[m];p='<td class="slPlanet">'+(q[1]?a(q[1]):"")+'</td><td class="slMoon">'+(q[3]?a(q[3]):"")+"</td><td "+(q[5]&&
+3==q[5].type?'class="slMoon"':"")+">"+(q[5]?a(q[5],"slACS"):"")+"</td>";b+="<tr>"+p+"</tr>"}var r=document.getElementById("pbutton").firstElementChild.innerHTML,s=document.getElementById("mbutton").firstElementChild.innerHTML,u=document.getElementById("combatunits tips").innerHTML.replace(":",""),b="<table><tbody>"+("<tr><th>"+r+"</th><th>"+s+"</th><th>"+u+"</th></tr>"+b)+"</tbody></table>",t=document.createElement("div");t.id="slPanel";t.innerHTML=b;document.getElementById("inhalt").appendChild(t);
+d.runScript('$(".slHref").bind("click", function(){ $("#slbox option").get(1+parseInt(this.getAttribute("rel"))).selected = true; shortLinkChange(); updateVariables(); } )');d.runScript('$(".slACS").bind("click", function(){ $("#aksbox option").get(1+parseInt(this.getAttribute("rel"))).selected = true; shortLinkChange(true); updateVariables(); handleUnion() } )')}catch(v){d.logC(v)}},Fleet3_Run:function(){d.logM("FleetSend.Fleet3_Run "+document.readyState);this.setMission();this.setResources()},setMission:function(){if(!(0<
+d.XPath('//*[@id="missions"]/descendant::*[contains(@id,"missionButton") and contains(@class,"selected")]').snapshotLength))for(var a=[7,f.mission1,f.mission2,f.mission3,f.mission4,f.mission5,1,3,4,5,6,9],b=0;b<a.length;b++)if(0<a[b]&&"on"==document.getElementById("button"+a[b]).className){setTimeout(function(){h("#missionButton"+a[b]).click()},100);break}},setResources:function(){var a=w.getStoredRes();a&&(a=a.split(":"),w.writeValue("metal",a[0]),w.writeValue("crystal",a[1]),w.writeValue("deuterium",
+a[2]),d.runScript("setTimeout(function(){checkRes();updateVariables();},0)"))},checkACStime:function(){var a=new Date,a=(this.dateACS.getTime()-(a.getTime()-u.TimeDelta))/1E3,b=p.duration,e="";if(1.3<=b/a)clearInterval(this.intervalACS),e="overmark";else if(b>=a&&0==this.stateACS)this.stateACS=1,e="middlemark";if(e)document.getElementById("timeACS").className=e},showACStime:function(){if(d.script){var a=d.script.innerHTML.match(/durationAKS\s*=\s*(\d+)\s*\;/i);if(a&&d.XPathSingle('//*[@id="button2" and @class="on"]')&&
+(a=parseInt(a[1],10)))if(this.dateACS=u.getFinishTime(a),this.stateACS=0,this.intervalACS=setInterval(function(){B.checkACStime()},1E3),a=document.createElement("li"),a.style.color="yellow",a.innerHTML=j.Labels.ArrivalACS+': <span class="value" id="timeACS">'+u.formatDateSetting(this.dateACS)+"</span>",d.insertAfter(a,document.getElementById("aks")),a=d.XPathSingle('//*[@id="roundup"]/descendant::UL').offsetHeight,125<a){var a=a-125,b=d.XPathSingle('//*[@id="sendfleet"]/DIV');if(b)b.style.paddingTop=
+""+(parseInt(b.style.paddingTop)+a)+"px"}}}},I={Run:function(){d.logM("Galaxy.Run "+document.readyState);this.insertCSSRules();f.galaxy_clickTips&&this.clueTips();f.galaxy_reload&&h(p).keydown(I.keyEvents);h("#showbutton").bind("click",function(){h("#galaxy").attr("antigame_clickDisplay",h("#system_input").val())});document.body.addEventListener("DOMNodeInserted",I.onDOMNodeInserted,!1);z&&document.getElementById("galaxytable")&&I.redrawGalaxy()},onDOMNodeInserted:function(a){a&&a.target&&a.target.id&&
+"galaxytable"==a.target.id&&!U&&(U=!0,document.body.removeEventListener("DOMNodeInserted",I.onDOMNodeInserted,!1),I.redrawGalaxy(),document.body.addEventListener("DOMNodeInserted",I.onDOMNodeInserted,!1),U=!1)},insertCSSRules:function(){var a="",b="",e="",k="";f.new_phalanx_clock&&(d.insertCSS("#OGameClock { position: "+(d.isMinVersion("3.1.0")?"relative":"absolute")+"; top:0px; left:0px; z-index: 10001; }"),d.insertCSS("#StartTime { z-index: 10001; }"),d.insertCSS(".contentBoxBody { z-index:auto !important; }"));
+d.insertCSS(".anti_debris, .debris a { text-decoration:none; padding: 0px; text-align:center; font-size:11px; }");d.insertCSS(".anti_rank { text-decoration:none; font-size:10px; }");d.insertCSS("#message-wrapper { display: block !important; }");h("#message-wrapper div").eq(0).attr("style","position: relative; left: 420px; width:40px; z-index: 1;");f.galaxy_Layout&&(d.insertCSS("#galaxyLoading { "+(f.oldBrowser?"":"opacity: 0.3; ")+"background-position: center 0px; }"),d.insertCSS("#galaxy #galaxytable { border-collapse:collapse; }"),
+d.insertCSS("#galaxy #galaxytable tr.row { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAo4AAAAfCAYAAABpq0wvAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAU5JREFUeNrs282JwzAQBtCVnBJy3gZSh/pyX64jDeScFpwJLCwsGwz+I0Tye1cjI02G4XOcpJRzPMYxfQEAwITcdZGVAQCAWeFRCQAAEBwBABAcAQB4r9PUhZR+/i9TlIiNhkbOUSo7Tw37NV84yqzT6x/0OUWEKmyQNTrCwaIzFPvVF7Cgp/W62dOUkxIAAEd2/r70a9bdb9f+CPf5y28cAQChcePaVu8jOAIAsIrgCACA4AgAgOAIAIDgCACA4AgAgOAIAIDgCAAAgiMAAIIjAACCIwAAgiMAAIIjAACCIwBAde63a7/H2lbv819KOcdjHNPrhVS0EzsZKt9/qew8NezXfOEos06vf5iIGFRhndx14RtHAADmhceFT06wxxN4zWcY7FdfwIKe1utmT1MmX1UDAMAvr6oBAJgfHpUAAADBEQAAwREAgPd6CjAAi0pZTP9xHngAAAAASUVORK5CYII%3D); }"),
+d.insertCSS("#galaxy #galaxytable tr.row td.spacer01 { width: 1px; }"),d.insertCSS("#galaxy #galaxytable tr.row td.position { width: 22px; padding-right: 5px }"),d.insertCSS("#galaxy #galaxytable tr.row td.planetname, #galaxy #galaxytable tr.row td.planetname1 { width: 128px; }"),d.insertCSS("#galaxy #galaxytable tr.row td.debris { width: 40px; padding-left: 4px; }"),d.insertCSS("#galaxy #galaxytable tr.row td.spacer03 { width: 29px; text-align:right; }"),d.insertCSS("#galaxy #galaxytable tr.row td.allytag { width: 108px; }"),
+a="28px",b="24px");f.galaxy_shrinkLayout&&(1==f.galaxy_shrinkLayout&&(e="30px",a="28px",b="24px",k="-1px "+(z?-2:-1)+"px"),2==f.galaxy_shrinkLayout&&(e="28px",a="26px",b="22px",k="-1px "+(z?-3:-2)+"px"),3==f.galaxy_shrinkLayout&&(e="26px",a="24px",b="20px",k="-1px "+(z?-4:-3)+"px"),d.insertCSS("#galaxy #galaxytable tr.row td { height:"+e+"; }"),d.insertCSS(".anti_debris { font-size: 9px; }"),d.insertCSS("#galaxy #fleetstatusrow { height:20px !important; font-size:10px !important; }"),d.insertCSS("#galaxy #galaxytable tr.row { background-position:"+
+k+"; }"));a&&d.insertCSS("#galaxy #galaxytable tr.row td.microplanet { background-size:"+a+" !important; background-position:7px 2px !important; }");b&&d.insertCSS("#galaxy #galaxytable tr.row td.moon a.tipsGalaxy img{ width:"+b+"; height:"+b+";}")},clueTips:function(){var a='$("'+(".playername .tipsGalaxy, .allytag .tipsGalaxy"+(!f.galaxy_keepTips&&!m.getCommander()?", .moon .tipsGalaxy":"")+(!f.galaxy_keepTips?", .microplanet, .debris .tipsGalaxy":""))+'").cluetip("destroy").cluetip({activation:"click",local:true,cluetipClass:"galaxy",width:250,showTitle:false,delayedClose:500,mouseOutClose:true,hoverIntent:false,clickThrough:false,sticky:true})';
+d.clueTips(a)},redrawGalaxy:function(){try{if(!h("#galaxytable").attr("antigame_processed")){h("#galaxytable").attr("antigame_processed","1");var a=s(h("#galaxy").attr("antigame_clickDisplay"));(this.sameCoords=0<a&&a==h("#system_input").val())||h("#galaxy").removeAttr("antigame_clickDisplay");f.galaxy_Layout&&(h("#galaxytable .planetname").parent().css("background-image","url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAo4AAAAfCAYAAABpq0wvAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAS9JREFUeNrs200KgzAQBtBO9Ahd9wI9lGfzUF7AtVewKXRVCoJ/SI3vbcWQjEP4iFpHSvk1jnEDAIAJqapyUgYAAGaFRyUAAEBwBABAcAQA4Fj11IWIz/8yrRKxUVPIOtqTrecM87W/cJW9Tq//0XPKOavCBkmjIxwsWkNrvvoCFvS0Xrf3FKVWAgDgyu6P56pjyKHv4grjfPONIwAgNG68t9RxBEcAAFYRHAEAEBwBABAcAQAQHAEAEBwBABAcAQAQHAEAQHAEAEBwBABAcAQAQHAEAEBwBABAcAQAOJ2h72KPe0sd51etZQAA4dE4czhxBABgc3BslIcdNIWtoTFffQELelqv23uKEpFSfo1jKAUAAFNSVWWvqgEAmBcelQAAAMERAADBEQCAY70FGAD++FbeS9nIAAAAAABJRU5ErkJggg%3D%3D)"),
+this.changeOrder());(0<f.galaxy_DebrisSize||0<f.galaxy_DebrisMin)&&this.showDebris();this.showPlayer();this.showAlliance()}}catch(b){d.logC(b)}},keyEvents:function(a){if(a&&!a.shiftKey&&!a.ctrlKey&&!a.altKey&&13==a.keyCode)return h("#galaxytableHead #showbutton").click(),!1},changeOrder:function(){try{var a=h("#galaxytable #galaxyheadbg2 th");h(a.eq(0).css("width","60px")).before(a.eq(1).css("width","150px"));a.eq(4).css("width","160px");h("#galaxytable tr.row").each(function(){h("td.position",this).after(h("td.planetname, td.planetname1",
+this));h("td.moon",this).before(h("td.spacer02",this))})}catch(b){d.logC(b)}},showOwnCoords:function(){},showDebris:function(){try{var a=I.sameCoords||3==f.galaxy_DebrisSize;h("#galaxytable .row .debris .tipsGalaxy img").each(function(){var b=[],d=0;h(".debris .debris-content",h(this).parent().parent().parent()).each(function(g){b[g]=t(h(this).text()).split(" ")[1];var j=s(b[g].replace(/\./g,""));d+=j;var l="";1E9<j?(l="#FF33FF",a||(b[g]=b[g].substr(0,b[g].length-12)+"&thinsp;B")):1E6<j?(l="#DD0000",
+a||(b[g]=b[g].substr(0,b[g].length-8)+"&thinsp;M")):1E3<j&&(l="#FFA800",a||(b[g]=b[g].substr(0,b[g].length-4)+"&thinsp;k"));l=0<f.galaxy_DebrisMin&&j>=f.galaxy_DebrisMin&&l?l:"#CFCBC2";b[g]='<span class="anti_debris" style="color:'+l+';">'+b[g]+"</span>"});if(1==f.galaxy_DebrisSize){0<f.galaxy_DebrisMin&&d>=f.galaxy_DebrisMin&&h(this).attr("src","data:image/gif;base64,R0lGODlhHgAeAPf/AGM3N8YeHrsdHUoMDEAKCkcVFZsZGVkODk8MDIkVFbUbG0MLC54YGJwYGJcXF5MXF4EUFD0KCjwKCnkSEjsJCUULC3IREXAREd8yMtwxMdoxMdUvL+NEROE4ONcwMNsxMd4yMuAyMuAzM6MZGdYwMOVSUuNJSdIvL+ROTlMNDeJBQeRNTW4REeNDQ2EPD+ZXVz0JCW8REXAcHFUlJdMgIMgeHuE6OpBPT+deXlcODuRKSr4qKuA1NcotLbkpKdkwMOJAQOZaWuE5OeI+PuRPT2wREeRLS+AtLWsQEOE3N+ZbW90xMc8uLtcpKXcSEo07O3sTE3ZGRnwcHJQzM40VFaFLS9IgIMwuLphYWMpCQswgIGwtLXIpKedgYONGRtxISM85OcpRUXVRUZ05OXE2NrU7O+E7O2U8PGgfH588PMMsLKoaGoBLS+RJSbRCQnBKSuJOTlkjI1cREeVVVeBhYeRMTNEgIIRbW7kcHFIkJIhaWlYaGuA0NFAMDGgQEHkcHNUwMMEeHohWVuZcXM4uLmMPD5keHnEnJ1UoKH0sLNgtLZoXF2gpKdg3N6cZGcI4OMtiYqFCQuAwMIwoKN0zM9MrK7McHLYcHN9ZWd5UVOZZWZ9SUqIwMKM0NOBDQ45AQE4cHKczM+djY+hjY18yMtwqKqRHR24/P5IkJJArK+E8POI6OmsXF24VFcIoKEgLC9cuLtA/P7khIb8lJcNLS8dISIRPT+VRUbZXV283N+hmZtAtLYFDQ4dCQt8vL4tJScUpKVkqKl8uLuVTU8lMTJAeHpcdHc1ERNwiIuI8PLQ4OHBHR3JERLoqKtgzM14ODnhSUsggIONISOdbW00WFnAsLNwvL+dcXH4zM35HR2Q1NeNCQm4oKHE+PnISEoZaWp8+Pm0rK1smJsUeHpQXF60wMLNYWL8rK7RZWW9DQ1geHlwdHedhYXxaWmwvL9UpKZEWFuVUVLAaGrIbG6wbG1gREdQxMbkoKOI9PcMeHohVVXQSEtgwMMgqKk0MDAAAACH5BAEAAP8ALAAAAAAeAB4AAAj/AP8JHEiwoMGDCBMqXMiwYUEA1XKJQdjujh59N7gVWLjFUyZ0v04Z/AaJzrRrHYrFUSguC7suL2pF4rVsoKBRooKgEAICz74KCdO8eDGnRIkvtKqweRMFzjBpPDX8sPMsIbY2KFYY0bHiVoljZIQ1GiIigwYS8lwQSOgOjAkvHFSoaNHiyp4CWjCYhfVgwUIAZUxwGJJEBAYQDyQsqJHhAw0LERqCW8HBjF4NTS78izBOg4ADC6EN7LWNg40lZ2v0+QfjEgOg/xB4QzDwTLYbm3BtEtgtFocOGTxsWESBtb9/BORIcRWCgV+BY+IpwRHE1D9SylTw+fDOwauCMuxx/8CHodSEgetQOdNRAsUTRJNWYQjAAoZBRqGSAP/goOABesmY8EgeMogwTwoKoTGCIh5YYFAFEBwRAhfUtDIAAQlAYFA6Ag3gxAigHVRIJZyAQsAAI/jSwD/aMGMLFuYQ00k9ERBAQGQIqXPIDKxEE0IIxvzzSRiY6IIDEUAgQ04Oayk0QypHYCACD4b844YSg2hCRAvAkWBFAywgFEw45aiCwQdLYGDAP1PUYYQJQPCAwVkbbDACQolQ0sGZ/PyQAQP//CGJDXuaBcgJuyRA20FoWGKNBsJt4IEj/7hAAwZ6CUdIP1AsVEEMAZzABBMnrPFPCgGAkMEGPagxSwwSNDyUQgLwTMBCDv8MoACr5zQjSxHFORQBjgNRsYMPPghQhEMKWXDPDoEgwaxCSACTjx/TKuSCAjFk621BAQEAOw%3D%3D");
+var g=E(f.galaxy_shrinkLayout,0,3),j=[30,28,26,24][g],g=E(2+3*t(d).length-g,14,j);h(this).attr({width:g,height:g})}1<f.galaxy_DebrisSize&&h(this).hide().parent().append(b[0]+"<br/>"+b[1]).parent().css("background","url(data:image/gif;base64,R0lGODlhHAAcAKIEABQdKhQeKxUeKxMdKgAAAAAAAAAAAAAAACH5BAEAAAQALAAAAAAcABwAAAOqSLrc/kxIAacIFBIxBsCOAHQd+IjkJy0c2alP4L5gOw9ZI9+ddAOrEK9ne+VCo9/GZdLsZoFlT5MrkigcoOKSCwQ+2x92/PVkmJuksWGNEp6D6LPJUnvqr7dZky5FdhIgXiFbX0dhAFsjiRNfAFobFRMpb3ZGh38uiZaabhEomnpDdzo8iXBQmKChViSeIaiMPK8Vj15YlrR8h3a6fA5zv8I7vsJsccbJvwkAOw%3D%3D) no-repeat scroll 10px 3px transparent")})}catch(b){d.logC(b)}},
+showPlayer:function(){try{h("#galaxytable .row .playername").each(function(){var a=h("#TTWrapper h4 .spacing span",this).text().trim();if(a){var e=y.Player[a.toUpperCase()];e&&h(".tipsGalaxy span",this).attr("style","color:"+e+" !important;");(e=l.coms[l.server].gStats)&&h(".ListLinks",this).append('<li><a href="http://ogame.gamestats.org/?lang='+e+"&uni="+(l.uni?l.uni+"":"").toLowerCase()+"&page=details&type=player&name="+a+'" target="WarRiders">WarRiders</a></li>')}if(f.galaxy_ShowRank&&(a=d.parseInt(h("li.rank a",
+this).text()),0<a)){var k=h("li.rank a",this).attr("href"),g=1E3>a?11:10,e=y.PlayerRank.COLOR;10>a?e=y.PlayerRank.COLOR10:100>a?e=y.PlayerRank.COLOR100:1E3>a?e=y.PlayerRank.COLOR1000:1E4<=a&&(a="10&thinsp;k");e='<a class="anti_rank" href="'+t(k)+'" style="color:'+e+"; font-size:"+g+'px;"> '+a+"</a>";f.galaxy_Layout?h(this).next().append(e):h(this).append(e)}})}catch(a){d.logC(a)}},showAlliance:function(){try{h("#galaxytable .row .allytag").each(function(){var a=h("#TTWrapper h4 span",this).text();
+if(a=G(a.substring(a.indexOf(" ")))){var e=y.Ally[a.toUpperCase()];e&&h(".allytagwrapper",this).attr("style","color:"+e+" !important;");(e=l.coms[l.server].gStats)&&h(".ListLinks",this).append('<li><a href="http://ogame.gamestats.org/?lang='+e+"&uni="+(l.uni?l.uni+"":"").toLowerCase()+"&page=details&type=ally&name="+a+'" target="WarRiders">WarRiders</a></li>')}if(f.galaxy_ShowAllyRank){var k=d.parseInt(h("li.rank a",this).text()),g=d.parseInt(h("li.members",this).text());if(0<k){a=h("li.rank a",this).attr("href");
+e=y.AllyRank.COLOR;if(5>=k)e=y.AllyRank.COLOR5;else if(10>k)e=y.AllyRank.COLOR10;else if(50>k)e=y.AllyRank.COLOR50;k=" "+k+(0<g?"/"+g:"");h(this).append('<a class="anti_rank" style="color: '+e+';" href="'+a+'">'+k+"</a>")}}})}catch(a){d.logC(a)}}},y={prepare:function(a,b,e){var d;this[a]=[];if(b&&e)for(var b=b.toUpperCase().split(","),e=e.toUpperCase().split(","),g=0;g<b.length;g++){var f=G(b[g]);d=t(G(e[g]),d);f&&d&&(this[a][f]=d)}},highlight:function(a,b,e,k){try{if(this[a]){var g=h(b,e);if(g&&
+0<g.length){var f=g.first().text().split("Alliance")[0].trim();"function"==typeof k&&(f=k(f));if(f){var j=this[a][f.toUpperCase()];j&&g.attr("style","color:"+j+" !important;")}}}}catch(n){d.logC(n)}},Init:function(){d.logM("Colorer.Init "+document.readyState);this.prepare("Player",f.galaxy_Players,f.galaxy_PlayerColors);this.prepare("Ally",f.galaxy_Allys,f.galaxy_AllyColors);this.prepare("PlayerRank","Color,Color1000,Color100,Color10",f.galaxy_PlayerRankColors);this.prepare("AllyRank","Color,Color50,Color10,Color5",
+f.galaxy_AllyRankColors)}},ia={Run:function(){d.logM("Jumpgate.Run "+document.readyState);this.insertCSSRules();this.Show()},insertCSSRules:function(){f.jumpgate_Improve&&(d.insertCSS("#jumpgate a.quantity_link { color: "+l.colors.textBlue+"; text-decoration: none; font-size: 12px; }"),d.insertCSS(['#jumpgateForm select[name="zm"] { color: '+l.colors.activeGreen+"; font-size: 12px; }",'#jumpgateForm select[name="zm"] option { font-size:12px; }',"#jumpgate #anti_jumpgate a { color: "+l.colors.textNormal+
+"; text-decoration: none; font-size: 12px; }","#jumpgate div.secondcol { top: "+(z?286:294)+"px; }","div#jumpgate { height: 552px; }","#station #jumpgate td, #station-moon #jumpgate td { padding: "+(z?2:1)+"px; }","#jumpgate table#anti_jumpgate { height:74px; padding-top: 8px; }","#jumpgate #anti_jumpgate td.anti { white-space:nowrap; padding: 3px 15px; vertical-align:top; }"]))},Show:function(){if(f.jumpgate_Improve){var a=["","",""],b=f.jumpgate_RequireTarget?1:0;h('#jumpgateForm select[name="zm"] option').each(function(e){d.log("jumpgate "+
+e);var g=4>e?0:8>e?1:2;a[g]+='<a href="javascript:void(0);" value="'+(s(e)+b)+'">'+this.innerHTML+"</a>"+(3!=e&&7!=e&&11!=e?"<br />":"")});var e='<table id="anti_jumpgate"><tr><td width="60%"></td><td class="anti">'+a[0]+"</td>"+(a[1]?'<td class="anti">'+a[1]+"</td>":"")+(a[2]?'<td class="anti">'+a[2]+"</td>":"")+"</tr></table>";h("#jumpgateForm div.fright").after(e);h("#anti_jumpgate a").bind("click",function(){h('#jumpgateForm select[name="zm"]').attr("selectedIndex",h(this).attr("value"))});f.jumpgate_RequireTarget&&
+h('#jumpgateForm select[name="zm"]').prepend('<option selected="selected">&nbsp;&nbsp;</option>').val("reset");h("#fleetTemplatesEdit table.list td:not(.tdInactive) span.quantity").each(function(){var a=t(this.innerHTML.replace(/[\(\)]/g,"")),b=a.replace(/\D/g,"");h(this).html('(<a href="javascript:void(0)">'+a+"</a>)").find("a").addClass("quantity_link").click(function(){h(this).parent().parent().next().find("input").attr("value",b)});h(this).parent().next().find("img").wrap('<a href="javascript:void(0)"></a>');
+h(this).parent().next().find("a").click(function(){h(this).parent().find("input").attr("value",b)})})}}},W={Show:function(){d.logM("Names.Show "+document.readyState);d.isCurrentPage("fleet1,resources,station,station-moon,research,shipyard,defense,techtree")&&this.showBuildingNames();this.showResNames()},showImgAlt:function(a){return T&&0==a.clientWidth?(a.style.display="none",setTimeout(function(){a.style.display="inline"},150),!0):!1},insertCSSRules:function(){d.insertCSS('.itemname { position: absolute; top: 8px; right: 3px; max-width: 76px; height: auto !important; background: transparent url("'+
+d.bg+'") repeat !important;text-align: right; font-size: 10px; overflow: hidden; }');"techtree"==l.page?(d.insertCSS(".redBorder .itemname { color: "+f.nameColorOff+"; }"),d.insertCSS(".greenBorder .itemname { color: "+f.nameColorOn+"; }")):(d.insertCSS(".off .itemname { color: "+f.nameColorOff+"; }"),d.insertCSS(".on .itemname { color: "+f.nameColorOn+"; }"),d.insertCSS(".disabled .itemname { color: "+f.nameColorDisabled+"; }"))},showBuildingResNames:function(){try{var a=d.XPath('//*[@id="costs"]/descendant::*[contains(@class,"metal")][@title]/IMG');
+if(a)for(var b=0;b<a.snapshotLength;b++){var e=a.snapshotItem(b);if(!e.getAttribute("alt")){var k=e.parentNode.title,k=k.match(/\s([^\s]+)$/);e.setAttribute("alt",k[1]);this.showImgAlt(e)}}}catch(g){d.logC(g)}},showResNames:function(){try{var a=d.XPath('//*[@id="resources"]/*[contains(@id,"_box")]');if(a)for(var b=0;b<a.snapshotLength;b++){var e=d.XPathSingle("descendant::IMG",a.snapshotItem(b));if(e&&!e.getAttribute("alt")){var k=a.snapshotItem(b).id;if(k=k.substr(0,k.indexOf("_")))e.setAttribute("alt",
+j.Labels[""+k]),this.showImgAlt(e)}}}catch(g){d.logC(g)}},showBuildingNames:function(){try{this.insertCSSRules();var a;a=d.isCurrentPage("fleet1")?'//*[@class="buildingimg"]/A':d.isCurrentPage("techtree")?'//A/DIV[contains(@class,"Border")]':"//A[@ref]";var b=d.XPath(a+"[@title]"),e,k,g;a="\\|([^<\\(]+)";d.isCurrentPage("techtree")&&(a="([^<\\(|]+)");a=RegExp(a,"");for(var f=0;f<b.snapshotLength;f++)if(g=b.snapshotItem(f),k=g.title.match(a)){e=document.createElement("div");e.className="itemname";
+if("resources"==l.page){var h=g.getAttribute("ref");if("1"==h||"2"==h||"3"==h||"4"==h||"12"==h||"212"==h)e.style.maxWidth="96px"}e.innerHTML=k[1];g.appendChild(e)}}catch(j){d.logC(j)}},showPlanetConstruction:function(){d.logM("Names.showPlanetConstruction "+document.readyState);try{var a=d.getElementsByClassName("constructionIcon"),b=document.createElement("span");b.className="constructionName";if(0<a.snapshotLength){var e=0;5<d.getElementsByClassName("smallplanet").snapshotLength&&(e=-10);d.insertCSS(".constructionName { font-size: 10px; color: grey; "+
+(e?"position:relative; top:"+e+"px;":"")+" }")}for(var f=0;f<a.snapshotLength;f++){var g=a.snapshotItem(f),h=g.parentNode,j=g.title.replace("|",""),n=b.cloneNode(!1);n.innerHTML=j;h.appendChild(n);h.style.height=h.clientHeight+n.offsetHeight+e+"px"}}catch(l){d.logC(l)}}},P={Run:function(){d.logM("Messages.Run "+document.readyState);this.insertCSSRules();if(d.isCurrentPage("messages")){if(document.getElementById("section2").addEventListener("DOMNodeInserted",this.onDOMNodeInserted,!1),d.XPathSingle('//FORM[@name="delMsg"]')&&
+this.Show(),f.msg_killTips)p.initCluetip=function(){}}else this.Show()},insertCSSRules:function(){if(1<=f.msg_expandBox){var a=E(f.msg_expandBox,1,800);d.insertCSS("#TB_iframeContent { height: "+(612+a)+"px !important; }");d.insertCSS("#messagebox { height: "+(504+a)+"px !important; }");d.insertCSS("#messagebox .textWrapper { height: "+(335+a)+"px !important; }");d.insertCSS("#messagebox .textWrapper div.note { height: "+(295+a)+"px; }")}d.isCurrentPage("messages")?(f.msg_fixColors&&(d.insertCSS(".combatreport_ididattack_iwon { color: #00B000; }"),
+d.insertCSS(".combatreport_ididattack_ilost { color: #D02222; }"),d.insertCSS(".combatreport_ididattack_draw { color: #C0C000; }")),d.insertCSS(".msgButtons input { background:transparent url(/cdn/img/layout/formular_buttons.gif) no-repeat scroll -88px -54px;border:0 none; color:#0D1014; cursor:pointer; font-size:11px; font-weight:700; text-align:center; height: 27px; width: 42px; }"),d.insertCSS(".msgButtons input:hover { background:transparent url(/cdn/img/layout/formular_buttons.gif) no-repeat scroll -88px -81px;}")):
+F||d.insertCSS("body { margin: 50px auto 0 auto; background: url(/cdn/img/background/background_voll_2.jpg) no-repeat scroll 50% 0 #000000 !important; }");Y.insertCSSRules()},addButtons:function(){function a(a,e,f){if(!f&&0<e){var h=d.XPathSingle('//SELECT/OPTION[@id="'+e+'"]');if(h)f=h.innerHTML}h=document.createElement("input");h.type="button";h.value=a;if(12==e)h.style.color="#00CC22";else if(-12==e)h.style.color="#229922";else if(7==e)h.style.color="#660011";else if(-7==e)h.style.color="#993300";
+else if(9==e)h.style.color="#990000";if(f)h.title=f;h.setAttribute("mod",e);b.appendChild(h)}d.logS("Messages.addButtons");if(3!=p.aktCat){var b=document.createElement("span");b.className="msgButtons";a("V",12);a("VV",-12,j.Labels.btnMarkReadAll);a("X",7);a("Xx",-7,j.Labels.btnDeleteSmallPlunder);a("XX",9);var e=d.XPathSingle('//FORM[@name="delMsg"]');e.parentNode.insertBefore(b,e);d.insertAfter(h(".msgButtons").clone(!0).get(0),e);h(".msgButtons input").click(P.onButtonClick);h(".selectContainer").clone(!0).prependTo("#messageContent").css({width:"160px",
+position:"absolute",right:"20px",fontSize:"11px"}).find("div").eq(0).css("float","left")}},onButtonClick:function(){try{var a=this.getAttribute("mod");if(0<a)p.mod=a,h(".buttonOK.deleteIt").attr("id","Anti_delMsg_Button"),d.trigger("Anti_delMsg_Button","click");else if(-12==a||-7==a){for(var b=[],e=d.getElementsByClassName(-12==a?"trigger new":"trigger smallplunder"),f=0;f<e.snapshotLength;f++)b.push(e.snapshotItem(f).id.toString().replace(/\D/g,""));p.executeAction(b,-a)}}catch(g){d.logC(g)}},changeTimes:function(){d.isCurrentPage("messages")?
+(u.changeNodesTime('//*[@id="mailz"]/TBODY/TR[contains(@class,"entry")]/*[@class="date"]',"[d].[m].[Y] [H]:[i]:[s]"),u.changeNodesTime('//*[@id="mailz"]/TBODY/TR[contains(@id,"spioDetails")]/descendant::*[@class="material spy"]/TBODY/TR/TH',"[m]-[d] [H]:[i]:[s]")):d.isCurrentPage("showmessage")&&(u.changeNodesTime('//*[contains(@class,"infohead")]/TABLE/TBODY/TR[last()]/TD | //*[@id="battlereport"]/P',"[d].[m].[Y] [H]:[i]:[s]"),u.changeNodesTime('//*[@class="material spy"]/TBODY/TR/TH',"[m]-[d] [H]:[i]:[s]"))},
+onDOMNodeInserted:function(a){a&&a.target&&!("FORM"!=a.target.tagName||"delMsg"!=a.target.name)&&P.Show()},Show:function(){d.logS("Messages.Show");try{if("messages"==l.page){var a=document.getElementsByName("delMsg")[0];if(a.getAttribute("antigame_processed"))return;a.setAttribute("antigame_processed","1")}a=!1;if(d.isCurrentPage("messages")&&f.msg_PlunderThreshold&&(f.msg_foldSmallPlunder||f.msg_addButtons))a=!0;(f.msg_showPlunder||a||f.msg_addSimButton)&&Y.Show();1==f.timeSetting&&P.changeTimes();
+d.isCurrentPage("messages")&&f.msg_PlunderThreshold&&f.msg_foldSmallPlunder&&setTimeout(function(){h(".smallplunder .subject a").trigger("click")},0);f.msg_addButtons&&d.isCurrentPage("messages")&&P.addButtons();if(d.isCurrentPage("showmessage")){var b=d.XPathSingle('//DIV[@class="note"]/SPAN[contains(@class,"tips") and @title]');if(b){var e=b.title.toString();if(e=e.replace(/<br>$/gi,"").replace(/<br>/gi,", ").replace(/\|/gi,""))b.innerHTML+=" ("+e+")"}}}catch(k){d.logC(k)}}},Y={Show:function(){var a;
+a=d.isCurrentPage("showmessage")?document.getElementById("messagebox"):document.getElementById("messageContent");a=d.getElementsByClassName("material spy",a);for(var b=0;b<a.snapshotLength;b++){var e=a.snapshotItem(b).parentNode;this.calculatePlunder(e);this.calculateDebris(e);if(f.msg_PlunderThreshold&&d.isCurrentPage("messages")){var k=this.debris_metal+this.debris_crystal;this.plunder_metal+this.plunder_crystal+this.plunder_deuterium<=1E3*f.msg_PlunderThreshold&&k<=1E3*f.msg_DebrisThreshold&&(document.getElementById(e.parentNode.parentNode.id.replace("spioDetails_",
+"")+"TR").className+=" smallplunder")}f.msg_showPlunder&&(this.showPlunder(e),this.showDebris(e));f.msg_addSimButton&&this.addSimButton(e)}},insertCSSRules:function(){d.insertCSS(".plkey { width: 30% }");d.insertCSS(".plvalue { width: 20% }");d.insertCSS(".plunder { border: 1px solid grey !important; }");d.insertCSS("table.plunder { border-collapse: collapse; }");d.insertCSS(".plkey, .plvalue { padding: 5px !important; }");d.insertCSS(".dummy { width: 33% !important; }");if(f.msg_EspionageSpace){d.insertCSS("#netz .contentz #showSpyReportsNow table th.area { padding: 4px 0px;}");
+var a={1:{top:3,bot:6},2:{top:2,bot:4},3:{top:1,bot:2},4:{top:0,bot:0}},b=a[f.msg_EspionageSpace].top;d.insertCSS("#netz #inhalt .contentz td { padding-top: "+b+"px; padding-bottom: "+a[f.msg_EspionageSpace].bot+"px; }");d.insertCSS("#messagebox .spy td { padding-top: "+b+"px; padding-bottom: "+b+"px; }")}},calculatePlunder:function(a){this.metal=this.crystal=this.deuterium=this.plunder_metal=this.plunder_crystal=this.plunder_deuterium=0;a=d.XPath('descendant::*[contains(@class,"fragment")]/descendant::TD',
+a);this.metal=this.readValue(a.snapshotItem(1));this.crystal=this.readValue(a.snapshotItem(3));this.deuterium=this.readValue(a.snapshotItem(5));this.plunder_metal=this.metal/2;this.plunder_crystal=this.crystal/2;this.plunder_deuterium=this.deuterium/2},calculateDebris:function(a){try{this.debris_metal=this.debris_crystal=0;for(var b=d.XPath('descendant::*[@class="fleetdefbuildings spy"][position()=1 or position()=2]/descendant::*[@class="key"]',a),a=[],e=0;e<b.snapshotLength;e++){var f=b.snapshotItem(e);
+a.push({name:f.innerHTML,count:this.readValue(f.nextSibling)})}var g=m.getFleetDebris(a,!0);this.debris_metal=g.metal;this.debris_crystal=g.crystal}catch(h){d.logC(h)}},showPlunder:function(a,b){var e=this.metal+this.crystal+this.deuterium,d=Math.max(this.plunder_metal+this.plunder_crystal+this.plunder_deuterium,Math.min(3*(2*this.plunder_metal+this.plunder_crystal+this.plunder_deuterium)/4,2*this.plunder_metal+this.plunder_deuterium)),g=Math.ceil(d/5E3),d=Math.ceil(d/25E3);r.init(j.Labels.resources);
+r.addCell(j.Labels.total,e);r.addCell(j.Labels.loot,Math.floor(e/2));r.addCell(j.Labels.shipLCargoAlt,d);r.addCell(j.Labels.shipSCargoAlt,g);this.insertTable(a,r,b)},showDebris:function(a){var b=this.debris_metal+this.debris_crystal;b&&(r.init(j.Labels.debris),r.addCell(j.Labels.metal,this.debris_metal),r.addCell(j.Labels.crystal,this.debris_crystal),r.addCell(j.Labels.total,b),r.addCell(j.Labels.shipRecyclerAlt,Math.ceil(b/2E4)),this.insertTable(a,r))},readValue:function(a){return parseInt(a.innerHTML.replace(/\D/g,
+""),10)},insertTable:function(a,b,e){var d=document.createElement("table");d.className="fleetdefbuildings spy plunder";b.title_class="area plunder";b.key_class="plkey plunder";b.value_class="plvalue plunder";d.innerHTML=b.createTableString(2,e);a.appendChild(d)},addSimButton:function(a){try{var b=document.createElement("td");b.className="dummy";var e=d.getElementByClassName("attack",a);e.parentNode.insertBefore(b,e);d.insertAfter(b.cloneNode(!1),e);a="";switch(f.msg_addSimButton){case 1:a=j.Labels.msg_Simulator1;
+break;case 2:a=j.Labels.msg_Simulator2;break;case 3:a=j.Labels.msg_Simulator3}var k=e.cloneNode(!1);k.innerHTML='<a class="buttonSave" href="javascript:void(0)"><span>'+a+"</span></a>";d.insertAfter(k,e);k.addEventListener("click",function(a){Y.submitToSim(a)},!1)}catch(g){d.logC(g)}},createWebSimForm:function(){function a(a,e){return-1<m.getTech(a)?"&"+e+"="+m.getTech(a):""}m.getPlanets();this.sim_form=document.createElement("form");this.sim_form.id="sim_form";this.sim_form.method="POST";this.sim_form.target=
+"_websim";this.sim_form.action="http://websim.speedsim.net/index.php?version=1&lang="+t(l.coms[l.server].wsim,"en")+a(m.TECH_WEAPONS,"tech_a0_0")+a(m.TECH_SHIELD,"tech_a0_1")+a(m.TECH_ARMOUR,"tech_a0_2")+a(m.TECH_COMB_DRIVE,"engine0_0")+a(m.TECH_IMPULSE_DRIVE,"engine0_1")+a(m.TECH_HYPER_DRIVE,"engine0_2")+"&start_pos="+m.planetsActive.coords+"&perc-df="+f.uni_DFPercent;this.sim_form.innerHTML='<input type="hidden" id="sim_input" name="report" />';document.body.appendChild(this.sim_form)},createDragoSimForm:function(){function a(a,
+b){return'<input type="hidden" name="'+a+'" value="'+b+'" />'}function b(b,d){return-1<m.getTech(b)?a(d,m.getTech(b)):""}this.sim_form=document.createElement("form");this.sim_form.id="sim_form";this.sim_form.method="POST";this.sim_form.action="http://drago-sim.com/";this.sim_form.target="_dragosim";this.sim_form.innerHTML=a("lang",t(l.coms[l.server].dsim,"english"))+b(m.TECH_WEAPONS,"techs[0][0][w_t]")+b(m.TECH_SHIELD,"techs[0][0][s_t]")+b(m.TECH_ARMOUR,"techs[0][0][r_p]")+a("debris_ratio",f.uni_DFPercent/
+100)+'<input type="hidden" id="sim_input" name="scan" />';document.body.appendChild(this.sim_form)},createOSimulateSimForm:function(){function a(a,b){return'<input type="hidden" name="'+a+'" value="'+b+'" />'}function b(b,d){return-1<m.getTech(b)?a(d,m.getTech(b)):""}m.getPlanets();this.sim_form=document.createElement("form");this.sim_form.id="sim_form";this.sim_form.method="POST";this.sim_form.action="http://www.osimulate.com/report";this.sim_form.target="_osimulate";this.sim_form.innerHTML=a("lang",
+t(l.coms[l.server].osim,"en"))+a("debris_ratio",f.uni_DFPercent/100)+b(m.TECH_WEAPONS,"techs[0][0][w_t]")+b(m.TECH_SHIELD,"techs[0][0][s_t]")+b(m.TECH_ARMOUR,"techs[0][0][r_p]")+b(m.TECH_COMB_DRIVE,"engine0_0")+b(m.TECH_IMPULSE_DRIVE,"engine0_1")+b(m.TECH_HYPER_DRIVE,"engine0_2")+a("start_pos",m.planetsActive.coords)+'<input type="hidden" id="sim_input" name="report" />';document.body.appendChild(this.sim_form)},submitToSim:function(a){this.sim_form||(1==f.msg_addSimButton?this.createWebSimForm():
+2==f.msg_addSimButton?this.createDragoSimForm():3==f.msg_addSimButton&&this.createOSimulateSimForm());if(this.sim_form){a=a.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.innerHTML.replace(/<[^>]+>|\n/g,"");if(1==f.msg_addSimButton||2==f.msg_addSimButton)"US"==l.server&&(a=a.split("Armor Technology").join("Armour Technology"));1==f.msg_addSimButton&&"RU"==l.server&&(a=a.split("\u041c\u0435\u0442\u0430\u043b\u043b:").join("\u041c\u0435\u0442\u0430\u043b\u043b\u0430:"),a=a.split("\u041a\u0440\u0438\u0441\u0442\u0430\u043b\u043b:").join("\u041a\u043b\u0438\u0441\u0442\u0430\u043b\u043b\u0430:"),
+a=a.split("\u0414\u0435\u0439\u0442\u0435\u0440\u0438\u0439:").join("\u0414\u0435\u0439\u0442\u0435\u0440\u0438\u044f:"));document.getElementById("sim_input").value=1==f.msg_addSimButton||3==f.msg_addSimButton?encodeURI(a):a;this.sim_form.submit()}}},ha={scrollTitle:function(){d.logM("Misc.scrollTitle "+document.readyState);document.body.setAttribute("original_title",document.title);var a={};a.title=document.title;a.index=0;var b=document.getElementById("tempcounter"),e=document.getElementById("eventContent"),
+f=document.getElementById("eventboxBlank");a.run=function(){if(f.offsetHeight)document.title=this.title;else{if(e&&b&&b.offsetHeight){var d=this.title+": "+b.innerHTML+" "+e.innerHTML+" ",d=d.substr(this.index)+d.substr(0,this.index);this.index=(this.index+1)%d.length;document.title=d}else document.title=this.title;setTimeout(function(){a.run()},200)}};setTimeout(function(){a.run()},200)}},ea={onDOMNodeInserted:function(a){a&&a.target&&"allyMemberlist"==a.target.id&&ea.Show()},Show:function(){h("#link11.opened").trigger("click");
+h("#link12.closed").trigger("click");d.insertCSS("#netz #alliance #inhalt #eins .contentz .members td {\tpadding-top:0px; padding-bottom:0px; }")},Run:function(){d.logM("Network.Run "+document.readyState);document.getElementById("allyMemberlist")&&this.Show();var a=document.getElementById("eins");a?a.addEventListener("DOMNodeInserted",this.onDOMNodeInserted,!1):d.log('Error => Network.Run() => The element "eins" is missing.')}},O={res_array:["metal","crystal","deuterium","energy"],res_array_firstcap:["Metal",
+"Crystal","Deuterium","Energy"],currentRes:{},costRes:{},res_container:null,addResButtons:function(){d.logM("Resources.addResButtons "+document.readyState);h("<input>").attr("class","buttonOK").attr({type:"button",value:"0%",ref:"0"}).click(function(){h("select").val(this.getAttribute("ref"))}).appendTo(".factorbutton").clone(!0).attr({value:"100%",ref:"100"}).appendTo(".factorbutton")},addCell:function(a,b){this.html&&(this.html+=" ");this.html+=a+':<span class="time" style="padding-right: 0px">'+
+d.formatNumber(b)+"</span>"},showMissing:function(){try{if(!d.getElementByClassName("abort")&&(container=d.XPathSingle('//*[@id="detail"]/DIV[@class="pic"]'))){r.init(j.Labels.deficientRes);for(var a=0,b=!1,e=0;e<this.res_array.length;e++){var f=this.res_array[e];if("energy"!=f)this.currentRes[f]=d.getIntById("resources_"+f);else{var g=document.getElementById("energy_box").title;(g=g.match(/\([\-\d\.]+\/([\-\d\.]+)\)/))&&(this.currentRes[f]=d.parseInt(g[1]))}this.costRes[f]=d.getIntByXPath('//*[@id="content"]/descendant::*[@id="resources"]/LI[contains(@title,"'+
+j.Labels[""+f]+'")]',"title");if(null!=this.costRes[f]){var h=this.costRes[f]-this.currentRes[f];0<h&&(r.addCell(j.Labels[""+f],h,f),b=!0,"energy"!=f&&(a+=h))}}if(b){var l="<table>"+r.createTableString()+"</table>";r.init("");r.addCell(j.Labels.shipSCargo,Math.ceil(a/5E3));r.addCell(j.Labels.shipLCargo,Math.ceil(a/25E3));var l=l+("<table>"+r.createTableString()+"</table>"),n=document.createElement("div");n.id="deficient";n.innerHTML=l;container.appendChild(n)}}}catch(m){d.logC(m)}},showProduction:function(){try{var a=
+document.getElementsByName("type")[0];if(a){var a=parseInt(a.value,10),b=d.XPathSingle('//*[@ref="'+a+'"]/descendant::*[@class="level"]');if(b){var b=d.parseInt(b.lastChild.nodeValue),e,f,g;if(1==a||2==a||3==a){var l=d.getIntById("resources_energy"),o=h("#action ul #possibleInTime").size(),n=h("#action ul li").find(".time").eq(1+o),p=l-d.parseInt(n.html()),q=Math.ceil(-p/m.getProduction(212,0));e=0<q?"<span>("+q+" "+j.Labels.shipSatelliteAlt+")</span>":"";n.after(d.addSpanMark(p)+e)}e="";12==a&&(f=
+-m.getConsumption(a,b),g=-m.getConsumption(a,b+1),e="<li>"+j.Labels.deuterium+': <span class="time">'+d.formatNumber(g)+"</span> "+d.addSpanMark(g-f)+"</li>",h("#action ul").append(e));if(1==a||2==a||3==a||4==a||12==a)if(f=m.getProduction(a,b),(g=m.getProduction(a,b+1))||isNaN(g))e="<li>"+j.Labels.Production+': <span class="time">'+d.formatNumber(g)+"</span> "+d.addSpanMark(g-f)+"</li>",h("#action ul").append(e);if(22==a||23==a||24==a)if(f=m.getStorageCapacity(a,b),g=m.getStorageCapacity(a,b+1)){var r=
+h("#description div.display div").get(0);r?(e="<li>"+r.firstChild.nodeValue+' <span class="time">'+d.formatNumber(g)+"</span> "+d.addSpanMark(g-f)+"</li>",h("#action ul").append(e),h(".techtree").css("display","none")):d.log("Error => Missing element in Resources.showProduction()")}e&&h("#action ul").css("padding-top","0")}}}catch(s){d.logC(s)}},Missing_insertCSSRules:function(){d.insertCSS("#deficient table tr td, #deficient table tr th { padding: 1px; font-size: 11px; color: white; }");d.insertCSS('#deficient { background: transparent url("'+
+d.bg+'") repeat; position: absolute; bottom: 0; right: 0; }')},Resources_insertCSSRules:function(){d.insertCSS(".antires { margin: 2px !important; padding: 4px !important; display: block; width: 151px !important; height: auto !important; }");d.insertCSS(".antires { float: left !important; background: #0D1014 !important; border: 1px solid #606060 !important; }");d.insertCSS(".antires { text-align: center !important; font-size: 10px !important; list-style: none outside !important; }");d.insertCSS(".finishtime { color: green; }");
+d.insertCSS("#links { overflow: visible; }");2==f.showResources&&(d.insertCSS("#links { position: relative; }"),d.insertCSS("#antires_cont { position: absolute; top: 0; left: -171px; width: 164px; }"))},Resources_createContainer:function(){if(1==f.showResources){var a=document.getElementById("box");if(a)a.style.paddingBottom="0";this.res_container=document.getElementById("menuTableTools")}else if(2==f.showResources&&(a=document.getElementById("links")))this.res_container=document.createElement("ul"),
+this.res_container.id="antires_cont",a.appendChild(this.res_container)},Resources_append:function(a){this.res_container||this.Resources_createContainer();this.res_container&&this.res_container.appendChild(a)},Resources_Run:function(){d.logM("Resources.Resources_Run "+document.readyState);try{if(document.getElementById("metal_box")){this.Resources_insertCSSRules();for(var a=new DOMParser,b=0;b<this.res_array.length;b++){var e=this.res_array[b],f="resourceTicker"+this.res_array_firstcap[b],g="antires_"+
+e,h=document.createElement("li");h.className="antires";var j=document.getElementById(e+"_box").title;if(0===j.indexOf("|"))j=j.replace("|",""),j=j.replace(RegExp("([\\d\\"+d.separator+"]+)\\/","gi"),'<span id="'+g+'">$1</span> / ');else{var l=a.parseFromString("<div>"+j.replace(/<br>/gi,"<br/>")+"</div>","text/xml"),m=l.getElementsByTagName("span")[0],q=l.getElementsByTagName("span")[1],r=l.getElementsByTagName("span")[2],s=l.getElementsByTagName("B"),s=s&&s[0]||l.firstChild,j="<b>"+s.firstChild.nodeValue.split("|")[0]+
+"</b>",j=j+"<br/>";if("energy"!=e)j+='<span class="'+m.getAttribute("class")+'">',j+='<span id="'+g+'">'+m.firstChild.nodeValue+"</span> / ",j+=q.firstChild.nodeValue,j+="</span>",j+="<br/>",j+='<span class="'+r.getAttribute("class")+'">('+r.firstChild.nodeValue+")</span>";else var t=r.firstChild.nodeValue.replace("-",""),v=q.firstChild.nodeValue.replace("+",""),j=j+('<span class="'+m.getAttribute("class")+'">'),j=j+m.firstChild.nodeValue,j=j+"<br/>",j=j+("("+t+"/ "+v+")</span>")}h.innerHTML=j;this.Resources_append(h);
+if("energy"!=e){var w=p[f],z=w.production?Math.floor((w.limit[1]-w.available)/w.production):-1;0<z&&(h.innerHTML+='<br/><span class="finishtime">'+u.formatDateSetting(u.getFinishTime(z))+"</span>");var y="var newticker = {};newticker.available = oldticker.available;newticker.limit = oldticker.limit;newticker.production = oldticker.production;newticker.valueElem = ticker_id;if (!vacation) new resourceTicker(newticker);",y=y.replace(/oldticker/g,f),y=y.replace(/newticker/g,f+"2"),y=y.replace(/ticker_id/g,
+'"'+g+'"');d.runScript(y)}}}}catch(B){d.logC(B)}}},da={showRange:function(){var a=d.getElementByClassName("solarSatEnergyInfo");if(a){var b=d.parseInt(a.innerHTML);m.getPlanets();if(m.planetsActive&&b){var e=m.planetsActive.system-b,b=m.planetsActive.system+b;"defense"!=l.page&&(e++,b--);e=Math.max(e,1);b=Math.min(b,499);b=' <span class="antigame_range">('+m.planetsActive.galaxy+":"+e+" - "+m.planetsActive.galaxy+":"+b+")</span>";a.innerHTML+=b}}},Show:function(a){a&&a.target&&"content"==a.target.id&&
+(f.showDeficient&&O.showMissing(),d.isCurrentPage("resources")&&O.showProduction(),(a=document.getElementsByName("type")[0])&&(a=parseInt(a.value,10)),(42==a||503==a)&&this.showRange(a),W.showBuildingResNames())},Run:function(){d.logM("Buildings.Run "+document.readyState);f.showDeficient&&O.Missing_insertCSSRules();var a=document.getElementById("planet");a?a.addEventListener("DOMNodeInserted",function(a){setTimeout(function(){da.Show(a)},0)},!1):d.log('Error => Buildings.Run() => The element "planet" is missing.')}},
+fa={Run:function(){d.logM("Stats.Run "+document.readyState)},Show:function(){this.highlightPlayer()},highlightAllyPlayer:function(){},onDOMNodeInserted:function(a){a&&a.relatedNode&&a.relatedNode.id&&a.target&&d.log("DOM "+a.relatedNode.id+"---"+a.target.id);a&&a.relatedNode&&a.target&&"highscoreContent"==a.relatedNode.id&&"content"==a.target.className&&fa.Show()}},j={Labels:{},Interface:{},Init:function(){d.logM("Lang.Init "+document.readyState);if(!f.language)f.language=l.server;if(j["Labels"+l.server])j.Labels=
+j["Labels"+l.server]();var a=l.coms[l.server].def_lang;""!=a&&j["Labels"+a]&&this.copyMissingProperties(j["Labels"+a](),j,"Labels");j.getLabels();j.readResLabels();j.getMissionLabels();this.copyMissingProperties(j.LabelsEN(),j,"Labels");j.Labels.btnDeleteSmallPlunder=j.Labels.btnDeleteSmallPlunder.replace("$plunder",d.formatNumber(1E3*f.msg_PlunderThreshold)).replace("$debris",d.formatNumber(1E3*f.msg_DebrisThreshold));if(!l.coms[f.language])f.language="EN";if(j["Interface"+f.language])j.Interface=
+j["Interface"+f.language]();a=l.coms[f.language].def_lang;""!=a&&j["Interface"+a]&&this.copyMissingProperties(j["Interface"+a](),j,"Interface");this.copyMissingProperties(j.InterfaceEN(),j,"Interface")},readResLabels:function(){function a(a){try{var e=F?parent.document.getElementById(a):document.getElementById(a);return e&&e.title?e.title.split(":")[0]:""}catch(f){d.logC(f)}return""}j.Labels.metal=a("metal_box");j.Labels.crystal=a("crystal_box");j.Labels.deuterium=a("deuterium_box");j.Labels.energy=
+a("energy_box");j.Labels.darkmatter=a("darkmatter_box")},copyMissingProperties:function(a,b,d){var f=b[d];if(f){if(a!==f)for(i in a)if(!f[i]||typeof a[i]!=typeof f[i])f[i]=a[i]}else b[d]=a},getMissionLabels:function(a){d.logS("Lang.getMissionLabels");var b={missAttack:{id:1,lbl:"#button1"},missFederation:{id:2,lbl:"#button2"},missTransport:{id:3,lbl:"#button3"},missDeploy:{id:4,lbl:"#button4"},missHold:{id:5,lbl:"#button5"},missEspionage:{id:6,lbl:"#button6"},missColony:{id:7,lbl:"#button7"},missHarvest:{id:8,
+lbl:"#button8"},missDestroy:{id:9,lbl:"#button9"},missIPMattack:{id:10,lbl:"#button10"},missExpedition:{id:15,lbl:"#button15"}};if("read"==a&&j.Labels.versionMissionLabels!=l.versionMissionLabels){d.logS("Lang.getMissionLabels - Read");var e=[],a=h("#buttonz");for(f in b)e[b[f].id]=h(b[f].lbl+" .textlabel",a).text().trim();e[0]=l.versionMissionLabels;d.setValueCom("LabelsMission",JSON.stringify(e),!0)}if((a=d.getValueCom("LabelsMission"))&&"undefined"!=a)try{if(e=JSON.parse(a),0<e.length&&e[0]==l.versionMissionLabels){for(var f in b)null!=
+e[b[f].id]&&(j.Labels[f]||(j.Labels[f]=e[b[f].id]));j.Labels.versionMissionLabels=l.versionMissionLabels}}catch(g){d.logC(g)}},getLabels:function(){d.logS("Lang.getLabels");var a={defRLauncher:{id:1,grp:"def",lbl:"#defense1"},defLLaser:{id:2,grp:"def",lbl:"#defense2"},defHLaser:{id:3,grp:"def",lbl:"#defense3"},defGauss:{id:4,grp:"def",lbl:"#defense4"},defIon:{id:5,grp:"def",lbl:"#defense5"},defPlasma:{id:6,grp:"def",lbl:"#defense6"},defSShield:{id:7,grp:"def",lbl:"#defense7"},defLShield:{id:8,grp:"def",
+lbl:"#defense8"},defABmissile:{id:9,grp:"def",lbl:"#defense9"},defIPmissile:{id:10,grp:"def",lbl:"#defense10"},shipSCargo:{id:12,grp:"shipC",lbl:"#button1"},shipLCargo:{id:13,grp:"shipC",lbl:"#button2"},shipColonizator:{id:14,grp:"shipC",lbl:"#button3"},shipRecycler:{id:15,grp:"shipC",lbl:"#button4"},shipSpy:{id:16,grp:"shipC",lbl:"#button5"},shipSatellite:{id:17,grp:"shipC",lbl:"#button6"},shipLFighter:{id:20,grp:"shipB",lbl:"#button1"},shipHFighter:{id:21,grp:"shipB",lbl:"#button2"},shipCruiser:{id:22,
+grp:"shipB",lbl:"#button3"},shipBattleship:{id:23,grp:"shipB",lbl:"#button4"},shipBCruiser:{id:24,grp:"shipB",lbl:"#button5"},shipBomber:{id:25,grp:"shipB",lbl:"#button6"},shipDestroyer:{id:26,grp:"shipB",lbl:"#button7"},shipRIP:{id:27,grp:"shipB",lbl:"#button8"}},b=[],e=d.getValueCom("Labels");if(e&&"undefined"!=e)try{b=JSON.parse(e)}catch(f){d.logC(f)}if(0<b.length&&b[0]==l.versionLabels){for(var g in a)null!=b[a[g].id]&&(j.Labels[g]=b[a[g].id]);j.Labels.versionLabels=l.versionLabels}else d.isCurrentPage("overview")&&
+(d.logS("Lang.getLabels - Read"),b=[],h.get("/game/index.php?page=defense",function(e){var e=h("<div>"+e+"</div>"),e=h("#buttonz",e),f;for(f in a)"def"==a[f].grp&&(b[a[f].id]=h(a[f].lbl+" .textlabel",e).text().trim());h.get("/game/index.php?page=shipyard",function(e){var e=h("<div>"+e+"</div>"),g=h("#buttonz #civilships",e);for(f in a)"shipC"==a[f].grp&&(b[a[f].id]=h(a[f].lbl+" .textlabel",g).text().trim());e=h("#buttonz #battleships",e);for(f in a)"shipB"==a[f].grp&&(b[a[f].id]=h(a[f].lbl+" .textlabel",
+e).text().trim());b[0]=l.versionLabels;d.setValueCom("Labels",JSON.stringify(b),!0)})}))},LabelsXX:function(){return{}},InterfaceXX:function(){return{}},LabelsEN:function(){return{missAttack:"Attack",missColony:"Colonization",missDeploy:"Deployment",missDestroy:"Moon Destruction",missEspionage:"Espionage",missExpedition:"Expedition",missFederation:"ACS Attack",missHarvest:"Harvest",missHold:"ACS Defend",missTransport:"Transport",shipSCargo:"Small Cargo",shipLCargo:"Large Cargo",shipLFighter:"Light Fighter",
+shipHFighter:"Heavy Fighter",shipCruiser:"Cruiser",shipBattleship:"Battleship",shipColonizator:"Colony Ship",shipRecycler:"Recycler",shipSpy:"Espionage Probe",shipBomber:"Bomber",shipDestroyer:"Destroyer",shipRIP:"Deathstar",shipBCruiser:"Battlecruiser",shipSatellite:"Solar Satellite",defRLauncher:"Rocket Launcher",defLLaser:"Light Laser",defHLaser:"Heavy Laser",defGauss:"Gauss Cannon",defIon:"Ion Cannon",defPlasma:"Plasma Turret",defSShield:"Small Shield Dome",defLShield:"Large Shield Dome",btnMarkReadAll:"Mark all displayed messages as read",
+btnDeleteSmallPlunder:"Delete spy reports with plunder < $plunder and debris < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Debris",total:"Total",loot:"Loot",Save:"Save",Clear:"Clear",tmTime:"Time",tmCountdown:"Countdown",rx_sendMail:/Send a message to (.+)\./,TotalCapacity:"Total capacity",MinSpeed:"Minimal speed",ExPoints:"Expedition points",resources:"Resources",ArrivalACS:"Arrival (ACS)",mvmt_Return:"R",shipSCargoAlt:"SC",shipLCargoAlt:"LC",shipRecyclerAlt:"Recs",
+shipRIPAlt:"RIP",Quantity:"Quantity",Duration:"Duration",Consumption:"Consumption",shipSatelliteAlt:"Sat.",deficientRes:"Missing resources",Production:"Production",RequiredEnergy:"Energy needed"}},InterfaceEN:function(){return{sectionGeneral:"General",sectionUniverse:"Universe",sectionGlobalview:"Global view",sectionHighlighting:"Highlighting",sectionObjectview:"Buildings, researches and ships",sectionJumpgate:"Jumpgate",sectionTime:"Time settings",sectionGalaxy:"Galaxy",sectionGalaxy_Player:"Player",
+sectionGalaxy_Alliance:"Alliance",sectionGalaxy_Debris:"Debris",sectionMessages:"Messages",sectionMessages_Espionage:"Espionage reports",sectionMessages_Combat:"Combat reports",sectionFleetDispatch:"Fleet dispatch",sectionFleetDispatch_Fleet1:"Fleet page 1",sectionFleetDispatch_Fleet2:"Fleet page 2",sectionFleetDispatch_Fleet3:"Fleet page 3",sectionFleet:"Fleet lists",sectionFleet_Movement:"Fleet movement",sectionFleet_Phalanx:"Phalanx",sectionFleet_Events:"Events",sectionFleet_MissionColor:"Mission colours (format: ABCDEF - Websafe format ACE)",
+sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"AntiGame Options",menu_SaveButton:"Save",menu_CancelButton:"Cancel",menu_updateTip:"A new update is available: Version",improveLayout:"Improve the layout of this page",improveUsability:"Improve the usability of this page",improveLayoutUse:"Improve layout and usability of this page",simpleLayout:"Simplify the layout of this page",killTips:"Remove tooltips from this page",
+clickTips:"Use mouse-click to show tooltips on this page",oldBrowser:"Do not use effects which slowdowns old browser or computer",language:"Settings menu language",thousandSeparator:"Thousand separator",btnDefault:"Default",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"Speed factor of this universe",uni_DFPercent:"Percentage of fleet structure to debris",uni_DefenseToDF:"Percentage of defense to debris",uni_topPlayerScore:"The points of the strongest player in this uni are: (for expo calculation)",
+uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Show extended resources information",show_onTop:"On top",show_onBottom:"On bottom",show_onLeft:"On left",showDeficient:"Show missing resources",showNames:"Show ship/building/research names over images",nameColorOn:"Name colour: available",nameColorOff:"Name colour: unavailable",nameColorDisabled:"Name colour: not enough resources",galaxy_Players:"Highlight the following players",galaxy_PlayerColors:"Colours for player highlighting",
+galaxy_Allys:"Highlight the following alliances",galaxy_AllyColors:"Colours for alliance highlighting",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"Show construction titles in the planet list",shortHeader:"Always minimize planet image",misc_scrollTitle:"Scroll time to the next event in the window title",timeAMPM:"Use 12-hours format (AM/PM) instead of 24-hours",timeSetting:"Change time values (hours only)",
+timeDontChange:"Don't change time",timeLocal:"Always set to local time-zone",timeServer:"Always set to server time-zone",showServerOgameClock:"Keep server time for top-right OGame clock",showServerPhalanx:"Keep server time for Phalanx view",showPageStartTime:"Display the time the page was last refreshed",galaxy_shrinkLayout:"Shrink the galaxy page",galaxy_keepTips:"Keep mouse-over tooltips for planet, moon and debris",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Show player ranks in Galaxy view",
+galaxy_PlayerRankColors:"Player ranks colour (All, 1000, 100, 10)",galaxy_ShowAllyRank:"Show alliance ranks in Galaxy view",galaxy_AllyRankColors:"Alliance ranks colour (All, 50, 10, 5)",galaxy_DebrisMin:"Minimal size of debris field to highlight (0 turns off)",galaxy_DebrisSize:"Show size of debris field through",galaxy_DebrisSize_Pic:"Picture size",galaxy_DebrisSize_Number:"Number",galaxy_DebrisSize_ShortNumber:"Number (k M B)",msg_expandBox:"Expand the message box height with those pixel (0 is off):",
+msg_addButtons:"Additional buttons on Messages",msg_EspionageSpace:"Reducing row spacing with",msg_PlunderThreshold:"Low limit for theoretical plunder (x1000)",msg_DebrisThreshold:"Low limit for theoretical debris (x1000)",msg_foldSmallPlunder:"Fold reports with plunder and debris less than the limit",msg_showPlunder:"Show plunder in spy reports",msg_addSimButton:"Add buttons for submitting spy reports to simulator",msg_fixColors:"Fix colours of combat reports",fleet_showCapacity:"Show ships capacity and speed",
+fleet1_showResCalc:"Show resource calculator",autocopyCoords:"Auto-copy coordinates",autocopyGlobal:"Memorize coordinates from any other external page",fleet2_setTargetDF:"Set target to DF if the fleet includes recyclers",fleet2_ShortLinks:"Target shortlinks",fleet2_MoonColor:"Colour for moons in the shortlink list",fleet2_MoonsToEnd:"Move moons to the end of the shortlinks list",fleet2_expandLists:"Expand drop-down boxes (Speed, Shortcuts, ACS)",fleet2_expandMoonColor:"Colour moons in expand list",
+fleet2_checkProbeCapacity:"Check probes capacity before departure",missionPriority:"Mission priority order",mvmt_expandFleets:"Show fleet ships and cargo",mvmt_showReversal:"Show reversal time for fleets",evt_expandFleetsPhal:"Show fleet composition and cargo",phalanx_showDebris:"Show theoretical debris in Phalanx view",evt_expandFleetsEvt:"Show fleet composition and cargo",evt_dimReverse:"Dim returning fleets",update_Changelog:"Changelog",update_check:"Auto-check for updates",update_check_Final:"Final",
+update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"This option is stored for this universe only",info_Tip2:"Please visit fleet send page 3 one time for each language for proper mission colouring.",info_Tip3:"Please choose the top player score for correct expo calculation.",
+info_Tip4:"",info_Tip5:""}},LabelsBA:function(){return{rx_sendMail:/Po\u0161alji poruku (.+)\./,ExPoints:"Ekspedicijski poeni"}},InterfaceBA:function(){return{thousandSeparator:"Zarez za hiljadu",fleet2_ShortLinks:"Precica do mete (stranica 2)",mvmt_showReversal:"Poka\u017ei vrijeme povratka flote"}},LabelsBR:function(){return{rx_sendMail:/Enviar uma mensagem a (.+)\./}},LabelsCZ:function(){return{btnMarkReadAll:"Ozna\u010dit v\u0161echny zobrazen\u00e9 zpr\u00e1vy jako p\u0159e\u010dten\u00e9",btnDeleteSmallPlunder:"Smazat \u0161pion\u00e1\u017en\u00ed zpr\u00e1vy s ko\u0159ist\u00ed ni\u017e\u0161\u00ed ne\u017e < $plunder a troskami < $debris",
+msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Trosky",total:"Celkem",loot:"Ko\u0159ist",Save:"Ulo\u017eit",Clear:"Vymazat",Moon:"M\u011bs\u00edc",tmTime:"\u010cas",tmCountdown:"Odpo\u010det",rx_sendMail:/Ode\u0161li zpr\u00e1vu (.+)\./,TotalCapacity:"Celkov\u00e1 kapacita",MinSpeed:"Minim\u00e1ln\u00ed rychlost",ExPoints:"Body expedice",resources:"Zdroje",ArrivalACS:"P\u0159\u00edlet (APP)",mvmt_Return:"N",shipSCargoAlt:"MT",shipLCargoAlt:"VT",shipRecyclerAlt:"Rec",
+shipRIPAlt:"HS",Quantity:"Mno\u017estv\u00ed",Duration:"Trv\u00e1n\u00ed",Consumption:"Spot\u0159eba deuteria",shipSatelliteAlt:"Sat",deficientRes:"Chyb\u011bj\u00edc\u00ed zdroje",Production:"Produkce",RequiredEnergy:"Pot\u0159ebn\u00e1 energie"}},InterfaceCZ:function(){return{sectionGeneral:"Obecn\u00e9",sectionUniverse:"Vesm\u00edr",sectionGlobalview:"Glob\u00e1ln\u00ed nastaven\u00ed",sectionHighlighting:"Zv\u00fdrazn\u011bn\u00ed",sectionObjectview:"Budovy, v\u00fdzkum a lod\u011b",sectionTime:"Nastaven\u00ed \u010dasu",
+sectionGalaxy:"Galaxie",sectionGalaxy_Player:"Hr\u00e1\u010d",sectionGalaxy_Alliance:"Aliance",sectionGalaxy_Debris:"Pole trosek",sectionMessages:"Zpr\u00e1vy",sectionMessages_Espionage:"\u0160pion\u00e1\u017en\u00ed zpr\u00e1vy",sectionMessages_Combat:"Bitevn\u00ed zpr\u00e1vy",sectionFleetDispatch:"Odesl\u00e1n\u00ed letky",sectionFleetDispatch_Fleet1:"Odesl\u00e1n\u00ed letky - strana 1.",sectionFleetDispatch_Fleet2:"Odesl\u00e1n\u00ed letky - strana 2.",sectionFleetDispatch_Fleet3:"Odesl\u00e1n\u00ed letky - strana 3.",
+sectionFleet:"Seznam letek",sectionFleet_Movement:"P\u0159esun letky",sectionFleet_Phalanx:"Senzor falang",sectionFleet_Events:"Seznam ud\u00e1lost\u00ed",sectionFleet_MissionColor:"Barva mise",sectionInfo:"Informace",sectionFeatures:"Funkce",sectionUpdates:"Aktualizace",sectionSupport:"Podpora",sectionTips:"Tipy",menu_Name:"AntiGame",menu_Title:"AntiGame Origin - Nastaven\u00ed",menu_SaveButton:"OK",menu_CancelButton:"Storno",menu_updateTip:"Dostupn\u00e1 nov\u00e1 verze: Version",improveLayout:"Zlep\u0161it vzhled t\u00e9to str\u00e1nky",
+improveUsability:"Zlep\u0161it uspo\u0159\u00e1d\u00e1n\u00ed a pou\u017eitelnost str\u00e1nky",improveLayoutUse:"Zlep\u0161it vzhled a pou\u017eitelnost t\u00e9to str\u00e1nky",simpleLayout:"Zjednodu\u0161it rozvr\u017een\u00ed str\u00e1nky",killTips:"Zak\u00e1zat bublinov\u00e9 (tooltip) n\u00e1pov\u011bdy",clickTips:"Zobrazovat na t\u00e9to str\u00e1nce bublinov\u00e9 n\u00e1pov\u011bdy a\u017e po kliknut\u00ed",oldBrowser:"Nepou\u017e\u00edvat efekty zpomaluj\u00edc\u00ed star\u0161\u00ed prohl\u00ed\u017ee\u010de \u010di po\u010d\u00edta\u010de",
+language:"Jazyk",thousandSeparator:"Odd\u011blova\u010d tis\u00edc\u016f",btnDefault:"V\u00fdchoz\u00ed",blockAutoComplete:"Zak\u00e1zat automatick\u00e9 dokon\u010dov\u00e1n\u00ed form. prvk\u016f (input\u016f)",uni_SpeedFactor:"Faktor rychlosti tohoto vesm\u00edru",uni_DFPercent:"Procenta slo\u017een\u00ed letky z nich\u017e vzniknou trosky",uni_DefenseToDF:"Procenta obrany z nich\u017e vzniknou trosky",uni_topPlayerScore:"Body nejsiln\u011bj\u0161\u00edho hr\u00e1\u010de v tomto vesm\u00edru:",
+uni_systemMetrik:"Maxim\u00e1ln\u00ed po\u010det 'galaxie:syst\u00e9m' v tomto vesm\u00edru (9:499)",showResources:"Zobrazovat roz\u0161\u00ed\u0159en\u00e9 info o zdroj\u00edch",show_onTop:"Naho\u0159e",show_onBottom:"Dole",show_onLeft:"Vlevo",showDeficient:"Zobrazovat chyb\u011bj\u00edc\u00ed suroviny",showNames:"Zobrazovat n\u00e1zvy lod\u00ed/budov/v\u00fdzkum\u016f (p\u0159es obr\u00e1zky)",nameColorOn:"Typ barvy: dostupn\u00e9",nameColorOff:"Typ barvy: nedostupn\u00e9",nameColorDisabled:"Typ barvy: nedostatek zdroj\u016f",
+galaxy_Players:"Zv\u00fdraznit n\u00e1sleduj\u00edc\u00ed hr\u00e1\u010de",galaxy_PlayerColors:"Barvy pro zv\u00fdrazn\u011bn\u00ed hr\u00e1\u010d\u016f",galaxy_Allys:"Zv\u00fdraznit n\u00e1sleduj\u00edc\u00ed aliance",galaxy_AllyColors:"Barvy pro zv\u00fdrazn\u011bn\u00ed alianc\u00ed",jumpgate_Improve:"Zobrazit seznam c\u00edl\u016f a nastavit po\u010det lod\u00ed po kliknut\u00ed na \u010d\u00edslo nebo ikonu",jumpgate_RequireTarget:"Po\u017eadovat v\u00fdb\u011br c\u00edle p\u0159ed t\u00edm ne\u017e budete moci sko\u010dit.",
+showConstructionTitle:"Zobrazovat n\u00e1zvy v\u00fdstavby v seznamu planet",shortHeader:"V\u017edy zmen\u0161it obr\u00e1zky planet",misc_scrollTitle:"Zobrazovat \u010das do dal\u0161\u00ed ud\u00e1losti v titulku okna",timeAMPM:"Pou\u017e\u00edvat 12hodinov\u00fd form\u00e1t \u010dasu (AM/PM) nam\u00edsto 24hodinov\u00e9ho",timeSetting:"Zm\u011bnit \u010dasov\u00e9 hodnoty (jen hodiny)",timeDontChange:"Nem\u011bnit \u010das",timeLocal:"V\u017edy nastavit na m\u00edstn\u00ed \u010dasov\u00e9 p\u00e1smo",
+timeServer:"V\u017edy nastavit na \u010dasov\u00e9 p\u00e1smo serveru",showServerOgameClock:"Nechat Ogame hodiny vpravo naho\u0159e ukazovat serverov\u00fd \u010das",showServerPhalanx:"Nechat serverov\u00fd \u010das pro zobrazen\u00ed falang",showPageStartTime:"Zobrazovat \u010das posledn\u00ed aktualizace str\u00e1nky",galaxy_shrinkLayout:"Zmen\u0161it str\u00e1nku galaxie",galaxy_keepTips:"Ponechat n\u00e1pov\u011bdy u planet, m\u011bs\u00edc\u016f a pol\u00ed trosek po najet\u00ed my\u0161\u00ed",
+galaxy_reload:"Zm\u00e1\u010dknut\u00edm tla\u010d\u00edtka enter aktualizovat p\u0159ehled galaxie",galaxy_ShowRank:"Zobrazovat hodnocen\u00ed hr\u00e1\u010de/aliance v p\u0159ehledu Galaxie",galaxy_PlayerRankColors:"Barvy hr\u00e1\u010d\u016f podle po\u0159ad\u00ed v \u017eeb\u0159i\u010dku (V\u0161ichni, 1000, 100, 10)",galaxy_ShowAllyRank:"Zobrazovat sk\u00f3re alianc\u00ed v p\u0159ehledu galaxie",galaxy_AllyRankColors:"Barvy alianc\u00ed podle po\u0159ad\u00ed v \u017eeb\u0159i\u010dku (V\u0161echny, 50, 10, 5)",
+galaxy_DebrisMin:"Minim\u00e1ln\u00ed velikost trosek pro zv\u00fdrazn\u011bn\u00ed (0 = vypnuto)",galaxy_DebrisSize:"Zobrazovat velikost pole trosek po",galaxy_DebrisSize_Pic:"Velikost obr\u00e1zku",galaxy_DebrisSize_Number:"\u010c\u00edslo",galaxy_DebrisSize_ShortNumber:"\u010c\u00edslo (k M B)",msg_expandBox:"Zv\u011bt\u0161it v\u00fd\u0161ku zobrazen\u00fdch zpr\u00e1v",msg_addButtons:"P\u0159\u00eddavn\u00e1 tla\u010d\u00edtka u zpr\u00e1v",msg_EspionageSpace:"Zmen\u0161it mezeru mezi \u0159\u00e1dky o",
+msg_PlunderThreshold:"Nejni\u017e\u0161\u00ed hranice pro teoretickou ko\u0159ist (x1.000)",msg_DebrisThreshold:"Nejni\u017e\u0161\u00ed hranice pro teoretick\u00e9 trosky (x1.000)",msg_foldSmallPlunder:"Rozvinout zpr\u00e1vy s ko\u0159ist\u00ed a troskami ni\u017e\u0161\u00edmi ne\u017e nejni\u017e\u0161\u00ed hranice",msg_showPlunder:"Zobrazovat ko\u0159ist ve \u0161pion\u00e1\u017en\u00edch zpr\u00e1v\u00e1ch",msg_addSimButton:"P\u0159idat tla\u010d\u00edtko pro na\u010d\u00edt\u00e1n\u00ed reportu do simul\u00e1toru",
+msg_fixColors:"Upravit barvy bitevn\u00edch zpr\u00e1v",fleet_showCapacity:"Zobrazovat kapacitu a rychlost lod\u00ed",fleet1_showResCalc:"Zobrazovat kalkula\u010dku zdroj\u016f",fleet2_fixLayout:"Opravit rozlo\u017een\u00ed letov\u00fdch informac\u00ed (strana 2)",autocopyCoords:"Automaticky kop\u00edrovat sou\u0159adnice",autocopyGlobal:"Pamatovat si sou\u0159adnice ze v\u0161ech str\u00e1nek (nejen panely s t\u00edmto vesm\u00edrem)",fleet2_setTargetDF:"Nastavit c\u00edl na DF pokud letka obsahuje recykl\u00e1tory",
+fleet2_ShortLinks:"Seznam zkratek (strana 2)",fleet2_MoonColor:"Barvy m\u011bs\u00edc\u016f v seznamu zkratek",fleet2_MoonsToEnd:"Um\u00edstit m\u011bs\u00edce na konec seznamu zkratek",fleet2_expandLists:"Rozbalovat rozbalovac\u00ed nab\u00eddky (Rychlost, Seznam zkratek, ACS)",fleet2_expandMoonColor:"Zv\u00fdraznit m\u011bs\u00edce v roz\u0161\u00ed\u0159en\u00e9m seznamu",fleet2_checkProbeCapacity:"Zkontrolovat kapacitu \u0161pion\u00e1\u017en\u00edch sond p\u0159i odes\u00edl\u00e1n\u00ed (strana 2)",
+missionPriority:"Priorita mis\u00ed",mvmt_expandFleets:"Zobrazovat lod\u011b a transport\u00e9ry letky",mvmt_showReversal:"Zobrazovat obr\u00e1cen\u00fd \u010das pro letky",evt_expandFleetsPhal:"Zobrazit slo\u017een\u00ed letky a transportu (Senzor Falang)",phalanx_showDebris:"Zobrazovat teoretick\u00e9 trosky v zobrazen\u00ed senzoru falang",evt_expandFleetsEvt:"Zobrazit slo\u017een\u00ed letky a transportu (Seznam ud\u00e1lost\u00ed)",evt_dimReverse:"Potla\u010dit vracej\u00edc\u00ed se letky",
+update_Changelog:"Changelog",update_check:"Automaticky kontrolovat aktualizace",update_check_Final:"Stabiln\u00ed verze",update_check_Preview:"Stabiln\u00ed & testovac\u00ed verze",update_Final:"Aktualizovat na posledn\u00ed verzi",update_Preview:"Update to preview version for testing",update_Last:"Vr\u00e1tit se zp\u00e1tky k posledn\u00ed stabiln\u00ed verzi",update_Install:"Instalovat",support_Homepage:"Domovsk\u00e1 str\u00e1nka",support_Feedback:"Zp\u011btn\u00e1 vazba & Chyby",support_Ideas:"N\u00e1vrhy",
+support_Translation:"P\u0159eklad",info_Tip1:"Volba je ulo\u017eena pouze pro tento vesm\u00edr",info_Tip2:"Pros\u00edm, nav\u0161tivte str\u00e1nku odes\u00edl\u00e1n\u00ed letek (strana 3) pro spr\u00e1vn\u00e9 zbarven\u00ed mis\u00ed.",info_Tip3:"Please choose the top player score for correct expo calculation.",info_Tip4:"",info_Tip5:""}},LabelsDE:function(){return{btnMarkReadAll:"Alle angezeigten Nachrichten als gelesen markieren",btnDeleteSmallPlunder:"Spionageberichte mit < $plunder Beute und < $debris TF entfernen",
+msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"TF",total:"Gesamt",loot:"Beute",Save:"Speichern",Clear:"L\u00f6schen",Moon:"Mond",tmTime:"Zeit",tmCountdown:"Countdown",rx_sendMail:/Sende Nachricht zu (.+)\./,TotalCapacity:"Ladekapazit\u00e4t",MinSpeed:"Minimale Geschwindigkeit",ExPoints:"Expeditionspunkte",resources:"Rohstoffe",ArrivalACS:"Ankunft (AKS)",mvmt_Return:"R",shipSCargoAlt:"KT",shipLCargoAlt:"GT",shipRecyclerAlt:"Recs",shipRIPAlt:"RIP",Quantity:"Menge",
+Duration:"Dauer",Consumption:"Verbrauch",shipSatelliteAlt:"Sat.",deficientRes:"Fehlende Rohstoffe",Production:"Produktion",RequiredEnergy:"Energiebedarf"}},InterfaceDE:function(){return{sectionGeneral:"Allgemein",sectionUniverse:"Universum",sectionGlobalview:"Global",sectionHighlighting:"Farblich hervorheben",sectionObjectview:"Geb\u00e4ude, Forschungen und Schiffe",sectionTime:"Zeiteinstellungen",sectionGalaxy:"Galaxie",sectionGalaxy_Player:"Spieler",sectionGalaxy_Alliance:"Allianzen",sectionGalaxy_Debris:"Tr\u00fcmmerfelder",
+sectionMessages:"Nachrichten",sectionMessages_Espionage:"Spionageberichte",sectionMessages_Combat:"Kampfberichte",sectionFleetDispatch:"Flotte versenden",sectionFleetDispatch_Fleet1:"Flottenseite 1",sectionFleetDispatch_Fleet2:"Flottenseite 2",sectionFleetDispatch_Fleet3:"Flottenseite 3",sectionFleet:"Flotten Listen",sectionFleet_Movement:"Flottenbewegungen",sectionFleet_Phalanx:"Phalanx",sectionFleet_Events:"Ereignisse",sectionFleet_MissionColor:"Auftragsfarbe",sectionInfo:"Informationen",sectionFeatures:"Features",
+sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"AntiGame Optionen",menu_SaveButton:"OK",menu_CancelButton:"Abbr.",menu_updateTip:"Ein neues Update ist verf\u00fcgbar - Version",improveLayout:"Layout dieser Seite verbessern",improveUsability:"Nutzerfreundlichkeit dieser Seite verbessern",improveLayoutUse:"Layout und Nutzerfreundlichkeit dieser Seite verbessern",simpleLayout:"Layout dieser Seite vereinfachen",killTips:"Entferne Tooltips auf dieser Seite",
+clickTips:"Zeige Tooltips per Mausklick auf dieser Seite",oldBrowser:"Keine Effekt nutzen die \u00e4ltere Browser oder Computer verlangsamen",language:"Men\u00fcsprache",thousandSeparator:"Tausender trennen mit",btnDefault:"Standard",blockAutoComplete:"Blocke automatisches vervollst\u00e4ndigen von Eingabefeldern",uni_SpeedFactor:"Geschwindigkeit des Universums",uni_DFPercent:"Prozent-Anteil von Flotte in Tr\u00fcmmerfeld",uni_DefenseToDF:"Prozent-Anteil von Verteidigung in Tr\u00fcmmerfeld",uni_topPlayerScore:"Die Punkte des st\u00e4rksten Spielers im Universum sind: (f\u00fcr Expo-Berechnung)",
+uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Zeige erweiterte Rohstoff-Informationen",show_onTop:"Oben",show_onBottom:"Unten",show_onLeft:"Links",showDeficient:"Zeige fehlende Rohstoffe",showNames:"Zeige Schiff/Geb\u00e4ude/Forschungsname \u00fcber dem Bild",nameColorOn:"Farbe f\u00fcr: verf\u00fcgbar",nameColorOff:"Farbe f\u00fcr: nicht verf\u00fcgbar",nameColorDisabled:"Farbe f\u00fcr: nicht gen\u00fcgend Ressourcen",galaxy_Players:"Hebe folgende Spieler hervor",
+galaxy_PlayerColors:"Farbe der hervorgehobenen Spieler",galaxy_Allys:"Hebe folgende Allianzen hervor",galaxy_AllyColors:"Farbe der hervorgehobenen Allianzen",jumpgate_Improve:"Zeige Zielmondliste und ein klick auf Anzahl/Icon setzt Schiffe.",jumpgate_RequireTarget:"Verlange Zielauswahl bevor ein Sprung m\u00f6glich ist.",showConstructionTitle:"Zeige im Bau befindliche Geb\u00e4ude in der Planetenliste",shortHeader:"Planetenbild immer minimieren",misc_scrollTitle:"Zeit bis zum n\u00e4chsten Ereignis in Titelleiste anzeigen",
+timeAMPM:"Benutze 12-Stunden-Anzeige (AM/PM) statt 24-Stunden-Anzeige",timeSetting:"Zeitversatz (nur Stunden)",timeDontChange:"Zeit nicht \u00e4ndern",timeLocal:"Immer die aktuelle Zeitzone setzen",timeServer:"Immer die Server-Zeitzone setzen",showServerOgameClock:"Behalte Serverzeit f\u00fcr OGame-Uhr (oben rechts)",showServerPhalanx:"Behalte Serverzeit f\u00fcr Phalanxansicht",showPageStartTime:"Zeige die Zeit der letzten Aktualisierung",galaxy_shrinkLayout:"Verkleinere die Galaxie Ansicht",galaxy_keepTips:"Behalte Mouseover-Tooltips bei Planet, Mond und TF",
+galaxy_reload:"Aktualisier Galaxyansicht per Returntaste.",galaxy_ShowRank:"Zeige Spieler-Rang in der Galaxie",galaxy_PlayerRankColors:"Farbe der R\u00e4nge (Alle, 1000, 100, 10)",galaxy_ShowAllyRank:"Zeige Allianz-Rang in der Galaxie",galaxy_AllyRankColors:"Farbe der R\u00e4nge (Alle, 50, 10, 5)",galaxy_DebrisMin:"Minimale Tr\u00fcmmerfeldgr\u00f6sse zum hervorheben",galaxy_DebrisSize:"Zeige die Tr\u00fcmmerfeldgr\u00f6sse durch:",galaxy_DebrisSize_Pic:"Bildgr\u00f6sse",galaxy_DebrisSize_Number:"Zahlen",
+galaxy_DebrisSize_ShortNumber:"Zahlen (k M B)",msg_expandBox:"Gr\u00f6\u00dfe der Nachrichtenbox erh\u00f6hen",msg_addButtons:"Zus\u00e4tzliche Nachrichtenfelder",msg_EspionageSpace:"Zeilenabstand verringern um",msg_PlunderThreshold:"Mindestgr\u00f6\u00dfe f\u00fcr theoretische Beute (in k)",msg_DebrisThreshold:"Mindestgr\u00f6\u00dfe f\u00fcr theoretisches Tr\u00fcmmerfeld (in k)",msg_foldSmallPlunder:"Spionageberichte unter diesem Limit einklappen",msg_showPlunder:"Zeige Beute in Spionageberichten",
+msg_addSimButton:"F\u00fcge Buttons f\u00fcr \u00dcbertragung an WebSim hinzu",msg_fixColors:"Farben von Kampfberichten \u00e4ndern",fleet_showCapacity:"Zeige Schiffe, Kapazit\u00e4t, Geschwindigkeit",fleet1_showResCalc:"Zeige Ressourcen-Rechner",fleet2_fixLayout:"Ver\u00e4ndere Layout f\u00fcr sehr lange Texte",autocopyCoords:"Koordinaten automatisch kopieren",autocopyGlobal:"Merke Koordinaten von allen externen Webseiten",fleet2_setTargetDF:"Setze Ziel auf Tr\u00fcmmerfeld, wenn Recycler dabei sind",
+fleet2_ShortLinks:"Vorgegebene Shortlinks",fleet2_MoonColor:"Farbe f\u00fcr Mond in der Shortlink-Liste",fleet2_MoonsToEnd:"Verschiebe Monde an das Ende der Shortlink-Liste",fleet2_expandLists:"Auswahlboxen aufklappen (Geschwindigkeit, Shortlinks, AKSs)",fleet2_expandMoonColor:"F\u00e4rbe Monde in der Auswahlbox",fleet2_checkProbeCapacity:"Pr\u00fcfe Sondenkapazit\u00e4t vor Absenden",missionPriority:"Auftragspriorit\u00e4t",mvmt_expandFleets:"Zeige Flotte, Schiffe und Laderaum",mvmt_showReversal:"Zeige R\u00fcckkehrzeit der Flotte",
+evt_expandFleetsPhal:"Zeige Flottenzusammenstellung und Ladung (Phalanx)",phalanx_showDebris:"Zeige theoretisches Tr\u00fcmmerfeld in der Phalanx",evt_expandFleetsEvt:"Zeige Flottenzusammenstellung (Eventliste)",evt_dimReverse:"Zur\u00fcckkehrende Flotten schwach anzeigen",update_Changelog:"Changelog",update_check:"Automatisch nach Updates suchen",update_check_Final:"Neueste",update_check_Preview:"Neueste & Vorschau",update_Final:"Installiere die neueste Version",update_Preview:"Installiere zum testen die Vorschau-Version",
+update_Last:"Installieren die vorhergehende stabile Version",update_Install:"Installiere",support_Homepage:"Homepage",support_Feedback:"Meinungen & Bugs",support_Ideas:"Vorschl\u00e4ge",support_Translation:"\u00dcbersetzungen",info_Tip1:"Diese Option wird nur f\u00fcr dieses Universum gespeichert",info_Tip2:"Flottenf\u00e4rben geht erst, wenn Flotteversenden Seite 3 einmal pro Sprache besucht wurde.",info_Tip3:"Bitte stellt die Punkte des Top1 Spielers ein f\u00fcr korrekte Expoberechnung.",info_Tip4:"",
+info_Tip5:""}},LabelsDK:function(){return{btnMarkReadAll:"M\u00e6rker alle viste beskeder som l\u00e6ste",btnDeleteSmallPlunder:"Slet Spion reporter og kamp reporter < $plunder og ruinmark < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"ruinmark",total:"Total",loot:"Bytte",Save:"Gem",Clear:"slet",Moon:"M\u00e5ne",tmTime:"Tid",tmCountdown:"Nedt\u00e6lling",rx_sendMail:/Send besked til (.+)\./,TotalCapacity:"Samlet kapacitet",MinSpeed:"minimumshastighed",
+ExPoints:"Expedition points",resources:"Ressourcer",ArrivalACS:"Ankomst (AKS)",mvmt_Return:"Retur",shipSCargoAlt:"LT",shipLCargoAlt:"ST",shipRecyclerAlt:"Recs",shipRIPAlt:"RIP",Quantity:"m\u00e6ngde",Duration:"varighed",Consumption:"forbrug",shipSatelliteAlt:"SolSat",deficientRes:"Manglende Ressourcer",Production:"Produktion",RequiredEnergy:"Energi beh\u00f8vet"}},InterfaceDK:function(){return{sectionGeneral:"Generalt",sectionUniverse:"Universe",sectionGlobalview:"Global view",sectionHighlighting:"Highlighting",
+sectionObjectview:"Buildings, researches and ships",sectionTime:"Time settings",sectionGalaxy:"Galakse",sectionGalaxy_Player:"Player",sectionGalaxy_Alliance:"Alliance",sectionGalaxy_Debris:"Debris",sectionMessages:"Beskeder",sectionMessages_Espionage:"Espionage reports",sectionMessages_Combat:"Combat reports",sectionFleetDispatch:"Fleet dispatch",sectionFleetDispatch_Fleet1:"Fleet page 1",sectionFleetDispatch_Fleet2:"Fleet page 2",sectionFleetDispatch_Fleet3:"Fleet page 3",sectionFleet:"Fl\u00e5delister",
+sectionFleet_Movement:"Fl\u00e5de bev\u00e6gelse",sectionFleet_Phalanx:"Phalanx",sectionFleet_Events:"Events",sectionFleet_MissionColor:"Mission farve",sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"AntiGame Indstillinger",menu_SaveButton:"OK",menu_CancelButton:"Annuler",menu_updateTip:"A new update is available: Version",improveLayout:"Improve the layout of this page",improveUsability:"Improve the usability of this page",
+improveLayoutUse:"Improve layout and usebility of this page",simpleLayout:"Simplify the layout of this page",killTips:"Kill tooltips",clickTips:"Use mouseclick to show tooltips on this page",oldBrowser:"Do not use effects which slowdowns old browser or computer",language:"Sprog",thousandSeparator:"Thousand separator",btnDefault:"Standart",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"Speed factor of this universe",uni_DFPercent:"Percentage of fleet structure to debris",
+uni_DefenseToDF:"Percentage of defense to debris",uni_topPlayerScore:"The points of the strongest player in this uni are",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Vis udvidede ressource information",show_onTop:"On top",show_onBottom:"On bottom",show_onLeft:"On left",showDeficient:"Vis manglende ressourcer",showNames:"Show ship/building/research names over images",nameColorOn:"Name color: available",nameColorOff:"Name color: unavailable",nameColorDisabled:"Name color: not enough resources",
+galaxy_Players:"Highlight the following players",galaxy_PlayerColors:"Colors for player highlighting",galaxy_Allys:"Highlight the following alliances",galaxy_AllyColors:"Colors for alliance highlighting",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"Show construction titles in the planet list",shortHeader:"Always minimize planet image",misc_scrollTitle:"Scroll time to the next event in the window title",
+timeAMPM:"Use 12-hours format (AM/PM) instead of 24-hours",timeSetting:"Change time values (hours only)",timeDontChange:"Don't change time",timeLocal:"Always set to local timezone",timeServer:"Always set to server timezone",showServerOgameClock:"Keep server time for top-right Ogame clock",showServerPhalanx:"Keep server time for Phalanx view",showPageStartTime:"Display the time the page was last refreshed",galaxy_shrinkLayout:"Shrink the galaxy page",galaxy_keepTips:"Keep mouseover tooltips for planet, moon and debris",
+galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Vis spiller/alliance ranks i Galakse oversigt",galaxy_PlayerRankColors:"Player ranks color (All, 1000, 100, 10)",galaxy_ShowAllyRank:"Show alliance ranks in Galaxy view",galaxy_AllyRankColors:"Alliance ranks color (All, 50, 10, 5)",galaxy_DebrisMin:"Minimum st\u00f8rrelse af ruin mark til highlight (s\u00e6t til 0 for at sl\u00e5 fra)",galaxy_DebrisSize:"Show size of debris field through",galaxy_DebrisSize_Pic:"Picture size",galaxy_DebrisSize_Number:"Number",
+galaxy_DebrisSize_ShortNumber:"Number (k M B)",msg_expandBox:"Expand the messagebox height",msg_addButtons:"Ekstra knapper i beskeder",msg_EspionageSpace:"Reducing row spacing with",msg_PlunderThreshold:"Lav gr\u00e6nse for teoretisk udplyndre (x1000)",msg_DebrisThreshold:"Lav gr\u00e6nse for teoretisk ruinmark (x1000)",msg_foldSmallPlunder:"hvis ikke rapporter med plyndring og ruinmarker der er mindre end den gr\u00e6nse",msg_showPlunder:"Vis m\u00e6ngde af resurser der kan hentes i spy raport",
+msg_addSimButton:"Add buttons for submitting spy reports to simulator",msg_fixColors:"Fix farver i kamp rapporter",fleet_showCapacity:"Show ships capacity and speed",fleet1_showResCalc:"Show resource calculator",fleet2_fixLayout:"Fleet 2: Improve Layout",autocopyCoords:"Auto-copy coordinates",autocopyGlobal:"Memorize coordinates from any page (not only current Ogame universe tabs)",fleet2_setTargetDF:"Set target to DF if the fleet includes recyclers",fleet2_ShortLinks:"Target shortlinks (page 2)",
+fleet2_MoonColor:"Color for moons in the shortlink list",fleet2_MoonsToEnd:"Move moons to the end of the shortlinks list",fleet2_expandLists:"Expand drop-down boxes (Speed, Shortcuts, ACSs)",fleet2_expandMoonColor:"Color moons in expand list",fleet2_checkProbeCapacity:"Check probes capacity before departure(page 2)",missionPriority:"Mission prioritet",mvmt_expandFleets:"Vis fl\u00e5de skibe og transtortere",mvmt_showReversal:"Vis  fl\u00e5dens tilbagevending ankomst (klokkesl\u00e6t)",evt_expandFleetsPhal:"Show fleet composition and cargo (Phalanx)",
+phalanx_showDebris:"Show theoretical debris in Phalanx view",evt_expandFleetsEvt:"Show fleet composition and cargo (EventList)",evt_dimReverse:"Dim returning fleets",update_Changelog:"Changelog",update_check:"Auto-check for updates",update_check_Final:"Final",update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",
+support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"The option is stored for this universe only",info_Tip2:"Please visit fleet send page 3 one time for each lanugage for proper mission coloring.",info_Tip3:"Please choose the top player score for correct expo calculation.",info_Tip4:"",info_Tip5:""}},LabelsES:function(){return{btnMarkReadAll:"Marcar todos los mensajes como le\u00eddos",btnDeleteSmallPlunder:"Eliminar los informes de espionaje con el bot\u00f3n < $plunder y los escombros < $debris",
+msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Escombros",total:"Total",loot:"Bot\u00edn",Save:"Guardar",Clear:"Borrar",Moon:"Luna",tmTime:"Hora",tmCountdown:"Cuenta atr\u00e1s",rx_sendMail:/Enviar mensaje a (.+)\./,TotalCapacity:"Capacidad total",MinSpeed:"Velocidad m\u00ednima",ExPoints:"Puntos de Expedici\u00f3n",resources:"Recursos",ArrivalACS:"Llegada (SAC)",mvmt_Return:"R",shipSCargoAlt:"NPC",shipLCargoAlt:"NGC",shipRecyclerAlt:"Recis",shipRIPAlt:"EDLM",
+Quantity:"Cantidad",Duration:"Duraci\u00f3n",Consumption:"Consumo",shipSatelliteAlt:"Sat.",deficientRes:"Recursos necesarios",Production:"Producci\u00f3n",RequiredEnergy:"Energ\u00eda necesaria"}},InterfaceES:function(){return{sectionGeneral:"General",sectionUniverse:"Universo",sectionGlobalview:"Vista General",sectionHighlighting:"Resaltado",sectionObjectview:"Edificios, Investigaciones y Naves",sectionTime:"Configuraci\u00f3n de Hora",sectionGalaxy:"Galaxia",sectionGalaxy_Player:"Jugador",sectionGalaxy_Alliance:"Alianza",
+sectionGalaxy_Debris:"Escombros",sectionMessages:"Mensajes",sectionMessages_Espionage:"Informes de Espionaje",sectionMessages_Combat:"Informes de Batalla",sectionFleetDispatch:"Env\u00edo de Flota",sectionFleetDispatch_Fleet1:"P\u00e1gina de env\u00edo de Flota 1",sectionFleetDispatch_Fleet2:"P\u00e1gina de env\u00edo de Flota 2",sectionFleetDispatch_Fleet3:"P\u00e1gina de env\u00edo de Flota 3",sectionFleet:"Lista de Flotas",sectionFleet_Movement:"Movimiento de Flotas",sectionFleet_Phalanx:"Lista de Phalanx",
+sectionFleet_Events:"Lista de Eventos",sectionFleet_MissionColor:"Color para la misi\u00f3n",sectionInfo:"Informaci\u00f3n",sectionFeatures:"Elementos",sectionUpdates:"Actualizaciones",sectionSupport:"Soporte",sectionTips:"Consejos",menu_Name:"AntiGame",menu_Title:"Opciones AntiGame",menu_SaveButton:"OK",menu_CancelButton:"Cancelar",menu_updateTip:"Una nueva actualizaci\u00f3n est\u00e1 dispinible: Versi\u00f3n",improveLayout:"Mejorar el dise\u00f1o de esta p\u00e1gina",improveUsability:"Mejorar la funcionalidad de esta p\u00e1gina",
+improveLayoutUse:"Mejorar dise\u00f1o y funcionalidad de esta p\u00e1gina",simpleLayout:"Simplificar el dise\u00f1o de esta p\u00e1gina",killTips:"Eliminar tooltips",clickTips:"Clickar para mostrar los tooltips en esta p\u00e1gina",oldBrowser:"No utilizar efectos con navegadores u ordenadores antiguos",language:"Idioma",thousandSeparator:"Separador de Miles",btnDefault:"Defecto",blockAutoComplete:"Bloquear el Auto-completar en los campos de escritura",uni_SpeedFactor:"Velocidad de este Universo",
+uni_DFPercent:"Porcentaje de flota a escombros",uni_DefenseToDF:"Porcentaje de defensa a escombros",uni_topPlayerScore:"Los puntos del jugador m\u00e1s fuerte de este universo son",uni_systemMetrik:"N\u00famero m\u00e1ximo de Galaxias:Sistemas en este universo (9:499)",showResources:"Mostrar ampliada la informaci\u00f3n sobre los recursos",show_onTop:"Arriba",show_onBottom:"Abajo",show_onLeft:"Izquierda",showDeficient:"Mostrar los recursos que faltan",showNames:"Mostrar los nombres de naves/edificios/investigaciones sobre las im\u00e1genes",
+nameColorOn:"Colorear Nombre: disponible",nameColorOff:"Colorear Nombre: no disponible",nameColorDisabled:"Colorear Nombre: sin recursos suficientes",galaxy_Players:"Resaltar a los siguientes Jugadores",galaxy_PlayerColors:"Colores para los Jugadores resaltados",galaxy_Allys:"Resaltar a las siguientes Alianzas",galaxy_AllyColors:"Colores para las Alianzas resaltadas",jumpgate_Improve:"Mostrar enlaces a la Lunas objetivo y poder seleccionar las naves clickando en el n\u00famero o el icono de cada nave",
+jumpgate_RequireTarget:"Se requiere escoger una Luna objetivo para poder llevar a cabo el salto.",showConstructionTitle:"Mostrar las construcciones en curso en la Lista de Planetas",shortHeader:"Minimizar siempre la imagen del Planeta",misc_scrollTitle:"Tiempo restante para el pr\u00f3ximo evento en el t\u00edtulo de la ventana del navegador",timeAMPM:"Usar formato 12-hors (AM/PM) en lugar del fomato 24-horas",timeSetting:"Cambiar valores de hora (s\u00f3lo horas)",timeDontChange:"No cambiar la hora",
+timeLocal:"Mantener siempre la hora local",timeServer:"Mantener siempre hora del servidor",showServerOgameClock:"Mantener la hora del servidor en el reloj superior derecho de OGame",showServerPhalanx:"Mantener la hora del servidor en el informe de Phalanx",showPageStartTime:"Mostrar la hora a la que la p\u00e1gina ha sido actualizada",galaxy_shrinkLayout:"Encoger la p\u00e1gina de Galaxia",galaxy_keepTips:"Mantener los tooltips en planeta, luna y escombros al pasar el puntero del rat\u00f3ns",galaxy_reload:"Pulsar la tecla Enter actualiza la Galaxia",
+galaxy_ShowRank:"Mostrar clasificaci\u00f3n del jugador/alianza en la vista de la Galaxia",galaxy_PlayerRankColors:"Colores en la Clasificaci\u00f3n de Jugadores (Todos, 1000, 100, 10)",galaxy_ShowAllyRank:"Mostrar ranking de las alianzas en la Galaxia",galaxy_AllyRankColors:"Colores en la Clasificaci\u00f3n de Alianzas (Todos, 50, 10, 5)",galaxy_DebrisMin:"Tama\u00f1o m\u00ednimo de los escombros para recogerlos (0 para desactivar)",galaxy_DebrisSize:"Mostrar el tama\u00f1o de los campos de escombros mediante",
+galaxy_DebrisSize_Pic:"Tama\u00f1o de la imagen",galaxy_DebrisSize_Number:"N\u00famero",galaxy_DebrisSize_ShortNumber:"N\u00famero (k M B)",msg_expandBox:"Expandir el recuadro de mensaje",msg_addButtons:"Otros botones de mensajes",msg_EspionageSpace:"Reducir el espacio entre las filas",msg_PlunderThreshold:"El l\u00edmite m\u00ednimo para el saqueo te\u00f3rico (x1000)",msg_DebrisThreshold:"El l\u00edmite m\u00ednimo de los escombros te\u00f3rico (x1000)",msg_foldSmallPlunder:"Ocultar los informes de batalla y de reciclaje por debajo del l\u00edmite",
+msg_showPlunder:"Mostrar el posible saqueo en los informes de espionaje",msg_addSimButton:"A\u00f1adir botones para enviar los informes de espionaje al simulador",msg_fixColors:"Corregir los colores de los informes de batalla",fleet_showCapacity:"Mostrar la capacidad de carga y velocidad de las naves",fleet1_showResCalc:"Mostrar calculadora de recursos",fleet2_fixLayout:"Arreglar el dise\u00f1o de la p\u00e1gina de informaci\u00f3n del vuelo (p\u00e1gina 2)",autocopyCoords:"Auto-copiar coordenadas",
+autocopyGlobal:"Memorizar coordenadas de cualquier p\u00e1gina",fleet2_setTargetDF:"Configurar escombros como objetivo si la flota incluye recicladores",fleet2_ShortLinks:"Accesos directos a objetivos (p\u00e1gina 2)",fleet2_MoonColor:"Colorear lunas en la lista de accesos directos",fleet2_MoonsToEnd:"Mover lunas al final de la lista de accesos directos",fleet2_expandLists:"Expandir los desplegables (Velocidad, Atajos, SACs)",fleet2_expandMoonColor:"Lunas coloreadas en la lista expandida",fleet2_checkProbeCapacity:"Comprobar capacidad de las sondas antes del env\u00edo (p\u00e1gina 2)",
+missionPriority:"Prioridad de la misi\u00f3n",mvmt_expandFleets:"Mostrar la flota de buques y la carga",mvmt_showReversal:"Mostrar la hora de vuelta de las flotas",evt_expandFleetsPhal:"Mostrar la composici\u00f3n y capacidad de carga de la flota (Phalanx)",phalanx_showDebris:"Mostrar escombros te\u00f3ricos en el informe de Phalanx",evt_expandFleetsEvt:"Mostrar la composici\u00f3n y capacidad de carga de la flota (Lista de Eventos)",evt_dimReverse:"Resaltar flotas en retorno",update_Changelog:"Lista de cambios",
+update_check:"Auto-check actualizaciones",update_check_Final:"Final",update_check_Preview:"Final & Vista Previa",update_Final:"Actualizar a la versi\u00f3n final",update_Preview:"Actualizar a la versi\u00f3n de pruebas",update_Last:"Volver a la versi\u00f3n estable anterior",update_Install:"Instalar",support_Homepage:"P\u00e1gina de Inicio",support_Feedback:"Opiniones & Bugs",support_Ideas:"Sugerencias",support_Translation:"Traducciones",info_Tip1:"La opci\u00f3n se guardar\u00e1 s\u00f3lo en este Universo",
+info_Tip2:"Por favor visita la p\u00e1gina 3 de env\u00edo de Flota una vez en cada idioma para colorear las misiones de forma correcta.",info_Tip3:"Por favor selecciona la puntuaci\u00f3n del top 1 de tu universo para que el c\u00e1lculo de los puntos de expedici\u00f3n sea correcto.",info_Tip4:"",info_Tip5:""}},LabelsFR:function(){return{btnMarkReadAll:"Marquer tous les messages s\u00e9lectionn\u00e9s comme lus",btnDeleteSmallPlunder:"Supprimer les rapports d'espionnage avec pillage < $plunder et d\u00e9bris < $debris",
+msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"D\u00e9bris",total:"Total",loot:"Butin",Save:"Sauver",Clear:"Effacer",Moon:"Lune",tmTime:"Heure",tmCountdown:"Compte \u00e0 rebours",rx_sendMail:/Envoyer un message \u00e0 (.+)\./,TotalCapacity:"Capacit\u00e9 totale",MinSpeed:"Vitesse minimale",ExPoints:"Expedition points",resources:"Ressources",ArrivalACS:"Arriv\u00e9e (AG)",mvmt_Return:"R",shipSCargoAlt:"PT",shipLCargoAlt:"GT",shipRecyclerAlt:"Recs",shipRIPAlt:"RIP",
+Quantity:"Quantit\u00e9",Duration:"Dur\u00e9e",Consumption:"Consommation",shipSatelliteAlt:"Sat.",deficientRes:"Ressources manquantes",Production:"Production",RequiredEnergy:"\u00c9nergie requise"}},InterfaceFR:function(){return{sectionGeneral:"G\u00e9n\u00e9ral",sectionUniverse:"Univers",sectionGlobalview:"Vue globale",sectionHighlighting:"Mise en \u00e9vidence",sectionObjectview:"Constructions, recherches et vaisseaux",sectionTime:"Param\u00e8tres de l'heure",sectionGalaxy:"Galaxie",sectionGalaxy_Player:"Player",
+sectionGalaxy_Alliance:"Alliance",sectionGalaxy_Debris:"Debris",sectionMessages:"Messages",sectionMessages_Espionage:"Rapports d'espionnage",sectionMessages_Combat:"Rapports de combat",sectionFleetDispatch:"Envoi de flottes",sectionFleetDispatch_Fleet1:"Page d'envoi de flotte 1",sectionFleetDispatch_Fleet2:"Page d'envoi de flotte 2",sectionFleetDispatch_Fleet3:"Page d'envoi de flotte 3",sectionFleet:"Fleet lists",sectionFleet_Movement:" Mouvements de flotte",sectionFleet_Phalanx:"Phalange",sectionFleet_Events:"Ev\u00e9nements",
+sectionFleet_MissionColor:"Couleur de mission",sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"Options AntiGame",menu_SaveButton:"OK",menu_CancelButton:"Annuler",menu_updateTip:"A new update is available: Version",improveLayout:"Am\u00e9liorer l'am\u00e9nagement de cette page",improveUsability:"Am\u00e9liorer la convivialit\u00e9 de cette page",improveLayoutUse:"Am\u00e9liorer la disposition et la convivialit\u00e9 de cette page",
+simpleLayout:"Simplifiez l'agencement de cette page",killTips:"D\u00e9sactiver les info-bulles",clickTips:"Utiliser le click souris pour montrer le popup sur cette page",oldBrowser:"Ne pas utiliser les effets qui ralentissent les vieux navigateurs ou ordinateur",language:"Langage",thousandSeparator:"S\u00e9parateur pour les milliers",btnDefault:"Par d\u00e9faut",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"Facteur de vitesse pour cet univers",uni_DFPercent:"Percentage de la flotte dans les d\u00e9bris",
+uni_DefenseToDF:"Pourcentage de la d\u00e9fence dans les d\u00e9bris",uni_topPlayerScore:"Les points du joueur le plus fort de cette univers sont (pour les expeditions)",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Afficher les informations de ressources avanc\u00e9es",show_onTop:"Au dessus",show_onBottom:"En dessous",show_onLeft:"A gauche",showDeficient:"Afficher les ressources manquantes",showNames:"Afficher les noms des vaisseaux/constructions/recherches sur les images",
+nameColorOn:"Couleur du nom: disponible",nameColorOff:"Couleur du nom: indisponible",nameColorDisabled:"Couleur du nom: pas assez de ressources",galaxy_Players:"Surligner les joueurs suivants",galaxy_PlayerColors:"Couleur des joueurs surlign\u00e9s",galaxy_Allys:"Surligner les alliances suivantes",galaxy_AllyColors:"Couleur des alliances surlign\u00e9es",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",
+showConstructionTitle:"Afficher les titres des constructions dans la liste des plan\u00e8tes",shortHeader:"Toujours r\u00e9duire les images plan\u00e8tes",misc_scrollTitle:"Temps restant avant le prochain \u00e9v\u00e8nement dans le titre de la fen\u00eatre",timeAMPM:"Utilisez le format 12h (AM/PM) au lieu de 24h",timeSetting:"Changer les valeurs de temps (les heures seulement)",timeDontChange:"Ne pas changer l'heure",timeLocal:"Toujours r\u00e9gler \u00e0 l'heure locale",timeServer:"Toujours r\u00e9gler \u00e0 l'heure serveur",
+showServerOgameClock:"Garder l'heure du serveur pour l'horloge en haut \u00e0 droite",showServerPhalanx:"Garder l'heure du serveur pour la vue Phalanx",showPageStartTime:"Afficher l`heure du dernier raffraichisement de la page",galaxy_shrinkLayout:"Diminuer la page galaxie",galaxy_keepTips:"Garder actif le popup sur un simple passage de souris pour les plan\u00e8tes lune ou d\u00e9bris",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Afficher le rang des joueurs dans la vue Galaxie",
+galaxy_PlayerRankColors:"Couleurs pour les classements joueurs (All, 1000, 100, 10)",galaxy_ShowAllyRank:"Montrer le classement alliance dans la vue Galaxie",galaxy_AllyRankColors:"Couleurs pour les classements alliances (All, 50, 10, 5)",galaxy_DebrisMin:"Taille minimale pour surligner les d\u00e9bris (0 pour d\u00e9sactiver)",galaxy_DebrisSize:"Afficher la taille du champ de d\u00e9bris avec",galaxy_DebrisSize_Pic:"Une image de plus en plus grande",galaxy_DebrisSize_Number:"Un nombre",galaxy_DebrisSize_ShortNumber:"Un nombre (k M B)",
+msg_expandBox:"Augmenter la hauteur de des messages",msg_addButtons:"Ajouter des boutons pour les messages",msg_EspionageSpace:"R\u00e9duire l'espacement des ligne d'un rapport d'espionnage ",msg_PlunderThreshold:"Taille minimale pour pillage th\u00e9orique (en K)",msg_DebrisThreshold:"Taille minimale pour recyclage th\u00e9orique (en K)",msg_foldSmallPlunder:"Pliez les rapports avec le pillage et les d\u00e9bris inf\u00e9rieurs \u00e0 la limite",msg_showPlunder:"Afficher le pillage dans les rapports d'espionnage",
+msg_addSimButton:"Ajouter un bouton pour envoyer le rapport d'espionnage sur WebSim",msg_fixColors:"Fixer la couleur des rapports de combat",fleet_showCapacity:"Afficher la vitesse et la capacit\u00e9 des flottes",fleet1_showResCalc:"Afficher le calculateur de ressources",fleet2_fixLayout:"Corriger les informations d'agencement",autocopyCoords:"Copier automatiquement les coordonn\u00e9es",autocopyGlobal:"M\u00e9moriser les coords sur toutes les pages (pas seulement la page courante dogame)",fleet2_setTargetDF:"S\u00e9lectionner automatiquement le champ de d\u00e9bris si la flotte inclus un recycleur",
+fleet2_ShortLinks:"Raccourcis de cibles",fleet2_MoonColor:"Couleur de la lune dans la liste de raccourcis",fleet2_MoonsToEnd:"Deplacer la lune \u00e0 la fin de la liste de raccourcis",fleet2_expandLists:"Epandre la liste de selectionner pour la vitesse et attaques group\u00e9es",fleet2_expandMoonColor:"Color moons in expand list",fleet2_checkProbeCapacity:"V\u00e9rifier la capacit\u00e9 des sondes avant le d\u00e9part(page 2)",missionPriority:"Priorit\u00e9 de la mission",mvmt_expandFleets:"Montrez la flotte et la cargaison de celle-ci",
+mvmt_showReversal:"Afficher le temps invers\u00e9 pour les flottes",evt_expandFleetsPhal:"Afficher la composition et la cargaison de la flotte sur la phalange (Phalanx)",phalanx_showDebris:"Afficher les d\u00e9bris th\u00e9oriques sur la phalange",evt_expandFleetsEvt:"Afficher la composition et la cargaison de la flotte dans la liste d'\u00e9v\u00e9nement (EventList)",evt_dimReverse:"Assombrir les flottes de retour",update_Changelog:"Changelog",update_check:"Mise \u00e0 jour automatique",update_check_Final:"Final",
+update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"L'option est sauvegard\u00e9e uniquement pour cet univers",info_Tip2:"Please visit fleet send page 3 one time for each lanugage for proper mission coloring.",
+info_Tip3:"Please choose the top player score for correct expo calculation.",info_Tip4:"",info_Tip5:""}},LabelsGR:function(){return{btnMarkReadAll:"\u03a3\u03b7\u03bc\u03b5\u03af\u03c9\u03c3\u03b5 \u03cc\u03bb\u03b1 \u03c4\u03b1 \u03bc\u03b7\u03bd\u03cd\u03bc\u03b1\u03c4\u03b1 \u03c9\u03c2 \u03b4\u03b9\u03b1\u03b2\u03b1\u03c3\u03bc\u03ad\u03bd\u03b1",btnDeleteSmallPlunder:"\u0394\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae \u03ba\u03b1\u03c4\u03b1\u03c3\u03ba\u03bf\u03c0\u03b5\u03c5\u03c4\u03b9\u03ba\u03ce\u03bd \u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ce\u03bd \u03bc\u03b5 \u03bb\u03ac\u03c6\u03c5\u03c1\u03b1 < $plunder \u03ba\u03b1\u03b9 \u03c3\u03c5\u03bd\u03c4\u03c1\u03af\u03bc\u03bc\u03b9\u03b1 < $debris",
+msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"\u03a3\u03c5\u03bd\u03c4\u03c1\u03af\u03bc\u03bc\u03b9\u03b1",total:"\u03a3\u03c5\u03bd\u03bf\u03bb\u03b9\u03ba\u03ac",loot:"\u039b\u03ac\u03c6\u03c5\u03c1\u03b1",Save:"\u0391\u03c0\u03bf\u03b8\u03ae\u03ba\u03b5\u03c5\u03c3\u03b7",Clear:"\u039a\u03b1\u03b8\u03b1\u03c1\u03b9\u03c3\u03bc\u03cc\u03c2",Moon:"\u03c6\u03b5\u03b3\u03b3\u03ac\u03c1\u03b9",tmTime:"\u03a7\u03c1\u03cc\u03bd\u03bf\u03c2",tmCountdown:"\u0391\u03bd\u03c4\u03af\u03c3\u03c4\u03c1\u03bf\u03c6\u03b7 \u03bc\u03ad\u03c4\u03c1\u03b7\u03c3\u03b7",
+rx_sendMail:/\u03c3\u03c5\u03b3\u03b3\u03c1\u03b1\u03c6\u03ae \u03bc\u03b7\u03bd\u03cd\u03bc\u03b1\u03c4\u03bf\u03c2 (.+)\./,TotalCapacity:"\u03a3\u03c5\u03bd\u03bf\u03bb\u03b9\u03ba\u03ae \u03c7\u03c9\u03c1\u03b7\u03c4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1",MinSpeed:"\u0395\u03bb\u03ac\u03c7\u03b9\u03c3\u03c4\u03b7 \u03c4\u03b1\u03c7\u03cd\u03c4\u03b7\u03c4\u03b1",ExPoints:"\u0392\u03b1\u03b8\u03bc\u03bf\u03af \u0391\u03c0\u03bf\u03c3\u03c4\u03bf\u03bb\u03ae\u03c2",resources:"\u03a0\u03cc\u03c1\u03bf\u03b9",
+ArrivalACS:"\u0386\u03c6\u03b9\u03be\u03b7 ACS",mvmt_Return:"\u0395",shipSCargoAlt:"\u039c\u03b9\u03ba\u03c1\u03cc \u039c\u03b5\u03c4\u03b1\u03b3\u03c9\u03b3\u03b9\u03ba\u03cc",shipLCargoAlt:"\u039c\u03b5\u03b3\u03ac\u03bb\u03bf \u039c\u03b5\u03c4\u03b1\u03b3\u03c9\u03b3\u03b9\u03ba\u03cc",shipRecyclerAlt:"\u0391\u03bd\u03b1\u03ba\u03c5\u03ba\u03bb\u03c9\u03c4\u03ae\u03c2",shipRIPAlt:"RIP",Quantity:"\u03a0\u03bf\u03c3\u03cc\u03c4\u03b7\u03c4\u03b1",Duration:"\u0394\u03b9\u03ac\u03c1\u03ba\u03b5\u03b9\u03b1",
+Consumption:"\u039a\u03b1\u03c4\u03b1\u03bd\u03ac\u03bb\u03c9\u03c3\u03b7",shipSatelliteAlt:"\u0397.\u03a3.",deficientRes:"\u0388\u03bb\u03bb\u03b5\u03b9\u03c8\u03b7 \u03c0\u03cc\u03c1\u03c9\u03bd",Production:"\u03a0\u03b1\u03c1\u03b1\u03b3\u03c9\u03b3\u03ae",RequiredEnergy:"\u03a7\u03c1\u03b5\u03b9\u03ac\u03b6\u03b5\u03c4\u03b1\u03b9 \u03b5\u03bd\u03ad\u03c1\u03b3\u03b5\u03b9\u03b1:"}},InterfaceGR:function(){return{sectionGeneral:"\u0393\u03b5\u03bd\u03b9\u03ba\u03ad\u03c2 \u03a1\u03c5\u03b8\u03bc\u03af\u03c3\u03b5\u03b9\u03c2",
+sectionUniverse:"\u03a3\u03cd\u03bc\u03c0\u03b1\u03bd",sectionGlobalview:"Global view",sectionHighlighting:"Highlighting",sectionObjectview:"Buildings, researches and ships",sectionTime:"\u03a1\u03c5\u03b8\u03bc\u03af\u03c3\u03b5\u03b9\u03c2 \u03ce\u03c1\u03b1\u03c2",sectionGalaxy:"\u0393\u03b1\u03bb\u03b1\u03be\u03af\u03b1\u03c2",sectionGalaxy_Player:"Player",sectionGalaxy_Alliance:"Alliance",sectionGalaxy_Debris:"Debris",sectionMessages:"\u039c\u03b7\u03bd\u03cd\u03bc\u03b1\u03c4\u03b1",sectionMessages_Espionage:"Espionage reports",
+sectionMessages_Combat:"Combat reports",sectionFleetDispatch:"\u0391\u03c0\u03bf\u03c3\u03c4\u03bf\u03bb\u03ae \u03c3\u03c4\u03cc\u03bb\u03bf\u03c5",sectionFleetDispatch_Fleet1:"Fleet page 1",sectionFleetDispatch_Fleet2:"Fleet page 2",sectionFleetDispatch_Fleet3:"Fleet page 3",sectionFleet:"Fleet lists",sectionFleet_Movement:"\u039c\u03b5\u03c4\u03b1\u03ba\u03af\u03bd\u03b7\u03c3\u03b7 \u03c3\u03c4\u03cc\u03bb\u03bf\u03c5",sectionFleet_Phalanx:"Phalanx",sectionFleet_Events:"\u039b\u03af\u03c3\u03c4\u03b1 \u03b3\u03b5\u03b3\u03bf\u03bd\u03cc\u03c4\u03c9\u03bd",
+sectionFleet_MissionColor:"\u03a7\u03c1\u03ce\u03bc\u03b1 \u03b1\u03c0\u03bf\u03c3\u03c4\u03bf\u03bb\u03ae\u03c2",sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"AntiGame \u0395\u03c0\u03b9\u03bb\u03bf\u03b3\u03ad\u03c2",menu_SaveButton:"OK",menu_CancelButton:"\u0386\u03ba\u03c5\u03c1\u03bf",menu_updateTip:"A new update is available: Version",improveLayout:"Improve the layout of this page",improveUsability:"Improve the usability of this page",
+improveLayoutUse:"Improve layout and usebility of this page",simpleLayout:"Simplify the layout of this page",killTips:"\u039d\u03b1 \u03bc\u03b7\u03bd \u03b5\u03bc\u03c6\u03b1\u03bd\u03af\u03b6\u03bf\u03bd\u03c4\u03b1\u03b9 tooltips",clickTips:"Use mouseclick to show tooltips on this page",oldBrowser:"Do not use effects which slowdowns old browser or computer",language:"\u0393\u03bb\u03ce\u03c3\u03c3\u03b1",thousandSeparator:"\u0394\u03b9\u03b1\u03c7\u03c9\u03c1\u03b9\u03c3\u03c4\u03ae\u03c2 \u03c0\u03bb\u03ae\u03b8\u03bf\u03c5\u03c2 \u03b1\u03c1\u03b9\u03b8\u03bc\u03ce\u03bd",
+btnDefault:"Default",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"\u03a4\u03b1\u03c7\u03cd\u03c4\u03b7\u03c4\u03b1 \u03c4\u03bf\u03c5 \u03c3\u03cd\u03bc\u03c0\u03b1\u03bd\u03c4\u03bf\u03c2",uni_DFPercent:"\u03a0\u03bf\u03c3\u03bf\u03c3\u03c4\u03cc \u03b1\u03be\u03af\u03b1\u03c2 \u03c3\u03c4\u03cc\u03bb\u03bf\u03c5 \u03c3\u03b5 \u03c0\u03b5\u03b4\u03af\u03bf \u03c3\u03c5\u03bd\u03c4\u03c1\u03b9\u03bc\u03bc\u03b9\u03ce\u03bd",uni_DefenseToDF:"\u03a0\u03bf\u03c3\u03bf\u03c3\u03c4\u03cc \u03b1\u03be\u03af\u03b1\u03c2 \u03ac\u03bc\u03c5\u03bd\u03b1\u03c2 \u03c3\u03b5 \u03c0\u03b5\u03b4\u03af\u03bf \u03c3\u03c5\u03bd\u03c4\u03c1\u03b9\u03bc\u03bc\u03b9\u03ce\u03bd",
+uni_topPlayerScore:"The points of the strongest player in this uni are",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 \u03b5\u03ba\u03c4\u03b5\u03c4\u03b1\u03bc\u03ad\u03bd\u03c9\u03bd \u03c0\u03bb\u03b7\u03c1\u03bf\u03c6\u03bf\u03c1\u03b9\u03ce\u03bd \u03c0\u03cc\u03c1\u03c9\u03bd",show_onTop:"\u03a3\u03c4\u03b7\u03bd \u03ba\u03bf\u03c1\u03c5\u03c6\u03ae \u03c4\u03b7\u03c2 \u03c3\u03b5\u03bb\u03af\u03b4\u03b1\u03c2",
+show_onBottom:"\u03a3\u03c4\u03bf \u03c4\u03ad\u03bb\u03bf\u03c2 \u03c4\u03b7\u03c2 \u03c3\u03b5\u03bb\u03af\u03b4\u03b1\u03c2",show_onLeft:"\u03a3\u03c4\u03b1 \u03b1\u03c1\u03b9\u03c3\u03c4\u03b5\u03c1\u03ac",showDeficient:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 \u03c0\u03cc\u03c1\u03c9\u03bd \u03c0\u03bf\u03c5 \u03bb\u03b5\u03af\u03c0\u03bf\u03c5\u03bd",showNames:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 \u03bf\u03bd\u03bf\u03bc\u03ac\u03c4\u03c9\u03bd \u03b1\u03c0\u03cc \u03b4\u03b9\u03b1\u03c3\u03c4\u03b7\u03bc\u03cc\u03c0\u03bb\u03bf\u03b9\u03b1/\u03ba\u03c4\u03ae\u03c1\u03b9\u03b1/\u03ad\u03c1\u03b5\u03c5\u03bd\u03b5\u03c2 \u03c0\u03ac\u03bd\u03c9 \u03b1\u03c0\u03cc \u03c4\u03b9\u03c2 \u03b5\u03b9\u03ba\u03cc\u03bd\u03b5\u03c2",
+nameColorOn:"\u03a7\u03c1\u03ce\u03bc\u03b1 \u03bf\u03bd\u03cc\u03bc\u03b1\u03c4\u03bf\u03c2: \u0394\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03bf",nameColorOff:"\u03a7\u03c1\u03ce\u03bc\u03b1 \u03bf\u03bd\u03cc\u03bc\u03b1\u03c4\u03bf\u03c2: \u039c\u03b7 \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03bf",nameColorDisabled:"\u03a7\u03c1\u03ce\u03bc\u03b1 \u03bf\u03bd\u03cc\u03bc\u03b1\u03c4\u03bf\u03c2: \u0394\u03b5\u03bd \u03c5\u03c0\u03ac\u03c1\u03c7\u03bf\u03c5\u03bd \u03b1\u03c1\u03ba\u03b5\u03c4\u03bf\u03af \u03c0\u03cc\u03c1\u03bf\u03b9",
+galaxy_Players:"\u0395\u03c0\u03b9\u03c3\u03ae\u03bc\u03b1\u03bd\u03b5 \u03c4\u03bf\u03c5\u03c2 \u03b5\u03be\u03ae\u03c2 \u03c0\u03b1\u03af\u03ba\u03c4\u03b5\u03c2",galaxy_PlayerColors:"\u03a7\u03c1\u03ce\u03bc\u03b1\u03c4\u03b1 \u03b3\u03b9\u03b1 \u03c4\u03b7\u03bd \u03b5\u03c0\u03b9\u03c3\u03ae\u03bc\u03b1\u03bd\u03c3\u03b7 \u03c4\u03c9\u03bd \u03c0\u03b1\u03b9\u03ba\u03c4\u03ce\u03bd",galaxy_Allys:"\u0395\u03c0\u03b9\u03c3\u03ae\u03bc\u03b1\u03bd\u03b5 \u03c4\u03b9\u03c2 \u03b5\u03be\u03ae\u03c2 \u03c3\u03c5\u03bc\u03bc\u03b1\u03c7\u03af\u03b5\u03c2",
+galaxy_AllyColors:"\u03a7\u03c1\u03ce\u03bc\u03b1\u03c4\u03b1 \u03b3\u03b9\u03b1 \u03c4\u03b7\u03bd \u03b5\u03c0\u03b9\u03c3\u03ae\u03bc\u03b1\u03bd\u03c3\u03b7 \u03c4\u03c9\u03bd \u03c3\u03c5\u03bc\u03bc\u03b1\u03c7\u03b9\u03ce\u03bd",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 \u03ba\u03b1\u03c4\u03b1\u03c3\u03ba\u03b5\u03c5\u03ce\u03bd \u03c3\u03c4\u03b7\u03bd \u03b5\u03c0\u03b9\u03c3\u03ba\u03cc\u03c0\u03b7\u03c3\u03b7",
+shortHeader:"\u0391\u03c0\u03cc\u03ba\u03c1\u03c5\u03c8\u03b7 \u03b5\u03b9\u03ba\u03cc\u03bd\u03b1\u03c2 \u03c0\u03bb\u03b1\u03bd\u03ae\u03c4\u03b7",misc_scrollTitle:"Scroll time to the next event in the window title",timeAMPM:"\u03a7\u03c1\u03ae\u03c3\u03b7 12\u03c9\u03c1\u03bf\u03c5 \u03b1\u03bd\u03c4\u03af 24\u03c9\u03c1\u03bf\u03c5",timeSetting:"\u03a1\u03c5\u03b8\u03bc\u03af\u03c3\u03b5\u03b9\u03c2 \u03ce\u03c1\u03b1\u03c2",timeDontChange:"\u039a\u03b1\u03bc\u03af\u03b1 \u03ac\u03bb\u03bb\u03b1\u03b3\u03ae - \u0391\u03c1\u03c7\u03b9\u03ba\u03ad\u03c2 \u03c1\u03c5\u03b8\u03bc\u03af\u03c3\u03b5\u03b9\u03c2",
+timeLocal:"\u03a1\u03cd\u03b8\u03bc\u03b9\u03c3\u03b7 \u03c3\u03b5 \u03c4\u03bf\u03c0\u03b9\u03ba\u03ae \u03b6\u03ce\u03bd\u03b7 \u03ce\u03c1\u03b1\u03c2",timeServer:"\u03a1\u03cd\u03b8\u03bc\u03b9\u03c3\u03b7 \u03bc\u03b5 \u03b2\u03ac\u03c3\u03b7 \u03c4\u03b7\u03bd \u03ce\u03c1\u03b1 \u03c4\u03bf\u03c5 server",showServerOgameClock:"\u03a7\u03c1\u03ae\u03c3\u03b7 \u03c1\u03c5\u03b8\u03bc\u03af\u03c3\u03b5\u03c9\u03bd \u03ce\u03c1\u03b1\u03c2 \u03c4\u03bf\u03c5 server (\u03c0\u03ac\u03bd\u03c9 \u03b4\u03b5\u03be\u03b9\u03ac)",
+showServerPhalanx:"\u03a7\u03c1\u03ae\u03c3\u03b7 \u03c1\u03c5\u03b8\u03bc\u03af\u03c3\u03b5\u03c9\u03bd \u03ce\u03c1\u03b1\u03c2 \u03b3\u03b9\u03b1 \u03c4\u03b7\u03bd \u03a6\u03ac\u03bb\u03b1\u03b3\u03b3\u03b1",showPageStartTime:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b5 \u03c4\u03bf \u03c7\u03c1\u03cc\u03bd\u03bf \u03c4\u03b7\u03c2 \u03c4\u03b5\u03bb\u03b5\u03c5\u03c4\u03b1\u03af\u03b1\u03c2 \u03b1\u03bd\u03b1\u03bd\u03ad\u03c9\u03c3\u03b7\u03c2 \u03c3\u03b5\u03bb\u03af\u03b4\u03b1\u03c2",
+galaxy_shrinkLayout:"Shrink the galaxy page",galaxy_keepTips:"Keep mouseover tooltips for planet, moon and debris",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 \u03b5\u03c0\u03b9\u03c0\u03ad\u03b4\u03c9\u03bd \u03c0\u03b1\u03af\u03ba\u03c4\u03b7/\u03c3\u03c5\u03bc\u03bc\u03b1\u03c7\u03af\u03b1\u03c2 \u03c3\u03c4\u03bf\u03bd \u03b3\u03b1\u03bb\u03b1\u03be\u03af\u03b1",galaxy_PlayerRankColors:"Player ranks color (All, 1000, 100, 10)",
+galaxy_ShowAllyRank:"Show alliance ranks in Galaxy view",galaxy_AllyRankColors:"Alliance ranks color (All, 50, 10, 5)",galaxy_DebrisMin:"\u0395\u03bb\u03ac\u03c7\u03b9\u03c3\u03c4\u03bf \u03bc\u03ad\u03b3\u03b5\u03b8\u03bf\u03c2 \u03b1\u03c0\u03cc \u03c3\u03c5\u03bd\u03c4\u03c1\u03af\u03bc\u03bc\u03b9\u03b1 \u03b3\u03b9\u03b1 \u03b5\u03c0\u03b9\u03c3\u03ae\u03bc\u03b1\u03bd\u03c3\u03b7 (0 \u03b3\u03b9\u03b1 \u03bd\u03b1 \u03b1\u03c0\u03b5\u03bd\u03b5\u03c1\u03b3\u03bf\u03c0\u03bf\u03b9\u03b7\u03b8\u03b5\u03af)",
+galaxy_DebrisSize:"Show size of debris field through",galaxy_DebrisSize_Pic:"Picture size",galaxy_DebrisSize_Number:"Number",galaxy_DebrisSize_ShortNumber:"Number (k M B)",msg_expandBox:"Expand the messagebox height",msg_addButtons:"\u03a0\u03c1\u03cc\u03c3\u03b8\u03b5\u03c4\u03b1 \u03ba\u03bf\u03c5\u03bc\u03c0\u03b9\u03ac \u03c3\u03c4\u03b1 \u03bc\u03b7\u03bd\u03cd\u03bc\u03b1\u03c4\u03b1",msg_EspionageSpace:"Reducing row spacing with",msg_PlunderThreshold:"\u0395\u03bb\u03ac\u03c7\u03b9\u03c3\u03c4\u03bf \u03cc\u03c1\u03b9\u03bf \u03b3\u03b9\u03b1 \u03bb\u03b5\u03b7\u03bb\u03ac\u03c4\u03b7\u03c3\u03b7 (x1000)",
+msg_DebrisThreshold:"\u0395\u03bb\u03ac\u03c7\u03b9\u03c3\u03c4\u03bf \u03cc\u03c1\u03b9\u03bf \u03b3\u03b9\u03b1 \u03c3\u03c5\u03bd\u03c4\u03c1\u03af\u03bc\u03bc\u03b9\u03b1 (x1000)",msg_foldSmallPlunder:"\u039c\u03b7\u03bd \u03b5\u03bd\u03b7\u03bc\u03b5\u03c1\u03ce\u03c3\u03b5\u03b9\u03c2 \u03c3\u03c7\u03b5\u03c4\u03b9\u03ba\u03ac \u03bc\u03b5 \u03bb\u03b5\u03b7\u03bb\u03ac\u03c4\u03b7\u03c3\u03b7 \u03ae \u03c3\u03c5\u03bd\u03c4\u03c1\u03af\u03bc\u03bc\u03b9\u03b1 \u03c7\u03b1\u03bc\u03b7\u03bb\u03cc\u03c4\u03b5\u03c1\u03b1 \u03b1\u03c0\u03cc \u03c4\u03bf \u03cc\u03c1\u03b9\u03bf",
+msg_showPlunder:"\u03a3\u03c5\u03bc\u03c0\u03b5\u03c1\u03b9\u03ad\u03bb\u03b1\u03b2\u03b5 \u03c4\u03b7\u03bd \u03bb\u03b5\u03b7\u03bb\u03b1\u03c3\u03af\u03b1 \u03c3\u03c4\u03b9\u03c2 \u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ad\u03c2 \u03c3\u03c7\u03b5\u03c4\u03b9\u03ba\u03ac \u03bc\u03b5 \u03ba\u03b1\u03c4\u03b1\u03c3\u03ba\u03bf\u03c0\u03b5\u03af\u03b1",msg_addSimButton:"\u03a0\u03c1\u03cc\u03c3\u03b8\u03b5\u03c3\u03b7 \u03ba\u03bf\u03c5\u03bc\u03c0\u03b9\u03ce\u03bd \u03b3\u03b9\u03b1 \u03c5\u03c0\u03bf\u03b2\u03bf\u03bb\u03ae \u03c4\u03c9\u03bd \u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ce\u03bd \u03ba\u03b1\u03c4\u03b1\u03c3\u03ba\u03bf\u03c0\u03b5\u03af\u03b1\u03c2 \u03c3\u03c4\u03bf WebSim",
+msg_fixColors:"\u0391\u03bb\u03bb\u03b1\u03b3\u03ae \u03c7\u03c1\u03c9\u03bc\u03ac\u03c4\u03c9\u03bd \u03c3\u03c4\u03b9\u03c2 \u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ad\u03c2 \u03bc\u03ac\u03c7\u03b7\u03c2",fleet_showCapacity:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 \u03c7\u03c9\u03c1\u03b7\u03c4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1\u03c2 \u03ba\u03b1\u03b9 \u03c4\u03b1\u03c7\u03cd\u03c4\u03b7\u03c4\u03b1\u03c2 \u03b4\u03b9\u03b1\u03c3\u03c4\u03b7\u03bc\u03bf\u03c0\u03bb\u03bf\u03af\u03c9\u03bd",
+fleet1_showResCalc:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 \u03c5\u03c0\u03bf\u03bb\u03bf\u03b3\u03b9\u03c3\u03c4\u03ae \u03c0\u03cc\u03c1\u03c9\u03bd",fleet2_fixLayout:"\u0394\u03b7\u03bc\u03b9\u03bf\u03c5\u03c1\u03b3\u03af\u03b1 \u03ad\u03ba\u03b8\u03b5\u03c3\u03b7\u03c2 \u03c0\u03bb\u03b7\u03c1\u03bf\u03c6\u03bf\u03c1\u03b9\u03ce\u03bd \u03c0\u03c4\u03ae\u03c3\u03b7\u03c2 (\u03c3\u03b5\u03bb\u03af\u03b4\u03b1 2)",autocopyCoords:"\u0391\u03c5\u03c4\u03cc\u03bc\u03b1\u03c4\u03b7 \u03b1\u03bd\u03c4\u03b9\u03b3\u03c1\u03b1\u03c6\u03ae \u03c3\u03c5\u03bd\u03c4\u03b5\u03c4\u03b1\u03b3\u03bc\u03ad\u03bd\u03c9\u03bd",
+autocopyGlobal:"Memorize coordinates from any page (not only current Ogame universe tabs)",fleet2_setTargetDF:"\u0398\u03ad\u03c3\u03b5 \u03c4\u03bf\u03bd \u03c3\u03c4\u03cc\u03c7\u03bf \u03c3\u03b5 DF \u03b1\u03bd \u03bf \u03c3\u03c4\u03cc\u03bb\u03bf\u03c2 \u03c0\u03b5\u03c1\u03b9\u03bb\u03b1\u03bc\u03b2\u03ac\u03bd\u03b5\u03b9 \u0391\u03bd\u03b1\u03ba\u03c5\u03ba\u03bb\u03c9\u03c4\u03ad\u03c2",fleet2_ShortLinks:"\u039c\u03b9\u03ba\u03c1\u03bf\u03c3\u03cd\u03bd\u03b4\u03b5\u03c3\u03bc\u03bf\u03b9 \u03c3\u03c4\u03cc\u03c7\u03c9\u03bd (\u03c3\u03b5\u03bb\u03af\u03b4\u03b1 2)",
+fleet2_MoonColor:"\u03a7\u03c1\u03c9\u03bc\u03b1\u03c4\u03b9\u03c3\u03bc\u03cc\u03c2 \u03c6\u03b5\u03b3\u03b3\u03b1\u03c1\u03b9\u03ce\u03bd \u03c3\u03c4\u03b7 \u03bb\u03af\u03c3\u03c4\u03b1 \u03c3\u03c5\u03bd\u03c4\u03bf\u03bc\u03b5\u03cd\u03c3\u03b5\u03c9\u03bd",fleet2_MoonsToEnd:"\u039c\u03b5\u03c4\u03b1\u03ba\u03af\u03bd\u03b7\u03c3\u03b7 \u03c6\u03b5\u03b3\u03b3\u03b1\u03c1\u03b9\u03ce\u03bd \u03c3\u03c4\u03bf \u03c4\u03ad\u03bb\u03bf\u03c2 \u03c4\u03b7\u03c2 \u03bb\u03af\u03c3\u03c4\u03b1\u03c2 \u03c3\u03c5\u03bd\u03c4\u03bf\u03bc\u03b5\u03cd\u03c3\u03b5\u03c9\u03bd",
+fleet2_expandLists:"Expand drop-down boxes (Speed, Shortcuts, ACSs)",fleet2_expandMoonColor:"Color moons in expand list",fleet2_checkProbeCapacity:"\u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2 \u03c7\u03c9\u03c1\u03b7\u03c4\u03b9\u03ba\u03cc\u03c4\u03b7\u03c4\u03b1\u03c2 \u03c0\u03c1\u03b9\u03bd \u03c4\u03b7\u03bd \u03b1\u03bd\u03b1\u03c7\u03ce\u03c1\u03b7\u03c3\u03b7",missionPriority:"\u03a0\u03c1\u03bf\u03c4\u03b5\u03c1\u03b1\u03b9\u03cc\u03c4\u03b7\u03c4\u03b1 \u03b1\u03c0\u03bf\u03c3\u03c4\u03bf\u03bb\u03ae\u03c2",
+mvmt_expandFleets:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b5 \u03c4\u03b1 \u03b4\u03b9\u03b1\u03c3\u03c4\u03b7\u03bc\u03cc\u03c0\u03bb\u03bf\u03b9\u03b1 \u03c4\u03bf\u03c5 \u03c3\u03c4\u03cc\u03bb\u03bf\u03c5 \u03ba\u03b1\u03b9 \u03c4\u03b1 \u03c6\u03bf\u03c1\u03c4\u03af\u03b1",mvmt_showReversal:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b5 \u03c4\u03bf\u03bd \u03c7\u03c1\u03cc\u03bd\u03bf \u03b5\u03c0\u03b9\u03c3\u03c4\u03c1\u03bf\u03c6\u03ae\u03c2 \u03c4\u03bf\u03c5 \u03c3\u03c4\u03cc\u03bb\u03bf\u03c5",
+evt_expandFleetsPhal:"Show fleet composition and cargo (Phalanx)",phalanx_showDebris:"\u0395\u03bc\u03c6\u03ac\u03bd\u03b9\u03c3\u03b7 \u03b8\u03b5\u03c9\u03c1\u03b7\u03c4\u03b9\u03ba\u03ce\u03bd \u03c3\u03c5\u03bd\u03c4\u03c1\u03b9\u03bc\u03bc\u03b9\u03ce\u03bd \u03c3\u03c4\u03b7 \u03a6\u03ac\u03bb\u03b1\u03b3\u03b3\u03b1",evt_expandFleetsEvt:"Show fleet composition and cargo (EventList)",evt_dimReverse:"Dim returning fleets",update_Changelog:"Changelog",update_check:"\u0388\u03bb\u03b5\u03b3\u03c7\u03bf\u03c2 \u03b3\u03b9\u03b1 \u03b5\u03bd\u03b7\u03bc\u03b5\u03c1\u03ce\u03c3\u03b5\u03b9\u03c2",
+update_check_Final:"Final",update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"\u0397 \u03b5\u03c0\u03b9\u03bb\u03bf\u03b3\u03ae \u03ad\u03c7\u03b5\u03b9 \u03b1\u03c0\u03bf\u03b8\u03b7\u03ba\u03b5\u03c5\u03c4\u03b5\u03af \u03b3\u03b9\u03b1 \u03c4\u03bf \u03c3\u03c5\u03b3\u03ba\u03b5\u03ba\u03c1\u03b9\u03bc\u03ad\u03bd\u03bf \u03c3\u03cd\u03bc\u03c0\u03b1\u03bd",
+info_Tip2:"Please visit fleet send page 3 one time for each lanugage for proper mission coloring.",info_Tip3:"Please choose the top player score for correct expo calculation.",info_Tip4:"",info_Tip5:""}},LabelsHR:function(){return{btnMarkReadAll:"Ozna\u010di sve prikazane poruke kao pro\u010ditane",btnDeleteSmallPlunder:"Izbri\u0161i sva izvje\u0161\u0107a gdje je plijen < $plunder i ru\u0161evina < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Ru\u0161evine",
+total:"Ukupno",loot:"Plijen",Save:"Sa\u010duvaj",Clear:"O\u010disti",Moon:"Mjesec",tmTime:"Vrijeme",tmCountdown:"Odbrojavanje",rx_sendMail:/Po\u0161alji poruku (.+)\./,TotalCapacity:"Ukupni kapacitet",MinSpeed:"Minimalna brzina",ExPoints:"Bodovi expedicije",resources:"Resursi",ArrivalACS:"Dolazak (AKS)",mvmt_Return:"R",shipSCargoAlt:"MT",shipLCargoAlt:"VT",shipRecyclerAlt:"Rec",shipRIPAlt:"ZS",Quantity:"Koli\u010dina",Duration:"Trajanje",Consumption:"Potro\u0161nja",shipSatelliteAlt:"Sat.",deficientRes:"Resursi koji nedostaju",
+Production:"Proizvodnja",RequiredEnergy:"Potrebno energije"}},InterfaceHR:function(){return{sectionGeneral:"Op\u0107enito",sectionUniverse:"Univerzum",sectionGlobalview:"Globalni pregled",sectionHighlighting:"Highlighting",sectionObjectview:"Zgrade, istra\u017eivanja i brodovi",sectionTime:"Postavke vremena",sectionGalaxy:"Galaksija",sectionGalaxy_Player:"Igra\u010d",sectionGalaxy_Alliance:"Savez",sectionGalaxy_Debris:"Ru\u0161evine",sectionMessages:"Poruke",sectionMessages_Espionage:"Izvje\u0161taji \u0161pijuna\u017ee",
+sectionMessages_Combat:"Izvje\u0161taji borbi",sectionFleetDispatch:"Otpremanje flota",sectionFleetDispatch_Fleet1:"Stranica flote 1",sectionFleetDispatch_Fleet2:"Stranica flote 2",sectionFleetDispatch_Fleet3:"Stranica flote 3",sectionFleet:"Fleet lists",sectionFleet_Movement:"Kretanje flota",sectionFleet_Phalanx:"Falanga",sectionFleet_Events:"Doga\u0111anja",sectionFleet_MissionColor:"Boja misije",sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Support",
+sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"AntiGame Opcije",menu_SaveButton:"OK",menu_CancelButton:"Poni\u0161ti",menu_updateTip:"A new update is available: Version",improveLayout:"Pobolj\u0161aj izgled ove stranice",improveUsability:"Pobolj\u0161aj upotrebljivost ove stranice",improveLayoutUse:"Pobolj\u0161aj izgled i upotrebljivost ove stranice",simpleLayout:"Pojednostavi izgled ove stranice",killTips:"Ne prikazuj napomene",clickTips:"Use mouseclick to show tooltips on this page",oldBrowser:"Do not use effects which slowdowns old browser or computer",
+language:"Jezik",thousandSeparator:"Zarez za tisu\u0107u",btnDefault:"Zadano",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"Faktor brzine za ovaj uni",uni_DFPercent:"Postotak flote koji se pretvara u ru\u0161evinu",uni_DefenseToDF:"Postotak obrane koji se pretvara u ru\u0161evinu",uni_topPlayerScore:"The points of the strongest player in this uni are",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Prika\u017ei dodatne informacije o resursima",
+show_onTop:"Na vrhu",show_onBottom:"Na dnu",show_onLeft:"Nalijevo",showDeficient:"Prika\u017ei resurse koji nedostaju",showNames:"Prika\u017ei imena preko slika za brodove/zgrade/istra\u017eivanja",nameColorOn:"Naziv boje: Mogu\u0107e",nameColorOff:"Naziv boje: Nije mogu\u0107e",nameColorDisabled:"Naziv boje: Nedovoljno resursa",galaxy_Players:"Ozna\u010di sljedece igra\u010de",galaxy_PlayerColors:"Boje za ozna\u010davanje igra\u010da",galaxy_Allys:"Ozna\u010di slijede\u0107e saveze",galaxy_AllyColors:"Boje za ozna\u010davanje saveza",
+jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"Prika\u017ei nazive gradnji na listi planeta",shortHeader:"Uvijek smanji sliku planete",misc_scrollTitle:"Prika\u017ei vrijeme sljedece flote u naslovu prozora/taba",timeAMPM:"Koristi 12-satni format (AM/PM) umjesto 24-satnog",timeSetting:"Promjeni postavke vremena (samo za sate)",timeDontChange:"Ne mijenjaj vrijeme",timeLocal:"Uvijek prikazuj lokalno vrijeme",
+timeServer:"Uvijek prikazuj vrijeme servera",showServerOgameClock:"Zadr\u017ei prikaz vremena servera u gornjem desnom uglu",showServerPhalanx:"Zadr\u017ei vrijeme servera za Falangu",showPageStartTime:"Prika\u017ei vrijeme kada je stranica zadnji puta osvje\u017eena",galaxy_shrinkLayout:"Shrink the galaxy page",galaxy_keepTips:"Keep mouseover tooltips for planet, moon and debris",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Prika\u017ei rang igra\u010da/saveza u galaksiji",
+galaxy_PlayerRankColors:"Player ranks color (All, 1000, 100, 10)",galaxy_ShowAllyRank:"Prika\u017ei rang saveza u pregledu galaksije",galaxy_AllyRankColors:"Alliance ranks color (All, 50, 10, 5)",galaxy_DebrisMin:"Minimalna veli\u010dina ru\u0161evine koja \u0107e se istaknuti (0 za isklju\u010diti)",galaxy_DebrisSize:"Show size of debris field through",galaxy_DebrisSize_Pic:"Picture size",galaxy_DebrisSize_Number:"Number",galaxy_DebrisSize_ShortNumber:"Number (k M B)",msg_expandBox:"Pove\u0107aj veli\u010dinu okvira za poruku",
+msg_addButtons:"Dodatne tipke na porukama",msg_EspionageSpace:"Smanji razmak izme\u0111u redova",msg_PlunderThreshold:"Donji limit za teoretski plijen (x1000)",msg_DebrisThreshold:"Donji limit za teoretsku ru\u0161evinu (x1000)",msg_foldSmallPlunder:"Skopiti izvje\u0161\u0107a s plja\u010dkom i ru\u0161evinama manjih od zadanog minimuma",msg_showPlunder:"Prika\u017ei plijen u izvje\u0161\u0107u \u0161pijuna\u017ee",msg_addSimButton:"Dodaj gumbove za online simulaciju borbi",msg_fixColors:"Podesi boje izvje\u0161taja o borbi",
+fleet_showCapacity:"Prika\u017ei kapacitet i brzinu brodova",fleet1_showResCalc:"Prika\u017ei kalkulator za resurse",fleet2_fixLayout:"Popravi prikaz menija za slanje flote (stranica 2)",autocopyCoords:"Automatski kopiraj koordinate",autocopyGlobal:"Zapamti koordinate sa bilo koje stranice (sa svih OGame tabova)",fleet2_setTargetDF:"Namjesti cilj na ru\u0161evinu ako u floti ima reciklera",fleet2_ShortLinks:"Pre\u010dac do mete (stranica 2)",fleet2_MoonColor:"Boja za mjesece u izborniku",fleet2_MoonsToEnd:"Premjesti mjesece na kraj liste",
+fleet2_expandLists:"Pro\u0161iri padaju\u0107e izbornike (Brzina, Kratice za planete, AKS)",fleet2_expandMoonColor:"Boja mjesecu u pro\u0161irenoj listi",fleet2_checkProbeCapacity:"Provjeri kapacitet sonde prije slanja (stranica 2)",missionPriority:"Prioritet misije",mvmt_expandFleets:"Poka\u017ei sastav flote i teret flote",mvmt_showReversal:"Poka\u017ei povratno vrijeme flote",evt_expandFleetsPhal:"Prika\u017ei sastav flote i teret (Falanga)",phalanx_showDebris:"Prika\u017ei teoretsku veli\u010dinu ru\u0161evine u Falangi",
+evt_expandFleetsEvt:"Prika\u017ei sastav flote i teret (u listi doga\u0111anja)",evt_dimReverse:"Zatamni flote na povratku",update_Changelog:"Changelog",update_check:"Automatska provjera za nadogradnju",update_check_Final:"Final",update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Po\u010detna stranica",support_Feedback:"Feedback & Bugs",
+support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"Opcija je spremljena samo za ovaj univerzum",info_Tip2:"Please visit fleet send page 3 one time for each lanugage for proper mission coloring.",info_Tip3:"Please choose the top player score for correct expo calculation.",info_Tip4:"",info_Tip5:""}},LabelsIT:function(){return{btnMarkReadAll:"Segna tutti i messaggi visualizzati come letti",btnDeleteSmallPlunder:"Cancella i rapporti di spionaggio con saccheggio < di $plunder e detriti < di $debris",
+msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Detriti",total:"Totale",loot:"Bottino",Save:"Salva",Clear:"Azzera",Moon:"Luna",tmTime:"Orario",tmCountdown:"Conto alla rovescia",rx_sendMail:/Invia messaggio a (.+)\./,TotalCapacity:"Capacit\u00e0 Totale",MinSpeed:"Velocit\u00e0 minima",ExPoints:"Punti spedizione",resources:"Risorse",ArrivalACS:"Arrivo (ACS)",mvmt_Return:"R",shipSCargoAlt:"CL",shipLCargoAlt:"CP",shipRecyclerAlt:"Rici",shipRIPAlt:"Morte Nera",Quantity:"Quantit\u00e0",
+Duration:"Durata",Consumption:"Consumo",shipSatelliteAlt:"Sat.",deficientRes:"Risorse mancanti",Production:"Produzione",RequiredEnergy:"Energia necessaria"}},InterfaceIT:function(){return{sectionGeneral:"Generale",sectionUniverse:"Universo",sectionGlobalview:"Vista Globale",sectionHighlighting:"Da Evidenziare",sectionObjectview:"Strutture, ricerche navi",sectionTime:"Impostazioni orario",sectionGalaxy:"Galassia",sectionGalaxy_Player:"Giocatore",sectionGalaxy_Alliance:"Alleanza",sectionGalaxy_Debris:"Detriti",
+sectionMessages:"Messaggi",sectionMessages_Espionage:"Rapporto di spionaggio",sectionMessages_Combat:"Rapporto di combattimento",sectionFleetDispatch:"Invio della flotta",sectionFleetDispatch_Fleet1:"Flotta Pagina 1",sectionFleetDispatch_Fleet2:"Flotta Pagina 2",sectionFleetDispatch_Fleet3:"Flotta Pagina 3",sectionFleet:"Opzioni Movimento Flotta",sectionFleet_Movement:"Movimenti di flotta",sectionFleet_Phalanx:"Falange",sectionFleet_Events:"Lista Eventi",sectionFleet_MissionColor:"Colore della missione",
+sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"Opzioni di AntiGame",menu_SaveButton:"OK",menu_CancelButton:"Annulla",menu_updateTip:"A new update is available: Version",improveLayout:"Migliora la visualizzazione della pagina",improveUsability:"Migliora la fruibilit\u00e0 della pagina",improveLayoutUse:"Migliora visualizzazione e la fruibilit\u00e0 della pagina",simpleLayout:"Semplifica la visualizzazione della pagina",
+killTips:"Nascondi i suggerimenti",clickTips:"Clicca per vedere i suggerimenti della pagina",oldBrowser:"Non usare effetti (\u00e8 pi\u00f9 veloce)",language:"Lingua",thousandSeparator:"Separatore delle migliaia",btnDefault:"Predefnito",blockAutoComplete:"Blocca l'autocompletamento del browser",uni_SpeedFactor:"Fattore di velocit\u00e0 di questo universo",uni_DFPercent:"Percentuale di flotta nel Campo Detriti",uni_DefenseToDF:"Percentuale di difese nel Campo Detriti",uni_maxPlayerScore:"Il giocatore pi\u00f9 forte ha pi\u00f9 di 5M punti",
+showResources:"Mostra informazioni estese sulle risorse",show_onTop:"In alto",show_onBottom:"In basso",show_onLeft:"A sinistra",showDeficient:"Mostra le risorse mancanti",showNames:"Mostra i nomi di navi/costruzioni/ricerche sulle immagini",nameColorOn:"Colore per: disponibile",nameColorOff:"Colore per: non disponibile",nameColorDisabled:"Colore per: risorse insufficienti",galaxy_Players:"Evidenzia i seguenti giocatori",galaxy_PlayerColors:"Colori da usare per evidenziare i giocatori",galaxy_Allys:"Evidenzia le seguenti alleanze",
+galaxy_AllyColors:"Colori da usare per evidenziare le alleanze",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"Mostra il nome della costruzione nella lista pianeti",shortHeader:"Riduci sempre l'immagine dei pianeti",misc_scrollTitle:"Mostra l'orario del prossimo evento nel titolo della finestra",timeAMPM:"Usa il formato 12 ore (AM/PM) al posto di quello 24 ore",timeSetting:"Cambia le impostazioni dell'orario (solo per le ore)",
+timeDontChange:"Non cambiare l'orario",timeLocal:"Imposta sempre il fuso orario locale",timeServer:"Imposta sempre il fuso orario del server",showServerOgameClock:"Mantieni l'ora del server nell'orologio in alto a destra di Ogame",showServerPhalanx:"Mantieni l'ora del server nella visuale Falange",showPageStartTime:"Mostra l'orario in cui la pagina \u00e8 stata aggiornata l'ultima volta",galaxy_shrinkLayout:"Compatta la visuale galassia",galaxy_keepTips:"Visualizza i suggerimenti Luna e Campo detriti nella meniera classica (mouse passa sopra visulizza i suggerimenti)",
+galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Mostra la posizione in classifica del giocatore/alleanza nella visuale galassia",galaxy_PlayerRankColors:"Colore Giocatore per classifica, rispettivamente(Tutti, Primi 1000, Primi 100, Primi 10)",galaxy_ShowAllyRank:"Visualizza classifica alleanza nella visuale galassia",galaxy_AllyRankColors:"Colore alleanza per classifica, rispettivamente (Tutte, Prime 50, Prime 10, Prime 5)",galaxy_DebrisMin:"Dimensione minima del campo detriti da evidenziare (0 per disabilitarlo)",
+galaxy_DebrisSize:"Come visualizzare il campo detriti",galaxy_DebrisSize_Pic:"Immagine",galaxy_DebrisSize_Number:"Numero",galaxy_DebrisSize_ShortNumber:"Numero in k,M,B",msg_expandBox:"Aumenta l'altezza dei messagi",msg_addButtons:"Pulsanti aggiuntivi nei messaggi",msg_EspionageSpace:"Riduce la spaziatura di riga",msg_PlunderThreshold:"Valore minimo per il saccheggio teorico (x1000)",msg_DebrisThreshold:"Valore minimo per i detriti teorici (x1000)",msg_foldSmallPlunder:"Elimina i rapporti con saccheggio e campo detriti inferiori al minimo",
+msg_showPlunder:"Mostra il saccheggio nei rapporti di spionaggio",msg_addSimButton:"Aggiungi i pulsanti per inviare il rapporto di spionaggio a WebSim",msg_fixColors:"Correggi i colori dei rapporti di combattimento",fleet_showCapacity:"Mostra la stiva e la velocit\u00e0 delle navi",fleet1_showResCalc:"Mostra il calcolatore di risorse",fleet2_fixLayout:"Correggi l'impostazione delle informazioni di volo (pagina 2)",autocopyCoords:"Copia automatica delle coordinate",autocopyGlobal:"Memorizza le coordinate da qualunque pagina (non solo dalla scheda del corrente universo di Ogame)",
+fleet2_setTargetDF:"Imposta l'obiettivo a Campo detriti se la flotta include riciclatrici",fleet2_ShortLinks:"Collegamento rapido all'obiettivo (pagina 2)",fleet2_MoonColor:"Colore delle lune nella lista scorciatoie",fleet2_MoonsToEnd:"Sposta le lune alla fine della lista scorciatoie",fleet2_expandLists:"Espandi i menu a tendina (Velocit\u00e0, Scorciatoie, ACS)",fleet2_expandMoonColor:"Colore Lune nella lista completa",fleet2_checkProbeCapacity:"Verifica la capacit\u00e0 delle sonde spia prima dell'invio (pagina 2)",
+missionPriority:"Priorit\u00e0 della missione",mvmt_expandFleets:"Mostra le navi della flotta",mvmt_showReversal:"Mostra il conto alla rovescia per le flotte",evt_expandFleetsPhal:"Mostra la composizione di flotta e le risorse trasportate (Falange)",phalanx_showDebris:"Mostra i detriti teorici nella vista Falange",evt_expandFleetsEvt:"Mostra la composizione di flotta e le risorse trasportate (Lista Eventi)",evt_dimReverse:"Oscura i ritorni di flotta",update_Changelog:"Changelog",update_check:"Controllo automatico aggiornamenti",
+update_check_Final:"Final",update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"L'opzione viene memorizzata solo per questo universo",info_Tip2:"Please visit fleet send page 3 one time for each lanugage for proper mission coloring.",
+info_Tip3:"Please choose the top player score for correct expo calculation.",info_Tip4:"",info_Tip5:""}},LabelsJP:function(){return{btnMarkReadAll:"\u8aad\u307f\u53d6\u308a\u3068\u3057\u3066\u8868\u793a\u3055\u308c\u3066\u3044\u308b\u3059\u3079\u3066\u306e\u30e1\u30c3\u30bb\u30fc\u30b8\u3092\u30de\u30fc\u30af",btnDeleteSmallPlunder:"\u30b9\u30d1\u30a4\u30ec\u30dd\u30fc\u30c8\u3092\u524a\u9664 \u7565\u596a\u54c1 < $plunder \u3068\u30c7\u30d6\u30ea < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",
+msg_Simulator3:"OSimulate",debris:"\u30c7\u30d6\u30ea",total:"\u5408\u8a08",loot:"\u6226\u5229\u54c1",Save:"\u4fdd\u5b58",Clear:"\u30af\u30ea\u30a2",Moon:"\u6708",tmTime:"\u6642\u9593",tmCountdown:"\u30ab\u30a6\u30f3\u30c8\u30c0\u30a6\u30f3",rx_sendMail:/Send a message to (.+)\./,TotalCapacity:"\u7dcf\u5bb9\u91cf",MinSpeed:"\u6700\u5c0f\u9650\u306e\u901f\u5ea6",ExPoints:"\u9060\u5f81\u30dd\u30a4\u30f3\u30c8",resources:"\u8cc7\u6e90",ArrivalACS:"\u5230\u7740 (ACS)",mvmt_Return:"R",shipSCargoAlt:"\u5c0f\u578b\u8f38\u9001\u6a5f",
+shipLCargoAlt:"\u5927\u578b\u8f38\u9001\u6a5f",shipRecyclerAlt:"\u6b8b\u9ab8\u56de\u53ce\u8239",shipRIPAlt:"\u30c7\u30b9\u30b9\u30bf\u30fc",Quantity:"\u6570\u91cf",Duration:"\u671f\u9593",Consumption:"\u6d88\u8cbb",shipSatelliteAlt:"\u30b5\u30c6\u30e9\u30a4\u30c8",deficientRes:"\u8cc7\u6e90\u4e0d\u8db3",Production:"\u751f\u7523",RequiredEnergy:"\u5fc5\u8981\u306a\u30a8\u30cd\u30eb\u30ae\u30fc"}},InterfaceJP:function(){return{sectionGeneral:"\u5168\u822c",sectionUniverse:"\u5b87\u5b99",sectionGlobalview:"\u30b0\u30ed\u30fc\u30d0\u30eb\u30d3\u30e5\u30fc",
+sectionHighlighting:"\u30cf\u30a4\u30e9\u30a4\u30c8",sectionObjectview:"\u65bd\u8a2d, \u30ea\u30b5\u30fc\u30c1\u3068\u8266\u968a",sectionTime:"\u6642\u9593\u8a2d\u5b9a",sectionGalaxy:"\u9280\u6cb3",sectionGalaxy_Player:"\u30d7\u30ec\u30a4\u30e4\u30fc",sectionGalaxy_Alliance:"\u540c\u76df",sectionGalaxy_Debris:"\u30c7\u30d6\u30ea",sectionMessages:"\u30e1\u30c3\u30bb\u30fc\u30b8",sectionMessages_Espionage:"\u30b9\u30d1\u30a4\u30ec\u30dd\u30fc\u30c8",sectionMessages_Combat:"\u30d0\u30c8\u30eb\u30ec\u30dd\u30fc\u30c8",
+sectionFleetDispatch:"\u8266\u968a\u6d3e\u9063",sectionFleetDispatch_Fleet1:"\u8266\u968a \u30da\u30fc\u30b8 1",sectionFleetDispatch_Fleet2:"\u8266\u968a \u30da\u30fc\u30b8 2",sectionFleetDispatch_Fleet3:"\u8266\u968a \u30da\u30fc\u30b8 3",sectionFleet:"\u8266\u968a\u30ea\u30b9\u30c8",sectionFleet_Movement:"\u8266\u968a\u52d5\u5411",sectionFleet_Phalanx:"\u5927\u578b\u30bb\u30f3\u30b5\u30fc",sectionFleet_Events:"\u30a4\u30d9\u30f3\u30c8\u30ea\u30b9\u30c8\u3068\u5927\u578b\u30bb\u30f3\u30b5\u30fc",
+sectionFleet_MissionColor:"\u30df\u30c3\u30b7\u30e7\u30f3\u306e\u8272 (\u30d5\u30a9\u30fc\u30de\u30c3\u30c8: ABCDEF - Websafe format ACE)",sectionInfo:"\u60c5\u5831",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"\u30b5\u30dd\u30fc\u30c8",sectionTips:"\u30d2\u30f3\u30c8",menu_Name:"AntiGame",menu_Title:"AntiGame\u30aa\u30d7\u30b7\u30e7\u30f3",menu_SaveButton:"OK",menu_CancelButton:"\u30ad\u30e3\u30f3\u30bb\u30eb",menu_updateTip:"\u65b0\u3057\u3044\u30a2\u30c3\u30d7\u30c7\u30fc\u30c8\u304c\u5229\u7528\u53ef\u80fd\u3067\u3059: Version",
+improveLayout:"\u3053\u306e\u30da\u30fc\u30b8\u306e\u30ec\u30a4\u30a2\u30a6\u30c8\u3092\u5411\u4e0a\u3055\u305b\u308b",improveUsability:"\u3053\u306e\u30da\u30fc\u30b8\u306e\u30e6\u30fc\u30b6\u30d3\u30ea\u30c6\u30a3\u3092\u5411\u4e0a\u3055\u305b\u308b",improveLayoutUse:"\u3053\u306e\u30da\u30fc\u30b8\u306e\u30ec\u30a4\u30a2\u30a6\u30c8\u3068\u30e6\u30fc\u30b6\u30d3\u30ea\u30c6\u30a3\u3092\u5411\u4e0a\u3055\u305b\u308b",simpleLayout:"\u3053\u306e\u30da\u30fc\u30b8\u306e\u30ec\u30a4\u30a2\u30a6\u30c8\u3092\u7c21\u7d20\u5316",
+killTips:"\u30c4\u30fc\u30eb\u30c1\u30c3\u30d7\u975e\u8868\u793a",clickTips:"\u3053\u306e\u30da\u30fc\u30b8\u3067\u30c4\u30fc\u30eb\u30c1\u30c3\u30d7\u3092\u8868\u793a\u3059\u308b\u305f\u3081\u306b\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3092\u4f7f\u7528\u3057\u3066\u304f\u3060\u3055\u3044",oldBrowser:"\u53e4\u3044\u30d6\u30e9\u30a6\u30b6\u3084\u30b3\u30f3\u30d4\u30e5\u30fc\u30bf\u304c\u901f\u5ea6\u4f4e\u4e0b\u3057\u306a\u3044\u69d8\u306b\u52b9\u679c\u3092\u4f7f\u7528\u3057\u306a\u3044",language:"\u8a2d\u5b9a\u30e1\u30cb\u30e5\u30fc\u306e\u8a00\u8a9e",
+thousandSeparator:"\u6841\u533a\u5207\u308a\u8a18\u53f7",btnDefault:"\u30c7\u30d5\u30a9\u30eb\u30c8",blockAutoComplete:"\u5165\u529b\u30d5\u30a3\u30fc\u30eb\u30c9\u306e\u30aa\u30fc\u30c8\u30b3\u30f3\u30d7\u30ea\u30fc\u30c8\u3092\u30d6\u30ed\u30c3\u30af\u3059\u308b",uni_SpeedFactor:"\u3053\u306e\u5b87\u5b99\u306e\u901f\u5ea6\u4fc2\u6570",uni_DFPercent:"\u8266\u968a\u30c7\u30d6\u30ea\u306e\u5272\u5408",uni_DefenseToDF:"\u9632\u885b\u30c7\u30d6\u30ea\u306e\u5272\u5408",uni_topPlayerScore:"\u3053\u306e\u5b87\u5b99\u3067\u6700\u5f37\u30d7\u30ec\u30a4\u30e4\u30fc\u306e\u30dd\u30a4\u30f3\u30c8",
+uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"\u62e1\u5f35\u8cc7\u6e90\u306e\u60c5\u5831\u3092\u8868\u793a",show_onTop:"\u4e0a\u90e8\u306b",show_onBottom:"\u4e0b\u90e8\u306b",show_onLeft:"\u5de6\u306b",showDeficient:"\u4e0d\u8db3\u8cc7\u6e90\u306e\u60c5\u5831\u3092\u8868\u793a",showNames:"\u753b\u50cf\u306e\u4e0a\u306b\u8239/\u65bd\u8a2d/\u30ea\u30b5\u30fc\u30c1\u306e\u540d\u524d\u3092\u8868\u793a\u3059\u308b",nameColorOn:"\u540d\u524d\u306e\u8272\uff1a\u4f7f\u7528",
+nameColorOff:"\u540d\u524d\u306e\u8272\uff1a\u672a\u4f7f\u7528",nameColorDisabled:"\u540d\u524d\u306e\u8272\uff1a\u8cc7\u6e90\u4e0d\u8db3",galaxy_Players:"\u30d7\u30ec\u30fc\u30e4\u30fc\u3092\u5f37\u8abf\u8868\u793a",galaxy_PlayerColors:"\u30d7\u30ec\u30fc\u30e4\u30fc\u3092\u8272\u306e\u5f37\u8abf\u8868\u793a",galaxy_Allys:"\u540c\u76df\u54e1\u306e\u8272\u306e\u5f37\u8abf\u8868\u793a",galaxy_AllyColors:"\u540c\u76df\u306e\u8272\u306e\u5f37\u8abf\u8868\u793a",jumpgate_Improve:"Show target links and set ships with click on number or icon.",
+jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"\u60d1\u661f\u30ea\u30b9\u30c8\u3067\u5efa\u8a2d\u30bf\u30a4\u30c8\u30eb\u3092\u8868\u793a",shortHeader:"\u5e38\u306b\u60d1\u661f\u306e\u753b\u50cf\u3092\u6700\u5c0f\u9650\u306b\u6291\u3048\u308b",misc_scrollTitle:"\u30a6\u30a3\u30f3\u30c9\u30a6\u30bf\u30a4\u30c8\u30eb\u306b\u6b21\u306e\u30a4\u30d9\u30f3\u30c8\u6642\u9593\u3092\u30b9\u30af\u30ed\u30fc\u30eb",timeAMPM:"12\u6642\u9593\u5f62\u5f0f(AM/PM)\u306e\u4ee3\u308f\u308a\u306b24\u6642\u9593\u5f62\u5f0f\u3092\u4f7f\u7528",
+timeSetting:"\u6642\u523b\u306e\u5024\u3092\u5909\u66f4(\u6642\u9593\u306e\u307f)",timeDontChange:"\u6642\u9593\u3092\u5909\u66f4\u3057\u306a\u3044",timeLocal:"\u5e38\u306b\u30ed\u30fc\u30ab\u30eb\u30bf\u30a4\u30e0\u30be\u30fc\u30f3\u306b\u8a2d\u5b9a",timeServer:"\u5e38\u306b\u30b5\u30fc\u30d0\u30fc\u30bf\u30a4\u30e0\u30be\u30fc\u30f3\u306b\u8a2d\u5b9a",showServerOgameClock:"\u53f3\u4e0aOGame\u6642\u9593\u306e\u305f\u3081\u306b\u30b5\u30fc\u30d0\u306e\u6642\u9593\u3092\u7dad\u6301",showServerPhalanx:"\u5927\u578b\u30bb\u30f3\u30b5\u30fc\u30d3\u30e5\u30fc\u306e\u305f\u3081\u306b\u30b5\u30fc\u30d0\u306e\u6642\u9593\u3092\u7dad\u6301",
+showPageStartTime:"\u30da\u30fc\u30b8\u304c\u6700\u5f8c\u306b\u30ea\u30d5\u30ec\u30c3\u30b7\u30e5\u3055\u308c\u308b\u6642\u9593\u3092\u8868\u793a",galaxy_shrinkLayout:"Shrink the galaxy page",galaxy_keepTips:"\u60d1\u661f\u3001\u6708\u3084\u30c7\u30d6\u30ea\u306e\u305f\u3081\u306b\u30de\u30a6\u30b9\u30aa\u30fc\u30d0\u30fc\u30c4\u30fc\u30eb\u30c1\u30c3\u30d7\u3092\u4fdd\u6301\u3059\u308b",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"\u9280\u6cb3\u30d3\u30e5\u30fc\u3067\u30d7\u30ec\u30a4\u30e4\u30fc\u30e9\u30f3\u30af\u306e\u8868\u793a",
+galaxy_PlayerRankColors:"\u30d7\u30ec\u30a4\u30e4\u30fc\u30e9\u30f3\u30af\u306e\u8272 (\u3059\u3079\u3066, 1000, 100, 10)",galaxy_ShowAllyRank:"\u9280\u6cb3\u30d3\u30e5\u30fc\u3067\u540c\u76df\u30e9\u30f3\u30af\u306e\u8868\u793a",galaxy_AllyRankColors:"\u540c\u76df\u30e9\u30f3\u30af\u306e\u8272 (\u3059\u3079\u3066, 50, 10, 5)",galaxy_DebrisMin:"\u5f37\u8abf\u8868\u793a\u3059\u308b\u305f\u3081\u306e\u30c7\u30d6\u30ea\u306e\u6700\u5c0f\u30b5\u30a4\u30ba (0 to turn off)",galaxy_DebrisSize:"\u30c7\u30d6\u30ea\u30d5\u30a3\u30fc\u30eb\u30c9\u306e\u5927\u304d\u3055\u306e\u8868\u793a\u65b9\u6cd5",
+galaxy_DebrisSize_Pic:"\u753b\u50cf\u30b5\u30a4\u30ba",galaxy_DebrisSize_Number:"\u6570",galaxy_DebrisSize_ShortNumber:"\u6570 (k M B)",msg_expandBox:"\u30e1\u30c3\u30bb\u30fc\u30b8\u30dc\u30c3\u30af\u30b9\u306e\u9ad8\u3055\u3092\u62e1\u5f35\u3059\u308b",msg_addButtons:"\u30e1\u30c3\u30bb\u30fc\u30b8\u306e\u8ffd\u52a0\u30dc\u30bf\u30f3",msg_EspionageSpace:"\u884c\u9593\u9694\u3092\u6e1b\u3089\u3059",msg_PlunderThreshold:"\u7406\u8ad6\u4e0a\u306e\u7565\u596a\u306e\u305f\u3081\u306e\u4e0b\u9650\u5024 (x1000)",
+msg_DebrisThreshold:"\u7406\u8ad6\u4e0a\u306e\u30c7\u30d6\u30ea\u306e\u305f\u3081\u306e\u4e0b\u9650\u5024 (x1000)",msg_foldSmallPlunder:"\u7565\u596a\u3068\u30c7\u30d6\u30ea\u306e\u9650\u754c\u672a\u6e80\u306e\u30ec\u30dd\u30fc\u30c8\u3092\u30d5\u30a9\u30fc\u30eb\u30c9",msg_showPlunder:"\u30b9\u30d1\u30a4\u30ec\u30dd\u30fc\u30c8\u3067\u306e\u7565\u596a\u54c1\u306e\u8868\u793a",msg_addSimButton:"\u30b7\u30df\u30e5\u30ec\u30fc\u30bf\u306b\u30b9\u30d1\u30a4\u306e\u5831\u544a\u66f8\u3092\u63d0\u51fa\u3059\u308b\u305f\u3081\u306e\u30dc\u30bf\u30f3\u3092\u8ffd\u52a0",
+msg_fixColors:"\u6226\u95d8\u5831\u544a\u66f8\u306e\u8272\u306e\u4fee\u6b63",fleet_showCapacity:"\u8239\u306e\u5bb9\u91cf\u3068\u901f\u5ea6\u306e\u8868\u793a",fleet1_showResCalc:"\u8cc7\u6e90\u306e\u8a08\u7b97\u6a5f\u3092\u8868\u793a",fleet2_fixLayout:"\u9577\u3044\u30c6\u30ad\u30b9\u30c8\u306e\u30d5\u30e9\u30a4\u30c8\u60c5\u5831\u306e\u30ec\u30a4\u30a2\u30a6\u30c8\u306e\u4fee\u6b63",autocopyCoords:"\u5ea7\u6a19\u306e\u81ea\u52d5\u30b3\u30d4\u30fc",autocopyGlobal:"\u4ed6\u306e\u5916\u90e8\u30da\u30fc\u30b8\u304b\u3089\u5ea7\u6a19\u3092\u8a18\u61b6",
+fleet2_setTargetDF:"\u8266\u968a\u306b\u6b8b\u9ab8\u56de\u53ce\u8239\u304c\u542b\u307e\u308c\u3066\u3044\u308b\u5834\u5408\u30c7\u30d6\u30ea\u306b\u76ee\u6a19\u3092\u8a2d\u5b9a",fleet2_ShortLinks:"\u30bf\u30fc\u30b2\u30c3\u30c8\u306e\u30b7\u30e7\u30fc\u30c8\u30ea\u30f3\u30af",fleet2_MoonColor:"\u30b7\u30e7\u30fc\u30c8\u30ea\u30f3\u30af\u4e00\u89a7\u3067\u6708\u306e\u8272",fleet2_MoonsToEnd:"\u6708\u3092\u30b7\u30e7\u30fc\u30c8\u30ea\u30f3\u30af\u4e00\u89a7\u306e\u672b\u5c3e\u306b\u79fb\u52d5",fleet2_expandLists:"\u30c9\u30ed\u30c3\u30d7\u30c0\u30a6\u30f3\u30dc\u30c3\u30af\u30b9(\u30b9\u30d4\u30fc\u30c9,\u30b7\u30e7\u30fc\u30c8\u30ab\u30c3\u30c8,ACS)\u3092\u5c55\u958b",
+fleet2_expandMoonColor:"\u8272\u306e\u6708\u30ea\u30b9\u30c8\u3092\u5c55\u958b",fleet2_checkProbeCapacity:"\u51fa\u767a\u3059\u308b\u524d\u306b\u30d7\u30ed\u30fc\u30d6\u306e\u5bb9\u91cf\u3092\u78ba\u8a8d",missionPriority:"\u30df\u30c3\u30b7\u30e7\u30f3\u306e\u512a\u5148\u5ea6",mvmt_expandFleets:"\u8266\u968a\u306e\u8239\u3068\u8f38\u9001\u8239\u306e\u8868\u793a",mvmt_showReversal:"\u8266\u968a\u306e\u5e30\u9084\u6642\u9593\u306e\u8868\u793a",evt_expandFleetsPhal:"\u8266\u968a\u306e\u69cb\u6210\u3068\u8ca8\u7269\u3092\u8868\u793a (\u5927\u578b\u30bb\u30f3\u30b5\u30fc)",
+phalanx_showDebris:"\u5927\u578b\u30bb\u30f3\u30b5\u30fc\u30d3\u30e5\u30fc\u3067\u7406\u8ad6\u4e0a\u306e\u6b8b\u9ab8\u3092\u8868\u793a\u3059\u308b",evt_expandFleetsEvt:"\u8266\u968a\u306e\u69cb\u6210\u3068\u8ca8\u7269\u3092\u8868\u793a (\u30a4\u30d9\u30f3\u30c8\u30ea\u30b9\u30c8)",evt_dimReverse:"\u5e30\u9084\u8266\u968a\u3092\u6697\u304f\u8868\u793a",update_Changelog:"\u5909\u66f4\u5c65\u6b74",update_check:"\u30a2\u30c3\u30d7\u30c7\u30fc\u30c8\u306e\u81ea\u52d5\u30c1\u30a7\u30c3\u30af",update_check_Final:"\u6700\u65b0\u7248",
+update_check_Preview:"\u6700\u65b0\u7248 & \u958b\u767a\u7248",update_Final:"\u6700\u65b0\u30d0\u30fc\u30b8\u30e7\u30f3\u3078\u30a2\u30c3\u30d7\u30c7\u30fc\u30c8",update_Preview:"\u30c6\u30b9\u30c8\u958b\u767a\u30d0\u30fc\u30b8\u30e7\u30f3\u3078\u30a2\u30c3\u30d7\u30c7\u30fc\u30c8",update_Last:"\u4ee5\u524d\u306e\u5b89\u5b9a\u30d0\u30fc\u30b8\u30e7\u30f3\u306b\u623b\u3059",update_Install:"\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb",support_Homepage:"\u30db\u30fc\u30e0\u30da\u30fc\u30b8",support_Feedback:"Feedback & Bugs",
+support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"\u3053\u306e\u30aa\u30d7\u30b7\u30e7\u30f3\u306f\u3001\u3053\u306e\u5b87\u5b99\u306e\u305f\u3081\u306b\u4fdd\u5b58\u3055\u308c\u307e\u3059",info_Tip2:"\u9069\u5207\u306a\u30df\u30c3\u30b7\u30e7\u30f3\u306e\u8272\u4ed8\u3051\u3092\u3001\u5404\u8a00\u8a9e\u306b\u884c\u3046\u305f\u3081\u306b\u8266\u968a \u30da\u30fc\u30b8 3\u3092\u4e00\u5ea6\u3054\u89a7\u304f\u3060\u3055\u3044",info_Tip3:"\u6b63\u3057\u3044\u63a2\u7d22\u8a08\u7b97\u306e\u305f\u3081\u306b\u30c8\u30c3\u30d7\u30d7\u30ec\u30a4\u30e4\u30fc\u306e\u30b9\u30b3\u30a2\u3092\u9078\u629e\u3057\u3066\u304f\u3060\u3055\u3044",
+info_Tip4:"",info_Tip5:""}},LabelsNL:function(){return{btnMarkReadAll:"Markeer alle zichtbare berichten als gelezen",btnDeleteSmallPlunder:"Verwijder spionagerapporten met buit onder < $plunder en puin onder < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Puin",total:"Totaal",loot:"Buit",Save:"Opslaan",Clear:"Wissen",Moon:"Maan",tmTime:"Tijd",tmCountdown:"Aftellen",rx_sendMail:/Stuur een bericht naar (.+)\./,TotalCapacity:"Totale laadvermogen",MinSpeed:"Minimale snelheid",
+ExPoints:"Expeditie punten",resources:"Grondstoffen",ArrivalACS:"Aankomst (AGS)",mvmt_Return:"R",shipSCargoAlt:"KV",shipLCargoAlt:"GV",shipRecyclerAlt:"Recs",shipRIPAlt:"RIP",Quantity:"Aantal",Duration:"Duur",Consumption:"Consumptie",shipSatelliteAlt:"Sats",deficientRes:"Missende grondstoffen",Production:"Productie",RequiredEnergy:"Benodigde energie"}},InterfaceNL:function(){return{sectionGeneral:"Algemeen",sectionUniverse:"Universum",sectionGlobalview:"Global view",sectionHighlighting:"Highlighting",
+sectionObjectview:"Gebouwen, onderzoeken en schepen",sectionTime:"Tijd instellingen",sectionGalaxy:"Melkweg",sectionGalaxy_Player:"Speler",sectionGalaxy_Alliance:"Alliantie",sectionGalaxy_Debris:"Puin",sectionMessages:"Berichten",sectionMessages_Espionage:"spionagerapporten",sectionMessages_Combat:"gevechtsrapporten",sectionFleetDispatch:"Vlootverzending",sectionFleetDispatch_Fleet1:"Vlootpagina 1",sectionFleetDispatch_Fleet2:"Vlootpagina 2",sectionFleetDispatch_Fleet3:"Vlootpagina 3",sectionFleet:"Vloot lijst",
+sectionFleet_Movement:"Vlootbeweging",sectionFleet_Phalanx:"Phalanx",sectionFleet_Events:"Gebeurtenissenlijst",sectionFleet_MissionColor:"Kleur voor",sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"AntiGame Opties",menu_SaveButton:"OK",menu_CancelButton:"Annuleer",menu_updateTip:"Een nieuwe update is beschikbaar: Versie",improveLayout:"Verbeter de layout van de pagina",improveUsability:"Verbeter de bruikbaarheid van de pagina",
+improveLayoutUse:"Verbeter de layout en bruikbaarheid van de pagina",simpleLayout:"Vergemakkelijk de layout van de pagina",killTips:"Verwijder tooltips",clickTips:"Klik met je muis om de tooltip zichtbaar te maken op deze pagina",oldBrowser:"Gebruik geen effecten die de oude browser of computer langzamer maken",language:"Taal",thousandSeparator:"Duizendtal scheidingsteken",btnDefault:"Standaard",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"Snelheid van universum",uni_DFPercent:"Percentage vloot-naar-puin",
+uni_DefenseToDF:"Percentage verdediging-naar-puin",uni_topPlayerScore:"De punten van de topspeler in dit universum zijn",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Toon uitgebreide grondstof informatie",show_onTop:"Boven",show_onBottom:"Onder menu",show_onLeft:"Links van menu",showDeficient:"Toon missende grondstoffen",showNames:"Toon schip/gebouw/onderzoek namen op afbeeldingen",nameColorOn:"Kleur als het beschikbaar is",nameColorOff:"Kleur als het niet beschikbaar is",
+nameColorDisabled:"Kleur als er niet genoeg grondstoffen zijn",galaxy_Players:"Markeer de volgende spelers",galaxy_PlayerColors:"Kleuren voor speler markering",galaxy_Allys:"Markeer de volgende allianties",galaxy_AllyColors:"Kleuren voor alliantie markering",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"Toon constructies die bezig zijn in planetenlijst",shortHeader:"Minimaliseer planeet afbeelding altijd",
+misc_scrollTitle:"Laat volgende gebeurtenis in titel van de brower scrollen",timeAMPM:"Gebruik 12-uurs notatie (AM/PM) i.p.v. 24-uurs",timeSetting:"Verander tijd-waarden (alleen uren)",timeDontChange:"Verander de tijd niet",timeLocal:"Gebruik altijd naar locale tijdzone",timeServer:"Gebruik altijd server tijdzone",showServerOgameClock:"Gebruik server tijd voor de Ogame klok rechts boven",showServerPhalanx:"Gebruik server tijd voor Phalanx overzicht",showPageStartTime:"Toon de tijd sinds laatste pagina refresh",
+galaxy_shrinkLayout:"Verklein het melkwegoverzicht",galaxy_keepTips:"Behoud mouseover tooltips voor planeet, maan en puin",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Toon speler/alliantie ranks in melkweg",galaxy_PlayerRankColors:"Spelerrank kleur (All, 1000, 100, 10)",galaxy_ShowAllyRank:"Toon alliantieranking in het melkwegoverzicht",galaxy_AllyRankColors:"Alliantierank kleur (All, 50, 10, 5)",galaxy_DebrisMin:"Minimale grootte om puinveld te markeren (0 om uit te zetten)",
+galaxy_DebrisSize:"Toon grootte van het puinveld",galaxy_DebrisSize_Pic:"Grootte van het plaatje voor het puin",galaxy_DebrisSize_Number:"Nummer",galaxy_DebrisSize_ShortNumber:"Nummer (k M B)",msg_expandBox:"Vergroot de messageboxhoogte",msg_addButtons:"Extra knoppen bij berichten",msg_EspionageSpace:"Spioneer een lege ruimte",msg_PlunderThreshold:"Minimale theoretische buit (x1000)",msg_DebrisThreshold:"Minimaal theoretisch puinveld (x1000)",msg_foldSmallPlunder:"Minimaliseer spionagerapporten met buit en puin onder het minimaal aantal",
+msg_showPlunder:"Toon buit in spionagerapporten",msg_addSimButton:"Knoppen om spionagerapporten naar WebSim/DragoSim te zenden",msg_fixColors:"Geef correcte kleur aan gevechtsrapporten",fleet_showCapacity:"Toon laadvermogen en snelheid schepen",fleet1_showResCalc:"Toon grondstoffen calculator",fleet2_fixLayout:"Pas de vlucht informatie layout aan (pagina 2)",autocopyCoords:"Kopieer coordinaten automatisch",autocopyGlobal:"Onthoud coordinaten van iedere pagina (Niet alleen OGame pagina's)",fleet2_setTargetDF:"Zet bestemming naar puinveld als er recyclers bij de vloot zitten",
+fleet2_ShortLinks:"Planeet shortcut lijst (pagina 2)",fleet2_MoonColor:"Kleur van manen in shortcut lijst",fleet2_MoonsToEnd:"Verplaats manen naar het einde van de shortcut lijst",fleet2_expandLists:"Breid drop-down boxen uit(Snelheid, Shortcuts, AGS)",fleet2_expandMoonColor:"Kleur manen in de uitbreidingslijst",fleet2_checkProbeCapacity:"Controleer sonde opslagruimte voor vertrek (pagina 2)",missionPriority:"Missie prioriteit",mvmt_expandFleets:"Toon lading en schepen in vloot",mvmt_showReversal:"Toon terugkeer tijd voor vloten",
+evt_expandFleetsPhal:"Toon vloot samenstelling en vracht (Phalanx)",phalanx_showDebris:"Toon theoretisch puin in Phalanx overzicht",evt_expandFleetsEvt:"Toon vloot samenstelling en vracht (Gebeurtenissenlijst)",evt_dimReverse:"Maak terugkerende vloten dof",update_Changelog:"Changelog",update_check:"Zoek automatisch naar updates",update_check_Final:"Final",update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",
+update_Install:"Installeer",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"Deze opties gelden enkel voor dit universum",info_Tip2:"Ga 1 keer naar vlootpagina 3 voor goede missiekleuren.",info_Tip3:"Kies de topspeler's score voor goede expocalculatie.",info_Tip4:"",info_Tip5:""}},LabelsNO:function(){return{btnMarkReadAll:"Marker alle vises meldinger som lest ",btnDeleteSmallPlunder:"Slett spion rapporter med Bytte < $plunder og vrakrester < $debris",
+msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"vrakrester",total:"Totall",loot:"bytte",Save:"Lagre",Clear:"Slett",Moon:"M\u00e5ne",tmTime:"Tid",tmCountdown:"nedtelling",rx_sendMail:/Send melding til (.+)\./,TotalCapacity:"Totall kapasitet",MinSpeed:"minste hastighet",ExPoints:"Ekspedisjons poeng",resources:"ressurser",ArrivalACS:"Ankomst (ACS)",mvmt_Return:"R",shipSCargoAlt:"LL",shipLCargoAlt:"SL",shipRecyclerAlt:"Recs",shipRIPAlt:"RIP",Quantity:"Antall",Duration:"varighet",
+Consumption:"forbruk",shipSatelliteAlt:"Sat.",deficientRes:"manglende ressurser",Production:"Produksjon",RequiredEnergy:"Energi behov"}},InterfaceNO:function(){return{sectionGeneral:"Generell",sectionUniverse:"Univers",sectionGlobalview:"Generell oversikt",sectionHighlighting:"Highlighting",sectionObjectview:"Bygninger, forskning og skip ",sectionTime:"tidsinnstillinger",sectionGalaxy:"Galakse",sectionGalaxy_Player:"Spiller",sectionGalaxy_Alliance:"Allianse",sectionGalaxy_Debris:"vrakfelt",sectionMessages:"Meldinger",
+sectionMessages_Espionage:"Spionasje rapporter",sectionMessages_Combat:"Angreps rapporter",sectionFleetDispatch:"Fl\u00e5te utsendelse",sectionFleetDispatch_Fleet1:"Fl\u00e5te side 1",sectionFleetDispatch_Fleet2:"Fl\u00e5te side 2",sectionFleetDispatch_Fleet3:"Fl\u00e5te side 3",sectionFleet:"Fl\u00e5telister",sectionFleet_Movement:"Fl\u00e5te bevegelse",sectionFleet_Phalanx:"Phalanx",sectionFleet_Events:"Event liste",sectionFleet_MissionColor:"Oppdrags farge",sectionInfo:"Information",sectionFeatures:"Features",
+sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"AntiGame Innstillinger",menu_SaveButton:"OK",menu_CancelButton:"Avbryt",menu_updateTip:"A new update is available: Version",improveLayout:"Forbedre utseendet p\u00e5 denne siden",improveUsability:"Forbedre brukbarheten av denne siden",improveLayoutUse:"Forbedre oppsett og brukervennlighet p\u00e5 denne siden",simpleLayout:"Forenkle oppsettet av denne siden",killTips:"Sl\u00e5 av tips",clickTips:"Use mouseclick to show tooltips on this page",
+oldBrowser:"Do not use effects which slowdowns old browser or computer",language:"Spr\u00e5k",thousandSeparator:"Tusind separator",btnDefault:"standard",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"Speed faktor i dette univers",uni_DFPercent:"Prosentandel av fl\u00e5testruktur til avfallsavdeling",uni_DefenseToDF:"Prosentandel av forsvar til avfallsavdeling",uni_topPlayerScore:"The points of the strongest player in this uni are",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",
+showResources:"Vis utvidet ressursene informasjon",show_onTop:"p\u00e5 toppen",show_onBottom:"p\u00e5 bunden",show_onLeft:"til venstre",showDeficient:"Vis manglende ressurser",showNames:"Vis skip / bygg / forskning navn over bildene",nameColorOn:"Navn farge: tilgjengelig",nameColorOff:"Navn farge: utilgjengelig ",nameColorDisabled:"Navn farge: ikke nok ressurser",galaxy_Players:"Uthev f\u00f8lgende spillere",galaxy_PlayerColors:"Farger p\u00e5 spilleren som fremheves",galaxy_Allys:"Uthev f\u00f8lgende allianser",
+galaxy_AllyColors:"Farger p\u00e5 alliansen som fremheves",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"Vis byggingens titler i planet listen",shortHeader:"Alltid minimere planet bilde",misc_scrollTitle:"Bla til neste arrangement i vinduet tittelen",timeAMPM:"Bruk 12-timers format (AM / PM) i stedet for 24-timers",timeSetting:"Endre tids verdier (Kun timer )",timeDontChange:"Ikke endre tid",
+timeLocal:"Alltid sett til lokal tidssone",timeServer:"Alltid sett til server tidssone",showServerOgameClock:"Behold server tid for top-h\u00f8yre Ogame klokke",showServerPhalanx:"Beholde server tid for Phalanx visning",showPageStartTime:"Vise tiden, siden ble oppdatert sist",galaxy_shrinkLayout:"Shrink the galaxy page",galaxy_keepTips:"Keep mouseover tooltips for planet, moon and debris",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Vis spiller / allianse rank i Galaxy visning",
+galaxy_PlayerRankColors:"Player ranks color (All, 1000, 100, 10)",galaxy_ShowAllyRank:"Vis allianse rank i Galakse oversikt",galaxy_AllyRankColors:"Alliance ranks color (All, 50, 10, 5)",galaxy_DebrisMin:"Minste st\u00f8rrelse p\u00e5 avfallsavdeling som fremheves (0 for \u00e5 sl\u00e5 av)",galaxy_DebrisSize:"Show size of debris field through",galaxy_DebrisSize_Pic:"Picture size",galaxy_DebrisSize_Number:"Number",galaxy_DebrisSize_ShortNumber:"Number (k M B)",msg_expandBox:"Utvid medingsboks h\u00f8yde",
+msg_addButtons:"Ekstra knapper p\u00e5 meldinger",msg_EspionageSpace:"Redusrer rekkeavstand med",msg_PlunderThreshold:"Lavest grense for teoretisk plyndring (x1000)",msg_DebrisThreshold:"Lavest grense for teoretisk avfallsavdeling (x1000)",msg_foldSmallPlunder:"Fold sammen rapporter med bytte og vrakfelt mindre enn limit",msg_showPlunder:"Vis byttet i spion rapporter",msg_addSimButton:"Legg til knapper for \u00e5 sende spion rapporter til simulator",msg_fixColors:"Fiks farger av kamp rapporter",fleet_showCapacity:"Vis skips kapasitet og hastighet",
+fleet1_showResCalc:"Vis ressurs kalkulator",fleet2_fixLayout:"Fiks flygeinformasjon layout (side 2)",autocopyCoords:"Auto-kopi koordinater",autocopyGlobal:"Lagrer koordinater fra en side (ikke bare Gjeldende Ogame universet faner)",fleet2_setTargetDF:"Sett m\u00e5let til DF hvis fl\u00e5te inneholder gjenvinnere",fleet2_ShortLinks:"M\u00e5l snarveislinker (side 2)",fleet2_MoonColor:"Farge p\u00e5 m\u00e5nene i snarveislisten",fleet2_MoonsToEnd:"Flytt m\u00e5ner til slutten av snarveislisten",fleet2_expandLists:"Utvid rullegardinmenyen (Fart, Snarveier, ACSs)",
+fleet2_expandMoonColor:"Farg m\u00e5ner i utviddet liste",fleet2_checkProbeCapacity:"Sjekk probers kapasitet f\u00f8r avreise (side 2)",missionPriority:"oppdrags prioritet",mvmt_expandFleets:"Vis fl\u00e5te skip og lasteskip",mvmt_showReversal:"Vis returtid tid p\u00e5 fl\u00e5ter",evt_expandFleetsPhal:"Vis fl\u00e5te sammensetning og lasteskip (Phalanx)",phalanx_showDebris:"Vis teoretisk avfallsavdeling i Phalanx visning",evt_expandFleetsEvt:"Vis fl\u00e5te sammensetning og lasteskip (Eventliste)",
+evt_dimReverse:"Dimme returnere fl\u00e5ter",update_Changelog:"Changelog",update_check:"Auto-sjekk for oppdateringer",update_check_Final:"Final",update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"Alternativet er lagret for kun dette universet",
+info_Tip2:"Please visit fleet send page 3 one time for each lanugage for proper mission coloring.",info_Tip3:"Please choose the top player score for correct expo calculation.",info_Tip4:"",info_Tip5:""}},LabelsPL:function(){return{btnMarkReadAll:"Zaznacz wszystkie wy\u015bwietlone wiadomo\u015bci jako przeczytane",btnDeleteSmallPlunder:"Usu\u0144 raporty szpiegowskie z rabunkiem < $plunder i odpadkami < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Pole zniszcze\u0144",
+total:"Razem",loot:"Rabunek",Save:"Zapisz",Clear:"Wyczy\u015b\u0107",Moon:"Ksi\u0119\u017cyc",tmTime:"Czas",tmCountdown:"Odliczanie",rx_sendMail:/Wy\u015blij wiadomo\u015b\u0107 do (.+)\./,TotalCapacity:"Pojemno\u015b\u0107",MinSpeed:"Maksymalna pr\u0119dko\u015b\u0107",ExPoints:"Punkty ekspedycji",resources:"Surowce",ArrivalACS:"Przybycie (ACS)",mvmt_Return:"R",shipSCargoAlt:"MT",shipLCargoAlt:"DT",shipRecyclerAlt:"Rec",shipRIPAlt:"RIP",Quantity:"Ilo\u015b\u0107",Duration:"Czas trwania",Consumption:"Konsumpcja",
+shipSatelliteAlt:"Sat.",deficientRes:"Brakuj\u0105ce surowce",Production:"Produkcja",RequiredEnergy:"Potrzebna energia"}},InterfacePL:function(){return{sectionGeneral:"G\u0142\u00f3wne",sectionUniverse:"Uniwersum",sectionGlobalview:"Widok og\u00f3lny",sectionHighlighting:"Kolorowanie",sectionObjectview:"Budynki, badania i statki",sectionTime:"Ustawienia czasu",sectionGalaxy:"Galaktyka",sectionGalaxy_Player:"Gracz",sectionGalaxy_Alliance:"Sojusz",sectionGalaxy_Debris:"Pole Zniszcze\u0144",sectionMessages:"Wiadomo\u015bci",
+sectionMessages_Espionage:"Raporty Szpiegowskie",sectionMessages_Combat:"Raporty Wojenne",sectionFleetDispatch:"Wy\u015bwietlanie floty",sectionFleetDispatch_Fleet1:"Flota strona 1",sectionFleetDispatch_Fleet2:"Flota strona 2",sectionFleetDispatch_Fleet3:"Flota strona 3",sectionFleet:"Lista lot\u00f3w",sectionFleet_Movement:"Ruchy floty",sectionFleet_Phalanx:"Falanga",sectionFleet_Events:"Lista Zdarze\u0144",sectionFleet_MissionColor:"Kolory misji (format: ABCDEF - format Websafe ACE)",sectionInfo:"Informacje",
+sectionFeatures:"Nowe opcje",sectionUpdates:"Aktualizacje",sectionSupport:"Wsparcie",sectionTips:"Podpowiedzi",menu_Name:"AntiGame",menu_Title:"Opcje AntiGame",menu_SaveButton:"OK",menu_CancelButton:"Anuluj",menu_updateTip:"Nowa wersja jest dost\u0119pna: Wersja:",improveLayout:"Poprawiaj wygl\u0105d strony",improveUsability:"Popraw u\u017cyteczno\u015b\u0107 strony",improveLayoutUse:"Popraw wygl\u0105d i u\u017cyteczno\u015b\u0107 strony",simpleLayout:"Upro\u015b\u0107 wygl\u0105d strony",killTips:"Zamknij tooltips",
+clickTips:"U\u017cywaj klikni\u0119cia myszki do wywo\u0142ania tooltips\u00f3w",oldBrowser:"Nie u\u017cywaj efekt\u00f3w kt\u00f3re mog\u0105 spowolni\u0107 przegl\u0105dark\u0119/komputer",language:"J\u0119zyk",thousandSeparator:"Separator tysi\u0105ca",btnDefault:"Domy\u015blne",blockAutoComplete:"Blokuj auto uzupe\u0142nianie p\u00f3l tekstowych",uni_SpeedFactor:"Wsp\u00f3\u0142czynnik pr\u0119dko\u015bci tego uniwersum",uni_DFPercent:"Procent debrisu z floty",uni_DefenseToDF:"Procent debrisu z obrony",
+uni_topPlayerScore:"TOP1 tego UNI ma punkt\u00f3w (kalkulator ekspedycji)",uni_systemMetrik:"Maksymalna liczba 'galaktyka:system' tego UNI (9:499)",showResources:"Pokazuj rozszerzone informacje o surowcach",show_onTop:"Na g\u00f3rze",show_onBottom:"Na dole",show_onLeft:"Po lewej",showDeficient:"Pokazuj brakuj\u0105ce surowce",showNames:"Pokazuj nazwy statk\u00f3w/budynk\u00f3w/bada\u0144 na obrazkach",nameColorOn:"Kolor dla: dost\u0119pne",nameColorOff:"Kolor dla: niedost\u0119pne",nameColorDisabled:"Kolor dla: brak surowc\u00f3w",
+galaxy_Players:"Koloruj graczy o nicku:",galaxy_PlayerColors:"Wybierz kolor dla graczy",galaxy_Allys:"Koloruj sojusze o tagu:",galaxy_AllyColors:"Wybierz kolor dla sojusz\u00f3w",jumpgate_Improve:"Pokazuj linki do innych teleporter\u00f3w i uzupe\u0142nij pola klikni\u0119ciem w numer lub obrazek statku",jumpgate_RequireTarget:"Wymagaj wyboru celu przed teleportacj\u0105",showprodPercentUpdate:"Pokazuj post\u0119p budowy/bada\u0144 w procentach",showConstructionTitle:"Pokazuj nazwy budowanych konstrukcji pod nazwami planet",
+shortHeader:"Zawsze ukrywaj obrazek planety gdy jest taka mo\u017cliwo\u015b\u0107",misc_scrollTitle:"Przewijaj czas do nast\u0119pnego zdarzenia w nag\u0142\u00f3wku przegl\u0105darki",timeAMPM:"Uzyj 12-godzinnego formatu (AM/PM) zamiast 24-godzinnego",timeSetting:"Ustaw godzin\u0119",timeDontChange:"Nie zmieniaj czasu",timeLocal:"Ustaw do lokalnej strefy czasowej",timeServer:"Ustaw do strefy czasowej serwera",showServerOgameClock:"Nie zmieniaj czasu Ogame zegara z prawego g\u00f3rnego rogu",showServerPhalanx:"Nie zmieniaj czasu serwera dla widoku Falangi Czujnik\u00f3w",
+showPageStartTime:"Wy\u015bwietlaj czas ostatniego od\u015bwie\u017cenia strony",galaxy_shrinkLayout:"Pomniejsz wygl\u0105d galaktyki",galaxy_keepTips:"Zachowaj tooltips (najechanie myszk\u0105) dla planet, ksi\u0119\u017cycy i p\u00f3l zniszcze\u0144",galaxy_reload:"Wci\u015bni\u0119cie entera powoduje od\u015bwie\u017cenie galaktyki",galaxy_ShowRank:"Pokazuj pozycje graczy w widoku galaktyki",galaxy_PlayerRankColors:"Kolor dla statystyk graczy (Wszyscy, TOP1000, 100, 10)",galaxy_ShowAllyRank:"Pokazuj pozycje sojuszy w widoku galaktyki",
+galaxy_AllyRankColors:"Kolor dla statystyk sojuszy (Wszyscy, TOP50, 10, 5)",galaxy_DebrisMin:"Minimalny rozmiar pola zniszcze\u0144 do pod\u015bwietlenia (0 wy\u0142\u0105cza)",galaxy_DebrisSize:"Pokazuj wielko\u015b\u0107 p\u00f3l zniszcze\u0144 w",galaxy_DebrisSize_Pic:"Obrazkach",galaxy_DebrisSize_Number:"Liczbach",galaxy_DebrisSize_ShortNumber:"Liczbach skr\u00f3conych (k M B)",msg_expandBox:"Zmie\u0144 wysoko\u015b\u0107 okna wiadomo\u015bci:",msg_addButtons:"Dodatkowe przyciski w wiadomo\u015bciach",
+msg_EspionageSpace:"Zmniejsz odst\u0119py mi\u0119dzy wierszami",msg_PlunderThreshold:"Minimalny teoretyczny rabunek (x1000)",msg_DebrisThreshold:"Minimalny rozmiar pola zniszcze\u0144 (x1000)",msg_foldSmallPlunder:"Zwijaj raporty z rabunkiem i odpadkami mniejszymi ni\u017c podany powy\u017cej minimalny limit",msg_showPlunder:"Pokazuj rabunek w raportach szpiegowskich",msg_addSimButton:"Dodaj przycisk do wysy\u0142ania raport\u00f3w szpiegowskich do  symulator\u00f3w",msg_fixColors:"Popraw raporty wojenne",
+fleet_showCapacity:"Pokazuj \u0142adowno\u015b\u0107 i pr\u0119dko\u015b\u0107 statk\u00f3w",fleet1_showResCalc:"Pokazuj rozszerzony kalkulator zasob\u00f3w",fleet1_showSimpleResCalc:"Pokazuj uproszczony kalkulator zasob\u00f3w",fleet2_fixLayout:"Poprawiaj wygl\u0105d informacji o flocie (strona 2)",autocopyCoords:"Auto-kopiowanie koordynat-\u00f3w",autocopyGlobal:"Zapami\u0119taj koordynaty z dowolnej strony (nie tylko z Ogame)",fleet2_setTargetDF:"Automatycznie ustaw miejsce przeznaczenia: 'PZ' gdy wysy\u0142asz recyklery",
+fleet2_ShortLinks:"Dodaj pozycje widoczn\u0105 na li\u015bcie koordynat-\u00f3w (strona 2)<br /><br />Format: G#S#P#T#N, gdzie:<br />G#S#P = koordynaty<br />T = 1 - planeta, 2 - szcz\u0105tki, 3 - ksi\u0119\u017cyc<br />N - nazwa, kt\u00f3ra jest opcjonalna<br/>Kolejne wpisy oddzielamy przecinkiem",fleet2_MoonColor:"Kolor dla ksi\u0119\u017cycy w kr\u00f3tkiej li\u015bcie - druga zak\u0142adka",fleet2_MoonsToEnd:"<br>Prznie\u015b ksi\u0119\u017cyce na koniec listy wyboru koordynat-\u00f3w",fleet2_expandLists:"Pokazuj list\u0119 szybkiego wyboru koordynat-\u00f3w (strona 2)",
+fleet2_expandMoonColor:"Koloruj Ksi\u0119\u017cyce na li\u015bcie szybkiego wyboru koordynat-\u00f3w (strona 2)",fleet2_checkProbeCapacity:"Sprawdzaj pojemno\u015b\u0107 sond przed wyruszeniem (strona 2)",missionPriority:"Priorytety misji",mvmt_expandFleets:"Pokazuj w Ruchach Flot statki i zawarto\u015b\u0107 \u0142adowni",mvmt_showReversal:"Pokazuj czas powrotu po zawr\u00f3ceniu",evt_expandFleetsPhal:"Pokazuj sk\u0142ad floty i \u0142adunek w falandze",phalanx_showDebris:"Pokazuj przybli\u017cone pole zniszcze\u0144 powsta\u0142e z floty widocznej na falandze",
+evt_expandFleetsEvt:"Pokazuj sk\u0142ad floty i \u0142adunek na li\u015bcie lot\u00f3w",evt_dimReverse:"Przyciemnij sloty powracaj\u0105cych flot",update_Changelog:"Zmiany",update_check:"Sprawdzaj czy s\u0105 aktualizacje",update_check_Final:"Oficjalna",update_check_Preview:"Oficjalna & Testowa",update_Final:"Zaktualizuj do wersji oficjalnej",update_Preview:"Zaktualizuj do wersji testowej",update_Last:"Zainstaluj poprzedni\u0105 stabiln\u0105 wersje",update_Install:"Instaluj",support_Homepage:"Strona domowa",
+support_Feedback:"Pomoc & B\u0142\u0119dy",support_Ideas:"Sugestie",support_Translation:"T\u0142umaczenia",info_Tip1:"Te opcje s\u0105 zapisane tylko dla tego uniwersum",info_Tip2:"Odwied\u017a raz stron\u0119 fleet3 dla poprawnego kolorowania typ\u00f3w misji.",info_Tip3:"Wybierz ile punkt\u00f3w ma TOP1 UNI dla poprawnego dzia\u0142ania kalkulatora ekspedycji.",info_Tip4:"",info_Tip5:""}},LabelsPT:function(){return{btnMarkReadAll:"Marcar todas as mensagens como lidas",btnDeleteSmallPlunder:"Apagar relat\u00f3rios de espionagem com roubo < $plunder e destro\u00e7os < $debris",
+msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Destro\u00e7os",total:"Total",loot:"Roubo",Save:"Guardar",Clear:"Limpar",Moon:"Lua",tmTime:"Hora",tmCountdown:"Contagem decrescente",rx_sendMail:/Enviar uma mensagem a (.+)\./,TotalCapacity:"Capacidade total",MinSpeed:"Velocidade M\u00ednima",ExPoints:"Pontos de expedi\u00e7\u00e3o",resources:"Recursos",ArrivalACS:"Chegada (ACS)",mvmt_Return:"R",shipSCargoAlt:"CP",shipLCargoAlt:"CG",shipRecyclerAlt:"Recs",shipRIPAlt:"EDM",
+Quantity:"Quantidade",Duration:"Dura\u00e7\u00e3o",Consumption:"Consumo",shipSatelliteAlt:"Sat.",deficientRes:"Recursos necess\u00e1rios",Production:"Produ\u00e7\u00e3o",RequiredEnergy:"Energia necess\u00e1ria"}},InterfacePT:function(){return{sectionGeneral:"Geral",sectionUniverse:"Universo",sectionGlobalview:"Vista global",sectionHighlighting:"Destaque",sectionObjectview:"Edif\u00edcios, Defesas e Frota",sectionTime:"Configura\u00e7\u00f5es da Hora",sectionGalaxy:"Gal\u00e1xia",sectionGalaxy_Player:"Jogador",
+sectionGalaxy_Alliance:"Alian\u00e7a",sectionGalaxy_Debris:"Destro\u00e7os",sectionMessages:"Mensagens",sectionMessages_Espionage:"Relat\u00f3rios de Espionagem",sectionMessages_Combat:"Relat\u00f3rios de Combate",sectionFleetDispatch:"Envio de Frota",sectionFleetDispatch_Fleet1:"Envio de Frota I",sectionFleetDispatch_Fleet2:"Envio de Frota II",sectionFleetDispatch_Fleet3:"Envio de Frota III",sectionFleet:"Lista Frotas",sectionFleet_Movement:"Movimento de Frotas",sectionFleet_Phalanx:"Lista de Phalanx",
+sectionFleet_Events:"Lista de Eventos",sectionFleet_MissionColor:"Cor para a miss\u00e3o",sectionInfo:"Informa\u00e7\u00f5es",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Suporte",sectionTips:"Tooltips",menu_Name:"AntiGame",menu_Title:"Op\u00e7\u00f5es AntiGame",menu_SaveButton:"Confirmar",menu_CancelButton:"Cancelar",menu_updateTip:"Existe uma nova atualiza\u00e7\u00e3o: Version",improveLayout:"Melhorar layout da p\u00e1gina",improveUsability:"Melhorar usabilidade da p\u00e1gina",
+improveLayoutUse:"Melhorar layout e usabilidade da p\u00e1gina",simpleLayout:"Simplificar layout da p\u00e1gina",killTips:"Desativar tooltips",clickTips:"Clicar para mostrar tooltips nesta p\u00e1gina",oldBrowser:"N\u00e3o usar efeitos que tornam o browser lento",language:"Linguagem",thousandSeparator:"Separador de Milhares",btnDefault:"Padr\u00e3o",blockAutoComplete:"Bloquear preenchimento autom\u00e1tico de dados",uni_SpeedFactor:"Velocidade do Universo",uni_DFPercent:"Percentagem de frota para destro\u00e7os",
+uni_DefenseToDF:"Percentagem de defensa para destro\u00e7os",uni_topPlayerScore:"O jogador mais forte do universo tem os seguintes pontos",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Mostrar informa\u00e7\u00f5es adicionais de recursos",show_onTop:"Em cima",show_onBottom:"Em baixo",show_onLeft:"\u00c0 esquerda",showDeficient:"Mostrar recursos que faltam",showNames:"Mostrar nomes de naves/edif\u00edcios/pesquisas sobre as imagens",nameColorOn:"Cor no Nome: dispon\u00edvel",
+nameColorOff:"Cor no Nome: indispon\u00edvel",nameColorDisabled:"Cor no Nome: sem recursos suficientes",galaxy_Players:"Jogadores destacados",galaxy_PlayerColors:"Cor para jogadores seguintes",galaxy_Allys:"Alian\u00e7as seguintes em destaque",galaxy_AllyColors:"Cor para as alian\u00e7as seguintes",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"Mostrar constru\u00e7\u00f5es em curso na lista do planeta",
+shortHeader:"Minimizar sempre imagem do Planeta",misc_scrollTitle:"Passar no t\u00edtulo da janela o tempo para o pr\u00f3ximo evento",timeAMPM:"Usar formato 12 horas (AM/PM) no lugar do formato 24 horas",timeSetting:"Mudar valores do tempo (s\u00f3 horas)",timeDontChange:"N\u00e3o alterar a hora",timeLocal:"Manter sempre a hora local",timeServer:"Manter sempre a hora do servidor",showServerOgameClock:"Manter hora do servidor no lado superior direito do OGame",showServerPhalanx:"Manter hora do servidor na vista Phalanx",
+showPageStartTime:"Mostrar hora em que a p\u00e1gina foi atualizada pela \u00faltima vez",galaxy_shrinkLayout:"Encolher vista da Gal\u00e1xia",galaxy_keepTips:"Clicar para ver tooltips do jogador, lua e destro\u00e7os",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Mostrar classifica\u00e7\u00e3o jogador/alian\u00e7a na vista Gal\u00e1xia",galaxy_PlayerRankColors:"Cor ranks jogadores (Todos, 1000, 100, 10)",galaxy_ShowAllyRank:"Ranks de alian\u00e7as na vista da Gal\u00e1xia",
+galaxy_AllyRankColors:"Cor ranks alian\u00e7as (Todos, 50, 10, 5)",galaxy_DebrisMin:"Tamanho m\u00ednimo dos destro\u00e7os em destaque (0 para desativar)",galaxy_DebrisSize:"Mostrar destro\u00e7os como",galaxy_DebrisSize_Pic:"Tamanho Imagem",galaxy_DebrisSize_Number:"N\u00famero",galaxy_DebrisSize_ShortNumber:"N\u00famero em (k M B)",msg_expandBox:"Expandir altura da caixa mensagens",msg_addButtons:"Adicionar bot\u00f5es \u00e0s mensagens",msg_EspionageSpace:"Reduzir espa\u00e7amento entre linhas",
+msg_PlunderThreshold:"Valor m\u00ednimo para roubo te\u00f3rico (x1000)",msg_DebrisThreshold:"Valor m\u00ednimo para destro\u00e7os te\u00f3rico (x1000)",msg_foldSmallPlunder:"Ocultar informa\u00e7\u00f5es do roubo e destro\u00e7os abaixo desse valor",msg_showPlunder:"Mostrar roubo no relat\u00f3rio de espionagem",msg_addSimButton:"Adicionar bot\u00f5es nos relat\u00f3rios de espionagem para usar o simulador",msg_fixColors:"Corrigir cores nos relat\u00f3rios de combate",fleet_showCapacity:"Mostrar capacidade de carga e velocidade das naves",
+fleet1_showResCalc:"Mostrar calculadora de recursos",fleet2_fixLayout:"Corrigir layout de informa\u00e7\u00e3o de voo (p\u00e1gina 2)",autocopyCoords:"Auto-copiar coordenadas",autocopyGlobal:"Memorizar quaisquer coordenadas (n\u00e3o s\u00f3 no separador do universo atual)",fleet2_setTargetDF:"Definir destino Campo de Destro\u00e7os se a frota incluir recicladores",fleet2_ShortLinks:"Direcionar atalhos (p\u00e1gina 2)",fleet2_MoonColor:"Colorir luas na lista de atalhos",fleet2_MoonsToEnd:"Mover luas para o final da lista de atalhos",
+fleet2_expandLists:"Expandir caixas de sele\u00e7\u00e3o (Velocidade, Atalhos, ACS)",fleet2_expandMoonColor:"Colorir luas na lista expandida",fleet2_checkProbeCapacity:"Verificar capacidade das sondas antes do envio (p\u00e1gina 2)",missionPriority:"Prioridade da miss\u00e3o",mvmt_expandFleets:"Mostrar naves e capacidade de carga da frota",mvmt_showReversal:"Mostrar hora do regresso da frota",evt_expandFleetsPhal:"Mostrar composi\u00e7\u00e3o da frota e capacidade de carga (Phalanx)",phalanx_showDebris:"Mostrar destro\u00e7os te\u00f3ricos na vista Phalanx",
+evt_expandFleetsEvt:"Mostrar composi\u00e7\u00e3o da frota e capacidade de carga (Lista de Eventos)",evt_dimReverse:"Escurecer frotas em regresso",update_Changelog:"Changelog",update_check:"Procura autom\u00e1tica de atualiza\u00e7\u00f5es",update_check_Final:"Final",update_check_Preview:"Final & Testes",update_Final:"Atualizar para \u00faltima vers\u00e3o",update_Preview:"Atualizar para \u00faltima vers\u00e3o de testes",update_Last:"Voltar \u00e0 \u00faltima vers\u00e3o est\u00e1vel",update_Install:"Instalar",
+support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"A op\u00e7\u00e3o \u00e9 guardada apenas para este Universo",info_Tip2:"Para colocar corretamente as miss\u00f5es visita a p\u00e1gina de Envio Frota III uma vez para cada linguagem.",info_Tip3:"Escolhe o ranking do melhor jogador para calculcar a expedi\u00e7\u00e3o corretamente.",info_Tip4:"",info_Tip5:""}},LabelsRO:function(){return{btnMarkReadAll:"Noteaza toate mesajele ca fiind citite",
+btnDeleteSmallPlunder:"Sterge toate mesajele cu captura < $plunder si ramasite de < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"Ramasite",total:"Total",loot:"Captura",Save:"Salveaza",Clear:"Sterge",Moon:"Luna",tmTime:"Timp",tmCountdown:"Numaratoare inversa",rx_sendMail:/Send a message to (.+)\./,TotalCapacity:"Capacitatea totala",MinSpeed:"Viteza minima",ExPoints:"Puncte de expeditie",resources:"Resurse",ArrivalACS:"Intoarcere (SAL)",mvmt_Return:"R",
+shipSCargoAlt:"Trans. Mic",shipLCargoAlt:"Trans. Mare",shipRecyclerAlt:"Rec.",shipRIPAlt:"RIP",Quantity:"Cantitate",Duration:"Durata",Consumption:"Consum",shipSatelliteAlt:"Sat.sol.",deficientRes:"Lipsa de resurse",Production:"Productie",RequiredEnergy:"Energie necesara"}},InterfaceRO:function(){return{sectionGeneral:"Total",sectionUniverse:"Univers",sectionGlobalview:"Vedere generala",sectionHighlighting:"Subliniere",sectionObjectview:"Constructii, cercetari si nave",sectionTime:"Setari de timp",
+sectionGalaxy:"Univers",sectionGalaxy_Player:"Jucator",sectionGalaxy_Alliance:"Alianta",sectionGalaxy_Debris:"Camp de Ramasite",sectionMessages:"Mesaj",sectionMessages_Espionage:"Rpoarte de spionaj",sectionMessages_Combat:"Rapoarte de lupta",sectionFleetDispatch:"Trimite flota",sectionFleetDispatch_Fleet1:"Flota pagina I",sectionFleetDispatch_Fleet2:"Flota pagina II",sectionFleetDispatch_Fleet3:"Flota pagina III",sectionFleet:"Liste flote",sectionFleet_Movement:"Lista flotei",sectionFleet_Phalanx:"Phalanx",
+sectionFleet_Events:"Lista evenimentelor",sectionFleet_MissionColor:"Culoare flota, misiune",sectionInfo:"Informatii",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Ajutor",sectionTips:"Sfaturi",menu_Name:"AntiGame",menu_Title:"Optiuni AntiGame",menu_SaveButton:"OK",menu_CancelButton:"Renunta",menu_updateTip:" Un nou upate este disponibil : Versiune",improveLayout:"Imbunatateste modul de afisare al acestei pagini",improveUsability:"Imbunatateste modul de utilizare al acestei pagini",
+improveLayoutUse:"Imbunatateste modul de afisare si de utilizare al acestei pagini",simpleLayout:"Simplifica afisarea acestei pagini",killTips:"Blocheaza pop-up sfaturi",clickTips:"Foloseste click pentru a arata tooltipuri pe aceasta pagina",oldBrowser:"Nu utilza efecte care incetinesc calculatoare sau browsere mai vechi",language:"Limba",thousandSeparator:"separator de mii",btnDefault:"Implicit",blockAutoComplete:"Dezactiveaza Auto-Fill in Firefox",uni_SpeedFactor:"Factorul de viteza in acest univers",
+uni_DFPercent:"Procentul de flota in camp de ramasite",uni_DefenseToDF:"Procentul de aparare in camp de ramasite",uni_topPlayerScore:"Punctele celui mai puternic jucator din acest univers sunt",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Afiseaza extins informatiile despre resurse",show_onTop:"Sus",show_onBottom:"Jos",show_onLeft:"In stanga",showDeficient:"Arata resurse lipsa",showNames:"Arata denumirea navelor/uzinelor/cercetarilor peste imagine",
+nameColorOn:"Culoarea comenzii: disponibil",nameColorOff:"Culoarea comenzii: indisponibil",nameColorDisabled:"Culoarea comenzii: Nu ajung resursele",galaxy_Players:"Pune in evidenta urmatorii jucatori",galaxy_PlayerColors:"Culoarea pentru punerea in evidenta a jucatorilor",galaxy_Allys:"Pune in evidenta urmatoarele aliante",galaxy_AllyColors:"Culoare pentru punerea in evidenta a aliantelor",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",
+showConstructionTitle:"Arata denumirea comenzii de constructie langa lista planetelor",shortHeader:"Micsoreaza imaginea planetei tot timpul",misc_scrollTitle:"Afiseaza timpul pana la urmatorul eveniment in titlul ferestrei",timeAMPM:"Foloseste formatul de 12 ore(AM/PM) in loc de 24 ore",timeSetting:"Modifica valorile de timp (numai ore)",timeDontChange:"Nu modifica timpul",timeLocal:"Seteaza mereu la ora locala",timeServer:"Seteaza mereu la ora serverului",showServerOgameClock:"Mentine ora serverului pentru ceasul ogame din dreapta sus",
+showServerPhalanx:"Pastreaza ora serverului pentru Phalanx",showPageStartTime:"Afiseaza ora la care a fost facuta ultima actualizare a paginii",galaxy_shrinkLayout:"Micsoreaza vederea galaxiei",galaxy_keepTips:"Pastreaza tooltipurile pentru planeta, luna si camp de ramasite",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Arata rang pentru jucator in sistem",galaxy_PlayerRankColors:"Culoarea pentru rang (All, 1000, 100, 10)",galaxy_ShowAllyRank:"Arata rangurile aliantelor in vederea galaxiei",
+galaxy_AllyRankColors:"Culoarea pentru alianta (All, 50, 10, 5)",galaxy_DebrisMin:"CR-ul minim pentru punerea in evidenta  (0 - nu este subliniat)",galaxy_DebrisSize:"Optiuni de afisare a campului de ramasite",galaxy_DebrisSize_Pic:"Dimensiunile imaginii",galaxy_DebrisSize_Number:"Valoare",galaxy_DebrisSize_ShortNumber:"valoare (k M B)",msg_expandBox:"Extinde inaltimea casetei de mesaj",msg_addButtons:"Butoane suplimentare la casuta de mesaje",msg_EspionageSpace:"Reducerea spatiului dintre randuri",
+msg_PlunderThreshold:"Limita minima pentru o posibila captura (x1000)",msg_DebrisThreshold:"Limina minima pentru un posibil camp de ramasite (x1000)",msg_foldSmallPlunder:"Minimizeaza rapoartele obtinute unde dobanda si campul de ramasite sunt sub limita",msg_showPlunder:"Arata posibila capacitate de captura in rapoartele de spionaj",msg_addSimButton:"Adauga butonul de simulare a raportului de lupta WebSim",msg_fixColors:"Corecteaza culorile rapoartelor de lupta",fleet_showCapacity:"Arata capacitatea si viteza navelor",
+fleet1_showResCalc:"Arata calculatorul de resurse",fleet2_fixLayout:"Corecteaza locatia si informatia despre misiune (pagina2)",autocopyCoords:"Auto-copiaza coordonatele",autocopyGlobal:"Memoreaza coordonatele din orice pagina (nu numai din pagina curenta ogame)",fleet2_setTargetDF:"Trimite la CR daca in flota exista reciclatoare",fleet2_ShortLinks:"Lista tintelor pentru atasare rapida (pagina 2)",fleet2_MoonColor:"Culoarea lunilor in lista de scurtaturi",fleet2_MoonsToEnd:"Muta lunile la sfarsitul listei de scurtaturi",
+fleet2_expandLists:"Extinde casetele drop-down (Viteza, Surtaturi, SAL-uri)",fleet2_expandMoonColor:"Coloreaza lunile in lista extinsa",fleet2_checkProbeCapacity:"Arata capacitatea de stocare a probelor inainte de a le trimite (pagina 2)",missionPriority:"Prioritatea misiunilor",mvmt_expandFleets:"Arata resursele si structura flotelor",mvmt_showReversal:"Arata timpul de retur la retragere",evt_expandFleetsPhal:"Arata compozitia flotelor si incarcatura(Phalanx)",phalanx_showDebris:"Arata CR-ul theoretic in vederea Phalanx",
+evt_expandFleetsEvt:"Arata compozitia flotei si incarcatura (Lista de evenimente)",evt_dimReverse:"Umbreste culoarea flotelor la intoarcere",update_Changelog:"Changelog",update_check:"Auto-verifica daca exista noi versiuni",update_check_Final:"Final",update_check_Preview:"Final & Preview",update_Final:"Update cu ultima vresiune",update_Preview:"Update la versiunea test",update_Last:"intoarcere la ultima versiune stabila",update_Install:"Instaleaza",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",
+support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"Setarea este salvata numai pentru acest univers",info_Tip2:"Pentru colorarea misiunilor te rog intra pe meniu flota III pentru fiecare limba.",info_Tip3:"Alege scorul jucatortului top 1 pentru a calcula corect expeditia.",info_Tip4:"",info_Tip5:""}},LabelsRU:function(){return{btnMarkReadAll:"\u041f\u043e\u043c\u0435\u0442\u0438\u0442\u044c \u0432\u0441\u0435 \u043f\u043e\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u043a\u0430\u043a \u043f\u0440\u043e\u0447\u0438\u0442\u0430\u043d\u043d\u044b\u0435",
+btnDeleteSmallPlunder:"\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0448\u043f\u0438\u043e\u043d\u0441\u043a\u0438\u0435 \u0434\u043e\u043a\u043b\u0430\u0434\u044b \u0441 \u0434\u043e\u0431\u044b\u0447\u0435\u0439 < $plunder \u0438 \u043b\u043e\u043c\u043e\u043c < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",debris:"\u041b\u043e\u043c",total:"\u0412\u0441\u0435\u0433\u043e",loot:"\u0414\u043e\u0431\u044b\u0447\u0430",Save:"\u0417\u0430\u043f\u043e\u043c\u043d\u0438\u0442\u044c",
+Clear:"\u041e\u0447\u0438\u0441\u0442\u0438\u0442\u044c",Moon:"\u041b\u0443\u043d\u0430",tmTime:"\u0412\u0440\u0435\u043c\u044f",tmCountdown:"\u041e\u0431\u0440\u0430\u0442\u043d\u044b\u0439 \u043e\u0442\u0441\u0447\u0435\u0442",rx_sendMail:/\u041f\u043e\u0441\u043b\u0430\u0442\u044c \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 (.+)\./,TotalCapacity:"\u0421\u0443\u043c\u043c\u0430\u0440\u043d\u0430\u044f \u0432\u043c\u0435\u0441\u0442\u0438\u043c\u043e\u0441\u0442\u044c",MinSpeed:"\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u043a\u043e\u0440\u043e\u0441\u0442\u044c",
+ExPoints:"\u042d\u043a\u0441\u043f\u0435\u0434\u0438\u0446\u0438\u043e\u043d\u043d\u044b\u0435 \u043e\u0447\u043a\u0438",resources:"\u0420\u0435\u0441\u0443\u0440\u0441\u044b",ArrivalACS:"\u041f\u0440\u0438\u0431\u044b\u0442\u0438\u0435 (\u0421\u0410\u0411)",mvmt_Return:"\u0412",shipSCargoAlt:"\u041c\u0422",shipLCargoAlt:"\u0411\u0422",shipRecyclerAlt:"\u0420\u0430\u0431\u043e\u0432",shipRIPAlt:"\u0417\u0421",Quantity:"\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e",Duration:"\u0412\u0440\u0435\u043c\u044f \u043f\u043e\u043b\u0435\u0442\u0430",
+Consumption:"\u041f\u043e\u0442\u0440\u0435\u0431\u043b\u0435\u043d\u0438\u0435",shipSatelliteAlt:"cc",deficientRes:"\u0420\u0435\u0441\u0443\u0440\u0441\u043e\u0432 \u043d\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442",Production:"\u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u043e",RequiredEnergy:"\u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u044d\u043d\u0435\u0440\u0433\u0438\u0438"}},InterfaceRU:function(){return{sectionGeneral:"\u041e\u0431\u0449\u0438\u0435",
+sectionUniverse:"\u0412\u0441\u0435\u043b\u0435\u043d\u043d\u0430\u044f",sectionGlobalview:"\u041e\u0431\u0449\u0438\u0439 \u0432\u0438\u0434",sectionHighlighting:"Highlighting",sectionObjectview:"\u0417\u0434\u0430\u043d\u0438\u044f, \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f, \u043a\u043e\u0440\u0430\u0431\u043b\u0438",sectionTime:"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0432\u0440\u0435\u043c\u0435\u043d\u0438",sectionGalaxy:"\u0413\u0430\u043b\u0430\u043a\u0442\u0438\u043a\u0430",
+sectionGalaxy_Player:"\u0418\u0433\u0440\u043e\u043a",sectionGalaxy_Alliance:"\u0410\u043b\u044c\u044f\u043d\u0441",sectionGalaxy_Debris:"\u041f\u043e\u043b\u0435 \u041e\u0431\u043b\u043e\u043c\u043a\u043e\u0432",sectionMessages:"\u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f",sectionMessages_Espionage:"\u0428\u043f\u0438\u043e\u043d\u0441\u043a\u0438\u0435 \u0434\u043e\u043a\u043b\u0430\u0434\u044b",sectionMessages_Combat:"\u0411\u043e\u0435\u0432\u044b\u0435 \u0434\u043e\u043a\u043b\u0430\u0434\u044b",
+sectionFleetDispatch:"\u041e\u0442\u043f\u0440\u0430\u0432\u043a\u0430 \u0444\u043b\u043e\u0442\u0430",sectionFleetDispatch_Fleet1:"\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u0444\u043b\u043e\u0442\u043e\u0432 1",sectionFleetDispatch_Fleet2:"\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u0444\u043b\u043e\u0442\u043e\u0432 2",sectionFleetDispatch_Fleet3:"\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u0444\u043b\u043e\u0442\u043e\u0432 3",sectionFleet:"\u0421\u043f\u0438\u0441\u043e\u043a \u0444\u043b\u043e\u0442\u0430",
+sectionFleet_Movement:"\u041f\u0435\u0440\u0435\u0434\u0432\u0438\u0436\u0435\u043d\u0438\u0435 \u0444\u043b\u043e\u0442\u0430",sectionFleet_Phalanx:"\u0424\u0430\u043b\u0430\u043d\u0433\u0430",sectionFleet_Events:"\u0421\u043f\u0438\u0441\u043e\u043a \u0441\u043e\u0431\u044b\u0442\u0438\u0439",sectionFleet_MissionColor:"\u0426\u0432\u0435\u0442 \u0444\u043b\u043e\u0442\u0430, \u0437\u0430\u0434\u0430\u043d\u0438\u0435",sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",
+sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 AntiGame",menu_SaveButton:"OK",menu_CancelButton:"\u041e\u0442\u043c\u0435\u043d\u0430",menu_updateTip:"A new update is available: Version",improveLayout:"\u0423\u043b\u0443\u0447\u0448\u0438\u0442\u044c \u043f\u043e\u043a\u0430\u0437 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u044b",improveUsability:"\u0421\u0434\u0435\u043b\u0430\u0442\u044c \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0443 \u0431\u043e\u043b\u0435\u0435 \u0443\u0434\u043e\u0431\u043d\u043e\u0439",
+improveLayoutUse:"\u0423\u043b\u0443\u0447\u0448\u0438\u0442\u044c \u043f\u043e\u043a\u0430\u0437 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u044b \u0438 \u0441\u0434\u0435\u043b\u0430\u0442\u044c \u0435\u0451 \u0431\u043e\u043b\u0435\u0435 \u0443\u0434\u043e\u0431\u043d\u043e\u0439",simpleLayout:"\u0423\u043f\u0440\u043e\u0441\u0442\u0438\u0442\u044c \u043f\u043e\u043a\u0430\u0437 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u044b",killTips:"\u0417\u0430\u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432\u0441\u043f\u043b\u044b\u0432\u0430\u044e\u0449\u0438\u0435 \u043f\u043e\u0434\u0441\u043a\u0430\u0437\u043a\u0438",
+clickTips:"\u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c \u0449\u0435\u043b\u0447\u043e\u043a \u043c\u044b\u0448\u043a\u0438 \u0434\u043b\u044f \u043e\u0442\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435 \u043c\u0435\u043d\u044e",oldBrowser:"\u041d\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c \u044d\u0444\u0444\u0435\u043a\u0442\u044b \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043f\u0440\u0438\u0442\u043e\u0440\u043c\u0430\u0436\u0438\u0432\u0430\u044e\u0442 \u0441\u0442\u0430\u0440\u044b\u0439 \u043a\u043e\u043c\u043f\u044c\u044e\u0442\u0435\u0440 \u0438\u043b\u0438 \u0431\u0440\u0430\u0443\u0437\u0435\u0440",
+language:"\u042f\u0437\u044b\u043a",thousandSeparator:"\u0420\u0430\u0437\u0434\u0435\u043b\u0438\u0442\u0435\u043b\u044c \u0442\u044b\u0441\u044f\u0447 \u0432 \u0447\u0438\u0441\u043b\u0430\u0445",btnDefault:"\u041f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"\u041a\u043e\u044d\u0444\u0444\u0438\u0446\u0438\u0435\u043d\u0442 \u0443\u0441\u043a\u043e\u0440\u0435\u043d\u0438\u044f \u0432 \u044d\u0442\u043e\u0439 \u0432\u0441\u0435\u043b\u0435\u043d\u043d\u043e\u0439",
+uni_DFPercent:"\u041f\u0440\u043e\u0446\u0435\u043d\u0442 \u0432\u044b\u043f\u0430\u0434\u0435\u043d\u0438\u044f \u0444\u043b\u043e\u0442\u0430 \u0432 \u043e\u0431\u043b\u043e\u043c\u043a\u0438",uni_DefenseToDF:"\u041f\u0440\u043e\u0446\u0435\u043d\u0442 \u0432\u044b\u043f\u0430\u0434\u0435\u043d\u0438\u044f \u043e\u0431\u043e\u0440\u043e\u043d\u044b \u0432 \u043e\u0431\u043b\u043e\u043c\u043a\u0438 (\u041e\u0432\u041e)",uni_topPlayerScore:"The points of the strongest player in this uni are",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",
+showResources:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u043d\u0443\u044e \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044e \u043e \u0440\u0435\u0441\u0443\u0440\u0441\u0430\u0445",show_onTop:"\u0412\u0432\u0435\u0440\u0445\u0443",show_onBottom:"\u0412\u043d\u0438\u0437\u0443",show_onLeft:"\u0421\u043b\u0435\u0432\u0430",showDeficient:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u043d\u0435\u0434\u043e\u0441\u0442\u0430\u044e\u0449\u0438\u0435 \u0440\u0435\u0441\u0443\u0440\u0441\u044b",
+showNames:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044f \u043a\u043e\u0440\u0430\u0431\u043b\u0435\u0439/\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u0439/\u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0439 \u043f\u043e\u0432\u0435\u0440\u0445 \u043a\u0430\u0440\u0442\u0438\u043d\u043e\u043a",nameColorOn:"\u0426\u0432\u0435\u0442 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044f: \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u043e",
+nameColorOff:"\u0426\u0432\u0435\u0442 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044f: \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u043e",nameColorDisabled:"\u0426\u0432\u0435\u0442 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044f: \u043d\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442 \u0440\u0435\u0441\u0443\u0440\u0441\u043e\u0432",galaxy_Players:"\u041f\u043e\u0434\u0441\u0432\u0435\u0447\u0438\u0432\u0430\u0442\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0445 \u0438\u0433\u0440\u043e\u043a\u043e\u0432",
+galaxy_PlayerColors:"\u0426\u0432\u0435\u0442\u0430 \u0434\u043b\u044f \u043f\u043e\u0434\u0441\u0432\u0435\u0442\u043a\u0438 \u0438\u0433\u0440\u043e\u043a\u043e\u0432",galaxy_Allys:"\u041f\u043e\u0434\u0441\u0432\u0435\u0447\u0438\u0432\u0430\u0442\u044c \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0435 \u0430\u043b\u044c\u044f\u043d\u0441\u044b",galaxy_AllyColors:"\u0426\u0432\u0435\u0442\u0430 \u0434\u043b\u044f \u043f\u043e\u0434\u0441\u0432\u0435\u0442\u043a\u0438 \u0430\u043b\u044c\u044f\u043d\u0441\u043e\u0432",
+jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",showConstructionTitle:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044f \u0432\u0435\u0434\u0443\u0449\u0438\u0445\u0441\u044f \u043f\u043e\u0441\u0442\u0440\u043e\u0435\u043a \u0432 \u0441\u043f\u0438\u0441\u043a\u0435 \u043f\u043b\u0430\u043d\u0435\u0442",shortHeader:"\u0412\u0441\u0435\u0433\u0434\u0430 \u043c\u0438\u043d\u0438\u043c\u0438\u0437\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043a\u0430\u0440\u0442\u0438\u043d\u043a\u0443 \u043f\u043b\u0430\u043d\u0435\u0442\u044b",
+misc_scrollTitle:"\u041f\u0440\u043e\u043a\u0440\u0443\u0447\u0438\u0432\u0430\u0442\u044c \u0432 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u0435 \u043e\u043a\u043d\u0430 \u0432\u0440\u0435\u043c\u044f \u0434\u043e \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0435\u0433\u043e \u0441\u043e\u0431\u044b\u0442\u0438\u044f",timeAMPM:"\u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c 12-\u0447\u0430\u0441\u043e\u0432\u043e\u0439 \u0444\u043e\u0440\u043c\u0430\u0442 \u0432\u0440\u0435\u043c\u0435\u043d\u0438 (AM/PM) \u0432\u043c\u0435\u0441\u0442\u043e 24-\u0447\u0430\u0441\u043e\u0432\u043e\u0433\u043e",
+timeSetting:"\u0418\u0441\u043f\u0440\u0430\u0432\u043b\u044f\u0442\u044c \u0432\u0440\u0435\u043c\u044f (\u0442\u043e\u043b\u044c\u043a\u043e \u0447\u0430\u0441\u044b)",timeDontChange:"\u041d\u0435 \u0438\u0441\u043f\u0440\u0430\u0432\u043b\u044f\u0442\u044c \u0432\u0440\u0435\u043c\u044f",timeLocal:"\u0412\u0441\u0435\u0433\u0434\u0430 \u043c\u0435\u0441\u0442\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f",timeServer:"\u0412\u0441\u0435\u0433\u0434\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f",
+showServerOgameClock:"\u041e\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u0441\u0435\u0440\u0432\u0435\u0440\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f \u0434\u043b\u044f \u0447\u0430\u0441\u043e\u0432 \u041e\u0433\u0435\u0439\u043c \u0432\u0432\u0435\u0440\u0445\u0443 \u0441\u043f\u0440\u0430\u0432\u0430",showServerPhalanx:"\u041e\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u0441\u0435\u0440\u0432\u0435\u0440\u043d\u043e\u0435 \u0432\u0440\u0435\u043c\u044f \u0432 \u0441\u043a\u0430\u043d\u0430\u0445 \u0444\u0430\u043b\u0430\u043d\u0433\u0438",
+showPageStartTime:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0432\u0440\u0435\u043c\u044f, \u043a\u043e\u0433\u0434\u0430 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u0432 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0440\u0430\u0437 \u043e\u0431\u043d\u043e\u0432\u0438\u043b\u0430\u0441\u044c",galaxy_shrinkLayout:"\u0421\u0436\u0430\u0442\u044c \u043c\u0435\u043d\u044e \u0433\u0430\u043b\u0430\u043a\u0442\u0438\u043a\u0438",galaxy_keepTips:"\u041d\u0430\u0432\u0435\u0434\u0435\u043d\u0438\u0435 \u043a\u0443\u0440\u0441\u043e\u0440\u0430 \u043e\u0442\u043e\u0431\u0440\u0430\u0436\u0430\u0435\u0442 \u043c\u0435\u043d\u044e \u0434\u043b\u044f \u043f\u043b\u0430\u043d\u0435\u0442\u044b, \u043b\u0443\u043d\u044b \u0438 \u041f\u041e",
+galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0440\u0435\u0439\u0442\u0438\u043d\u0433 \u0438\u0433\u0440\u043e\u043a\u0430/\u0430\u043b\u044c\u044f\u043d\u0441\u0430 \u0432 \u0413\u0430\u043b\u0430\u043a\u0442\u0438\u043a\u0435",galaxy_PlayerRankColors:"Player ranks color (All, 1000, 100, 10)",galaxy_ShowAllyRank:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0440\u0435\u0439\u0442\u0438\u043d\u0433 \u0430\u043b\u044c\u044f\u043d\u0441\u0430 \u0432 \u0413\u0430\u043b\u0430\u043a\u0442\u0438\u043a\u0435",
+galaxy_AllyRankColors:"Alliance ranks color (All, 50, 10, 5)",galaxy_DebrisMin:"\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u044b\u0439 \u0440\u0430\u0437\u043c\u0435\u0440 \u041f\u041e \u0434\u043b\u044f \u043f\u043e\u0434\u0441\u0432\u0435\u0442\u043a\u0438 (0 - \u043d\u0435 \u043f\u043e\u0434\u0441\u0432\u0435\u0447\u0438\u0432\u0430\u0442\u044c)",galaxy_DebrisSize:"Show size of debris field through",galaxy_DebrisSize_Pic:"Picture size",galaxy_DebrisSize_Number:"Number",galaxy_DebrisSize_ShortNumber:"Number (k M B)",
+msg_expandBox:"\u0420\u0430\u0441\u0448\u0438\u0440\u0438\u0442\u044c \u0432\u044b\u0441\u043e\u0442\u0443 \u043e\u043a\u043d\u0430 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0439",msg_addButtons:"\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u043a\u043d\u043e\u043f\u043a\u0438 \u0432 \u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f\u0445",msg_EspionageSpace:"\u0423\u043c\u0435\u043d\u044c\u0448\u0438\u0442\u044c \u0440\u0430\u0441\u0441\u0442\u043e\u044f\u043d\u0438\u0435 \u043c\u0435\u0436\u0434\u0443 \u0441\u0442\u0440\u043e\u043a\u0430\u043c\u0438",
+msg_PlunderThreshold:"\u041d\u0438\u0436\u043d\u0438\u0439 \u043f\u0440\u0435\u0434\u0435\u043b \u0434\u043b\u044f \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0439 \u0434\u043e\u0431\u044b\u0447\u0438 (x1000)",msg_DebrisThreshold:"\u041d\u0438\u0436\u043d\u0438\u0439 \u043f\u0440\u0435\u0434\u0435\u043b \u0434\u043b\u044f \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0433\u043e \u043b\u043e\u043c\u0430 (x1000)",msg_foldSmallPlunder:"\u0421\u0432\u043e\u0440\u0430\u0447\u0438\u0432\u0430\u0442\u044c \u0434\u043e\u043a\u043b\u0430\u0434\u044b \u0441 \u0434\u043e\u0431\u044b\u0447\u0435\u0439 \u0438 \u043b\u043e\u043c\u043e\u043c \u043c\u0435\u043d\u044c\u0448\u0435 \u043f\u0440\u0435\u0434\u0435\u043b\u0430",
+msg_showPlunder:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u0443\u044e \u0434\u043e\u0431\u044b\u0447\u0443 \u0432 \u0448\u043f\u0438\u043e\u043d\u0441\u043a\u0438\u0445 \u0434\u043e\u043a\u043b\u0430\u0434\u0430\u0445",msg_addSimButton:"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043a\u043d\u043e\u043f\u043a\u0438 \u0434\u043b\u044f \u0441\u0438\u043c\u0443\u043b\u044f\u0446\u0438\u0438 \u0434\u043e\u043a\u043b\u0430\u0434\u043e\u0432 \u0432 WebSim",
+msg_fixColors:"\u0418\u0441\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0446\u0432\u0435\u0442\u0430 \u0431\u043e\u0435\u0432\u044b\u0445 \u0434\u043e\u043a\u043b\u0430\u0434\u043e\u0432",fleet_showCapacity:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0432\u043c\u0435\u0441\u0442\u0438\u043c\u043e\u0441\u0442\u044c \u0438 \u0441\u043a\u043e\u0440\u043e\u0441\u0442\u044c \u043a\u043e\u0440\u0430\u0431\u043b\u0435\u0439",fleet1_showResCalc:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u043a\u0430\u043b\u044c\u043a\u0443\u043b\u044f\u0442\u043e\u0440 \u0440\u0435\u0441\u0443\u0440\u0441\u043e\u0432",
+fleet2_fixLayout:"\u0418\u0441\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0440\u0430\u0441\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u0438 \u043e \u043f\u043e\u043b\u0435\u0442\u0435 (\u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430 2)",autocopyCoords:"\u0410\u0432\u0442\u043e-\u0432\u0441\u0442\u0430\u0432\u043a\u0430 \u043a\u043e\u043e\u0440\u0434\u0438\u043d\u0430\u0442",autocopyGlobal:"\u0417\u0430\u043f\u043e\u043c\u0438\u043d\u0430\u0442\u044c \u043a\u043e\u043e\u0440\u0434\u0438\u043d\u0430\u0442\u044b \u0441 \u043b\u044e\u0431\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u044b (\u043d\u0435 \u0442\u043e\u043b\u044c\u043a\u043e \u0438\u0437 \u0432\u043a\u043b\u0430\u0434\u043e\u043a \u0442\u0435\u043a\u0443\u0449\u0435\u0439 \u0432\u0441\u0435\u043b\u0435\u043d\u043d\u043e\u0439 Ogame)",
+fleet2_setTargetDF:"\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u044f\u0442\u044c \u043d\u0430 \u041f\u041e, \u0435\u0441\u043b\u0438 \u0432\u043e \u0444\u043b\u043e\u0442\u0435 \u0435\u0441\u0442\u044c \u043f\u0435\u0440\u0435\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a\u0438",fleet2_ShortLinks:"\u0421\u043f\u0438\u0441\u043e\u043a \u0446\u0435\u043b\u0435\u0439 \u0434\u043b\u044f \u0431\u044b\u0441\u0442\u0440\u043e\u0439 \u0432\u0441\u0442\u0430\u0432\u043a\u0438 (\u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430 2)",
+fleet2_MoonColor:"\u0426\u0432\u0435\u0442 \u0434\u043b\u044f \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u044f \u043b\u0443\u043d \u0432 \u0441\u043f\u0438\u0441\u043a\u0435 \u0432\u044b\u0431\u043e\u0440\u0430 \u043f\u043b\u0430\u043d\u0435\u0442",fleet2_MoonsToEnd:"\u041f\u0435\u0440\u0435\u043c\u0435\u0449\u0430\u0442\u044c \u043b\u0443\u043d\u044b \u0432 \u043a\u043e\u043d\u0435\u0446 \u0441\u043f\u0438\u0441\u043a\u0430 \u0432\u044b\u0431\u043e\u0440\u0430 \u043f\u043b\u0430\u043d\u0435\u0442",
+fleet2_expandLists:"\u0420\u0430\u0437\u0432\u043e\u0440\u0430\u0447\u0438\u0432\u0430\u0442\u044c \u0432\u044b\u043f\u0430\u0434\u0430\u044e\u0449\u0438\u0435 \u0441\u043f\u0438\u0441\u043a\u0438 (\u0441\u043a\u043e\u0440\u043e\u0441\u0442\u044c, \u043f\u043b\u0430\u043d\u0435\u0442\u044b, \u0421\u0410\u0411\u044b)",fleet2_expandMoonColor:"\u0420\u0430\u0441\u043a\u0440\u0430\u0441\u0438\u0442\u044c \u043b\u0443\u043d\u044b \u0432 \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u043d\u043e\u043c \u0441\u043f\u0438\u0441\u043a\u0435",
+fleet2_checkProbeCapacity:"\u041f\u0440\u043e\u0432\u0435\u0440\u044f\u0442\u044c \u0432\u043c\u0435\u0441\u0442\u0438\u043c\u043e\u0441\u0442\u044c \u0448\u043f\u0438\u043e\u043d\u0441\u043a\u0438\u0445 \u0437\u043e\u043d\u0434\u043e\u0432 \u043f\u0440\u0438 \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0435 (\u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430 2)",missionPriority:"\u041f\u0440\u0438\u043e\u0440\u0438\u0442\u0435\u0442 \u0437\u0430\u0434\u0430\u043d\u0438\u044f",mvmt_expandFleets:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0441\u043e\u0441\u0442\u0430\u0432 \u0438 \u0433\u0440\u0443\u0437 \u0444\u043b\u043e\u0442\u043e\u0432",
+mvmt_showReversal:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0432\u0440\u0435\u043c\u044f \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u0430 \u0444\u043b\u043e\u0442\u0430 \u043f\u0440\u0438 \u043e\u0442\u0437\u044b\u0432\u0435",evt_expandFleetsPhal:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0441\u043e\u0441\u0442\u0430\u0432 \u0438 \u0433\u0440\u0443\u0437 \u0444\u043b\u043e\u0442\u043e\u0432 (\u0444\u0430\u043b\u0430\u043d\u0433\u0430)",phalanx_showDebris:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u044b\u0439 \u043b\u043e\u043c \u0432 \u0441\u043a\u0430\u043d\u0430\u0445 \u0444\u0430\u043b\u0430\u043d\u0433\u0438",
+evt_expandFleetsEvt:"\u041f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0442\u044c \u0441\u043e\u0441\u0442\u0430\u0432 \u0438 \u0433\u0440\u0443\u0437 \u0444\u043b\u043e\u0442\u043e\u0432 (\u0441\u043f\u0438\u0441\u043e\u043a \u0441\u043e\u0431\u044b\u0442\u0438\u0439)",evt_dimReverse:"\u0417\u0430\u0442\u0435\u043c\u043d\u0438\u0442\u044c \u0432\u043e\u0437\u0432\u0440\u0430\u0449\u0430\u044e\u0449\u0438\u0435\u0441\u044f \u0444\u043b\u043e\u0442\u044b",update_Changelog:"Changelog",update_check:"\u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438 \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u0442\u044c \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f",
+update_check_Final:"Final",update_check_Preview:"Final & Preview",update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Home page",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u0441\u043e\u0445\u0440\u0430\u043d\u044f\u0435\u0442\u0441\u044f \u0442\u043e\u043b\u044c\u043a\u043e \u0434\u043b\u044f \u044d\u0442\u043e\u0439 \u0432\u0441\u0435\u043b\u0435\u043d\u043d\u043e\u0439",
+info_Tip2:"Please visit fleet send page 3 one time for each lanugage for proper mission coloring.",info_Tip3:"Please choose the top player score for correct expo calculation.",info_Tip4:"",info_Tip5:""}},LabelsSK:function(){return{btnMarkReadAll:"Ozna\u010d v\u0161etky zobrazen\u00e9 spr\u00e1vy ako pre\u010d\u00edtan\u00e9",btnDeleteSmallPlunder:"Vyma\u017e \u0161pion\u00e1\u017ene spr\u00e1vy s koris\u0165ou < $plunder and debris < $debris",msg_Simulator1:"WebSim",msg_Simulator2:"DragoSim",msg_Simulator3:"OSimulate",
+debris:"Trosky",total:"Celkovo",loot:"Koris\u0165",Save:"Ulo\u017e",Clear:"Zma\u017e",Moon:"Mesiac",tmTime:"\u010cas",tmCountdown:"Odpo\u010d\u00edtavanie",rx_sendMail:/Odo\u0161li spr\u00e1vu (.+)\./,TotalCapacity:"Celkov\u00e1 kapacita",MinSpeed:"Minim\u00e1lna r\u00fdchlos\u0165",ExPoints:"Expedi\u010dn\u00e9 body",resources:"Zdroje",ArrivalACS:"N\u00e1vrat (ACS)",mvmt_Return:"N",shipSCargoAlt:"MT",shipLCargoAlt:"VT",shipRecyclerAlt:"Recyk.",shipRIPAlt:"RIP",Quantity:"Mno\u017estvo",Duration:"Trvanie",
+Consumption:"Spotreba",shipSatelliteAlt:"Sat.",deficientRes:"Ch\u00fdbaj\u00face zdroje",Production:"Produkcia",RequiredEnergy:"Potrebn\u00e1 energia"}},InterfaceSK:function(){return{sectionGeneral:"V\u0161eobecn\u00e9",sectionUniverse:"Vesm\u00edr",sectionGlobalview:"V\u0161eobecn\u00fd preh\u013ead",sectionHighlighting:"Highlighting",sectionObjectview:"Budovy, v\u00fdskumy a lode",sectionTime:"\u010casov\u00e9 mo\u017enosti",sectionGalaxy:"Galaxia",sectionGalaxy_Player:"Hr\u00e1\u010d",sectionGalaxy_Alliance:"Aliancia",
+sectionGalaxy_Debris:"Trosky",sectionMessages:"Spr\u00e1vy",sectionMessages_Espionage:"\u0160pion\u00e1\u017ene spr\u00e1vy",sectionMessages_Combat:"Spr\u00e1vy z boja",sectionFleetDispatch:"Vyslanie flotily",sectionFleetDispatch_Fleet1:"Flotila strana 1.",sectionFleetDispatch_Fleet2:"Flotila strana 2.",sectionFleetDispatch_Fleet3:"Flotila strana 3.",sectionFleet:"Fleet lists",sectionFleet_Movement:"Pohyb flotily",sectionFleet_Phalanx:"List Falanga",sectionFleet_Events:"List udalost\u00ed",sectionFleet_MissionColor:"Farby \u00faloh (form\u00e1t: ABCDEF - Websafe form\u00e1t ACE)",
+sectionInfo:"Information",sectionFeatures:"Features",sectionUpdates:"Updates",sectionSupport:"Support",sectionTips:"Tips",menu_Name:"AntiGame",menu_Title:"AntiGame Origin nastavenia",menu_SaveButton:"OK",menu_CancelButton:"Storno",menu_updateTip:"A new update is available: Version",improveLayout:"Vylep\u0161i rozvrhnutie tejto str\u00e1nky",improveUsability:"Vylep\u0161i pou\u017eite\u013enos\u0165 tejto str\u00e1nky",improveLayoutUse:"Vylep\u0161i rozvrhnutie a pou\u017eite\u013enos\u0165 tejto str\u00e1nky",
+simpleLayout:"Zjednodu\u0161 rozvrhnutie tejto str\u00e1nky",killTips:"Odstr\u00e1\u0148 info. okn\u00e1 z tejto str\u00e1nky",clickTips:"Use mouseclick to show tooltips on this page",oldBrowser:"Do not use effects which slowdowns old browser or computer",language:"Jazyk ponuky Nastavenia",thousandSeparator:"Oddelova\u010d tis\u00edcov",btnDefault:"Predvolen\u00e9",blockAutoComplete:"Block Auto-Complete for input fields",uni_SpeedFactor:"Faktor r\u00fdchlosti tohoto vesm\u00edru",uni_DFPercent:"Percent\u00e1\u017e flotily do trosiek",
+uni_DefenseToDF:"Percent\u00e1\u017e obrany do trosiek",uni_topPlayerScore:"The points of the strongest player in this uni are",uni_systemMetrik:"Maximal number of 'galaxy:system' in this universe (9:499)",showResources:"Uk\u00e1\u017e roz\u0161\u00edren\u00e9 inform\u00e1cie o zdrojoch",show_onTop:"Hore",show_onBottom:"Dole",show_onLeft:"Na\u013eavo",showDeficient:"Uk\u00e1\u017e ch\u00fdbaj\u00face suroviny",showNames:"Uk\u00e1\u017e n\u00e1zvy lod\u00ed/budov/v\u00fdskumov cez obr\u00e1zky",nameColorOn:"N\u00e1zov farby: dostupn\u00e9",
+nameColorOff:"N\u00e1zov farby: nedostupn\u00e9",nameColorDisabled:"N\u00e1zov farby: nedostatok zdrojov",galaxy_Players:"Zv\u00fdrazni nasleduj\u00facich hr\u00e1\u010dov",galaxy_PlayerColors:"Farby pre zv\u00fdraz\u0148ovanie hr\u00e1\u010da",galaxy_Allys:"Zv\u00fdrazni nasleduj\u00face aliancie",galaxy_AllyColors:"Farby pre zv\u00fdraz\u0148ovanie aliancie",jumpgate_Improve:"Show target links and set ships with click on number or icon.",jumpgate_RequireTarget:"Require selecting a target before you can jump.",
+showConstructionTitle:"Zobraz n\u00e1zvy v\u00fdstavby v zozname plan\u00e9t",shortHeader:"V\u017edy zmen\u0161i obr\u00e1zky plan\u00e9t",misc_scrollTitle:"Uk\u00e1\u017e \u010das do \u010fal\u0161ej udalosti v n\u00e1zve karty",timeAMPM:"Pou\u017ei 12-hodinov\u00fd form\u00e1t (AM/PM) namiesto 24-hodinov\u00e9ho",timeSetting:"Zme\u0148 \u010dasov\u00e9 hodnoty (iba hodiny)",timeDontChange:"Nemeni\u0165 \u010das",timeLocal:"V\u017edy nastav na lok\u00e1lnu \u010dasov\u00fa z\u00f3nu",timeServer:"V\u017edy nastav na serverov\u00fa \u010dasov\u00fa z\u00f3nu",
+showServerOgameClock:"Ponechaj serverov\u00fd \u010das pre Ogame hodiny vpravo-hore",showServerPhalanx:"Ponechaj serverov\u00fd \u010das pre Falangu",showPageStartTime:"Zobraz \u010das poslednej obnovy str\u00e1nky",galaxy_shrinkLayout:"Shrink the galaxy page",galaxy_keepTips:"Keep mouseover tooltips for planet, moon and debris",galaxy_reload:"Pressing enter key reloads galaxy",galaxy_ShowRank:"Uk\u00e1\u017e hodnosti hr\u00e1\u010da v preh\u013eade galaxie",galaxy_PlayerRankColors:"Player ranks color (All, 1000, 100, 10)",
+galaxy_ShowAllyRank:"Uk\u00e1\u017e hodnosti aliancie v preh\u013eade galaxie",galaxy_AllyRankColors:"Alliance ranks color (All, 50, 10, 5)",galaxy_DebrisMin:"Minim\u00e1lna ve\u013ekos\u0165 trosiek pre zv\u00fdraznenie (0 pre vypnutie)",galaxy_DebrisSize:"Show size of debris field through",galaxy_DebrisSize_Pic:"Picture size",galaxy_DebrisSize_Number:"Number",galaxy_DebrisSize_ShortNumber:"Number (k M B)",msg_expandBox:"Pred\u013a\u017e telo spr\u00e1vy",msg_addButtons:"Doplnkov\u00e9 tla\u010didl\u00e1 v Spr\u00e1vach",
+msg_EspionageSpace:"Zmen\u0161enie odstupu riadkov na",msg_PlunderThreshold:"Najni\u017e\u0161\u00ed limit pre teoretick\u00fa koris\u0165 (x1000)",msg_DebrisThreshold:"Najni\u017e\u0161\u00ed limit pre teoretick\u00e9 trosky (x1000)",msg_foldSmallPlunder:"Zabali\u0165 spr\u00e1vy s koris\u0165ou a troskami men\u0161\u00edmi ako limit",msg_showPlunder:"Uk\u00e1\u017e koris\u0165 v \u0161pion\u00e1\u017enych spr\u00e1vach",msg_addSimButton:"Pridaj tla\u010didl\u00e1 na odoslanie \u0161pion\u00e1\u017enych spr\u00e1v do simul\u00e1tora",
+msg_fixColors:"Upravi\u0165 farby spr\u00e1v z boja",fleet_showCapacity:"Uk\u00e1\u017e kapacitu a r\u00fdchlos\u0165 lod\u00ed",fleet1_showResCalc:"Uk\u00e1\u017e v\u00fdpo\u010det zdrojov",fleet2_fixLayout:"Upravi\u0165 rozvrhnutie inform\u00e1ci\u00ed o lete pre dlh\u00e9 texty",autocopyCoords:"Auto-kop\u00edruj s\u00faradnice",autocopyGlobal:"Pam\u00e4taj s\u00faradnice z akejko\u013evek externej str\u00e1nky",fleet2_setTargetDF:"Nastav cie\u013e na trosky ak flotila obsahuje Recykl\u00e1tory",
+fleet2_ShortLinks:"Skratky cie\u013eov",fleet2_MoonColor:"Farby pre Mesiace v zozname skratiek",fleet2_MoonsToEnd:"Presu\u0148 Mesiace na koniec v zozname skratiek",fleet2_expandLists:"Roz\u0161\u00edr rozba\u013eovacie ponuky (R\u00fdchlos\u0165, Skratky, Bojov\u00e9 zoskupenia)",fleet2_expandMoonColor:"Farby Mesiacov v zozname skratiek",fleet2_checkProbeCapacity:"Over kapacitu sond pred odletom",missionPriority:"Prioritn\u00fd v\u00fdber \u00falohy",mvmt_expandFleets:"Uk\u00e1\u017e lode flotily a n\u00e1klad",
+mvmt_showReversal:"Uk\u00e1\u017e \u010das pre odvolanie letu",evt_expandFleetsPhal:"Uk\u00e1\u017e zlo\u017eenie flotily a n\u00e1kladu (Falanga)",phalanx_showDebris:"Uk\u00e1\u017e teoretick\u00e9 trosky vo Falange",evt_expandFleetsEvt:"Uk\u00e1\u017e zlo\u017eenie flotily a n\u00e1kladu (List Udalost\u00ed)",evt_dimReverse:"Ztmav vracaj\u00face sa flotily",update_Changelog:"Changelog",update_check:"Auto-kontrola pre aktualiz\u00e1cie",update_check_Final:"Final",update_check_Preview:"Final & Preview",
+update_Final:"Update to final version",update_Preview:"Update to preview version for testing",update_Last:"Go back to the previous stable version",update_Install:"Install",support_Homepage:"Dom. str\u00e1nka",support_Feedback:"Feedback & Bugs",support_Ideas:"Suggestions",support_Translation:"Translation",info_Tip1:"Nastavenie plat\u00ed iba pre tento vesm\u00edr",info_Tip2:"Please visit fleet send page 3 one time for each lanugage for proper mission coloring.",info_Tip3:"Please choose the top player score for correct expo calculation.",
+info_Tip4:"",info_Tip5:""}},dummy:function(){}};ca.Run()}}AntiStart();
+function AntiStart(){try{var s=!1,Q=window.opera?!0:!1,E=-1<window.navigator.userAgent.indexOf("Firefox")?!0:!1,t=-1<window.navigator.userAgent.indexOf("Chrome")?!0:!1,G="function"==typeof GM_getResourceURL;if(document.readyState){if(Q)"complete"==document.readyState&&(s=!0);else if(E){if("interactive"==document.readyState||"complete"==document.readyState)s=!0}else if(t&&G){if("interactive"==document.readyState||"complete"==document.readyState)s=!0}else t&&!G&&"complete"==document.readyState&&(s=
+!0);E&&(s=!0)}if(s){if(!E)document.onreadystatechange=null;if(t&&!G){var h=document.createElement("script");h.setAttribute("type","text/javascript");h.innerHTML="("+AntigameFunc.valueOf()+")();";document.body.appendChild(h)}else AntigameFunc()}else if(!E)document.onreadystatechange=AntiStart}catch(p){}};

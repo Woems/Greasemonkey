@@ -101,6 +101,7 @@ function DatePrint(d)
 var AktuelleFilme=$x("id('contentRegionInner')//div[@class='movieResultItem']").map(function (item,i) {
   return {
     Titel:$xs('div/h3/a',item).textContent.replace('"',"'"),
+    Link:$xs('div/h3/a',item).href,
     StartDate:( $xs('.//dd/dl[dt[@class="date"]]/dd',item) || { textContent: DatePrint(new Date()) } ).textContent,
     Img:$xs("div[@class='preSellingMovieListItemHeadline']/a[@class='filmPosterWeekview']/img",item),
     TimeTable:$xs(".//table[@class='movieSchedule']",item),
@@ -145,7 +146,7 @@ FilmeNachZeit.sort(function (a,b) { return (a.Tag!=b.Tag) ? a.Tag-b.Tag : a.Zeit
 
 function data2html(data)
 {
-  return "<div class=wThumb del='"+data.Status['del']+"' cool='"+data.Status['cool']+"' seen='"+data.Status['seen']+"' alter="+Math.floor(data.DayDiff/7/2+1)+' title="'+data.Titel+'">'+data.DayDiff+' Tage<br>'+Math.floor(data.DayDiff/7+1)+' Wochen<a name=thump_'+data.Nr+" href=#img_"+data.Nr+"><img src="+data.Img.src+"></a><br><wbutton class='seen'>gesehen</wbutton><wbutton class='del'>löschen</wbutton><wbutton class='cool'>cool</wbutton></div>";
+  return "<div class=wThumb del='"+data.Status['del']+"' cool='"+data.Status['cool']+"' seen='"+data.Status['seen']+"' alter="+Math.floor(data.DayDiff/7/2+1)+' title="'+data.Titel+'">'+data.DayDiff+' Tage<br>'+Math.floor(data.DayDiff/7+1)+' Wochen<a name=thump_'+data.Nr+" target=_blank href="+ data.Link /* #img_"+data.Nr+"*/ +"><img src="+data.Img.src+"></a><br><wbutton class='seen'>gesehen</wbutton><wbutton class='del'>löschen</wbutton><wbutton class='cool'>cool</wbutton></div>";
 }
 
 //GM_log(uneval(images.map(data)));
@@ -153,11 +154,11 @@ function data2html(data)
 
 // Nur die nicht coolen Filme //
 insertBefore(createElement("div",{ id:"wUebersichtUnsort", className:"onlycool" }),$xs("id('contentRegionInner')//div[@class='wrapperInner']"));
-$("wUebersichtUnsort").innerHTML=""+AktuelleFilme.filter(function (e) { return !e.Status['cool']; }).map(data2html).join("")+"<div style='clear:left;'></div>";
+$("wUebersichtUnsort").innerHTML=""+AktuelleFilme.filter(function (e) { return !e.Status['cool']; }).sort(function (a,b) { return a.DayDiff-b.DayDiff; }).map(data2html).join("")+"<div style='clear:left;'></div>";
 
 // Nur die coolen Filme //
 insertBefore(createElement("div",{ id:"wUebersicht", className:"onlycool" }),$xs("id('contentRegionInner')//div[@class='wrapperInner']"));
-$("wUebersicht").innerHTML="<a href=# id=wShowAll>Alles anzeigen</a><br>"+AktuelleFilme.filter(function (e) { return e.Status['cool']; }).map(data2html).join("")+"<div style='clear:left;'></div>";
+$("wUebersicht").innerHTML="<a href=# id=wShowAll>Alles anzeigen</a><br>"+AktuelleFilme.filter(function (e) { return e.Status['cool']; }).sort(function (a,b) { return a.DayDiff-b.DayDiff; }).map(data2html).join("")+"<div style='clear:left;'></div>";
 
 // Filme nach Uhrzeit //
 insertBefore(createElement("div",{ id:"wUhrzeiten" }),$xs("id('contentRegionInner')//div[@class='wrapperInner']"));
@@ -224,3 +225,6 @@ $x("id('contentRegionInner')//div[@class='movieResultItem']").forEach(function (
   $xs("div/h3[@class='headlineWeekView']",movieResultItem).style.display="none";
 });
 */
+1
+
+

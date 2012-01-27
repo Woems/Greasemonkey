@@ -21,7 +21,11 @@ function loop(xpath, func, rootdir) {
 // Edit Nodes
 function createElement(type, attributes, append){
   var node = document.createElement(type);
-  for (var attr in attributes) if (attributes.hasOwnProperty(attr)) try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
+  if (attributes) for (var attr in attributes) if (attributes.hasOwnProperty(attr))
+    if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(), attributes[attr], true)
+    else if (attr=="append") node.appendChild(attributes[attr])
+    else if(attr=="childs" && (childs=attributes[attr])) for(var i=0; i<childs.length; i++) node.appendChild(childs[i]);
+    else try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
   if (append) append.appendChild(node);
   return node;
 } // Example usage: var styles = createElement('link', {rel: 'stylesheet', type: 'text/css', href: basedir + 'style.css'});
@@ -44,6 +48,7 @@ function get(url, cb) { GM_xmlhttpRequest({ method: "GET", url: url, onload: fun
 //function get(url, cb, error) { GM_xmlhttpRequest({ method: "GET", url: url, onload: function(xhr) { cb(xhr.finalUrl, xhr.responseText, xhr.responseHeaders, xhr); }, onerror: function(xhr) { if (error) error(xhr); } });}
 function head(url, cb) { GM_xmlhttpRequest({ method: "HEAD", url: url, onload: function(xhr) { cb(xhr.finalUrl, xhr.responseText, xhr.responseHeaders, xhr); } }); }
 // ** get("",function (Url, Text, Header, xhr) {}); **
+function text2div(text) { var div=document.createElement("div"); div.innerHTML=text; return div; }
 // Text
 function trim(text) { return text.replace(/(^\s*|\s*$)/g,""); }
 // Array
@@ -53,60 +58,9 @@ function aa(obj) { alert(uneval(obj)); }
 function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return (key)?r[key]:r; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
+function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //GM_log=function (){}
 /********************************/
-
-function dump(obj)
-{
-  var variablen="";
-  var objekte="";
-  var functionen="";
-  if (typeof obj!="object") return obj;
-  for (i in obj)
-    switch (typeof obj[i])
-    {
-      case "function":
-        functionen+=""+obj[i]+"\n\n";
-        break;
-      case "object":
-        var tmp="";
-        try {
-        for (j in obj[i])
-          switch (typeof obj[i][j])
-          {
-           case "object":
-              tmp+=j+": { ... },\n";
-              break;
-           case "function":
-              tmp+=j+": function () { ... },\n";
-              break;
-           case "string":
-              tmp+=j+": '"+obj[i][j]+"',\n";
-              break;
-           case "number":
-           case "boolean":
-              tmp+=j+": "+obj[i][j]+",\n";
-              break;
-           default: tmp+=j+": ...,\n";
-          }
-        } catch(e) { tmp="..."; };
-        objekte+="var "+i+" = { "+tmp+" }\n\n";
-        break;
-      case "string":
-        variablen+="var "+i+" = '"+obj[i]+"'\n\n";
-        break;
-      case "number":
-      case "boolean":
-        variablen+="var "+i+" = "+obj[i]+"\n\n";
-        break;
-      default:
-        try {
-          GM_log("Error: " +typeof obj[i]+" - "+obj[i]);
-        } catch(e) {}
-        break;
-    }
-  return variablen+objekte+functionen;
-}
 
 function closeTab(){
   //window.focus();
@@ -141,10 +95,10 @@ Timeout(function () {
  //GM_log("'"+location.host+"'");
  switch(location.host)
  {
-  case 'www.onlinetvrecorder.com': onlinetvrecorder(); break;
+  case 'www.onlinetvrecorder.com': /**/ onlinetvrecorderNEU(); window.setInterval(AutoOpen,60*1000); /*/ onlinetvrecorder(); /**/ break;
   case 'www.otrkeyfinder.com': otrkeyfinder(); break;
   case 'otr-download.de': otrdownloadde(); break;
-  case 'otr.datenkeller.at': datenkellerat(); break;
+  case 'wait.lastverteiler.net': case 'otr.datenkeller.at': datenkellerat(); break;
   case 'www.otr-files.de': otrfilesde(); break;
   case 'mirror-verbund.com':
   case 'www.mirror-verbund.com': mirrorverbundcom(); break;
@@ -159,30 +113,208 @@ Timeout(function () {
   case 'filebroker.de': filebrokerde(); break;
   case 'mirror-otr.de': mirrorotrde(); break;
   case 'www.otrworld.at': otrworldat(); break;
+  case 'otr.cgnetsphere.org': otrcgnetsphereorg(); break;
+  case 'xanadu.otr-keys.de': case 'www.otr-keys.de': otrkeysde(); break;
+  case 'tvhelden.de': tvheldende(); break;
 
-  case 'otr.ceemx.de': closeTab(); break; // werden direkt als Video geöffnet, nicht als Download
-  case 'otr-spider.de': closeTab(); break; // filefactory.com
-  case 'otr-cloud.net': closeTab(); break; // uploaded.to
-  case 'flash-sms.org': closeTab(); break; // MagaUpload, Fileserv
-  case 'super-otr.de': closeTab(); break; // uploaded.to
-  case 'otr-share.de': closeTab(); break; // hotfile, rapidshare, ... + Gesplittet und rar gepackt
-  case 'free-otr.de': closeTab(); break; // Zeigt ein Alert an, den man erst wegklicken muss..
-  case 'otr.knoffl.com': closeTab(); break; // Zeigt ein Alert an, den man erst wegklicken muss..
-  case 'otrkeys.net': closeTab(); break; // weil wird als Video angezeigt und nicht heruntergeladen...
-  case 'bitshare.com': closeTab(); break;  // wegen Captcha
-  case 'mirror.human-evo.de': closeTab(); break;  // wegen Captcha
-  case 'otr.matzl.eu': closeTab(); break;  // wegen upload.to Captcha
-  case 'www.free-klingeltoene-handy.de': closeTab(); break; // nur für Angemeldete
+  case 'www.otr-push.com': PrioSet(location.hostname,-100); closeTab(); break; // MegaUpload
+  case 'otr-free.jimdo.com': PrioSet(location.hostname,-100); closeTab(); break; // rapidshare
+  case 'web320.rb-media-s1.de': PrioSet(location.hostname,-100); closeTab(); break; // shragle
+  case 'otr.ceemx.de': PrioSet(location.hostname,-100); closeTab(); break; // werden direkt als Video geöffnet, nicht als Download
+  case 'otr-spider.de': PrioSet(location.hostname,-100); closeTab(); break; // filefactory.com
+  case 'otr-cloud.net': PrioSet(location.hostname,-100); closeTab(); break; // uploaded.to
+  case 'flash-sms.org': PrioSet(location.hostname,-100); closeTab(); break; // MagaUpload, Fileserv
+  case 'super-otr.de': PrioSet(location.hostname,-100); closeTab(); break; // uploaded.to
+  case 'otr-share.de': PrioSet(location.hostname,-100); closeTab(); break; // hotfile, rapidshare, ... + Gesplittet und rar gepackt
+  case 'free-otr.de': PrioSet(location.hostname,-100); closeTab(); break; // Zeigt ein Alert an, den man erst wegklicken muss..
+  case 'otr.knoffl.com': PrioSet(location.hostname,-100); closeTab(); break; // Zeigt ein Alert an, den man erst wegklicken muss..
+  case 'otrkeys.net': PrioSet(location.hostname,-100); closeTab(); break; // weil wird als Video angezeigt und nicht heruntergeladen...
+  case 'bitshare.com': PrioSet(location.hostname,-100); closeTab(); break;  // wegen Captcha
+  case 'mirror.human-evo.de': PrioSet(location.hostname,-100); closeTab(); break;  // wegen Captcha
+  case 'otr.matzl.eu': PrioSet(location.hostname,-100); closeTab(); break;  // wegen upload.to Captcha
+  case 'www.free-klingeltoene-handy.de': PrioSet(location.hostname,-100); closeTab(); break; // nur für Angemeldete
 //  case '': (); break;
 
   //default: alert("OTR-DirektLink: "+location.host); GM_log("OTR-DirektLink: "+location.host+"\n"+location.href); break;
  }
 }, 4000);
 
+// ******************************
+// ****   Helperfunktionen   ****
+// ******************************
+
+function getOTRList()
+{
+  if (!$x("//tr[td/input[@type='checkbox']]")) return false;
+  if ($x("//tr[td/input[@type='checkbox']]").length==0) return false;
+  return $x("//tr[td/input[@type='checkbox']]").map(function (e) {
+    return {
+      Line:e,
+      DeleteBox:e.cells[0].firstChild,
+      EPGId:e.cells[1].textContent,
+      Titel:$xs("span/span",e.cells[2]).textContent,
+      Genre:e.cells[3].textContent,
+      Station:e.cells[4].textContent,
+      Time:e.cells[5].textContent,
+      Dec:e.cells[6].textContent*1,
+      DLs:e.cells[7].textContent*1,
+      DL:e.cells[7],
+      StateElement:e.cells[8],
+      DownloadLink:"http://www.onlinetvrecorder.com/index.php?aktion=dl2&epg_id="+e.cells[1].textContent+"&rrecordingid=0&refererid=0&stopme=true",
+      DownloadLinkElement:$xs(".//a",e.cells[9]),
+    };
+  });
+}
+
+function nichtDecodiert(e)
+{
+  return !e.Dec;
+}
+
+function getFilename(Link, func)
+{
+  /**/
+  var link2file=deserialize('link2file',{});
+  if (link2file[Link])
+    func(link2file[Link]);
+  else
+  /**/
+    get(Link,function (url, text, headers, xhr) {
+      var filename=(text.match(/<div class="title">(.*)<\/div>/)[1].match(/(.*)\.mpg\.(HQ\.avi|avi|mp4|flv)(\.otrkey)?/)[1]+".mpg.avi.otrkey").replace(/$[0-9]*_/,"");
+      var link2file=deserialize('link2file',{});
+      link2file[url]=filename;      
+      serialize('link2file',link2file);
+      func(filename);
+    });
+}
+
+function getLinks(Filename, func)
+{
+    get("http://www.otrkeyfinder.com/?search="+Filename,function (url, text, headers, xhr) {
+       //if (/Es wurde kein Mirror gefunden, der diese Datei zum Download zu Verf&uuml;gung stellt./.test(text)) { func([]); } else {
+         func($x("//a[contains(@href,'page=goto_mirror')]",text2div(text)).map(function (a) { return [ "http://www.otrkeyfinder.com/"+a.getAttribute("href"), a.textContent ]; }));
+       //}
+    });  
+}
+
+function PrioAll(Anz)
+{
+  var Prio=deserialize('Prio',{});
+  //GM_log("Vorher: "+dump(Prio));
+  for (i in Prio) if (Prio.hasOwnProperty(i))
+    Prio[i]=Prio[i]+Anz;
+  //GM_log("Nachher: "+dump(Prio));
+  serialize('Prio',Prio);  
+}
+function PrioGet(Name)
+{
+  Name=Name.replace(/^(www|home)\./,"").replace(/\/.*/,"")
+  var Prio=deserialize('Prio',{});
+  //GM_log("get "+Name+": "+Prio[Name]);
+  return Prio[Name]||0;
+}
+function PrioSet(Name, Anz)
+{
+  Name=Name.replace(/^(www|home)\./,"").replace(/\/.*/,"")
+  var Prio=deserialize('Prio',{});
+  GM_log("set "+Name+": "+Prio[Name]+" + "+Anz);
+  Prio[Name]=(Prio[Name]||0)+Anz;
+  if (Anz==-100) Prio[Name]=-100; // Diesen Mirror deaktivieren...
+  if (Prio[Name]<-100) { GM_log("OTR Fehler: Prio["+Name+"]="+Prio[Name]+" < -100"); Prio[Name]=-100; if (location.host==Name) closeTab(); }
+  if (Prio[Name]>100) { GM_log("OTR Fehler: Prio["+Name+"]="+Prio[Name]+" > 100"); Prio[Name]=100; }
+  if (location.host==Name) document.title=document.title.replace(/\[[0-9-]+\] |^/,'['+Prio[Name]+'] ');
+  serialize('Prio',Prio);  
+}
+
+function JDownloader(func,maxAnz)
+{
+  get("http://localhost:10025/get/downloads/currentcount",function (Url, Text, Header, xhr) {
+    var Anz=Text*1;
+    if (Anz <= maxAnz) func();
+  });
+}
+
+// *************
+// **** OTR ****
+// *************
+
+function onlinetvrecorderNEU()
+{
+  PrioAll(1);
+  var ErledigtenDownloads=$x("//td[contains(@style,'background-color: rgb(170, 167, 207)')]/input[@type='checkbox']");
+  ErledigtenDownloads.forEach(function (e) { e.checked=true; }); // erledigte Downloads zum Löschen vorsehen
+  if (ErledigtenDownloads.length>10) $xs("//input[@value='Delete']").click(); // bei 10 fertigen Downloads automatisch diese aus der Liste löschen.
+  var OTR=getOTRList();
+  if (OTR)
+  {
+   OTR.forEach(function (e) {
+    if (!e.DownloadLinkElement) { return; }
+    if (e.Dec)
+    {
+      e.DownloadLinkElement.innerHTML="FERTIG";
+      e.StateElement.innerHTML="";
+      //e.DeleteBox.checked=true;
+    } else {
+      getFilename(e.DownloadLink, function (Filename) {
+        e.DownloadLinkElement.href="http://www.otrkeyfinder.com/?search="+Filename;
+        e.DownloadLinkElement.innerHTML="OtrkeyFinder";
+        e.DownloadLinkElement.target="_blank";
+        e.DownloadLinkElement.title=Filename;
+        getLinks(Filename, function (Links) { 
+          e.StateElement.innerHTML=Links.map(function (a,i) { return "- <a href="+a[0]+" target=_blank>"+a[1]+"</a>" }).join("<br>");
+        });
+      });
+    }
+   });
+  }
+
+  var nextBTN=createElement("input", { className: 'button', type:'button', name:'wNextDL', value:'Film download', onClick:function(event){ AutoOpen(); event.stopPropagation(); event.preventDefault(); } });
+  insertAfter(nextBTN, $xs("//input[@name='btn_sendtohlt']"));
+  insertAfter(document.createElement("br",{}), $xs("//input[@name='btn_sendtohlt']"));
+  insertAfter(document.createElement("br",{}), $xs("//input[@name='btn_sendtohlt']"));
+  //nextBTN.scrollIntoView(false);
+  //try { unsafeWindow.markCheckbox("decoded"); } catch(e) {}
+}
+
+function AutoOpen()
+{
+    JDownloader(function () {
+      var OTR=getOTRList();
+      if (!OTR) return;
+      var DownloadLinks={};
+      OTR.some(function (e) {
+        if (!e.Dec && e.DownloadLinkElement && e.StateElement.textContent!="")
+        {
+          if (e.DL.textContent=="0")
+          {
+            var LinkList=$x("./a",e.StateElement)
+                         .map(function (a) { return { Element:a, Link: a.href, Text: a.textContent, Prio:PrioGet(a.textContent) }; })
+                         .filter(function (a) { return !a.Element.style.color; })
+                         .sort(function (a, b) { return b.Prio-a.Prio; });  
+            //GM_log("linkListe: "+LinkList+"\n"+dump(LinkList));
+            LinkList[0].Element.style.color="red";
+            PrioSet(LinkList[0].Text,-1);
+            e.DL.innerHTML="downloading...<br>"+LinkList[0].Text+" ("+LinkList[0].Prio+")";
+            e.DL.scrollIntoView(true);
+            GM_openInTab(LinkList[0].Link);
+            return true;
+          }
+        }
+      });
+    },1);
+
+  Timeout(function () {
+    $xs("//input[@value='Delete']").click();
+  },60*60*1000);
+}
+
 function onlinetvrecorder()
 {
-  var AnzDecodingsLeft=$xs("id('hometoprightinfo')/table/tbody/tr[2]/td[2]").textContent;
-  document.title="OTR - "+AnzDecodingsLeft;
+  if($xs("id('hometoprightinfo')/table/tbody/tr[2]/td[2]"))
+  {
+    var AnzDecodingsLeft=$xs("id('hometoprightinfo')/table/tbody/tr[2]/td[2]").textContent;
+    document.title="OTR - "+AnzDecodingsLeft;
+  }
   if (location.pathname=="/patience.php")
   {
     document.title="Reload in 60sec ...";
@@ -269,7 +401,7 @@ function nextDownload()
           }
         });
         /**/
-        var DownloadList=$x("//tr[td/table/tbody/tr/td[1]/div/a/nobr[text()='Continue to download']][td[8][text()=0]]").map(function (e) {
+        var DownloadList=$x("//tr[td/table/tbody/tr/td[1]/div/a/nobr[text()='Continue to download']][td[7][text()=0]]").map(function (e) {
           var AktiveDownloads=deserialize("AktiveDownloads",{});
           var id=$xs("./td[2]/font | ./td[2]",e).textContent.replace(/[^0-9]/,"");
           return {
@@ -313,6 +445,11 @@ function slowOpenInTab(linklist)
   Timeout(function () { slowOpenInTab(linklist); },30*1000);
 }
 
+
+// ******************************
+// **** Parser für Webseiten ****
+// ******************************
+
 function otrkeyfinder()
 {
   if (location.pathname=="/otr/frame2.php")
@@ -347,6 +484,7 @@ function otrkeyfinder()
 
 function datenkellerat()
 {
+  PrioSet("otr.datenkeller.at",-1);
   if (getParam("getFile"))
   {
     get("http://localhost:10025/get/downloads/currentlist",function (Url, Text, Header, xhr) {
@@ -358,34 +496,38 @@ function datenkellerat()
     });
   }
 
-  if ($xs("id('reqFile')//a[text()='Download']")) // indexseite
+  if ($xs("id('reqFile')//a[text()='Download']")) // Indexseite
   {
     var dl=$xs("id('reqFile')//a[text()='Download']").getAttribute("onclick").match(/'([^\']+)'/)[1];
     GM_openInTab("http://"+location.host+dl);
     closeTab();
-  } else if ($xs("//a[text()='Hier'][contains(@onclick,'startCount')]"))
+  } else if ($xs("//a[text()='Hier'][contains(@onclick,'startCount')]")) // startet den Cowntdown
   {
     var click=$xs("//a[text()='Hier'][contains(@onclick,'startCount')]").getAttribute("onclick");
     var sC=click.match(/startCount\(([^,]*), ([^,]*), '([^,]*)', '([^,]*)', '([^,]*)'\)/)
     unsafeWindow.startCount(sC[1],sC[2],sC[3],sC[4],sC[5]);
     Timeout(datenkellerat, 4000);
-  } else if ($xs("//a[text()='Download Link']"))
+  } else if ($xs("//a[text()='Download Link']")) // Download starten
   {
+    PrioSet("otr.datenkeller.at",10);
     var dllink=$xs("//a[text()='Download Link']");
     //location.href="otr://"+dllink.href;
     // ** Download startet automatisch. "location.href=dllink.href;" nicht nötig **
     closeTab();
-  } else if ($xs("//font[contains(text(),'Download Links pro Stunde')]"))
+  } else if ($xs("//font[contains(text(),'Download Links pro Stunde')]")) // Fehler: Zu viele Downloads
   {
+    PrioSet("otr.datenkeller.at",-5);
     closeTab();
-  } else if ($xs('//font[contains(text(),"Du bist bereits bei 3 anderen Sendungen in der Warteschlange")]'))
+  } else if ($xs('//font[contains(text(),"Du bist bereits bei 3 anderen Sendungen in der Warteschlange")]')) // Fehler: Zu viele in der Warteschlange
   {
+    PrioSet("otr.datenkeller.at",-5);
     closeTab();
   } else Timeout(datenkellerat, 60*1000);
 }
 
-function otrdownloadde()
+function otrdownloadde() // PrioSet(location.hostname,10);
 {
+  PrioSet(location.hostname,-1);
   if ($xs("id('now')/a[contains(@onclick,'dl_popup(')]")) // indexseite
   {
     var dlid=$xs("id('now')/a[contains(@onclick,'dl_popup(')]").getAttribute("onclick").match(/'([0-9]+)'/)[1];
@@ -393,20 +535,22 @@ function otrdownloadde()
     closeTab();
   } else if ($xs("//a[contains(@onclick,'dl_popup_start_download(')]")) // DL after Waiting
   {
+    PrioSet(location.hostname,10);
     var dlid=$xs("//a[contains(@onclick,'dl_popup_start_download(')]").getAttribute("onclick").match(/'([a-z0-9]+)'/)[1];
     unsafeWindow.dl_popup_start_download(dlid);
-    closeTab();
-  } else if ($xs("//a[b[text()='Highspeed Download']]"))
+    //closeTab();
+  } else if ($xs("//a[b[text()='Highspeed Download']]")) // Download starten -> Warteschlange oder Download
   {
     location.href=$xs("//a[b[text()='Highspeed Download']]").href;
-  } else if ($xs("//a[text()='Warten auf einen Highspeedslot']"))
+  } else if ($xs("//a[text()='Warten auf einen Highspeedslot']")) // Slot starten -> Warteschlange oder Download
   {
     location.href="javascript:"+$xs("//a[text()='Warten auf einen Highspeedslot']").getAttribute('onclick');
     closeTab();
-  } else if ($xs("id('now2')/b[contains(text(),'Leider können Sie keinen Highspeed Download benutzen')]"))
+  } else if ($xs("id('now2')/b[contains(text(),'Leider können Sie keinen Highspeed Download benutzen')]")) // Error: kein Highspeed
   {
+    PrioSet(location.hostname,-5);
     closeTab();
-  } else if ($('numberCountdown'))
+  } else if ($('numberCountdown')) // Countdown
   {
     if ($xs("id('numberCountdown')/b/u/a"))
     {
@@ -419,31 +563,42 @@ function otrdownloadde()
 
 function otrfilesde()
 {
+  PrioSet(location.hostname,-1);
   if ($xs('//input[@id="Send"][@value="Weiter zum Download Fenster"]')) // indexseite
-    $xs('//input[@id="Send"][@value="Weiter zum Download Fenster"]').click();
-  if ($("Send"))
-    Timeout(otrfilesde, 60*1000)
-  if ($xs("//strong[text()='Download steht automatisch wieder zur Verfügung wenn das 24 Stunden Limit wieder unterschritten wurde. ']"))
-    closeTab();
-  if ($("Countdown"))
-    if ($xs("id('Countdown')/a[contains(@href,'dl-slot')]"))
-    {
-      //location.href="otr://"+$xs("id('Countdown')/a[contains(@href,'dl-slot')]").href;
-      location.href=$xs("id('Countdown')/a[contains(@href,'dl-slot')]").href;
-      //closeTab();
-    } else Timeout(otrfilesde,60*1000);
-  if ($xs("//a[contains(@href,'dl-slot')]"))
   {
+    $xs('//input[@id="Send"][@value="Weiter zum Download Fenster"]').click();
+  } 
+  else if ($xs("//a[contains(@href,'dl-slot')]")) // Download
+  {
+    PrioSet(location.hostname,10);
     //location.href="otr://"+$xs("//a[contains(@href,'dl-slot')]").href;
     location.href=$xs("//a[contains(@href,'dl-slot')]").href;
     closeTab();
   }
+  else if ($xs("//a[contains(@href,'.otrkey')]")) // Zwischenschritt
+  {
+    location.href=$xs("//a[contains(@href,'.otrkey')]").href;
+  }
+  else if ($("Send"))
+    Timeout(otrfilesde, 60*1000)
+  else if ($xs("//strong[text()='Download steht automatisch wieder zur Verfügung wenn das 24 Stunden Limit wieder unterschritten wurde. ']"))
+    closeTab();
+  else if ($("Countdown"))
+    if ($xs("id('Countdown')/a[contains(@href,'dl-slot')]"))
+    {
+      //location.href="otr://"+$xs("id('Countdown')/a[contains(@href,'dl-slot')]").href;
+      PrioSet(location.hostname,10);
+      location.href=$xs("id('Countdown')/a[contains(@href,'dl-slot')]").href;
+      //closeTab();
+    } else Timeout(otrfilesde,60*1000);
   else if ($xs("//td[contains(text(),'Limit erreicht')]"))
   {
+    PrioSet(location.hostname,-10);
     closeTab();
   }
   else if ($xs("//td[contains(text(),'Server voll')]"))
   {
+    PrioSet(location.hostname,-10);
     closeTab();
   }
 
@@ -451,29 +606,37 @@ function otrfilesde()
 
 function mirrorverbundcom()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("id('mv_link_show')//a[contains(@onclick,'mvpop_dl(')]"))
   {
+GM_log(location.href+" 1");
      var dl=$xs("id('mv_link_show')//a[contains(@onclick,'mvpop_dl(')]").getAttribute("onclick").match(/'([0-9a-z_]+)'/);
      unsafeWindow.mvpop_dl(dl[1]);
      closeTab();
   }
   else if ($xs("//input[@value='Warteschlange']"))
   {
+GM_log(location.href+" 2");
     $xs("//input[@value='Warteschlange']").click();
     closeTab();
   }
   else if ($xs("//a[contains(@href,'.otrkey')]"))
   {
+GM_log(location.href+" 3");
+    PrioSet(location.hostname,10);
     location.href=$xs("//a[contains(@href,'.otrkey')]").href;
     closeTab();
   }
   else if ($xs("//a[text()='Download starten']"))
   {
+GM_log(location.href+" 4");
+    PrioSet(location.hostname,10);
     var attr=$xs("//a[text()='Download starten']").getAttribute('onclick').match(/'([^']*)'/);
     location.href="http://www.mirror-verbund.com/"+attr[1];
   }
   else if ($xs("//b[contains(text(),'Du darfst als Gast max. 2000 MB in 2 Stunde/n herrunterladen! Mehr Infos auf der Startseite')]"))
   {
+GM_log(location.href+" 5");
     closeTab();
   }
   else Timeout(mirrorverbundcom, 60*1000);
@@ -481,12 +644,16 @@ function mirrorverbundcom()
 
 function otrkingcom()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("//ul/li[@class='na'][@onclick='f(this)']"))
   {
+GM_log(location.href+" 1");
     unsafeWindow.f($xs("//ul/li[@class='na'][@onclick='f(this)']"));
     Interval(function (){
       if ($xs("//a[text()='Direktdownload']"))
       {
+GM_log(location.href+" 2");
+        PrioSet(location.hostname,10);
         location.href=$xs("//a[text()='Direktdownload']").href;
         unsafeWindow.f($xs("//ul/li[@class='na'][@onclick='f(this)']"));
         closeTab();
@@ -497,6 +664,7 @@ function otrkingcom()
 
 function superotrde()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("id('ddownloadbox')/p/a"))
     location.href=$xs("id('ddownloadbox')/p/a").href;
   else if ($xs("id('ddownloadbox')/a[img[@src='images/download/ddl.png']]"))
@@ -508,9 +676,11 @@ function superotrde()
 
 function homeprivatotrmirrorde()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("id('ja-content')//a[@onclick]"))
+  {
     location.href=$xs("id('ja-content')//a[@onclick]").getAttribute("onclick").match(/http.*otrkey/);
-  else if ($xs("//a[contains(@href,'.otrkey')]"))
+  } else if ($xs("//a[contains(@href,'.otrkey')]"))
   {
     location.href=$xs("//a[contains(@href,'.otrkey')]").href;
     closeTab();
@@ -519,8 +689,10 @@ function homeprivatotrmirrorde()
 
 function otr2xto()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("//a[h1[text()='Download starten']]"))
   {
+    PrioSet(location.hostname,10);
     location.href=$xs("//a[h1[text()='Download starten']]").href;
     closeTab();
   }
@@ -528,7 +700,7 @@ function otr2xto()
 
 function wunschotrde()
 {
-
+  PrioSet(location.hostname,-1);
   if ($xs("//input[contains(@name,'Download starten')]"))
   {
     $xs("//input[contains(@name,'Download starten')]").click();
@@ -547,6 +719,7 @@ function wunschotrde()
 
 function dieschnellekuhde()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("//td[strong[text()='Warten']]/div[contains(@style,'display: block')]/a[text()='Weiter zum Download!']"))
     location.href=$xs("//td[strong[text()='Warten']]/div[contains(@style,'display: block')]/a[text()='Weiter zum Download!']").href;
   else if ($xs("//a[text()='Download Starten!']"))
@@ -558,6 +731,7 @@ function dieschnellekuhde()
 
 function easyotrde()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("//a[b[text()='Download starten']]"))
   {
     location.href=$xs("//a[b[text()='Download starten']]").href;
@@ -567,6 +741,7 @@ function easyotrde()
 
 function filebrokerde()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("id('downloadarray')//a[@href]"))
   {
     location.href=$xs("id('downloadarray')//a[@href]").href;
@@ -579,6 +754,7 @@ function filebrokerde()
 
 function mirrorotrde()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("//a[contains(text(),'Du suchst:')]"))
   {
     location.href=$xs("//a[contains(text(),'Du suchst:')]").href;
@@ -594,6 +770,7 @@ function mirrorotrde()
 
 function otrworldat()
 {
+  PrioSet(location.hostname,-1);
   if ($xs("//a[text()='Download']"))
   {
     location.href=$xs("//a[text()='Download']").href;
@@ -605,4 +782,54 @@ function otrworldat()
   {
     closeTab();
   } else Timeout(otrworldat,60*10000)
+}
+
+function otrkeysde()
+{
+  PrioSet(location.hostname,-1);
+  if ($('dl_download')) // Download oder Warteschlange
+  {
+    if ($('dl_download').src=="http://www.otr-keys.de/template/images/download.png") PrioSet(location.hostname,10); // Download
+    location.href=$('dl_download').parentNode.href;
+    closeTab();
+  } else if ($('dl') && $('dl').parentNode.href) // Wartezeit abgelaufen
+  {
+    GM_openInTab($('dl').parentNode.href);
+  } else if ($('error') && $('error').textContent=="Fehler 403") // Keine weiteren Downloads
+  {
+    PrioSet(location.hostname,-5);
+    closeTab();
+  } else if ($xs("//td[text()='Die Warteschlange ist leer.']")) // Alle Downloads erledigt
+  {
+    closeTab();
+  } else if ($('error') && $('error').textContent=="Fehler 404") // Datei nicht gefunden // Irgendwas ist schief gelaufen. URL Prüfen!!!
+  {
+    PrioSet(location.hostname,1);
+    //closeTab();
+  }
+}
+
+function otrcgnetsphereorg()
+{
+  PrioSet(location.hostname,-1);
+  if ($xs("//a[@href]/img[@src='/buttons/avi.png']"))
+    location.href=$xs("//a[@href][img[@src='/buttons/avi.png']]").href;
+  else if ($xs("//a[contains(@href,'dltype=http')]")) // Startseite
+    location.href=$xs("//a[contains(@href,'dltype=http')]").href;
+  else if ($("downbutton")) {
+    $("downbutton").click();
+    close();
+    PrioSet(location.hostname,10);
+  }
+}
+
+function tvheldende()
+{
+  PrioSet(location.hostname,-1);
+  if ($xs("//a[text()='Download Server 1']"))
+  {
+    PrioSet(location.hostname,10);
+    location.href=$xs("//a[text()='Download Server 1']").href;
+    closeTab();
+  }
 }

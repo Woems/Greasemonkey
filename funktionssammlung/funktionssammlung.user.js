@@ -43,7 +43,6 @@ function createElement(type, attributes, append){
   return node;
 } // Example usage: var styles = createElement('link', {rel: 'stylesheet', type: 'text/css', href: basedir + 'style.css'});
 // var test=createElement("div",{ innerHTML:"LOL", textContent:"123", onClick: function () { alert("test"); },  append:createElement("span",{ innerHTML:"Text"}) }, document.body);
-function Text(t) { return document.createTextNode(t); }
 function fade(node, speed, to, endfunc) {
   if (node.style.opacity=="") node.style.opacity=(node.style.display=='none')?0:1;
   node.style.display="";
@@ -60,6 +59,7 @@ function fade(node, speed, to, endfunc) {
     }
   }, 50);
 }
+function Text(txt) { return document.createTextNode(txt); }
 function remove(node) {if(node)node.parentNode.removeChild(node);return remove;}
 function insertAfter(newNode, node) { return node.parentNode.insertBefore(newNode, node.nextSibling); }
 function insertBefore(newNode, node) { return node.parentNode.insertBefore(newNode, node); }
@@ -74,9 +74,12 @@ function on(type, elm, func) {
   else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
-function onkey(func) { on('keydown',window,function (e) { var key=(e.shiftKey?'SHIFT+':'') + (e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + e.keyCode; if (func(key, e)) { e.stopPropagation(); e.preventDefault(); } }); }
-function onaccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
+function onKey(func) { on('keydown',window,function (e) { var key=(e.shiftKey?'SHIFT+':'') + (e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + e.keyCode; if (func(key, e)) { e.stopPropagation(); e.preventDefault(); } }); }
+function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
+function getAccesskeys() { return $x('//*[@accesskey]').map(function (e) { return e.getAttribute("accesskey"); }).sort().join(", "); }
+function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmnopqrstuvwxyz1234567890+-#<".split("").filter(function (e) { return keys.indexOf(e)==-1; }).sort().join(", "); }
+//GM_log("\nKeys: "+getAccesskeys()+"\nFree: "+getFreeAccesskeys());
 // ** Position **
 function css(code) { GM_addStyle(code); }
 function PosX(element) { var e=element; var i=0; while(e) { i+=e.offsetLeft; e=e.offsetParent; } return i; }
@@ -134,7 +137,7 @@ Array.prototype.uniq = function (array) { var last=""; return array.filter(funct
 function urlParse(url) { var a = urlParse.a = urlParse.a || document.createElement('a'); a.href = url; return { scheme: /^[^:]+/.exec(a.protocol)[0], host: a.host, hostname: a.hostname, pathname: a.pathname, search: a.search, hash: a.hash }; } //alert(mdump(urlParse(location.href)));
 function aa(obj) { alert(uneval(obj)); }
 function ga(obj) { GM_log(uneval(obj)); }
-function getParam(key) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return (key)?r[key]:r; }
+function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
 // ** HTML-Code
 function div(text) { return '<div>'+text+'</div>'; }
@@ -143,21 +146,32 @@ function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>';
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
+function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) { window[key] = GM_getValue(key, defaultValue); GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() { GM_setValue(key, !window[key]); location.reload(); }); }
 function showmsg(data)
 {
-  if (!data.id) data.id="default_msg";
+  if (!data.id) data.id="default_msg_{rand}";
+  data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  var Box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:"padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center" }),document.body);
-  if (data.onOK) createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { remove($(data.id)); data.onOK(); } }, Box);
-  if (data.onCancel) createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { remove($(data.id)); data.onCancel(); } }, Box);
+  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999;";
+  if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
+  if (data.top) style+=" position: absolute; top:0px; width: 100%;";
+  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+  if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
+  if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
-} // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout
- // ** Log **
+  return data;
+} // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
+// $xs('id("default_msg")/input[@value="OK"]').setAttribute("accesskey","o");
+// $xs('id("default_msg")/input[@value="Cancel"]').setAttribute("accesskey","c");
+// $('default_msg_ok').setAttribute("accesskey","o");
+// $('default_msg_cancel').setAttribute("accesskey","c");
+// ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
 /********************************/ 
+
 
 /*
 var a1=["test",6,'',7]
@@ -338,6 +352,14 @@ GM_log("Hash: "+document.location.hash+"\n"+
       "protokol: "+document.location.protokol+"\n"+
       "search: "+document.location.search+"\n"
        );
+GM_log(dump({ hash:location.hash,
+              host:location.host,
+              hostname: location.hostname,
+              href: location.href,
+              pathname: location.pathname,
+              port:location.port,
+              protokol:location.protokol,
+              search:location.search }));
 /**/
 
 /*/

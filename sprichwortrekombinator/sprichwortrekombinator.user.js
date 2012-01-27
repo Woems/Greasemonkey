@@ -145,41 +145,162 @@ function iframe(url,className,w,h,noframetext) { var iframe=document.createEleme
 function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) { window[key] = GM_getValue(key, defaultValue); GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() { GM_setValue(key, !window[key]); location.reload(); }); }
 function showmsg(data)
 {
-  if (!data.id) data.id="default_msg";
+  if (!data.id) data.id="default_msg_{rand}";
+  data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  var Box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:"padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center" }),document.body);
-  if (data.onOK) createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { remove($(data.id)); data.onOK(); } }, Box);
-  if (data.onCancel) createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { remove($(data.id)); data.onCancel(); } }, Box);
+  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:"z-index:999; padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center" }),document.body);
+  if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { remove($(data.id)); data.onOK(data); } }, data.box);
+  if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { remove($(data.id)); data.onCancel(data); } }, data.box);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
+  return data;
 } // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout
  // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
 /********************************/
 
-var Sprichwort=$xs('//div[@class="spwort"]').textContent;
+var StarGIF = 'data:image/gif;base64,' +
+		'R0lGODlhHgBaAOYAAP////7+/uPNmfv7+/Ly8uLh4vf399vGmP39/fT09PHNRPb29qqKQ93GcuTYuvfm' +
+		'p9rZ2fPt0vDw8M2nUfbRRti3Z8vKyuzk1dKrUvnlmenp6efeyfz8/N7d3tzLi/fZZuzJQsKdSqaFPejo' +
+		'6Jp6OPfcdsmjTuLHi+7u7tjJptu7cujYmdy6PtXU1ezs7Obm5tHQ0PTmsvniiuTTrPjWVvn5+dOzO8Wo' +
+		'OfLqyeTk5OTCQPbz7bSRQ+rTe+fUjenGQe7lw9S2RfHt4riVRtW9hL2mc+XRo76aSbCNQeTKaMq7mfr3' +
+		'68WgTN7RtOnLV8PCw9WwW/DhqeziusuuRPz7/PHdjde3PdjLsfX19cetdMGtgvfz5N+9Pvr477yYR9vb' +
+		'27Wea+Df4NjY2Ovr6+3t7erboefn5/j158+ycNO/k8e0jOfaquLBQOG/P/79+vrgffj28PXw3c+zScjH' +
+		'yN7Df8+wOr6ujvHemeDPpraXU+PDT8ysYbqWR6qNTubYo+vfsCH5BAAAAAAALAAAAAAeAFoAAAf/gACC' +
+		'g4QAAQgDNTUDHAGFj5CECDVYBgZYNQiRm4QBA1gJKCgECQOOnJsBNRI1MC0GKAaaqJEcWBIuc3MuEgSm' +
+		'tI+eBAYtYsawssCFCAYEY2IvL2JjEgkcyoPCBjAvEhI5YgZkBhwIAafZhwgcA4nNzhBkCwtkHWMuZAQL' +
+		'Bovl54gGFiQgtS8TjBGlBiQY8YXDJQIEelUaANAAxRpjwrSwYKGDLwSICGj4IgZCAReZBlhKNKCDhScW' +
+		'WoTJMQJFghqNAnCoEWpEjg5fYMzpmIhSgjkwOmiQaICKOUGHqDyUoKGD0AQJLBK4BSOMPIrngh0aQC8M' +
+		'DFIEcBro5UKMmY+c/0KaETNKXiOyveZqSEAFXaEAVBJogKCBgAssFA05rFbgy7hZj5jVe0GADGLIOtcS' +
+		'+PLCWq0ELwo4W/CrEwfBBkRTiUSFQAEDb0svu+UijIQBkQZICDMGBRbIs12HIdAXJIdy5lqHEf271tYv' +
+		'OXypxAJx4gACOSCAugbpOrEcEqiTMZMjh5l8t3K0qOErtwQEMApo0JDji2My9nPMN4vgNiRVEhhggRgk' +
+		'DbfAfAsQEAaBYliwVg1+QdWMCzB1sAAWGvCCiwZYLODSEy4MEyEAzGDxQgcqmVEYPzU0o4EZFnXwwj7A' +
+		'CTKJLxyMMUJ4YI11ywhjsJNWjYZM10tW/pxziP9DA4Vn0YhjtbgISIi0QxFI7kw5oiHqPIVIgltlYgiV' +
+		'YSlzHTUSjOHLlsAEYICOW2zxggYLsEkLBwoS8Mcam91mZyoYFXDGCj7E0QGMf0aCABaiAXGHD2VI4BFu' +
+		'2Aii2wtLRHFHFT3EEYYGBiSaji2U4RBFBpz6IMEXsTBSJlTsuEOdBKF1EcUDGchQQhIRQADBeb0s0I8n' +
+		'E2owJy+l4PAArm+U4EQPa43xQg4F6MejZgtw4EYXW8SBQwwx4CrDGx848YMeSfjwRwRdfCJBLAlgEYEU' +
+		'f0QB7r3L5lrCBxQoAIIObXBhhQ1yVIAHRCJ14UcZty6bb67k0kBBvyD82wb/C3VMEUdhWAA56B13ZCBy' +
+		'ruN+IPHECqT8AxssyBHBCJ2tEsYIcfhQhQw4j7vvySj7+wMXNuDwQjzkiNPBCBH00EMJzX5g8sQ9g/BD' +
+		'G1YAkd0YpB2yinw4JOH001BHrYMVfww9xpNjrnJoFE4oEHbPPrNQBjgukOOXmxq00IUOILydcsr/stAF' +
+		'N9mOOMAYHUTQBghu99vv3ytbgYM9shFyeA5/LO424P5WHPkaL4xB6SM1jKCBD5r7/MMPOqweuQcuaFBD' +
+		'JAZE10AbrrPBBQu8c8EGwFY0QMALBvyXQBgDBOE7y8FHEEEDNljBuxVy1FBAAiMioGAXdVgxsAdxkCFG' +
+		'/wtkxEFHHTbUcUMXoo2I5ws43DCFB1s8I0YBBRjjwhYe3HDDBd3gjuUM4wAPLAEFrsiBTUKhHhhIYAce' +
+		'cECIRjeI67wAE2JIyhhKgaUEIA4G4RheewqxmDFUa0U9AohIqEUNcgRDJQizCJashKV3DKNyUFkHDccC' +
+		'JkyYo0qMeMp/XnUmb6ipNErChpvGoAEhCGFOdaoUIfA0nCZcIQFf8JMUDRGoHRwgDUI4VKi2uCjROCAF' +
+		'B0iBpEZYqUvtAA8COAARhPCpMbZJJyYiwAbgKMcDoIBVFsmJadrRolmFZgczMIIATkAENFzAV8DSx7Bg' +
+		'GLtjVWMAG0jkIumABiKsQv9a1LIWYrClrR3E4QIbcEAijXCCE6gADRMwQRbS0IQLwMFd8MLCBRzQhBn4' +
+		'8pdGUOQJ6FABKMQyBEcYAg8Y0AcwKIE6IoFDClKAB2AqcpMqqAAGJnDMZC6zD0LgGJC8eAA4XrOVdMgm' +
+		'FDCwTRMwIZlIYMAFfHKT3ZhBCGk4wAkWOcx0FpOdsWRCCLywzA0MbRwOqccILkAEItDhoSpQARTW2U4T' +
+		'DHSZDrha1iYhAflsAA0RrcA/AWoCdyaTAVd4wRfO9gutScoMDtjDHiYK0Fi6MwR8QEIK6Ga3Thggb11g' +
+		'wgTYuU2bCvQIy9wB4RrxiMN14AIhMAE3jXpUgopgA5TI29LlmnAEoZaUCUc9ghdyKoIUhI6ChCidBtLQ' +
+		'1ZuK1QtDiCsPkCACNTBxdpCoHQGy4IUjIFOZSAisYBkgAjAMr3jBON4A8jAEPiiTAUVAZRFEQNnKUuF6' +
+		'2VMQHBgQWAZo4QLiawEKLqAFEoiABCTYQfse8b4NiIABahCC/fBnjDEIobQkgAYBBFhBZzRBDXBAYAsU' +
+		'iBUUNNAbdrjCBJs6vJtk0B4cRIQHrRIO0LBxECU84TCYqhgXsTBAvIUKDCGCtr+M94boCAQAOw==';
+
+
+function SaveSprwrt(Sprichwort)
+{
+  var Skipt_Sprwrt=deserialize('Skipt_Sprwrt',[]);
+  Skipt_Sprwrt.push(Sprichwort);
+  serialize('Skipt_Sprwrt',Skipt_Sprwrt);
+}
+function LoadSprwrt()
+{
+  return deserialize('Skipt_Sprwrt',[]);
+}
+function RemoveSprwrt(Sprichwort)
+{
+  var Skipt_Sprwrt=deserialize('Skipt_Sprwrt',[]);
+  Skipt_Sprwrt=Skipt_Sprwrt.filter(function (e) { return e!=Sprichwort; });
+  serialize('Skipt_Sprwrt',Skipt_Sprwrt);  
+}
+
+var div_sprich=$xs('//div[@class="spwort"]');
 var div_weiter=$xs('//div[@class="weiter"]');
+var Sprichwort=div_sprich.textContent;
 
 var sprichwoerter=deserialize('sprichwoerter',{});
+LoadSprwrt().forEach(function (e) {
+  showmsg({
+    id:e,
+    text:e,
+    color:((sprichwoerter[e]["Schlecht"]>sprichwoerter[e]["Gut"])?'red':(sprichwoerter[e]["Gut"]>sprichwoerter[e]["Schlecht"])?'green':'lightgray'),
+    OK:'Gut ('+sprichwoerter[e]["Gut"]+')',
+    onOK:function (e) { RemoveSprwrt(e.id); var s=deserialize('sprichwoerter',{}); s[e.id]["Gut"]+=1; serialize('sprichwoerter',s); },
+    Cancel:'Schlecht ('+sprichwoerter[e]["Schlecht"]+')',
+    onCancel:function (e) { RemoveSprwrt(e.id); var s=deserialize('sprichwoerter',{}); s[e.id]["Schlecht"]+=1; serialize('sprichwoerter',s); },
+  });
+});
 if (!sprichwoerter[Sprichwort]) sprichwoerter[Sprichwort]={ Anzahl:0, Gut:0, Schlecht:0 };
-if (sprichwoerter[Sprichwort]["Schlecht"]>0) { alert("'"+Sprichwort+"' ist schlecht"); location.reload(); }
-if (sprichwoerter[Sprichwort]["Gut"]>0) { alert("'"+Sprichwort+"' ist gut"); }
-if (sprichwoerter[Sprichwort]["Anzahl"]>0) { alert("'"+Sprichwort+"' war schonmal da..."); }
+if (sprichwoerter[Sprichwort]["Schlecht"]>0) { div_sprich.style.color="red"; SaveSprwrt(Sprichwort); window.setTimeout(function () { location.reload(); },1000); } else
+if (sprichwoerter[Sprichwort]["Gut"]>0) { div_sprich.style.color="darkgreen"; SaveSprwrt(Sprichwort); window.setTimeout(function () { location.reload(); },1000); } else
+if (sprichwoerter[Sprichwort]["Anzahl"]>0) { div_sprich.style.color="blue"; SaveSprwrt(Sprichwort); window.setTimeout(function () { location.reload(); },1000); }
 sprichwoerter[Sprichwort]["Anzahl"]+=1;
 serialize('sprichwoerter',sprichwoerter);
 
 //alert(uneval(sprichwoerter));
 var div = createElement('div', { childs:[
-  createElement('a', { style:'color:green', textContent:'Gut', href:'.', onClick:function (e) {
+  createElement('a', { style:'color:darkgreen', title:"Taste: a", textContent:'Gut ('+sprichwoerter[Sprichwort]["Gut"]+')', href:'.', onClick:function (e) {
     var s=deserialize('sprichwoerter',{}); s[Sprichwort]["Gut"]+=1; serialize('sprichwoerter',s);
   } }),
   //createElement('br'),
   Text(" "),
-  createElement('a', { style:'color:red', textContent:'Schlecht', href:'.', onClick:function (e) {
-    var s=deserialize('sprichwoerter',{}); s[Sprichwort]["Gut"]+=1; serialize('sprichwoerter',s);
+  createElement('a', { style:'color:red', title:"Taste: s", textContent:'Schlecht ('+sprichwoerter[Sprichwort]["Schlecht"]+')', href:'.', onClick:function (e) {
+    var s=deserialize('sprichwoerter',{}); s[Sprichwort]["Schlecht"]+=1; serialize('sprichwoerter',s);
   } }),
 ] }, div_weiter);
 
+// **** Top/Flop Sprüche ****
+function Obj2Array(obj)
+{
+  var tmp=[];
+  for (i in obj)
+    tmp.push({ key:i, value:obj[i] });
+  return tmp;
+}
+Timeout(function () {
+  //var top=Obj2Array(sprichwoerter).reduce(function (a,b) { return a["value"]["Gut"]>b["value"]["Gut"]?a:b; });
+  //var flop=Obj2Array(sprichwoerter).reduce(function (a,b) { return a["value"]["Schlecht"]>b["value"]["Schlecht"]?a:b; });
+  var top=Obj2Array(sprichwoerter).sort(function (a,b) { return a["value"]["Gut"]<b["value"]["Gut"]; });
+  var flop=Obj2Array(sprichwoerter).sort(function (a,b) { return a["value"]["Schlecht"]<b["value"]["Schlecht"]; });
+  function SprichwortArrayOut(arr, anz)
+  {
+    var tmp=[];
+    for (var i=0; i<anz; i++)
+      tmp.push(arr[i].key+" ("+arr[i].value.Gut+"/"+arr[i].value.Schlecht+")");
+    return tmp.join("<br>");
+  }
+  var top=showmsg({
+    id:'top',
+    text:"<b>Top:</b><br>"+SprichwortArrayOut(top, 8)+"<br>",
+    color:'lightgray',
+    onOK:function (e) {},
+    //onOKTimeout:function (e) {},
+    Timeout:120,
+  });
+  css(".StarBar { list-style:none; height: 30px; width:60px; background: url('"+StarGIF+"') top left repeat-x; border:1px solid black; }");
+  css(".StarBar li { height: 30px; width:30px; float: left; border:1px solid black; }");
+  css(".StarBar li:hover { background: url('"+StarGIF+"') center left repeat-x; }");
+  createElement('ul', { className:"StarBar", childs:[
+    createElement('li', { className:"1", href:"#", textContent:"T" }),
+    createElement('li', { className:"2", href:"#", textContent:"A" }),
+  ] }, top.box); 
+  showmsg({
+    id:'flop',
+    text:"<b>Flop:</b><br>"+SprichwortArrayOut(flop, 2)+"<br>",
+    color:'lightgray',
+    //onOK:function (e) {},
+    onOKTimeout:function (e) {},
+    Timeout:30,
+  });
+},10000);
 
-
+onkey(function (key, e) { 
+  switch (key)
+  {
+    case '65': var s=deserialize('sprichwoerter',{}); s[Sprichwort]["Gut"]+=1; serialize('sprichwoerter',s); location.reload(); break;
+    case '83': var s=deserialize('sprichwoerter',{}); s[Sprichwort]["Schlecht"]+=1; serialize('sprichwoerter',s); location.reload(); break;
+    //default: GM_log(key);
+  }
+});
