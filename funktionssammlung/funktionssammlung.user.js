@@ -35,10 +35,11 @@ function topmessage(data) // id, text, onOK/onCancel/onTimeout, Timeout, color
 function createElement(type, attributes, append){
   var node = document.createElement(type);
   if (attributes) for (var attr in attributes) if (attributes.hasOwnProperty(attr))
-    if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(), attributes[attr], true)
-    else if (attr=="append") node.appendChild(attributes[attr])
-    else if(attr=="childs" && (childs=attributes[attr])) for(var i=0; i<childs.length; i++) node.appendChild(childs[i]);
-    else try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
+    if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
+    if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
+    if (attr=="append") node.appendChild(attributes[attr]) else
+    if (attr=="childs") { for (var child in attributes[attr]) node.appendChild(attributes[attr][child]); } else
+    try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
   if (append) append.appendChild(node);
   return node;
 } // Example usage: var styles = createElement('link', {rel: 'stylesheet', type: 'text/css', href: basedir + 'style.css'});
@@ -83,8 +84,8 @@ function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEve
 function getAccesskeys() { return $x('//*[@accesskey]').map(function (e) { return e.getAttribute("accesskey"); }).sort().join(", "); }
 function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmnopqrstuvwxyz1234567890+-#<".split("").filter(function (e) { return keys.indexOf(e)==-1; }).sort().join(", "); }
 //GM_log("\nKeys: "+getAccesskeys()+"\nFree: "+getFreeAccesskeys());
-// ** Position **
 function css(code) { GM_addStyle(code); }
+// ** Position **
 function PosX(element) { var e=element; var i=0; while(e) { i+=e.offsetLeft; e=e.offsetParent; } return i; }
 function PosY(element) { var e=element; var i=0; while(e) { i+=e.offsetTop; e=e.offsetParent; } return i; }
 function PosXY(obj) { var p = { x:0, y:0 }; do { p.x += obj.offsetLeft; p.y += obj.offsetTop; } while (obj = obj.offsetParent); return p; }
@@ -195,7 +196,7 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
-/********************************/ 
+/********************************/
 
 function iframe(url,className,w,h,noframetext)
 {
@@ -856,6 +857,49 @@ function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) {
   });
 }
 
+function createEl(elObj, parent) {
+  var el;
+  if (typeof elObj == 'string') {
+     el = document.createTextNode(elObj);
+  }
+  else {
+     el = document.createElement(elObj.n);
+     if (elObj.a) {
+        attributes = elObj.a;
+        for (var key in attributes) if (attributes.hasOwnProperty(key)) {
+           if (key.charAt(0) == '@')
+              el.setAttribute(key.substring(1), attributes[key]);
+           else 
+              el[key] = attributes[key];
+        }
+     }
+     if (elObj.evl) {
+        el.addEventListener(elObj.evl.type, elObj.evl.f, elObj.evl.bubble);
+     }
+     if (elObj.c) {
+        elObj.c.forEach(function (v, i, a) { createEl(v, el); });
+     }
+  }
+  if (parent)
+     parent.appendChild(el);
+  return el;
+}
+
+
+//Example usage:
+/*
+   createEl({n: 'ol', a: {'@class': 'some_list', '@id': 'my_list'}, c: [
+   {n: 'li', a: {textContent: 'first point'}, evl: {type: 'click', f: function() {alert('first point');}, bubble: true}},
+   {n: 'li', a: {textContent: 'second point'}},
+   {n: 'li', a: {textContent: 'third point'}}
+   ]}, document.body);
+
+<ol id="my_list" class="some_list">
+  <li onClick="alert('first point');">first point</li>
+  <li>second point</li>
+  <li>third point</li>
+</ol>
+*/
 
 function dump(obj)
 {

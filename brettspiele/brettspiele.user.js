@@ -36,6 +36,7 @@ function createElement(type, attributes, append){
     if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(), attributes[attr], true)
     else if (attr=="append") node.appendChild(attributes[attr])
     else if(attr=="childs" && (childs=attributes[attr])) for(var i=0; i<childs.length; i++) node.appendChild(childs[i]);
+    else if (attr=="style") node.setAttribute(attr, attributes[attr]);
     else try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
   if (append) append.appendChild(node);
   return node;
@@ -149,7 +150,7 @@ function showmsg(data)
   data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:(data.top?"position: absolute; width: 100%;":"")+"z-index:999; padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center" }),document.body);
+  data.box=insertFirstChild(createElement("div",{ id:data.id, innerHTML: data.text, style:(data.top?"position: absolute; width: 100%; ":"")+"z-index:999; padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center;" }),document.body);
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
@@ -246,12 +247,12 @@ function spieletest()
     var AktuellesSpiel=new Spiel();
     if (!AktuellesSpiel.findByLink(PermaLink))
     {
-      var data=AktuellesSpiel.similar(Titel).map(function (e,i) { return e.Name+" (ID:"+e.ID+"/Ahnlich:"+e.similar+")"; });
+      var data=AktuellesSpiel.similar(Titel).map(function (e,i) { return e.Name+" (ID:"+e.ID+"/Ahnlich:"+e.similar+"/Len:"+e.Name.length+"/"+Titel.length+")"; });
       if (data.length==0)
       {  AktuellesSpiel.add(Titel,PermaLink); location.reload(); }
       else
-        showmsg({
-          id:'default_msg',
+        var ret=showmsg({
+          //id:'default_msg',
           text:"<div>"+data.join("<br>")+'</div><br>Ist das Spiel "'+Titel+'" mit einem der oberen Spiele identisch?<br><br>',
           top:true,
           color:'red',
@@ -260,6 +261,7 @@ function spieletest()
           Cancel:'Nein',
           onCancel:function (e) { AktuellesSpiel.add(Titel,PermaLink); location.reload(); },
         });
+        //ret.box.setAttribute("style","position: absolute; width: 100%; z-index:999; padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:red; text-align:center;");
         //$('default_msg').style.position="absolute";
         //$('default_msg').style.width="100%";    
     } else {
@@ -309,7 +311,7 @@ function brettspielereport()
     var AktuellesSpiel=new Spiel();
     if (!AktuellesSpiel.findByLink(PermaLink))
     {
-      var data=AktuellesSpiel.similar(Titel).map(function (e,i) { return e.Name+" (ID:"+e.ID+"/Ahnlich:"+e.similar+")"; });
+      var data=AktuellesSpiel.similar(Titel).map(function (e,i) { return e.Name+" (ID:"+e.ID+"/Ahnlich:"+e.similar+"/Len:"+e.Name.length+"/"+Titel.length+")"; });
       if (data.length==0)
       {  AktuellesSpiel.add(Titel,PermaLink); location.reload(); }
       else

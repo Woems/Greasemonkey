@@ -99,8 +99,9 @@ try {
                    return (
                      (e.parentNode.getAttribute("bgcolor")=="#cc0000")?
                          "<font color=#777>"+trim(e.textContent)+"</font>":
-                     (trim(e.textContent)=="45")?"<font color=green>"+trim(e.textContent)+"</font>":
-                         trim(e.textContent)
+                     (trim(e.textContent)=="45")?
+                         "<font color=green>"+trim(e.textContent)+"</font>":
+                     trim(e.textContent)
                    );
                  }).join("|"),
     absatz:      ($("wcolor").textContent.match(/Absatz: ([0-9\,]+ cm)/)||[false,false
