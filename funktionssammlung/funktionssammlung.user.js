@@ -74,7 +74,10 @@ function on(type, elm, func) {
   else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
-function onKey(func) { on('keydown',window,function (e) { var key=(e.shiftKey?'SHIFT+':'') + (e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + e.keyCode; if (func(key, e)) { e.stopPropagation(); e.preventDefault(); } }); }
+function onKey(func) { on('keydown',window,function (e) { 
+  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
+  var Code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
+  if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
 function getAccesskeys() { return $x('//*[@accesskey]').map(function (e) { return e.getAttribute("accesskey"); }).sort().join(", "); }
@@ -167,11 +170,46 @@ function showmsg(data)
 // $xs('id("default_msg")/input[@value="Cancel"]').setAttribute("accesskey","c");
 // $('default_msg_ok').setAttribute("accesskey","o");
 // $('default_msg_cancel').setAttribute("accesskey","c");
+function createHover(elem,text)
+{
+  if (!$("wPopup")) createElement('div', { id:"wPopup", style:"display:none; padding: 3px; background:lightgray; border:1px solid black; position:absolute;" }, document.body);
+  elem.addEventListener("mouseover",function(event){
+    if (event.target.title) { text="<b>"+event.target.title+"</b><br><br>"+text; event.target.title=""; }
+    $("wPopup").innerHTML=text;
+    $("wPopup").style.top=(PosY(event.target)+20)+"px";
+    $("wPopup").style.left=PosX(event.target)+"px";
+    $("wPopup").style.display="";
+   window.setTimeout(function () {
+     if ($("wPopup").clientWidth > window.innerWidth)
+       $("wPopup").style.left="1px";
+     else if ($("wPopup").clientWidth > window.innerWidth-PosX(event.target))
+       $("wPopup").style.left=(window.innerWidth-$("wPopup").clientWidth)+"px";
+     else
+       $("wPopup").style.left=PosX(event.target)+"px";
+   },100);
+  }, true);
+  elem.addEventListener("mouseout",function(event){
+    if ($("wPopup")) $("wPopup").style.display="none";
+  }, true);
+}
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
 /********************************/ 
 
+function iframe(url,className,w,h,noframetext)
+{
+  var iframe=document.createElement("iframe");
+  iframe.src=url;
+  iframe.className=className||"test";
+  iframe.width=w||100;
+  iframe.height=h||100;
+  iframe.innerHTML=noframetext||"";
+  return iframe;
+}
+
+// ZEIGT DEN ACCESSKEY AN
+//css("*[accesskey]:after { content:' ['attr(accesskey)']'; }");
 
 /*
 var a1=["test",6,'',7]
@@ -886,3 +924,5 @@ unsafeWindow.pasteFromClipboard = function() {
 }
 */
 //copyToClipboard("2345");
+
+
