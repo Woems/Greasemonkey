@@ -338,9 +338,6 @@
 		<Exclude>http://*wists.com/*</Exclude>
 		<Exclude>http://www.google.*/*</Exclude>
 	</Script>
-	<Script filename="amazon_-_bilder_im_einka.user.js" name="Amazon - Bilder im Einkaufswagen" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="amazon_-_bilder_im_einka" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
-		<Include>http://www.amazon.de/gp/cart/view.html/ref=*</Include>
-	</Script>
 	<Script filename="otr_-_suchwort_im_titel.user.js" name="OTR - Suchwort im Titel" namespace="Woems" description="Zeigt das Suchwort im Titel" version="" enabled="true" runAt="document-end" basedir="otr_-_suchwort_im_titel" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
 		<Include>http://epg.onlinetvrecorder.com/broadcasts/search*</Include>
 	</Script>
