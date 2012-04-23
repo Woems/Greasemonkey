@@ -1,27 +1,27 @@
 <UserScriptConfig>
-	<Script filename="kinopolis_-_more_info.user.js" name="Kinopolis - More info" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="kinopolis_-_more_info" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="kinopolis_-_more_info" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_more_info.user.js" installTime="1335187664399" lastUpdateCheck="1327941146000" modified="1335185551000" name="Kinopolis - More info" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.kinopolis.de/filme/filminfo.dhtml?filmoid=*</Include>
 	</Script>
-	<Script filename="kinopolis_print.user.js" name="Kinopolis Print" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="kinopolis_print" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="kinopolis_print" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_print.user.js" installTime="1335187664400" lastUpdateCheck="1327941146000" modified="1335185551000" name="Kinopolis Print" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://213.168.82.190/Reservation.ASP?WCI=PrintAtHome&amp;Nr=*Kinopolis Pring&amp;IsPrintPreview=1</Include>
 		<Include>file:///*/Reservation.ASP.htm</Include>
 	</Script>
-	<Script filename="notpron_sound.user.js" name="notpron sound" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="notpron_sound" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="notpron_sound" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="notpron_sound.user.js" installTime="1335187664400" lastUpdateCheck="1327941146000" modified="1335185551000" name="notpron sound" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://deathball.net/notpron/*</Include>
 	</Script>
-	<Script filename="studivz_status_der_grupp.user.js" name="StudiVZ Status der Gruppenbenachrichtigung in der Übersicht" namespace="Woems" description="Zeigt den Status der Gruppenbenachrichtigung in der Übersicht an" version="" enabled="true" runAt="document-end" basedir="studivz_status_der_grupp" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="studivz_status_der_grupp" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt den Status der Gruppenbenachrichtigung in der Übersicht an" enabled="true" filename="studivz_status_der_grupp.user.js" installTime="1335187664401" lastUpdateCheck="1327941146000" modified="1335185551000" name="StudiVZ Status der Gruppenbenachrichtigung in der Übersicht" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.studivz.net/groups.php*</Include>
 	</Script>
-	<Script filename="kinopolis.user.js" name="Kinopolis" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="kinopolis" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="kinopolis" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis.user.js" installTime="1335187664401" lastUpdateCheck="1327941146000" modified="1335185551000" name="Kinopolis" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.kinopolis.de/*/spielplan_neu/spielplan*.html*</Include>
 	</Script>
-	<Script filename="rapidshare_downloadmanag.user.js" name="Rapidshare Downloadmanager" namespace="Woems" description="" version="" enabled="false" runAt="document-end" basedir="rapidshare_downloadmanag" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="rapidshare_downloadmanag" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="rapidshare_downloadmanag.user.js" installTime="1335187664402" lastUpdateCheck="1327941146000" modified="1335185551000" name="Rapidshare Downloadmanager" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>*</Include>
 	</Script>
-	<Script filename="google_search_compact_.user.js" name="Google Search Compact ✪✪✪" namespace="random_1" description="Compact and two-column Google results with managed ads and some cherry" version="0.2.1b" enabled="false" runAt="document-end" basedir="google_search_compact_" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="google_search_compact_" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Compact and two-column Google results with managed ads and some cherry" enabled="false" filename="google_search_compact_.user.js" installTime="1335187664402" lastUpdateCheck="1327941146000" modified="1335185551000" name="Google Search Compact ✪✪✪" namespace="random_1" runAt="document-end" updateAvailable="false" version="0.2.1b">
 		<Include>http://www.google.*/search*</Include>
 	</Script>
-	<Script filename="google_fx.user.js" name="Google Fx" namespace="http://userscripts.org/scripts/show/31950" description="Nice Look&amp;Feel + Sites ThumbShots + Global Google Suggest (multi-lang) + Full AutoPage Results + Easy Access to Advance Filters + Relink Images &amp; FullSize preview + Search in Other Searchers + Static Menus &amp; ToolBars + Multi-Language Feature + Full User's Settings... and more. [Op &amp; FF]" version="2.1.5" enabled="false" runAt="document-end" basedir="google_fx" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="google_fx" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nice Look&amp;Feel + Sites ThumbShots + Global Google Suggest (multi-lang) + Full AutoPage Results + Easy Access to Advance Filters + Relink Images &amp; FullSize preview + Search in Other Searchers + Static Menus &amp; ToolBars + Multi-Language Feature + Full User's Settings... and more. [Op &amp; FF]" enabled="false" filename="google_fx.user.js" installTime="1335187664402" lastUpdateCheck="1327941146000" modified="1335185551000" name="Google Fx" namespace="http://userscripts.org/scripts/show/31950" runAt="document-end" updateAvailable="false" version="2.1.5" updateurl="http://userscripts.org.nyud.net/scripts/source/31950.meta.js">
 		<Include>http://*.google.*</Include>
 		<Include>https://*.google.*</Include>
 		<Include>http://*.googleproxy.*</Include>
@@ -31,100 +31,99 @@
 		<Include>http://216.239.*.*/*</Include>
 		<Exclude>http://*.google.*/complete/*</Exclude>
 	</Script>
-	<Script filename="kinopolis_-_keine_werbun.user.js" name="Kinopolis - keine Werbung" namespace="Woems" description="Blendet die Werbung beim Drucken aus" version="" enabled="true" runAt="document-end" basedir="kinopolis_-_keine_werbun" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="kinopolis_-_keine_werbun" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Blendet die Werbung beim Drucken aus" enabled="true" filename="kinopolis_-_keine_werbun.user.js" installTime="1335187664403" lastUpdateCheck="1327941146000" modified="1335185551000" name="Kinopolis - keine Werbung" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://213.168.82.190/Reservation.ASP?WCI=PrintAtHome&amp;Nr=*&amp;IsPrintPreview=1</Include>
 	</Script>
-	<Script filename="werbeblocker_-_ascaron.user.js" name="Werbeblocker - ascaron" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="werbeblocker_-_ascaron" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="werbeblocker_-_ascaron" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="werbeblocker_-_ascaron.user.js" installTime="1335187664403" lastUpdateCheck="1327941146000" modified="1335185551000" name="Werbeblocker - ascaron" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://ascaron.alien.to/*</Include>
 		<Include>http://sothys1987.so.funpic.de/*</Include>
 	</Script>
-	<Script filename="wurzelzeit.user.js" name="Wurzelzeit" namespace="Woems" description="Zeigt neben den Dekupunkten an, wenn wieder was im Wurzelimperium zu tun ist." version="" enabled="false" runAt="document-end" basedir="wurzelzeit" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelzeit" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt neben den Dekupunkten an, wenn wieder was im Wurzelimperium zu tun ist." enabled="false" filename="wurzelzeit.user.js" installTime="1335187664403" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelzeit" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de/main.php?page=garden</Include>
 		<Include>http://s*.wurzelimperium.de/menu.php</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_login_s.user.js" name="Wurzelimperium - Login Server" namespace="Woems" description="" version="" enabled="false" runAt="document-end" basedir="wurzelimperium_-_login_s" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_login_s" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="wurzelimperium_-_login_s.user.js" installTime="1335187664403" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Login Server" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*wurzelimperium.de/*</Include>
 	</Script>
-	<Script filename="wurzelimperium.user.js" name="Wurzelimperium" namespace="www.wurzelimperium.de" description="" version="updatet-1.0" enabled="true" runAt="document-end" basedir="wurzelimperium" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium.user.js" installTime="1335187664404" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium" namespace="www.wurzelimperium.de" runAt="document-end" updateAvailable="false" version="updatet-1.0">
 		<Include>http://s*.wurzelimperium.de/*</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_autolog.user.js" name="Wurzelimperium - Autologin" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="wurzelimperium_-_autolog" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_autolog" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_autolog.user.js" installTime="1335187664404" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Autologin" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.wurzelimperium.de/*</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_giescri.user.js" name="Wurzelimperium - Gießscript" namespace="Woems" description="Automatisches setzen, gießen und ernten der Pflanzen" version="" enabled="false" runAt="document-end" basedir="wurzelimperium_-_giescri" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="false" filename="wurzelimperium_-_giescri.user.js" installTime="1335187664404" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script filename="wurzelimperium_wimp-prei.user.js" name="Wurzelimperium Wimp-Preischeck" namespace="http://userscripts.org/scripts/source/40956.user.js" description="Vergleicht die gebotenen Preise der Wimps mit dem NPC- oder Markt-Preis" version="" enabled="true" runAt="document-end" basedir="wurzelimperium_wimp-prei" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_wimp-prei" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Vergleicht die gebotenen Preise der Wimps mit dem NPC- oder Markt-Preis" enabled="true" filename="wurzelimperium_wimp-prei.user.js" installTime="1335187664405" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium Wimp-Preischeck" namespace="http://userscripts.org/scripts/source/40956.user.js" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de/*</Include>
 		<Include>http://s*.zieloneimperium.pl/*</Include>
 		<Include>http://s*.sadowajaimperija.ru/*</Include>
 		<Include>http://s*.molehillempire.*.php*</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_punkte_.user.js" name="Wurzelimperium - Punkte als Bargraph" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="wurzelimperium_-_punkte_" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_punkte_" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_punkte_.user.js" installTime="1335187664405" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Punkte als Bargraph" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de/*</Include>
 	</Script>
-	<Script filename="the_west_fullscreen_skin.user.js" name="The West Fullscreen skin" namespace="www.the-west.sk" description="Fullscreen skin for the west" version="" enabled="false" runAt="document-end" basedir="the_west_fullscreen_skin" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="the_west_fullscreen_skin" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Fullscreen skin for the west" enabled="false" filename="the_west_fullscreen_skin.user.js" installTime="1335187664406" lastUpdateCheck="1327941146000" modified="1335185551000" name="The West Fullscreen skin" namespace="www.the-west.sk" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.the-west.*/game.php*</Include>
 		<Include>http://zz1w1.tw.innogames.net/game.php*</Include>
-		<Exclude>http://de1.the-west.de/*</Exclude>
 	</Script>
-	<Script filename="the_west_jobs.user.js" name="The West Jobs" namespace="dschachtler.dssr.ch" description="Arbeiten Wahlhilfe für &quot;The West&quot;" version="" enabled="true" runAt="document-end" basedir="the_west_jobs" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="the_west_jobs" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Arbeiten Wahlhilfe für &quot;The West&quot;" enabled="true" filename="the_west_jobs.user.js" installTime="1335187664406" lastUpdateCheck="1327941146000" modified="1335185551000" name="The West Jobs" namespace="dschachtler.dssr.ch" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://de*.the-west.de/game.php</Include>
 	</Script>
-	<Script filename="myfreefarm_-_time_2_titl.user.js" name="myfreefarm - time 2 title" namespace="Woems" description="Zeigt in der Titelleiste, wann das naechste Mal etwas gemacht werden muss." version="" enabled="false" runAt="document-end" basedir="myfreefarm_-_time_2_titl" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="myfreefarm_-_time_2_titl" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt in der Titelleiste, wann das naechste Mal etwas gemacht werden muss." enabled="false" filename="myfreefarm_-_time_2_titl.user.js" installTime="1335187664406" lastUpdateCheck="1327941146000" modified="1335185551000" name="myfreefarm - time 2 title" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.myfreefarm.de*</Include>
 	</Script>
-	<Script filename="userscriptsorg_menu_comm.user.js" name="Userscripts.org Menu Commander" namespace="#aVg" description="Adds some sexy drop-downs to your userscripts." version="0.1.1" enabled="true" runAt="document-end" basedir="userscriptsorg_menu_comm" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="userscriptsorg_menu_comm" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Adds some sexy drop-downs to your userscripts." enabled="true" filename="userscriptsorg_menu_comm.user.js" installTime="1335187664407" lastUpdateCheck="1327941146000" modified="1335185551000" name="Userscripts.org Menu Commander" namespace="#aVg" runAt="document-end" updateAvailable="false" version="0.1.1">
 		<Include>http://userscripts.org/*</Include>
 	</Script>
-	<Script filename="google_account_multi-log.user.js" name="Google Account Multi-Login" namespace="http://www.crappytools.net" description="Replaces &quot;Sign Out&quot; link on Google pages with a select box of accounts." version="" enabled="true" runAt="document-end" basedir="google_account_multi-log" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="google_account_multi-log" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Replaces &quot;Sign Out&quot; link on Google pages with a select box of accounts." enabled="true" filename="google_account_multi-log.user.js" installTime="1335187664407" lastUpdateCheck="1327941146000" modified="1335185551000" name="Google Account Multi-Login" namespace="http://www.crappytools.net" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.google.tld/*</Include>
 		<Include>https://*.google.tld/*</Include>
 		<Include>http://google.tld/*</Include>
 		<Include>https://google.tld/*</Include>
 		<Exclude>http*://mail.google.tld/*ui=1*</Exclude>
 	</Script>
-	<Script filename="the_west_bag_info.user.js" name="The West Bag Info" namespace="www.the-west.sk" description="Calculate inventory buy/sell price. Detailed statistic." version="" enabled="true" runAt="document-end" basedir="the_west_bag_info" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="the_west_bag_info" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Calculate inventory buy/sell price. Detailed statistic." enabled="true" filename="the_west_bag_info.user.js" installTime="1335187664407" lastUpdateCheck="1327941146000" modified="1335185551000" name="The West Bag Info" namespace="www.the-west.sk" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.the-west.*</Include>
 		<Include>http://*.innogames.*</Include>
 		<Exclude>http://www.the-west.*</Exclude>
 		<Exclude>http://forum.the-west.*</Exclude>
 	</Script>
-	<Script filename="fgw_wardrobe.user.js" name="FGW Wardrobe" namespace="http://ptwestscript.blogspot.com/" description="For all your wardrobe needs!" version="" enabled="true" runAt="document-end" basedir="fgw_wardrobe" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="fgw_wardrobe" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="For all your wardrobe needs!" enabled="true" filename="fgw_wardrobe.user.js" installTime="1335187664408" lastUpdateCheck="1327941146000" modified="1335185551000" name="FGW Wardrobe" namespace="http://ptwestscript.blogspot.com/" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.the-west.*/game.php*</Include>
 	</Script>
-	<Script filename="twb_the_west_tools.user.js" name="TWB The West Tools" namespace="http://tw.wusel.info" description="Verschiedene Tools für das Browsergame The West." version="1.0.0" enabled="true" runAt="document-end" basedir="twb_the_west_tools" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="twb_the_west_tools" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verschiedene Tools für das Browsergame The West." enabled="true" filename="twb_the_west_tools.user.js" installTime="1335187664408" lastUpdateCheck="1327941146000" modified="1335185551000" name="TWB The West Tools" namespace="http://tw.wusel.info" runAt="document-end" updateAvailable="false" version="1.0.0">
 		<Include>http://de*.the-west.de*</Include>
 	</Script>
-	<Script filename="adds_a_link_to_download_.user.js" name="Adds a link to download video for YouTube" namespace="http://userscripts.org/users/76078" description="Adds a link to download video and a button to watch video for YouTube." version="0.7.8" enabled="false" runAt="document-end" basedir="adds_a_link_to_download_" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="adds_a_link_to_download_" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Adds a link to download video and a button to watch video for YouTube." enabled="false" filename="adds_a_link_to_download_.user.js" installTime="1335187664408" lastUpdateCheck="1327941146000" modified="1335185551000" name="Adds a link to download video for YouTube" namespace="http://userscripts.org/users/76078" runAt="document-end" updateAvailable="false" version="0.7.8">
 		<Include>http://www.youtube.com/watch?v=*</Include>
 		<Include>http://www.youtube.com/user/*</Include>
 		<Include>http://www.youtube.com/*</Include>
 		<Include>http://youtube.com/*</Include>
 		<Include>http://*.youtube.com/*</Include>
 	</Script>
-	<Script filename="autologin.user.js" name="Autologin" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="autologin" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
-		<Include>http://*myfreefarm.de*</Include>
+	<Script basedir="autologin" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="autologin.user.js" installTime="1335187664408" lastUpdateCheck="1327941146000" modified="1335185551000" name="MyFreeFarm - Autologin" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
+		<Include>http://*myfreefarm.de/*</Include>
 	</Script>
-	<Script filename="the_west_-_test.user.js" name="The West - Test" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="the_west_-_test" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="the_west_-_test" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="the_west_-_test.user.js" installTime="1335187664409" lastUpdateCheck="1327941146000" modified="1335185551000" name="The West - Test" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://de*.the-west.de*</Include>
 	</Script>
-	<Script filename="antigam_lang_de.user.js" name="AntiGam_lang_de" namespace="greasefire.userscripts.org" description="AntiGame Übersetzung (Muss VOR dem AntiGame Script laufen) - 1.13.8" version="" enabled="true" runAt="document-end" basedir="antigam_lang_de" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="antigam_lang_de" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="AntiGame Übersetzung (Muss VOR dem AntiGame Script laufen) - 1.13.8" enabled="true" filename="antigam_lang_de.user.js" installTime="1335187664409" lastUpdateCheck="1327941146000" modified="1335185551000" name="AntiGam_lang_de" namespace="" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 	</Script>
-	<Script filename="download_from_youtube.user.js" name="Download from YouTube" namespace="greasefire.userscripts.org" description="Adds FLV, MP4, 3GP, and 720p download links to YouTube." version="1.1.4" enabled="false" runAt="document-end" basedir="download_from_youtube" modified="1327941146000" dependhash="3f5ae4bc7a1d485b346ab51b6d94bd9f4c06948f" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="download_from_youtube" checkRemoteUpdates="true" dependhash="3f5ae4bc7a1d485b346ab51b6d94bd9f4c06948f" description="Adds FLV, MP4, 3GP, and 720p download links to YouTube." enabled="false" filename="download_from_youtube.user.js" installTime="1335187664409" lastUpdateCheck="1327941146000" modified="1335185551000" name="Download from YouTube" namespace="" runAt="document-end" updateAvailable="false" version="1.1.4">
 		<Include>http://*.youtube.com/watch*v=*</Include>
 		<Include>http://youtube.com/watch*v=*</Include>
 		<Require filename="index.php"/>
 	</Script>
-	<Script filename="ogame_-_flash_startseite.user.js" name="OGame - Flash startseite ausblenden" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="ogame_-_flash_startseite" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ogame_-_flash_startseite" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="ogame_-_flash_startseite.user.js" installTime="1335187664409" lastUpdateCheck="1327941146000" modified="1335185551000" name="OGame - Flash startseite ausblenden" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*ogame.de*</Include>
 	</Script>
-	<Script filename="ogame_redesign__autologi.user.js" name="OGame Redesign : Autologin" namespace="http://userscripts.org/scripts/show/60482" description="Automatically logs you in so you don't have to select the uni each and every freaking time XD This one should work with every ogame out there. Hopefully." version="" enabled="false" runAt="document-end" basedir="ogame_redesign__autologi" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ogame_redesign__autologi" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatically logs you in so you don't have to select the uni each and every freaking time XD This one should work with every ogame out there. Hopefully." enabled="false" filename="ogame_redesign__autologi.user.js" installTime="1335187664410" lastUpdateCheck="1327941146000" modified="1335185551000" name="OGame Redesign : Autologin" namespace="http://userscripts.org/scripts/show/60482" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*ogame.*/</Include>
 		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 	</Script>
-	<Script filename="ogame_resourcen_im_flug.user.js" name="OGame: Resourcen im Flug" namespace="Gilly" description="Summiert Resourcen die Unterwegs sind und zeigt diese unter dem Planeten Resourcen an." version="" enabled="true" runAt="document-end" basedir="ogame_resourcen_im_flug" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ogame_resourcen_im_flug" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Summiert Resourcen die Unterwegs sind und zeigt diese unter dem Planeten Resourcen an." enabled="true" filename="ogame_resourcen_im_flug.user.js" installTime="1335187664410" lastUpdateCheck="1327941146000" modified="1335185551000" name="OGame: Resourcen im Flug" namespace="Gilly" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.ogame.*/game/index.php?page=overview*</Include>
 		<Include>http://*.ogame.*/game/index.php?page=micropayment*</Include>
 		<Include>http://*.ogame.*/game/index.php?page=messages*</Include>
@@ -133,52 +132,52 @@
 		<Include>http://*.ogame.*/game/index.php?page=resources*</Include>
 		<Include>http://*.ogame.*/game/index.php?page=b_building*</Include>
 	</Script>
-	<Script filename="ogame_commander.user.js" name="OGame: Commander" namespace="Gilly" description="Nachbau des OGameCommander (Aufruf über Offizierskasino)" version="" enabled="true" runAt="document-end" basedir="ogame_commander" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ogame_commander" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nachbau des OGameCommander (Aufruf über Offizierskasino)" enabled="true" filename="ogame_commander.user.js" installTime="1335187664410" lastUpdateCheck="1327941146000" modified="1335185551000" name="OGame: Commander" namespace="Gilly" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.ogame.*/game/index.php?page=micropayment*</Include>
 	</Script>
-	<Script filename="ogame_buildables.user.js" name="OGame: Buildables" namespace="Gilly" description="Zeigt an wieviel Einheiten (Schiffe/Def) mit den vorhandenen Res möglich sind zu bauen." version="" enabled="true" runAt="document-end" basedir="ogame_buildables" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ogame_buildables" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt an wieviel Einheiten (Schiffe/Def) mit den vorhandenen Res möglich sind zu bauen." enabled="true" filename="ogame_buildables.user.js" installTime="1335187664411" lastUpdateCheck="1327941146000" modified="1335185551000" name="OGame: Buildables" namespace="Gilly" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://uni*.ogame.de/game/index.php?page=buildings*</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_sort.user.js" name="Wurzelimperium - Sort" namespace="Woems" description="Sortiert die Gl�ser" version="" enabled="true" runAt="document-end" basedir="wurzelimperium_-_sort" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_sort" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Sortiert die Gl�ser" enabled="true" filename="wurzelimperium_-_sort.user.js" installTime="1335187664411" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Sort" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_time_2_.user.js" name="Wurzelimperium - Time 2 Title" namespace="Woems" description="Zeigt im Titel, wann es wieder was zu tun gibt." version="" enabled="true" runAt="document-end" basedir="wurzelimperium_-_time_2_" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_time_2_" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt im Titel, wann es wieder was zu tun gibt." enabled="true" filename="wurzelimperium_-_time_2_.user.js" installTime="1335187664411" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Time 2 Title" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_mehr_zw.user.js" name="Wurzelimperium - Mehr Zwerge" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="wurzelimperium_-_mehr_zw-1" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_mehr_zw-1" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_mehr_zw.user.js" installTime="1335187664411" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Mehr Zwerge" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_feld_au.user.js" name="Wurzelimperium - Feld aufraeumen" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="wurzelimperium_-_feld_au" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_feld_au" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_feld_au.user.js" installTime="1335187664412" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Feld aufraeumen" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script filename="the_west_-_motvation.user.js" name="The West - Motvation" namespace="http://joesmith.jo.funpic.de" description="Individuelle Zusammenstellung von Arbeiten in einer eigenen Liste." version="" enabled="true" runAt="document-end" basedir="the_west_-_motvation" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="the_west_-_motvation" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Individuelle Zusammenstellung von Arbeiten in einer eigenen Liste." enabled="true" filename="the_west_-_motvation.user.js" installTime="1335187664412" lastUpdateCheck="1327941146000" modified="1335185551000" name="The West - Motvation" namespace="http://joesmith.jo.funpic.de" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.the-west.*</Include>
 	</Script>
-	<Script filename="the_west_-_center_jobs.user.js" name="The West - Center Jobs" namespace="http://joesmith.jo.funpic.de" description="Center every job in Task Queue on Map" version="" enabled="false" runAt="document-end" basedir="the_west_-_center_jobs" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="the_west_-_center_jobs" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Center every job in Task Queue on Map" enabled="false" filename="the_west_-_center_jobs.user.js" installTime="1335187664412" lastUpdateCheck="1327941146000" modified="1335185551000" name="The West - Center Jobs" namespace="http://joesmith.jo.funpic.de" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.the-west.*</Include>
 	</Script>
-	<Script filename="the_west_-_quest_helper.user.js" name="The West - Quest Helper" namespace="http://www.puli.sk" description="" version="" enabled="true" runAt="document-end" basedir="the_west_-_quest_helper" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="the_west_-_quest_helper" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="the_west_-_quest_helper.user.js" installTime="1335187664413" lastUpdateCheck="1327941146000" modified="1335185551000" name="The West - Quest Helper" namespace="http://www.puli.sk" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.the-west.*/game.php*</Include>
 	</Script>
-	<Script filename="tw_buildings_shortcut_ic.user.js" name="TW Buildings Shortcut Icons (MUI)" namespace="www.the-west.ro" description="Buildings Shortcut Icons for The-West v 1.23 [Multilingual User Interface] " version="" enabled="true" runAt="document-end" basedir="tw_buildings_shortcut_ic" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="tw_buildings_shortcut_ic" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Buildings Shortcut Icons for The-West v 1.23 [Multilingual User Interface]" enabled="true" filename="tw_buildings_shortcut_ic.user.js" installTime="1335187664413" lastUpdateCheck="1327941146000" modified="1335185551000" name="TW Buildings Shortcut Icons (MUI)" namespace="www.the-west.ro" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.the-west.*</Include>
 		<Include>http://zz1w1.tw.innogames.net/game.php*</Include>
 		<Exclude>http://www.the-west.*</Exclude>
 		<Exclude>http://forum.the-west.*</Exclude>
 	</Script>
-	<Script filename="wurzelimperium_-_select_.user.js" name="Wurzelimperium - Select Login Server (nach Zeit)" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="wurzelimperium_-_select_" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_select_" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_select_.user.js" installTime="1335187664413" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - Select Login Server (nach Zeit)" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*wurzelimperium.de/*</Include>
 	</Script>
-	<Script filename="ogame_-_time2titel.user.js" name="OGame - Time2Titel" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="ogame_-_time2titel" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ogame_-_time2titel" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="ogame_-_time2titel.user.js" installTime="1335187664414" lastUpdateCheck="1327941146000" modified="1335185551000" name="OGame - Time2Titel" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.ogame.de*</Include>
 	</Script>
-	<Script filename="wurzelimperium_-_autoein.user.js" name="Wurzelimperium - AutoEinkauf" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="wurzelimperium_-_autoein" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wurzelimperium_-_autoein" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_autoein.user.js" installTime="1335187664414" lastUpdateCheck="1327941146000" modified="1335185551000" name="Wurzelimperium - AutoEinkauf" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script filename="the_west_-_center_jobs.user.js" name="The West - Center Jobs" namespace="http://userscripts.org/users/120392" description="Show every job in Task Queue on Map" version="" enabled="true" runAt="document-end" basedir="the_west_-_center_jobs-1" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="the_west_-_center_jobs-1" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Show every job in Task Queue on Map" enabled="true" filename="the_west_-_center_jobs.user.js" installTime="1335187664415" lastUpdateCheck="1327941146000" modified="1335185551000" name="The West - Center Jobs" namespace="http://userscripts.org/users/120392" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*.the-west.*/game.php*</Include>
 	</Script>
-	<Script filename="download_video.user.js" name="Download Video" namespace="http://1024k.de/bookmarklets/video-bookmarklets.html" description="Save video clips from YouTube, Google Video, Myspace, Metacafe, Break.com, Putfile, Dailymotion and Sevenload." version="" enabled="false" runAt="document-end" basedir="download_video" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="download_video" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Save video clips from YouTube, Google Video, Myspace, Metacafe, Break.com, Putfile, Dailymotion and Sevenload." enabled="false" filename="download_video.user.js" installTime="1335187664415" lastUpdateCheck="1327941146000" modified="1335185551000" name="Download Video" namespace="http://1024k.de/bookmarklets/video-bookmarklets.html" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*youtube.com/*</Include>
 		<Include>http://*video.google.*/*</Include>
 		<Include>http://*myspace.com/*</Include>
@@ -190,52 +189,51 @@
 		<Include>http://*myvideo.de/*</Include>
 		<Include>http://*clipfish.de/*</Include>
 	</Script>
-	<Script filename="bausim_-_autoplay.user.js" name="bausim - AutoPlay" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="bausim_-_autoplay" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
-		<Include>http://bausim.net*</Include>
-		<Include>http://www.bausim.net*</Include>
+	<Script basedir="bausim_-_autoplay" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="bausim_-_autoplay.user.js" installTime="1335187664415" lastUpdateCheck="1327941146000" modified="1335185551000" name="bausim - AutoPlay" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
+		<Include>http://*bausim.net*</Include>
 	</Script>
-	<Script filename="elektro-skateboard_-_ad_.user.js" name="elektro-skateboard - Ad Killer" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="elektro-skateboard_-_ad_" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="elektro-skateboard_-_ad_" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="elektro-skateboard_-_ad_.user.js" installTime="1335187664416" lastUpdateCheck="1327941146000" modified="1335185551000" name="elektro-skateboard - Ad Killer" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.elektro-skateboard.de*</Include>
 	</Script>
-	<Script filename="video2blogde.user.js" name="video2blog.de" namespace="Woems" description="" version="" enabled="false" runAt="document-end" basedir="video2blogde" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="video2blogde" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="video2blogde.user.js" installTime="1335187664416" lastUpdateCheck="1327941146000" modified="1335185551000" name="video2blog.de" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>*</Include>
 	</Script>
-	<Script filename="crazy_outfits.user.js" name="Crazy Outfits" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="crazy_outfits" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="crazy_outfits" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_outfits.user.js" installTime="1335187664416" lastUpdateCheck="1327941146000" modified="1335185551000" name="Crazy Outfits" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.crazy-outfits.de/shop/*</Include>
 	</Script>
-	<Script filename="klack.user.js" name="klack" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="klack" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="klack" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="klack.user.js" installTime="1335187664416" lastUpdateCheck="1327941146000" modified="1335185551000" name="klack" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.klack.de/*</Include>
 	</Script>
-	<Script filename="facebook_fixer.user.js" name="Facebook Fixer" namespace="http://userscripts.org/people/14536" description="Enhancements for Facebook: bigger profile pictures and photos, easier viewing of albums, links to download videos, showing people's age and sign, google calendar integration, keyboard shortcuts &amp; more. Compatible with new Facebook and fully customizable!" version="2.1.3" enabled="false" runAt="document-end" basedir="facebook_fixer" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="facebook_fixer" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancements for Facebook: bigger profile pictures and photos, easier viewing of albums, links to download videos, showing people's age and sign, google calendar integration, keyboard shortcuts &amp; more. Compatible with new Facebook and fully customizable!" enabled="false" filename="facebook_fixer.user.js" installTime="1335187664417" lastUpdateCheck="1327941146000" modified="1335185551000" name="Facebook Fixer" namespace="http://userscripts.org/people/14536" runAt="document-end" updateAvailable="false" version="2.1.3">
 		<Include>http://facebook.com/*</Include>
 		<Include>http://*.facebook.com/*</Include>
 		<Include>https://facebook.com/*</Include>
 		<Include>https://*.facebook.com/*</Include>
 	</Script>
-	<Script filename="splitbrain_file_icons.user.js" name="Splitbrain File Icons" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="splitbrain_file_icons" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="splitbrain_file_icons" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="splitbrain_file_icons.user.js" installTime="1335187664417" lastUpdateCheck="1327941146000" modified="1335185551000" name="Splitbrain File Icons" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.splitbrain.org/projects/file_icons</Include>
 	</Script>
-	<Script filename="german-bashorg_werbefrei.user.js" name="German-Bash.org Werbefrei 1.1 (16.06.2009)" namespace="http://gordon_vdlg.byethost16.com" description="Killt unten die Box mit der Überschrift &quot;Werbung&quot; samt Inhalt, den Rest übernimmt Adblock Plus..." version="" enabled="true" runAt="document-end" basedir="german-bashorg_werbefrei" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="german-bashorg_werbefrei" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Killt unten die Box mit der Überschrift &quot;Werbung&quot; samt Inhalt, den Rest übernimmt Adblock Plus..." enabled="true" filename="german-bashorg_werbefrei.user.js" installTime="1335187664417" lastUpdateCheck="1327941146000" modified="1335185551000" name="German-Bash.org Werbefrei 1.1 (16.06.2009)" namespace="http://gordon_vdlg.byethost16.com" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://german-bash.org/*</Include>
 		<Include>http://www.german-bash.org/*</Include>
 	</Script>
-	<Script filename="facebook_accept_all.user.js" name="Facebook Accept all" namespace="Facebook Accept all" description="Facebook Accept all" version="1.0.0" enabled="true" runAt="document-end" basedir="facebook_accept_all" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="facebook_accept_all" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Facebook Accept all" enabled="true" filename="facebook_accept_all.user.js" installTime="1335187664417" lastUpdateCheck="1327941146000" modified="1335185551000" name="Facebook Accept all" namespace="Facebook Accept all" runAt="document-end" updateAvailable="false" version="1.0.0">
 		<Include>http://www.facebook.com/home.php?#/reqs.php</Include>
 		<Include>http://www.facebook.com/reqs.php</Include>
 		<Include>http://www.facebook.com/reqs*</Include>
 		<Include>http://www.facebook.com/*/reqs.php</Include>
 	</Script>
-	<Script filename="turn_off_the_lights.user.js" name="Turn Off the Lights" namespace="tayfunsen.com" description="Enabling the lights out feature on YouTube on every video." version="0.6" enabled="false" runAt="document-end" basedir="turn_off_the_lights" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="turn_off_the_lights" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enabling the lights out feature on YouTube on every video." enabled="false" filename="turn_off_the_lights.user.js" installTime="1335187664418" lastUpdateCheck="1327941146000" modified="1335185551000" name="Turn Off the Lights" namespace="tayfunsen.com" runAt="document-end" updateAvailable="false" version="0.6">
 		<Include>http://*.youtube.com/watch?*</Include>
 		<Include>http://youtube.com/watch?*</Include>
 	</Script>
-	<Script filename="wepad_-_grosse_videos.user.js" name="WePad - Grosse Videos" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="wepad_-_grosse_videos" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="wepad_-_grosse_videos" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wepad_-_grosse_videos.user.js" installTime="1335187664418" lastUpdateCheck="1327941146000" modified="1335185551000" name="WePad - Grosse Videos" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://wepad.mobi/galerie</Include>
 	</Script>
-	<Script filename="ohmydollz.user.js" name="OhMyDollz" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="ohmydollz" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ohmydollz" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="ohmydollz.user.js" installTime="1335187664418" lastUpdateCheck="1327941146000" modified="1335185551000" name="OhMyDollz" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://de.ohmydollz.com/*</Include>
 	</Script>
-	<Script filename="myfreefarm.user.js" name="MyFreeFarm" namespace="http://userscripts.org/scripts/show/66964" description="Erweitert MyFreeFarm" version="" enabled="true" runAt="document-end" basedir="myfreefarm" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="myfreefarm" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Erweitert MyFreeFarm" enabled="true" filename="myfreefarm.user.js" installTime="1335187664419" lastUpdateCheck="1327941146000" modified="1335185551000" name="MyFreeFarm" namespace="http://userscripts.org/scripts/show/66964" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*myfreefarm.*</Include>
 		<Include>http://*wolnifarmerzy.pl*</Include>
 		<Include>http://*enkicsitanyam.hu*</Include>
@@ -249,36 +247,36 @@
 		<Exclude>http://*forum.tr.myfreefarm.com*</Exclude>
 		<Exclude>http://*forum.veselaferma.com*</Exclude>
 	</Script>
-	<Script filename="better_amazon.user.js" name="Better Amazon" namespace="http://www.thumbedthrough.com/" description="A compilation of enhancements to Amazon.com with new features coming." version="" enabled="true" runAt="document-end" basedir="better_amazon" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="better_amazon" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="A compilation of enhancements to Amazon.com with new features coming." enabled="true" filename="better_amazon.user.js" installTime="1335187664419" lastUpdateCheck="1327941146000" modified="1335185551000" name="Better Amazon" namespace="http://www.thumbedthrough.com/" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.amazon.*/*</Include>
 		<Exclude>http://www.amazon.*/gp/cart/*</Exclude>
 	</Script>
-	<Script filename="portable_freeware.user.js" name="Portable Freeware" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="portable_freeware" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="portable_freeware" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="portable_freeware.user.js" installTime="1335187664419" lastUpdateCheck="1327941146000" modified="1335185551000" name="Portable Freeware" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.portablefreeware.com/*</Include>
 	</Script>
-	<Script filename="crazy_heels_-_details.user.js" name="Crazy Heels - Details" namespace="Woems" description="Zeigt bei dem Titel die Heelgroeße mit an" version="" enabled="true" runAt="document-end" basedir="crazy_heels_-_details" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="crazy_heels_-_details" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt bei dem Titel die Heelgroeße mit an" enabled="true" filename="crazy_heels_-_details.user.js" installTime="1335187664419" lastUpdateCheck="1327941146000" modified="1335185551000" name="Crazy Heels - Details" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.crazy-heels.de/shop/index.php*.html*</Include>
 		<Include>http://www.crazy-heels.de/shop/product_info.php/info/*.html</Include>
 	</Script>
-	<Script filename="crazy_heels_-_popup.user.js" name="Crazy Heels - Popup" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="crazy_heels_-_popup" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="crazy_heels_-_popup" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_heels_-_popup.user.js" installTime="1335187664420" lastUpdateCheck="1327941146000" modified="1335185551000" name="Crazy Heels - Popup" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.crazy-heels.de/shop/popup_image.php*</Include>
 	</Script>
-	<Script filename="crazy_heels_-_detail_ueb.user.js" name="Crazy Heels - Detail Uebersicht" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="crazy_heels_-_detail_ueb" modified="1327945785000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327945785000">
+	<Script basedir="crazy_heels_-_detail_ueb" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_heels_-_detail_ueb.user.js" installTime="1335187664420" lastUpdateCheck="1327945785000" modified="1335185551000" name="Crazy Heels - Detail Uebersicht" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.crazy-heels.de*</Include>
 	</Script>
-	<Script filename="crazy_heels_-_product_sa.user.js" name="Crazy Heels - Product Save" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="crazy_heels_-_product_sa" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="crazy_heels_-_product_sa" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_heels_-_product_sa.user.js" installTime="1335187664420" lastUpdateCheck="1327941146000" modified="1335185551000" name="Crazy Heels - Product Save" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.crazy-heels.de/shop/product_info.php*</Include>
 	</Script>
-	<Script filename="userscriptsorg_random_sc.user.js" name="Userscripts.org Random Script Viewer" namespace="http://userscripts.org/users/23652" description="Views a random script on userscripts.org. Comes with customizable blacklist. Keyboard shortcut alt+shift+x" version="1.0.5" enabled="true" runAt="document-end" basedir="userscriptsorg_random_sc" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="userscriptsorg_random_sc" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Views a random script on userscripts.org. Comes with customizable blacklist. Keyboard shortcut alt+shift+x" enabled="true" filename="userscriptsorg_random_sc.user.js" installTime="1335187664420" lastUpdateCheck="1327941146000" modified="1335185551000" name="Userscripts.org Random Script Viewer" namespace="http://userscripts.org/users/23652" runAt="document-end" updateAvailable="false" version="1.0.5">
 		<Include>http://userscripts.org/*</Include>
 		<Include>https://userscripts.org/*</Include>
 	</Script>
-	<Script filename="youtube_auto_buffer__aut.user.js" name="YouTube Auto Buffer &amp; Auto HD &amp; Remove Ads" namespace="userscripts.org" description="Buffers the video without autoplaying, removes in-video ads, and puts it in hd if the option is on. For Firefox and Opera" version="1.2.61" enabled="false" runAt="document-end" basedir="youtube_auto_buffer__aut" modified="1327941146000" dependhash="a0286f19418d4db1c1e269dbacd98fedfa4a352e" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="youtube_auto_buffer__aut" checkRemoteUpdates="true" dependhash="a0286f19418d4db1c1e269dbacd98fedfa4a352e" description="Buffers the video without autoplaying, removes in-video ads, and puts it in hd if the option is on. For Firefox and Opera" enabled="false" filename="youtube_auto_buffer__aut.user.js" installTime="1335187664421" lastUpdateCheck="1327941146000" modified="1335185551000" name="YouTube Auto Buffer &amp; Auto HD &amp; Remove Ads" namespace="userscripts.org" runAt="document-end" updateAvailable="false" version="1.2.61">
 		<Include>http://*.youtube.com/*</Include>
 		<Include>http://youtube.com/*</Include>
 		<Require filename="updater.php"/>
 	</Script>
-	<Script filename="facebook_mass_accept_req.user.js" name="Facebook Mass Accept Requests" namespace="http://userscripts.org/users/23652" description="Adds checkboxes to each request and a big accept button allowing you to accept them all at once, and also send thank you gifts" version="1.1.13" enabled="false" runAt="document-end" basedir="facebook_mass_accept_req" modified="1327941146000" dependhash="8417712803d219e7a240505273e3d7ca07dfb828" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="facebook_mass_accept_req" checkRemoteUpdates="true" dependhash="8417712803d219e7a240505273e3d7ca07dfb828" description="Adds checkboxes to each request and a big accept button allowing you to accept them all at once, and also send thank you gifts" enabled="false" filename="facebook_mass_accept_req.user.js" installTime="1335187664421" lastUpdateCheck="1327941146000" modified="1335185551000" name="Facebook Mass Accept Requests" namespace="http://userscripts.org/users/23652" runAt="document-end" updateAvailable="false" version="1.1.13">
 		<Include>http://*.facebook.com/*</Include>
 		<Include>https://*.facebook.com/*</Include>
 		<Include>http://facebook.com/*</Include>
@@ -288,49 +286,48 @@
 		<Require filename="29910user.js"/>
 		<Require filename="updater.php"/>
 	</Script>
-	<Script filename="lazygirls_enlarge.user.js" name="LazyGirls Enlarge" namespace="http://userscripts.org/users/23652" description="Shows the large picture when you hover over a thumbnail" version="1.0.1" enabled="true" runAt="document-end" basedir="lazygirls_enlarge" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="lazygirls_enlarge" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Shows the large picture when you hover over a thumbnail" enabled="true" filename="lazygirls_enlarge.user.js" installTime="1335187664422" lastUpdateCheck="1327941146000" modified="1335185551000" name="LazyGirls Enlarge" namespace="http://userscripts.org/users/23652" runAt="document-end" updateAvailable="false" version="1.0.1">
 		<Include>http://lazygirls.info/*</Include>
 		<Include>http://*.lazygirls.info/*</Include>
 	</Script>
-	<Script filename="titel_hide.user.js" name="Titel Hide" namespace="Woems" description="" version="" enabled="false" runAt="document-end" basedir="titel_hide" modified="1327941146000" dependhash="db7966408a31beda6d774147df467931e3659340" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="titel_hide" checkRemoteUpdates="true" dependhash="db7966408a31beda6d774147df467931e3659340" description="" enabled="false" filename="titel_hide.user.js" installTime="1335187664422" lastUpdateCheck="1327941146000" modified="1335185551000" name="Titel Hide" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>*</Include>
 	</Script>
-	<Script filename="youtube_-_warteschlange_.user.js" name="YouTube - Warteschlange aufraeumen" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="youtube_-_warteschlange_" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="youtube_-_warteschlange_" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="youtube_-_warteschlange_.user.js" installTime="1335187664422" lastUpdateCheck="1327941146000" modified="1335185551000" name="YouTube - Warteschlange aufraeumen" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*youtube.com*</Include>
 	</Script>
-	<Script filename="minecraft_-_serverlist.user.js" name="MineCraft - Serverlist" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="minecraft_-_serverlist" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="minecraft_-_serverlist" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="minecraft_-_serverlist.user.js" installTime="1335187664422" lastUpdateCheck="1327941146000" modified="1335185551000" name="MineCraft - Serverlist" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://minecraft.net/servers.jsp</Include>
 	</Script>
-	<Script filename="smoothscroll.user.js" name="SmoothScroll" namespace="userscripts.org" description="smoothscroll平滑滚动脚本版" version="0.9.4" enabled="false" runAt="document-end" basedir="smoothscroll" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="smoothscroll" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="smoothscroll平滑滚动脚本版" enabled="false" filename="smoothscroll.user.js" installTime="1335187664423" lastUpdateCheck="1327941146000" modified="1335185551000" name="SmoothScroll" namespace="" runAt="document-end" updateAvailable="false" version="0.9.4">
 		<Include>*</Include>
 	</Script>
-	<Script filename="youtube_prewatch.user.js" name="Youtube prewatch" namespace="http://www.jautis.net/" description="Spielt eine Vorschau des Videos nachdem man die Maus darüber bewegt." version="1.0b5" enabled="false" runAt="document-end" basedir="youtube_prewatch" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="youtube_prewatch" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Spielt eine Vorschau des Videos nachdem man die Maus darüber bewegt." enabled="false" filename="youtube_prewatch.user.js" installTime="1335187664423" lastUpdateCheck="1327941146000" modified="1335185551000" name="Youtube prewatch" namespace="http://www.jautis.net/" runAt="document-end" updateAvailable="false" version="1.0b5">
 		<Include>http://www.youtube.com/*</Include>
 	</Script>
-	<Script filename="aa-surflan-refresh.user.js" name="aa-surflan-refresh" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="aa-surflan-refresh" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="aa-surflan-refresh" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="aa-surflan-refresh.user.js" installTime="1335187664423" lastUpdateCheck="1327941146000" modified="1335185551000" name="aa-surflan-refresh" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>https://vpn4:8001/index.php?redirurl=*</Include>
 	</Script>
-	<Script filename="ffixer.user.js" name="FFixer" namespace="http://code-poet.net/" description="Enhancements for Facebook: bigger profile pictures and photos, easier viewing of albums, links to download videos, showing people's age and sign, google calendar integration, keyboard shortcuts &amp; more. Compatible with new Facebook and fully customizable!" version="2.3.1" enabled="false" runAt="document-end" basedir="ffixer" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ffixer" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancements for Facebook: bigger profile pictures and photos, easier viewing of albums, links to download videos, showing people's age and sign, google calendar integration, keyboard shortcuts &amp; more. Compatible with new Facebook and fully customizable!" enabled="false" filename="ffixer.user.js" installTime="1335187664423" lastUpdateCheck="1327941146000" modified="1335185551000" name="FFixer" namespace="http://code-poet.net/" runAt="document-end" updateAvailable="false" version="2.3.1">
 		<Include>http://facebook.com/*</Include>
 		<Include>http://*.facebook.com/*</Include>
 		<Include>https://facebook.com/*</Include>
 		<Include>https://*.facebook.com/*</Include>
 	</Script>
-	<Script filename="franzisi_-_resize.user.js" name="franzisi - Resize" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="franzisi_-_resize" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
-		<Include>http://www.franzisi.com/shop/product_info.php?*</Include>
+	<Script basedir="franzisi_-_resize" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="franzisi_-_resize.user.js" installTime="1335187664424" lastUpdateCheck="1327941146000" modified="1335185551000" name="franzisi - Resize" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.franzisi.com/shop/popup_image.php?*</Include>
 	</Script>
-	<Script filename="crazy_heels_-_popup_gro.user.js" name="Crazy Heels - Popup groß" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="crazy_heels_-_popup_gro" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="crazy_heels_-_popup_gro" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_heels_-_popup_gro.user.js" installTime="1335187664424" lastUpdateCheck="1327941146000" modified="1335185551000" name="Crazy Heels - Popup groß" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.crazy-heels.de/shop/product_info.php*</Include>
 	</Script>
-	<Script filename="fritzbox_-_netadd.user.js" name="FritzBox - NetAdd" namespace="Woems" description="Im DHCP eine neue feste IP vergeben" version="" enabled="true" runAt="document-end" basedir="fritzbox_-_netadd" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="fritzbox_-_netadd" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Im DHCP eine neue feste IP vergeben" enabled="true" filename="fritzbox_-_netadd.user.js" installTime="1335187664424" lastUpdateCheck="1327941146000" modified="1335185551000" name="FritzBox - NetAdd" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>https://woems.dyndns.org/net/newdevice.lua*</Include>
 	</Script>
-	<Script filename="fritzbox_netzwerk-ip-lis.user.js" name="FritzBox Netzwerk-IP-Liste sortieren" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="fritzbox_netzwerk-ip-lis" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="fritzbox_netzwerk-ip-lis" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="fritzbox_netzwerk-ip-lis.user.js" installTime="1335187664424" lastUpdateCheck="1327941146000" modified="1335185551000" name="FritzBox Netzwerk-IP-Liste sortieren" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>https://*.dyndns.org*</Include>
 		<Include>http://fritz.box</Include>
 	</Script>
-	<Script filename="no_middle_man.user.js" name="No Middle Man" namespace="http://fivethreenine.blogspot.com/2006/03/no-middle-man.html" description="Rewrites URLs to remove redirection scripts" version="" enabled="true" runAt="document-end" basedir="no_middle_man" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="no_middle_man" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Rewrites URLs to remove redirection scripts" enabled="true" filename="no_middle_man.user.js" installTime="1335187664425" lastUpdateCheck="1327941146000" modified="1335185551000" name="No Middle Man" namespace="http://fivethreenine.blogspot.com/2006/03/no-middle-man.html" runAt="document-end" updateAvailable="false" version="">
 		<Include>*</Include>
 		<Exclude>http://del.icio.us/*</Exclude>
 		<Exclude>http://*bloglines.com/*</Exclude>
@@ -338,22 +335,22 @@
 		<Exclude>http://*wists.com/*</Exclude>
 		<Exclude>http://www.google.*/*</Exclude>
 	</Script>
-	<Script filename="otr_-_suchwort_im_titel.user.js" name="OTR - Suchwort im Titel" namespace="Woems" description="Zeigt das Suchwort im Titel" version="" enabled="true" runAt="document-end" basedir="otr_-_suchwort_im_titel" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="otr_-_suchwort_im_titel" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt das Suchwort im Titel" enabled="false" filename="otr_-_suchwort_im_titel.user.js" installTime="1335187664425" lastUpdateCheck="1327941146000" modified="1335185551000" name="OTR - Suchwort im Titel" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://epg.onlinetvrecorder.com/broadcasts/search*</Include>
 	</Script>
-	<Script filename="kinopolis_-_reservierung.user.js" name="Kinopolis - Reservierung Mailen" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="kinopolis_-_reservierung" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
-		<Include>http://mail.google.com*</Include>
+	<Script basedir="kinopolis_-_reservierung" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_reservierung.user.js" installTime="1335187664425" lastUpdateCheck="1327941146000" modified="1335185551000" name="Kinopolis - Reservierung Mailen" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.kinopolis.de*</Include>
 		<Include>http://213.168.82.190*</Include>
-		<Include>https://mail.google.com/*</Include>
+		<Include>http://mail.google.com*</Include>
+		<Include>https://mail.google.com*</Include>
 	</Script>
-	<Script filename="userstylesorg_enhancer.user.js" name="Userstyles.org Enhancer" namespace="1nfected" description="Enhancement suite for the Userstyles.org site" version="1.4.5" enabled="true" runAt="document-end" basedir="userstylesorg_enhancer" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="userstylesorg_enhancer" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancement suite for the Userstyles.org site" enabled="true" filename="userstylesorg_enhancer.user.js" installTime="1335187664426" lastUpdateCheck="1327941146000" modified="1335185551000" name="Userstyles.org Enhancer" namespace="1nfected" runAt="document-end" updateAvailable="false" version="1.4.5">
 		<Include>http://userstyles.org/users/*</Include>
 		<Include>https://userstyles.org/users/*</Include>
 		<Include>http://userstyles.org/styles/browse*</Include>
 		<Include>https://userstyles.org/styles/browse*</Include>
 	</Script>
-	<Script filename="userscriptsorg_bullshit_.user.js" name="userscripts.org Bullshit Filter" namespace="userscripts.org" description="Hides scripts for popular browser games and social networks as well as scripts that use &quot;foreign&quot; characters in description" version="2011.8.9" enabled="true" runAt="document-end" basedir="userscriptsorg_bullshit_" modified="1327941146000" dependhash="46b7d1741d0c3890dd00183d8a68859e625bd09a" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="userscriptsorg_bullshit_" checkRemoteUpdates="true" dependhash="46b7d1741d0c3890dd00183d8a68859e625bd09a" description="Hides scripts for popular browser games and social networks as well as scripts that use &quot;foreign&quot; characters in description" enabled="true" filename="userscriptsorg_bullshit_.user.js" installTime="1335187664426" lastUpdateCheck="1327941146000" modified="1335185551000" name="userscripts.org Bullshit Filter" namespace="" runAt="document-end" updateAvailable="false" version="2011.8.9" updateurl="http://userscripts.org/scripts/source/97145.meta.js">
 		<Include>http://userscripts.org/</Include>
 		<Include>http://userscripts.org/scripts</Include>
 		<Include>http://userscripts.org/scripts?*</Include>
@@ -362,67 +359,39 @@
 		<Include>http://userscripts.org/users/*/favorites*</Include>
 		<Include>http://userscripts.org/scripts/search*</Include>
 	</Script>
-	<Script filename="userscriptsorg_alternate.user.js" name="userscripts.org alternate CSS" namespace="http://userscripts.org/scripts/show/34698" description="Enhancing userscripts.org" version="1.051" enabled="true" runAt="document-end" basedir="userscriptsorg_alternate" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="userscriptsorg_alternate" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancing userscripts.org" enabled="true" filename="userscriptsorg_alternate.user.js" installTime="1335187664426" lastUpdateCheck="1327941146000" modified="1335185551000" name="userscripts.org alternate CSS" namespace="http://userscripts.org/scripts/show/34698" runAt="document-end" updateAvailable="false" version="1.051">
 		<Include>http://userscripts.org/*</Include>
 		<Include>https://userscripts.org/*</Include>
 	</Script>
-	<Script filename="otr_-_search.user.js" name="OTR - Search" namespace="Woems" description="Highlight the Search" version="" enabled="true" runAt="document-end" basedir="otr_-_search" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="otr_-_search" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Highlight the Search" enabled="false" filename="otr_-_search.user.js" installTime="1335187664426" lastUpdateCheck="1327941146000" modified="1335185551000" name="OTR - Search" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://epg.onlinetvrecorder.com/broadcasts/search?*</Include>
 	</Script>
-	<Script filename="funktionssammlung.user.js" name="Funktionssammlung" namespace="Woems" description="" version="0.1" enabled="true" runAt="document-end" basedir="funktionssammlung" modified="1327947656000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327947656000">
+	<Script basedir="funktionssammlung" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="funktionssammlung.user.js" installTime="1335187664427" lastUpdateCheck="1327947656000" modified="1335188399000" name="Funktionssammlung" namespace="Woems" runAt="document-end" updateAvailable="false" version="0.1">
 		<Include>*</Include>
 	</Script>
-	<Script filename="otr_-_weasel.user.js" name="OTR - Weasel" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="otr_-_weasel" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="otr_-_weasel" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="otr_-_weasel.user.js" installTime="1335187664427" lastUpdateCheck="1327941146000" modified="1335185551000" name="OTR - Weasel" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.onlinetvrecorder.com/buyclicks/weasel.php*</Include>
 		<Include>http://www.onlinetvrecorder.com/buyclicks/bcbf.php*</Include>
-		<Include>http://www.onlinetvrecorder.com/</Include>
 		<Include>http://www.onlinetvrecorder.com/?aktion=click_confirmation</Include>
+		<Include>http://www.onlinetvrecorder.com/</Include>
 		<Include>*</Include>
 	</Script>
-	<Script filename="onlinetvrecorder_-_direk.user.js" name="OnlineTVRecorder - Direkt Download Links" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="onlinetvrecorder_-_direk" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
-		<Include>http://otr.datenkeller.at*</Include>
-		<Include>http://www.otr-files.de*</Include>
-		<Include>http://filebase.to*</Include>
-		<Include>http://otr-download.de*</Include>
-		<Include>http://otr.datenkeller.at*</Include>
-		<Include>http://www.otrking.com*</Include>
-		<Include>http://www.onlinetvrecorder.com*</Include>
-		<Include>http://www.otrkeyfinder.com*</Include>
-		<Include>http://www.mirror-verbund.com*</Include>
-		<Include>http://mirror-verbund.com*</Include>
-		<Include>http://mirror.human-evo.de*</Include>
-		<Include>http://super-otr.de*</Include>
-		<Include>http://home.privatotrmirror.de*</Include>
-		<Include>http://otr.2x.to*</Include>
-		<Include>http://otrkeys.net*</Include>
-		<Include>http://otr.knoffl.com*</Include>
-		<Include>http://free-otr.de*</Include>
-		<Include>http://easy-otr.de*</Include>
-		<Include>http://wunsch-otr.de*</Include>
-		<Include>http://mirror-otr.de*</Include>
-		<Include>http://otr.knoffl.com*</Include>
-		<Include>http://free-otr.de*</Include>
-		<Include>http://easy-otr.de*</Include>
-		<Include>http://dateibrowser.de*</Include>
-		<Include>http://otr-download.de*</Include>
-		<Include>http://otr.matzl.eu*</Include>
-		<Include>http://bitshare.com*</Include>
-		<Include>http://die-schnelle-kuh.de*</Include>
+	<Script basedir="onlinetvrecorder_-_direk" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="onlinetvrecorder_-_direk.user.js" installTime="1335187664427" lastUpdateCheck="1327941146000" modified="1335185551000" name="OnlineTVRecorder - Direkt Download Links" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*</Include>
 	</Script>
-	<Script filename="sprichwortrekombinator.user.js" name="Sprichwortrekombinator" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="sprichwortrekombinator" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="sprichwortrekombinator" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="sprichwortrekombinator.user.js" installTime="1335187664428" lastUpdateCheck="1327941146000" modified="1335185551000" name="Sprichwortrekombinator" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://sprichwortrekombinator.de/*</Include>
 	</Script>
-	<Script filename="brettspiele.user.js" name="Brettspiele" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="brettspiele" modified="1327941748000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941748000">
+	<Script basedir="brettspiele" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="brettspiele.user.js" installTime="1335187664428" lastUpdateCheck="1327941748000" modified="1335185551000" name="Brettspiele" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>*</Include>
 	</Script>
-	<Script filename="kinopolis_-_uebersichtli.user.js" name="Kinopolis - uebersichtlicher" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="kinopolis_-_uebersichtli" modified="1327942863000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327942863000">
+	<Script basedir="kinopolis_-_uebersichtli" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_uebersichtli.user.js" installTime="1335187664428" lastUpdateCheck="1327942863000" modified="1335185551000" name="Kinopolis - uebersichtlicher" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.kinopolis.de/bn/programm_wochenansicht*</Include>
 	</Script>
-	<Script filename="boardgamegeek.user.js" name="BoardGameGeek" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="boardgamegeek" modified="1327941605000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941605000">
+	<Script basedir="boardgamegeek" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="boardgamegeek.user.js" installTime="1335187664429" lastUpdateCheck="1327941605000" modified="1335185551000" name="BoardGameGeek" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*boardgamegeek.com*</Include>
 	</Script>
-	<Script filename="antigame.user.js" name="AntiGame" namespace="antikiller" description="Extends Ogame with many functions." version="2.02.8" enabled="true" runAt="document-end" basedir="antigame" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="antigame" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Extends Ogame with many functions." enabled="true" filename="antigame.user.js" installTime="1335187664429" lastUpdateCheck="1327941146000" modified="1335185551000" name="AntiGame" namespace="antikiller" runAt="document-end" updateAvailable="false" version="2.02.8">
 		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 		<Include>http://*/secret/*.php*</Include>
 		<Include>http://*.gamestats.org/*</Include>
@@ -439,23 +408,26 @@
 		<Include>http://ood.giftsua.com/tool/*</Include>
 		<Include>http://shahterov.net/tool/*</Include>
 	</Script>
-	<Script filename="ogame_redesign__short_he.user.js" name="OGame Redesign : Short Header (V. 1.03)" namespace="Gollaoum" description="Minimize the header when is possible." version="1.03" enabled="true" runAt="document-end" basedir="ogame_redesign__short_he" modified="1327941146000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327941146000">
+	<Script basedir="ogame_redesign__short_he" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Minimize the header when is possible." enabled="true" filename="ogame_redesign__short_he.user.js" installTime="1335187664430" lastUpdateCheck="1327941146000" modified="1335185551000" name="OGame Redesign : Short Header (V. 1.03)" namespace="Gollaoum" runAt="document-end" updateAvailable="false" version="1.03">
 		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 	</Script>
-	<Script filename="bildergalerie.user.js" name="BilderGalerie" namespace="Woems" description="Nach drücken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert." version="" enabled="true" runAt="document-end" basedir="BilderGalerie" modified="1327948282000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327948282000" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js">
+	<Script basedir="BilderGalerie" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nach drücken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert." enabled="true" filename="bildergalerie.user.js" installTime="1335187664430" lastUpdateCheck="1327948282000" modified="1335185551000" name="BilderGalerie" namespace="Woems" runAt="document-end" updateAvailable="false" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js">
 		<Include>*</Include>
 	</Script>
-	<Script filename="fritzbox.user.js" name="Fritz!Box" namespace="Woems" description="" version="" enabled="true" runAt="document-end" basedir="Fritz!Box" modified="1327948301000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327948301000" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/fritzbox/fritzbox.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/fritzbox/fritzbox.user.js">
+	<Script basedir="Fritz!Box" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="fritzbox.user.js" installTime="1335187664431" lastUpdateCheck="1327948301000" modified="1335185551000" name="Fritz!Box" namespace="Woems" runAt="document-end" updateAvailable="false" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/fritzbox/fritzbox.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/fritzbox/fritzbox.user.js">
 		<Include>http://fritz.box*</Include>
 	</Script>
-	<Script filename="kgforum.user.js" name="kgforum" namespace="Woems" description="Verbesserungen" version="" enabled="true" runAt="document-end" basedir="kgforum" modified="1327948314000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327948314000" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js">
+	<Script basedir="kgforum" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen" enabled="true" filename="kgforum.user.js" installTime="1335187664431" lastUpdateCheck="1327948314000" modified="1335185551000" name="kgforum" namespace="Woems" runAt="document-end" updateAvailable="false" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js">
 		<Include>http://www.kgforum.org*</Include>
 	</Script>
-	<Script filename="ogame_fast_login.user.js" name="ogame fast login" namespace="ogamefl" description="with this script the login form will show up after ogame loaded. this will let your browser fill the login data (if login data is saved)." version="" enabled="true" runAt="document-end" basedir="ogame_fast_login" modified="1327948329000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327948329000" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js">
+	<Script basedir="ogame_fast_login" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="with this script the login form will show up after ogame loaded. this will let your browser fill the login data (if login data is saved)." enabled="true" filename="ogame_fast_login.user.js" installTime="1335187664431" lastUpdateCheck="1327948329000" modified="1335185551000" name="ogame fast login" namespace="ogamefl" runAt="document-end" updateAvailable="false" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js">
 		<Include>http://*ogame.*/*</Include>
 		<Exclude>http://*ogame.*/game/*</Exclude>
 	</Script>
-	<Script filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" description="Seite auf wiedervorlage legen" version="" enabled="true" runAt="document-end" basedir="Wiedervorlage" modified="1327948341000" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" checkRemoteUpdates="true" updateAvailable="false" lastUpdateCheck="1327948341000" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
+	<Script basedir="Wiedervorlage" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" filename="wiedervorlage.user.js" installTime="1335187664431" lastUpdateCheck="1327948341000" modified="1335185551000" name="Wiedervorlage" namespace="Woems" runAt="document-end" updateAvailable="false" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
 		<Include>*</Include>
+	</Script>
+	<Script basedir="YouTube" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" installTime="1335187824443" lastUpdateCheck="" modified="1335189550000" name="YouTube" namespace="Woems" runAt="document-end" updateAvailable="" version="">
+		<Include>http://*youtube.com*</Include>
 	</Script>
 </UserScriptConfig>
