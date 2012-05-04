@@ -190,9 +190,8 @@
 		<Include>http://*myvideo.de/*</Include>
 		<Include>http://*clipfish.de/*</Include>
 	</Script>
-	<Script basedir="bausim_-_autoplay" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="bausim_-_autoplay.user.js" installTime="1329249489536" lastUpdateCheck="1327941146000" modified="1327941146000" name="bausim - AutoPlay" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
-		<Include>http://bausim.net*</Include>
-		<Include>http://www.bausim.net*</Include>
+	<Script basedir="bausim_-_autoplay" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="bausim_-_autoplay.user.js" installTime="1335187664415" lastUpdateCheck="1327941146000" modified="1335185551000" name="bausim - AutoPlay" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
+		<Include>http://*bausim.net*</Include>
 	</Script>
 	<Script basedir="elektro-skateboard_-_ad_" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="elektro-skateboard_-_ad_.user.js" installTime="1329249489536" lastUpdateCheck="1327941146000" modified="1327941146000" name="elektro-skateboard - Ad Killer" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.elektro-skateboard.de*</Include>
@@ -341,11 +340,11 @@
 	<Script basedir="otr_-_suchwort_im_titel" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt das Suchwort im Titel" enabled="true" filename="otr_-_suchwort_im_titel.user.js" installTime="1329249489557" lastUpdateCheck="1327941146000" modified="1327941146000" name="OTR - Suchwort im Titel" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://epg.onlinetvrecorder.com/broadcasts/search*</Include>
 	</Script>
-	<Script basedir="kinopolis_-_reservierung" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_reservierung.user.js" installTime="1329249489558" lastUpdateCheck="1327941146000" modified="1327941146000" name="Kinopolis - Reservierung Mailen" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
-		<Include>http://mail.google.com*</Include>
+	<Script basedir="kinopolis_-_reservierung" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_reservierung.user.js" installTime="1335187664425" lastUpdateCheck="1327941146000" modified="1335185551000" name="Kinopolis - Reservierung Mailen" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.kinopolis.de*</Include>
 		<Include>http://213.168.82.190*</Include>
-		<Include>https://mail.google.com/*</Include>
+		<Include>http://mail.google.com*</Include>
+		<Include>https://mail.google.com*</Include>
 	</Script>
 	<Script basedir="userstylesorg_enhancer" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancement suite for the Userstyles.org site" enabled="true" filename="userstylesorg_enhancer.user.js" installTime="1329249489559" lastUpdateCheck="1327941146000" modified="1327941146000" name="Userstyles.org Enhancer" namespace="1nfected" runAt="document-end" updateAvailable="false" version="1.4.5">
 		<Include>http://userstyles.org/users/*</Include>
@@ -375,39 +374,11 @@
 	<Script basedir="otr_-_weasel" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="otr_-_weasel.user.js" installTime="1329249489562" lastUpdateCheck="1327941146000" modified="1327941146000" name="OTR - Weasel" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://www.onlinetvrecorder.com/buyclicks/weasel.php*</Include>
 		<Include>http://www.onlinetvrecorder.com/buyclicks/bcbf.php*</Include>
-		<Include>http://www.onlinetvrecorder.com/</Include>
 		<Include>http://www.onlinetvrecorder.com/?aktion=click_confirmation</Include>
+		<Include>http://www.onlinetvrecorder.com/</Include>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="onlinetvrecorder_-_direk" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="onlinetvrecorder_-_direk.user.js" installTime="1329249489562" lastUpdateCheck="1327941146000" modified="1327941146000" name="OnlineTVRecorder - Direkt Download Links" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
-		<Include>http://otr.datenkeller.at*</Include>
-		<Include>http://www.otr-files.de*</Include>
-		<Include>http://filebase.to*</Include>
-		<Include>http://otr-download.de*</Include>
-		<Include>http://otr.datenkeller.at*</Include>
-		<Include>http://www.otrking.com*</Include>
-		<Include>http://www.onlinetvrecorder.com*</Include>
-		<Include>http://www.otrkeyfinder.com*</Include>
-		<Include>http://www.mirror-verbund.com*</Include>
-		<Include>http://mirror-verbund.com*</Include>
-		<Include>http://mirror.human-evo.de*</Include>
-		<Include>http://super-otr.de*</Include>
-		<Include>http://home.privatotrmirror.de*</Include>
-		<Include>http://otr.2x.to*</Include>
-		<Include>http://otrkeys.net*</Include>
-		<Include>http://otr.knoffl.com*</Include>
-		<Include>http://free-otr.de*</Include>
-		<Include>http://easy-otr.de*</Include>
-		<Include>http://wunsch-otr.de*</Include>
-		<Include>http://mirror-otr.de*</Include>
-		<Include>http://otr.knoffl.com*</Include>
-		<Include>http://free-otr.de*</Include>
-		<Include>http://easy-otr.de*</Include>
-		<Include>http://dateibrowser.de*</Include>
-		<Include>http://otr-download.de*</Include>
-		<Include>http://otr.matzl.eu*</Include>
-		<Include>http://bitshare.com*</Include>
-		<Include>http://die-schnelle-kuh.de*</Include>
+	<Script basedir="onlinetvrecorder_-_direk" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="onlinetvrecorder_-_direk.user.js" installTime="1335187664427" lastUpdateCheck="1327941146000" modified="1335185551000" name="OnlineTVRecorder - Direkt Download Links" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*</Include>
 	</Script>
 	<Script basedir="sprichwortrekombinator" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="sprichwortrekombinator.user.js" installTime="1329249489563" lastUpdateCheck="1327941146000" modified="1327941146000" name="Sprichwortrekombinator" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
@@ -460,5 +431,11 @@
 	</Script>
 	<Script basedir="German_Bash" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="German_Bash.user.js" installTime="1330024416543" lastUpdateCheck="1330024822000" modified="1330024822000" name="German Bash" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://german-bash.org/*</Include>
+	</Script>
+	<Script basedir="YouTube" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" installTime="1335187824443" lastUpdateCheck="1335189550000" modified="1335189550000" name="YouTube" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
+		<Include>http://*youtube.com*</Include>
+	</Script>
+	<Script basedir="Bimmelbahn-Forum" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Bimmelbahn-Forum.user.js" installTime="1336132841469" lastUpdateCheck="1336132841000" modified="1336138276000" name="Bimmelbahn-Forum" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
+		<Include>http://www.boards-4you.de/wbb13/60/*</Include>
 	</Script>
 </UserScriptConfig>
