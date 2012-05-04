@@ -54,6 +54,15 @@ function ga(obj) { GM_log(uneval(obj)); }
 //GM_log=function (){}
 /********************************/
 
+
+window.setTimeout(killpopup, 1000);
+
+function killpopup()
+{ 
+  if ($('adscaleLightboxBackground')) remove($('adscaleLightboxBackground')); else window.setTimeout(killpopup, 1000);
+}
+
+
 var sp;
         
 for (var i = 0; i < document.getElementsByTagName("div").length; i++) {
@@ -73,4 +82,4 @@ if (document.URL.indexOf("german-bash.org/action/random") > -1) {
   }
 }
 
-$x('/html/body/div[2]/div/div[2]/span')[0].style.display="none";
+//$x('/html/body/div[2]/div/div[2]/span')[0].style.display="none";
