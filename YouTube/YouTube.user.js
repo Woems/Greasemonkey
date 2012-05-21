@@ -213,7 +213,7 @@ function Video(VideoID)
   showmsg({
     id:"VideoStatus",
     text: uneval(Video[VideoID])+"<br>Bitte bewerten sie das Video:<br>",
-    color:(Video[VideoID].anz==1)?"gray":{ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[getParam("v","")].qualitaet],
+    color:(Video[VideoID].anz<=1)?"gray":{ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[getParam("v","")].qualitaet],
     fixed:true,
     OK: "Gut",
     Cancel: "Schlecht",
@@ -221,5 +221,12 @@ function Video(VideoID)
     onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video);  },
   });
   // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
+
+  // Vorschauliste bunt
+  var VideoLinks=$x("//ul[@id='watch-related']//li")
+                   .map(function (e) { return { link:e.firstChild.href, elem:e }; })
+                   .map(function (vid) { vid.id=vid.link.match(/v=([a-zA-Z0-9-]*)/)[1]; return vid; })
+  //GM_log(uneval(VideoLinks));
+  VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
 }
 
