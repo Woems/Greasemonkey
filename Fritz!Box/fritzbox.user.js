@@ -59,8 +59,7 @@ css=GM_addStyle;
 //GM_log=function (){}
 /********************************/
 
-
-
+if (location.pathname.split("/")[1]!="fhem")
 switch (location.pathname)
 {
   case '/': break; // Home
