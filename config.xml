@@ -427,7 +427,7 @@
 	<Script basedir="Wiedervorlage" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" filename="wiedervorlage.user.js" installTime="1335187664431" lastUpdateCheck="1327948341000" modified="1335185551000" name="Wiedervorlage" namespace="Woems" runAt="document-end" updateAvailable="false" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
 		<Include>*</Include>
 	</Script>
-	<Script basedir="YouTube" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" installTime="1335187824443" lastUpdateCheck="1335189550000" modified="1335189550000" name="YouTube" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
+	<Script basedir="YouTube" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" installTime="1335187824443" lastUpdateCheck="1335189550000" modified="1337611083000" name="YouTube" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
 		<Include>http://*youtube.com*</Include>
 	</Script>
 	<Script basedir="Bimmelbahn-Forum" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Bimmelbahn-Forum.user.js" installTime="1336132841469" lastUpdateCheck="1336132841000" modified="1336138276000" name="Bimmelbahn-Forum" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
