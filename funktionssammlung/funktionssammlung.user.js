@@ -38,7 +38,7 @@ function createElement(type, attributes, append){
     if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
     if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
     if (attr=="append") node.appendChild(attributes[attr]); else
-    if (attr=="childs") { for (var child in attributes[attr]) node.appendChild(attributes[attr][child]); } else
+    if (attr=="childs") { for (var child in attributes[attr]) if (attributes[attr].hasOwnProperty(child)) node.appendChild(attributes[attr][child]); } else
     try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
   if (append) append.appendChild(node);
   return node;
