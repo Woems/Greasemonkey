@@ -37,7 +37,7 @@ function createElement(type, attributes, append){
     if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
     if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
     if (attr=="append") node.appendChild(attributes[attr]); else
-    if (attr=="childs") { for (var child in attributes[attr]) node.appendChild(attributes[attr][child]); } else
+    if (attr=="childs") { for (var child in attributes[attr]) if (attributes[attr].hasOwnProperty(child)) node.appendChild(attributes[attr][child]); } else
     try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
   if (append) append.appendChild(node);
   return node;
@@ -209,10 +209,18 @@ function Video(VideoID)
   Video[VideoID].anz+=1;
   Video[VideoID].lastseen=new Date();
   serialize("Video",Video);
-
+  var Kategorien=deserialize('Kategorien',[]);
+  Kategorien.unshift("-- bitte auswählen --");
+  Kategorien.push("-- Eingeben --");
+  var SelectKat="<select id=wKategorie>"+
+                Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
+                "</select>"
   showmsg({
     id:"VideoStatus",
-    text: uneval(Video[VideoID])+"<br>Bitte bewerten sie das Video:<br>",
+    text: [uneval(Video[VideoID]),
+           "Kategorie: "+SelectKat,
+           "Bitte bewerten sie das Video:",
+           ""].join('<br>'),
     color:(Video[VideoID].anz<=1)?"gray":{ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[getParam("v","")].qualitaet],
     fixed:true,
     OK: "Gut",
@@ -221,6 +229,27 @@ function Video(VideoID)
     onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video);  },
   });
   // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
+  var i=Kategorien.indexOf(Video[VideoID].Kategorie);
+  if (i>0) $('wKategorie').selectedIndex=i;
+  $('wKategorie').addEventListener("change",function(event){
+    var Video=deserialize("Video",{});
+    switch (event.target.value)
+    {
+      case "-- bitte auswählen --":
+        delete Video[VideoID].Kategorie;
+        break;
+      case "-- Eingeben --":
+        Video[VideoID].Kategorie=prompt("Bitte Name der Kategorie eingeben:");
+        var k=deserialize('Kategorien',[]);
+        k.push(Video[VideoID].Kategorie);
+        serialize('Kategorien',k);
+        break;
+      default:
+        Video[VideoID].Kategorie=event.target.value;
+        break;
+    }
+    serialize("Video",Video);
+  }, true);
 
   // Vorschauliste bunt
   var VideoLinks=$x("//ul[@id='watch-related']//li")
@@ -228,5 +257,33 @@ function Video(VideoID)
                    .map(function (vid) { vid.id=vid.link.match(/v=([a-zA-Z0-9-]*)/)[1]; return vid; })
   //GM_log(uneval(VideoLinks));
   VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
+  
+  // Links zu gespeicherten Videos
+  if ($('watch-actions'))
+  {
+    var Kat=deserialize('Kategorien',[]);
+    Kat.unshift("* Ohne Kategorie *");
+    Kat.unshift("- Kategorie öffnen -");
+    var c=Kat.map(function (e) { return createElement('option', { textContent:e }); });
+    var m=createElement('select', { childs:c, onChange:function (e){ 
+      var Video=deserialize("Video",{});
+      var youtube=['',new Date()];
+      for (var i in Video)
+         if (((e.value=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==e.value)  && Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
+           youtube=[ Video[i].id, Video[i].lastseen ];
+      if (youtube[0]=='')
+      {
+        alert("Keine Videos in der Kategorie gefunden");
+        var k=deserialize('Kategorien',[]);
+        k.splice(k.indexOf(e.value),1);        
+        serialize('Kategorien',k);
+        return;
+      }
+      if (confirm('Im neuen Tab öffnen?'))
+        GM_openInTab("http://www.youtube.com/watch?v="+youtube[0]);
+      else
+        location.href="http://www.youtube.com/watch?v="+youtube[0];
+    } }, $('watch-actions'));
+  }
 }
 
