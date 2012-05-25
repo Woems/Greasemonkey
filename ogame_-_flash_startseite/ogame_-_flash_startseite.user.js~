@@ -1,8 +1,0 @@
-// ==UserScript==
-// @name           OGame - Flash startseite ausblenden
-// @namespace      Woems
-// @include        http://*ogame.de*
-// ==/UserScript==
-
-$("flash_oben").style.visibility="";
-$("flash_oben").style.display="none";
