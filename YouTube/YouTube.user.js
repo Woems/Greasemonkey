@@ -209,7 +209,7 @@ function Video(VideoID)
   Video[VideoID].anz+=1;
   Video[VideoID].lastseen=new Date();
   serialize("Video",Video);
-  var Kategorien=deserialize('Kategorien',[]);
+  var Kategorien=deserialize('Kategorien',[]).sort();
   Kategorien.unshift("-- bitte auswählen --");
   Kategorien.push("-- Eingeben --");
   var SelectKat="<select id=wKategorie>"+
@@ -254,23 +254,28 @@ function Video(VideoID)
   // Vorschauliste bunt
   var VideoLinks=$x("//ul[@id='watch-related']//li")
                    .map(function (e) { return { link:e.firstChild.href, elem:e }; })
-                   .map(function (vid) { vid.id=vid.link.match(/v=([a-zA-Z0-9-]*)/)[1]; return vid; })
+                   .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; })
   //GM_log(uneval(VideoLinks));
   VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
   
   // Links zu gespeicherten Videos
   if ($('watch-actions'))
   {
-    var Kat=deserialize('Kategorien',[]);
+    var Kat=deserialize('Kategorien',[]).sort();
     Kat.unshift("* Ohne Kategorie *");
     Kat.unshift("- Kategorie öffnen -");
     var c=Kat.map(function (e) { return createElement('option', { textContent:e }); });
-    var m=createElement('select', { childs:c, onChange:function (e){ 
+    var m=createElement('select', { className:"yt-uix-button-default", childs:c, onChange:function (e){ 
       var Video=deserialize("Video",{});
       var youtube=['',new Date()];
+      var anz=0;
       for (var i in Video)
-         if (((e.value=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==e.value)  && Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-           youtube=[ Video[i].id, Video[i].lastseen ];
+         if ((e.value=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==e.value)
+         {
+           anz+=1;
+           if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
+             youtube=[ Video[i].id, Video[i].lastseen ];
+         }
       if (youtube[0]=='')
       {
         alert("Keine Videos in der Kategorie gefunden");
@@ -279,7 +284,7 @@ function Video(VideoID)
         serialize('Kategorien',k);
         return;
       }
-      if (confirm('Im neuen Tab öffnen?'))
+      if (confirm('Anzahl Videos in der Kategorie: '+anz+'\n\nAktuelles Video im neuen Tab öffnen?'))
         GM_openInTab("http://www.youtube.com/watch?v="+youtube[0]);
       else
         location.href="http://www.youtube.com/watch?v="+youtube[0];
