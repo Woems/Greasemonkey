@@ -198,7 +198,7 @@ function createHover(elem,text)
 /********************************/
 
 var VideoID=getParam("v","");
-GM_log("VideoID: "+VideoID);
+//GM_log("VideoID: "+VideoID);
 if (VideoID!="") Video(VideoID);
 
 
@@ -261,12 +261,14 @@ function Video(VideoID)
   // Links zu gespeicherten Videos
   if ($('watch-actions'))
   {
+    // Selectbox
     var Kat=deserialize('Kategorien',[]).sort();
     Kat.unshift("* Ohne Kategorie *");
     Kat.unshift("- Kategorie öffnen -");
     var c=Kat.map(function (e) { return createElement('option', { textContent:e }); });
     var m=createElement('select', { className:"yt-uix-button-default", childs:c, onChange:function (e){ 
       var Video=deserialize("Video",{});
+      GM_setValue('lastKat',e.value);
       var youtube=['',new Date()];
       var anz=0;
       for (var i in Video)
@@ -282,6 +284,7 @@ function Video(VideoID)
         var k=deserialize('Kategorien',[]);
         k.splice(k.indexOf(e.value),1);        
         serialize('Kategorien',k);
+        GM_setValue('lastKat','* Ohne Kategorie *');
         return;
       }
       if (confirm('Anzahl Videos in der Kategorie: '+anz+'\n\nAktuelles Video im neuen Tab öffnen?'))
@@ -289,6 +292,67 @@ function Video(VideoID)
       else
         location.href="http://www.youtube.com/watch?v="+youtube[0];
     } }, $('watch-actions'));
+    // Button
+    createElement('button',{
+        className: "yt-uix-button yt-uix-button-default",
+        textContent:'Next',
+        onClick:function (e) { 
+          var Video=deserialize("Video",{});
+          var youtube=['',new Date()];
+          var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
+          for (var i in Video)
+            if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
+            {
+               if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
+                 youtube=[ Video[i].id, Video[i].lastseen ];
+            }
+          if (youtube[0]=='')
+          {
+            alert("Keine Videos in der Kategorie gefunden");
+            var k=deserialize('Kategorien',[]);
+            k.splice(k.indexOf(Kat),1);        
+            serialize('Kategorien',k);
+            GM_setValue('lastKat','* Ohne Kategorie *');
+            return;
+          }
+          location.href="http://www.youtube.com/watch?v="+youtube[0];
+        }
+    }, $('watch-actions'));
   }
+  unsafeWindow.onYouTubePlayerReady = function (playerID)
+  {
+    var player=document.getElementById("movie_player").wrappedJSObject;
+    //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
+    var intervalID=window.setInterval(function () {
+      //GM_log("interval");
+      if (player.getPlayerState()==0)
+      {
+        //GM_log("Ende");
+        window.setTimeout(function () {
+          var Video=deserialize("Video",{});
+          var youtube=['',new Date()];
+          var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
+          for (var i in Video)
+            if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
+            {
+               if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
+                 youtube=[ Video[i].id, Video[i].lastseen ];
+            }
+          if (youtube[0]=='')
+          {
+            alert("Keine Videos in der Kategorie gefunden");
+            var k=deserialize('Kategorien',[]);
+            k.splice(k.indexOf(Kat),1);        
+            serialize('Kategorien',k);
+            GM_setValue('lastKat','* Ohne Kategorie *');
+            return;
+          }
+          location.href="http://www.youtube.com/watch?v="+youtube[0];
+        }, 10*1000);
+        window.clearInterval(intervalID);
+      }
+    },1000);
+  }
+  GM_log("ALL DONE");
 }
 
