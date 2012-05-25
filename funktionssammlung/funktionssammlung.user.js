@@ -240,6 +240,21 @@ function Woems(obj, base)
 }
 
 
+function CopyToClipboard(Text)
+{
+  try {
+    var tc = Text.replace(/\n\n/g, '\n');
+    unsafeWindow.netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+    const clipboardHelper = Components.classes
+        ["@mozilla.org/widget/clipboardhelper;1"].
+        getService(Components.interfaces.nsIClipboardHelper);
+    clipboardHelper.copyString(tc);
+  } catch (e) { alert([e,"",
+                       'Bitte in der user.js oder prefs.js im Profilverzeichniss eintragen:',
+                       '  user_pref("signed.applets.codebase_principal_support", true);',
+                       '  user_pref("capability.principal.greasemonkey1.id", "<url>");',
+                       '  user_pref("capability.principal.greasemonkey1.granted", "UniversalXPConnect");'].join('\n')); }
+}
 
 
 
