@@ -295,7 +295,15 @@ function Vote()
       event.preventDefault();
     }, true);
   });
-  /*/
+  
+  // *** Youtube Videos ***
+
+  var Titelmin=Titel.toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss");
+  var YoutubeHier=$xs("id('ContentSpalte')/div/table[3]/tbody/tr/td");
+  YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+Titelmin,"YouTube",700,500));
+  //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
+
+  /**/
   showmsg({
     id:"debug",
     //text:[Link,Titel,uneval(filme[Link]),Obj2String(filme[Link],"<br>")].join("<br>"),
