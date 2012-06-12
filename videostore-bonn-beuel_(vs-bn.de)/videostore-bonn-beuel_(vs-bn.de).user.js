@@ -206,7 +206,7 @@ function MapObj(Obj,func) { var t=[]; for (i in Obj) t.push(func(i, Obj[i])); re
 function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); return t.sort().join(sep||"\n"); }
 
 
-function ElemMeineUebersicht(Titel, Liste)
+function ElemMeineUebersicht(Titel, Liste, ID)
 {
   insertBefore(
     createElement('tr', {
@@ -214,7 +214,8 @@ function ElemMeineUebersicht(Titel, Liste)
         createElement('td', { className:"Boxtext", childs:[
           Text(Titel),
           createElement('br'),
-          createElement('ul', {
+          createElement('span', {
+            id:ID,
             childs:Liste
           })
         ]})
@@ -224,11 +225,20 @@ function ElemMeineUebersicht(Titel, Liste)
   );  
 }
 
-if (location.pathname.indexOf("/film_")==0)
+if (location.pathname=="/index.php" && location.search=="?load=showfsk18")
+  GM_log("FSK18");
+else if (location.pathname.indexOf("/film_")==0)
   Vote();
 else
   FilmListe();
 InfoBox();
+
+function Kuerzen(text,anz)
+{
+  //alert([text,text.length,anz,text.substr(0,anz)].join("\n"));
+  if (text.length<anz) return text;
+  return text.substr(0,anz)+"...";
+}
 
 function InfoBox()
 {
@@ -236,27 +246,44 @@ function InfoBox()
   if ($xs("//*[@id='searchBoxLT'][2]"))
   {
     /**/
-    ElemMeineUebersicht("Lange nicht angesehen (STRG+SHIFT+L)",
-      MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1) }; })
-      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); })
+    var Filme=MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1) }; })
+      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); });
+    ElemMeineUebersicht(""+Filme.length+". Lange nicht angesehen (STRG+SHIFT+L)",
+      Filme
       .slice(0,5)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, innerHTML:e.Titel, accessKey:(n==0)?'l':'' }) ] }); })
-    );
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), accessKey:(n==0)?'l':'' }) ] }); })
+    , "wUnseen");
     /**/
-    ElemMeineUebersicht("Will ich sehen (STRG+SHIFT+W)",
-      MapObj(filme,function (Key, Value) {  return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
+    var Filme=MapObj(filme,function (Key, Value) {  return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
       .filter(function (e) { return e.Val.want && !e.Val.seen; })
       .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); })
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, innerHTML:e.Titel, accessKey:(n==0)?'w':'' }) ] }); })
-    );
+    ElemMeineUebersicht(""+Filme.length+". Will ich sehen (STRG+SHIFT+W)",
+      Filme
+      .slice(0,20)
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), accessKey:(n==0)?'w':'' }) ] }); })
+    , "wWillSeen");
     /**/
-    ElemMeineUebersicht("Unvoted (STRG+SHIFT+U)",
-      MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
+    var Filme=MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
       .filter(function (e) { return !e.Val.want && !e.Val.seen && !e.Val.hide && !e.Val.blue; })
-      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); })
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, innerHTML:e.Titel, accessKey:(n==0)?'u':'' }) ] }); })
-    );
+      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); });
+    ElemMeineUebersicht(""+Filme.length+". Unvoted (STRG+SHIFT+D)",
+      Filme
+      .slice(0,30)
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",20), accessKey:(n==0)?'d':'' }) ] }); })
+    , "wUnvoted");
     /**/
+    $x("id('wUnvoted')//a").forEach(function (a) {
+      a.addEventListener("click",function(event){
+        var Link=a.href.replace(/http:\/\/[^\/]*/,"");
+        var filme=deserialize('filme',{});
+        filme[Link]["lastopen"]=new Date();
+        serialize('filme',filme);
+        //showmsg({ text: "a:"+a.href, onOK: function (data) {} });
+        //event.stopPropagation();
+        //event.preventDefault();
+      }, true);
+      
+    });
   }
 }
 
@@ -298,9 +325,10 @@ function Vote()
   
   // *** Youtube Videos ***
 
-  var Titelmin=Titel.toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss");
+  var Titelmin=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"").toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("&","und");
   var YoutubeHier=$xs("id('ContentSpalte')/div/table[3]/tbody/tr/td");
-  YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+Titelmin,"YouTube",700,500));
+  YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer" }));
+  YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",700,500));
   //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
 
   /**/
@@ -316,19 +344,22 @@ function Vote()
 function FilmListe()
 {
   var Filme=$x("id('ContentSpalte')/div/table[tbody/tr[1]/td/a]").map(function (e) {
+    var a=$xs("./tbody/tr[1]/td/a",e);
     return {
-        Elem:e,
-        Box:$xs('./tbody/tr[2]/td[2]/table/tbody/tr/td',e),
-        Titel: trim($xs("./tbody/tr[1]/td/a",e).textContent).replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,""),
-        Blue: trim($xs("./tbody/tr[1]/td/a",e).textContent).indexOf("BLU-RAY")!=-1,
-        DVD: trim($xs("./tbody/tr[1]/td/a",e).textContent).indexOf("DVD")!=-1,
-        URL:$xs('./tbody/tr[1]/td/a',e).href.replace(/http:\/\/[^\/]*/,""),
+        Elem: e,
+        Box: $xs('./tbody/tr[2]/td[2]/table/tbody/tr/td',e),
+        Titel: trim(a.textContent).replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,""),
+        Blue: a.textContent.toUpperCase().indexOf("BLU-RAY")!=-1 || a.textContent.toUpperCase().indexOf("BLU RAY")!=-1,
+        DVD: a.textContent.toUpperCase().indexOf("DVD")!=-1,
+        PS3: a.textContent.toUpperCase().indexOf("PS3")!=-1,
+        WII: a.textContent.toUpperCase().indexOf("WII")!=-1,
+        URL: a.href.replace(/http:\/\/[^\/]*/,""),
     };
   });
 
   // *** HIDE BLU-RAY ***
   Filme.forEach(function (Film) {
-    if (Film.Blue) { Film.Elem.style.display="none"; return; }
+    if (Film.Blue || Film.PS3 || Film.WII) { Film.Elem.style.display="none"; return; }
     var filme=deserialize('filme',{});
     if (!filme[Film.URL])
     {
