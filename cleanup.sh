@@ -6,3 +6,4 @@ echo config.xml commiten...
 git add config.xml ; git commit -m "config"
 #echo GIT status:
 #git status
+git gui

@@ -1,8 +1,9 @@
 // ==UserScript==
-// @name           YouTube
-// @namespace      Woems
-// @description    Youtube
-// @include        http://*youtube.com*
+// @name        videostore-bonn-beuel (vs-bn.de)
+// @namespace   Woems
+// @description Bewerten und sortieren der Filme
+// @include     http://www.videostore-bonn-beuel.de*
+// @version     1
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -197,172 +198,200 @@ function createHover(elem,text)
 //GM_log=function (){}
 /********************************/
 
-var VideoID=getParam("v","");
-//GM_log("VideoID: "+VideoID);
-if (VideoID!="") Video(VideoID);
+function ObjKeys(Obj) { var t=[]; for (i in Obj) t.push(i); return t; }
+function ObjValues(Obj) { var t=[]; for (i in Obj) t.push(Obj[i]); return t; }
+function ObjKeysAndValues(Obj,sep) { var t=[]; for (i in Obj) t.push(i+(sep||": ")+Obj[i]); return t; }
+function ForEachObj(Obj,func) { for (i in Obj) func(i, Obj[i]); }
+function MapObj(Obj,func) { var t=[]; for (i in Obj) t.push(func(i, Obj[i])); return t; }
+function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); return t.sort().join(sep||"\n"); }
 
 
-function Video(VideoID)
+function ElemMeineUebersicht(Titel, Liste, ID)
 {
-  var Video=deserialize("Video",{});
-  if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
-  Video[VideoID].anz+=1;
-  Video[VideoID].lastseen=new Date();
-  serialize("Video",Video);
-  var Kategorien=deserialize('Kategorien',[]).sort();
-  Kategorien.unshift("-- bitte auswählen --");
-  Kategorien.push("-- Eingeben --");
-  var SelectKat="<select id=wKategorie>"+
-                Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
-                "</select>"
-  showmsg({
-    id:"VideoStatus",
-    text: [uneval(Video[VideoID]),
-           "Kategorie: "+SelectKat,
-           "Bitte bewerten sie das Video:",
-           ""].join('<br>'),
-    color:(Video[VideoID].anz<=1)?"gray":{ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[getParam("v","")].qualitaet],
-    fixed:true,
-    OK: "Gut",
-    Cancel: "Schlecht",
-    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; serialize("Video",Video);  },
-    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video);  },
-  });
-  // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
-  var i=Kategorien.indexOf(Video[VideoID].Kategorie);
-  if (i>0) $('wKategorie').selectedIndex=i;
-  $('wKategorie').addEventListener("change",function(event){
-    var Video=deserialize("Video",{});
-    switch (event.target.value)
-    {
-      case "-- bitte auswählen --":
-        delete Video[VideoID].Kategorie;
-        break;
-      case "-- Eingeben --":
-        Video[VideoID].Kategorie=prompt("Bitte Name der Kategorie eingeben:");
-        var k=deserialize('Kategorien',[]);
-        k.push(Video[VideoID].Kategorie);
-        serialize('Kategorien',k);
-        break;
-      default:
-        Video[VideoID].Kategorie=event.target.value;
-        break;
-    }
-    serialize("Video",Video);
-  }, true);
-
-  // Vorschauliste bunt
-  var VideoLinks=$x("//ul[@id='watch-related']//li")
-                   .map(function (e) { return { link:e.firstChild.href, elem:e }; })
-                   .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; })
-  //GM_log(uneval(VideoLinks));
-  VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
-  
-  // Links zu gespeicherten Videos
-  if ($('watch-actions'))
-  {
-    // Selectbox
-    var Kat=deserialize('Kategorien',[]).sort();
-    Kat.unshift("* Ohne Kategorie *");
-    Kat.unshift("- Kategorie öffnen -");
-    var c=Kat.map(function (e) { return createElement('option', { textContent:e }); });
-    var m=createElement('select', { className:"yt-uix-button-default", childs:c, onChange:function (e){ 
-      var Video=deserialize("Video",{});
-      GM_setValue('lastKat',e.value);
-      var youtube=['',new Date()];
-      var anz=0;
-      for (var i in Video)
-         if ((e.value=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==e.value)
-         {
-           anz+=1;
-           if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-             youtube=[ Video[i].id, Video[i].lastseen ];
-         }
-      if (youtube[0]=='')
-      {
-        alert("Keine Videos in der Kategorie gefunden");
-        var k=deserialize('Kategorien',[]);
-        k.splice(k.indexOf(e.value),1);        
-        serialize('Kategorien',k);
-        GM_setValue('lastKat','* Ohne Kategorie *');
-        return;
-      }
-      if (confirm('Anzahl Videos in der Kategorie: '+anz+'\n\nAktuelles Video im neuen Tab öffnen?'))
-        GM_openInTab("http://www.youtube.com/watch?v="+youtube[0]);
-      else
-        location.href="http://www.youtube.com/watch?v="+youtube[0];
-    } }, $('watch-actions'));
-    // Button
-    createElement('button',{
-        className: "yt-uix-button yt-uix-button-default",
-        textContent:'Next',
-        onClick:function (e) { 
-          var Video=deserialize("Video",{});
-          var youtube=['',new Date()];
-          var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
-          for (var i in Video)
-            if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
-            {
-               if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-                 youtube=[ Video[i].id, Video[i].lastseen ];
-            }
-          if (youtube[0]=='')
-          {
-            alert("Keine Videos in der Kategorie gefunden");
-            var k=deserialize('Kategorien',[]);
-            k.splice(k.indexOf(Kat),1);        
-            serialize('Kategorien',k);
-            GM_setValue('lastKat','* Ohne Kategorie *');
-            return;
-          }
-          location.href="http://www.youtube.com/watch?v="+youtube[0];
-        }
-    }, $('watch-actions'));
-  }
-  unsafeWindow.onYouTubePlayerReady = function (playerID)
-  {
-    var player=document.getElementById("movie_player").wrappedJSObject;
-    //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
-    var intervalID=window.setInterval(function () {
-      //GM_log("interval");
-      if (player.getPlayerState()==0)
-      {
-        //GM_log("Ende");
-        showmsg({
-          id: "default_msg_{rand}",
-          text: "<p style='padding:20px'>Öffnen nächstes Video in der Kategorie '"+GM_getValue('lastKat','* Ohne Kategorie *')+"'</p>",
-          color: "red",
-          OK: "OK",
-          Cancel: "Abbrechen",
-          Timeout: 20,
-          fixed:true,
-          onCancel: function (data) {},
-          onOKTimeout: function () {
-            var Video=deserialize("Video",{});
-            var youtube=['',new Date()];
-            var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
-            for (var i in Video)
-              if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
-              {
-                 if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-                   youtube=[ Video[i].id, Video[i].lastseen ];
-              }
-            if (youtube[0]=='')
-            {
-              alert("Keine Videos in der Kategorie gefunden");
-              var k=deserialize('Kategorien',[]);
-              k.splice(k.indexOf(Kat),1);        
-              serialize('Kategorien',k);
-              GM_setValue('lastKat','* Ohne Kategorie *');
-              return;
-            }
-            location.href="http://www.youtube.com/watch?v="+youtube[0];
-          },
-        });
-        window.clearInterval(intervalID);
-      }
-    },1000);
-  }
-  //GM_log("ALL DONE");
+  insertBefore(
+    createElement('tr', {
+      childs:[
+        createElement('td', { className:"Boxtext", childs:[
+          Text(Titel),
+          createElement('br'),
+          createElement('span', {
+            id:ID,
+            childs:Liste
+          })
+        ]})
+      ]
+    }), 
+    $xs("//*[@id='searchBoxLT'][2]/tbody/tr[3]")
+  );  
 }
 
+if (location.pathname=="/index.php" && location.search=="?load=showfsk18")
+  GM_log("FSK18");
+else if (location.pathname.indexOf("/film_")==0)
+  Vote();
+else
+  FilmListe();
+InfoBox();
+
+function Kuerzen(text,anz)
+{
+  //alert([text,text.length,anz,text.substr(0,anz)].join("\n"));
+  if (text.length<anz) return text;
+  return text.substr(0,anz)+"...";
+}
+
+function InfoBox()
+{
+  var filme=deserialize('filme',{});
+  if ($xs("//*[@id='searchBoxLT'][2]"))
+  {
+    /**/
+    var Filme=MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1) }; })
+      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); });
+    ElemMeineUebersicht(""+Filme.length+". Lange nicht angesehen (STRG+SHIFT+L)",
+      Filme
+      .slice(0,5)
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), accessKey:(n==0)?'l':'' }) ] }); })
+    , "wUnseen");
+    /**/
+    var Filme=MapObj(filme,function (Key, Value) {  return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
+      .filter(function (e) { return e.Val.want && !e.Val.seen; })
+      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); })
+    ElemMeineUebersicht(""+Filme.length+". Will ich sehen (STRG+SHIFT+W)",
+      Filme
+      .slice(0,20)
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), accessKey:(n==0)?'w':'' }) ] }); })
+    , "wWillSeen");
+    /**/
+    var Filme=MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
+      .filter(function (e) { return !e.Val.want && !e.Val.seen && !e.Val.hide && !e.Val.blue; })
+      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); });
+    ElemMeineUebersicht(""+Filme.length+". Unvoted (STRG+SHIFT+D)",
+      Filme
+      .slice(0,30)
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",20), accessKey:(n==0)?'d':'' }) ] }); })
+    , "wUnvoted");
+    /**/
+    $x("id('wUnvoted')//a").forEach(function (a) {
+      a.addEventListener("click",function(event){
+        var Link=a.href.replace(/http:\/\/[^\/]*/,"");
+        var filme=deserialize('filme',{});
+        filme[Link]["lastopen"]=new Date();
+        serialize('filme',filme);
+        //showmsg({ text: "a:"+a.href, onOK: function (data) {} });
+        //event.stopPropagation();
+        //event.preventDefault();
+      }, true);
+      
+    });
+  }
+}
+
+function Vote()
+{
+  $('ContentSpalte').scrollIntoView();
+
+  var Link=location.href.toString().replace(/http:\/\/[^\/]*/,"");
+  var Titel=$xs("//tr[td/b[text()='Titelsuche am Automat:']]/td[2]").textContent;
+  createElement('div', { style:"padding-top:1em", id:"wVote" }, $xs("id('exdata')/..")); // $('wVote')
+
+  // *** Daten hinzufügen ***
+  var filme=deserialize('filme',{});
+  if (!filme[Link]) filme[Link]={ };
+  filme[Link]["lastopen"]=new Date();
+  filme[Link]["titel"]=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"");
+  serialize('filme',filme);
+
+  // *** Vote ***
+  var a=[
+     "<input type=checkbox name=want accesskey=s> Will ich <b>s</b>ehen. ",
+     "<input type=checkbox name=hide accesskey=n> Will ich <b>n</b>icht sehen.",
+     "<input type=checkbox name=seen accesskey=g> Habe ich <b>g</b>esehen.",
+     "<input type=checkbox name=blue accesskey=b> <b>B</b>luRay",
+  ];1
+
+  $("wVote").innerHTML=a.join("<br>");
+  $x("id('wVote')/input").forEach(function (e) {
+    e.checked=filme[Link][e.name];
+    if (typeof filme[Link][e.name]=="undefined") e.indeterminate=true;
+    e.addEventListener("change",function(event){ 
+      var filme=deserialize('filme',{});
+      filme[Link][event.target.name]=event.target.checked;
+      serialize('filme',filme);
+      event.stopPropagation();
+      event.preventDefault();
+    }, true);
+  });
+  
+  // *** Youtube Videos ***
+
+  var Titelmin=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"").toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("&","und");
+  var YoutubeHier=$xs("id('ContentSpalte')/div/table[3]/tbody/tr/td");
+  YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer" }));
+  YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",700,500));
+  //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
+
+  /**/
+  showmsg({
+    id:"debug",
+    //text:[Link,Titel,uneval(filme[Link]),Obj2String(filme[Link],"<br>")].join("<br>"),
+    text:Obj2String(filme[Link],"<br>")+"<br>",
+    onOK:function (data) {},
+  });
+  /**/
+}
+
+function FilmListe()
+{
+  var Filme=$x("id('ContentSpalte')/div/table[tbody/tr[1]/td/a]").map(function (e) {
+    var a=$xs("./tbody/tr[1]/td/a",e);
+    return {
+        Elem: e,
+        Box: $xs('./tbody/tr[2]/td[2]/table/tbody/tr/td',e),
+        Titel: trim(a.textContent).replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,""),
+        Blue: a.textContent.toUpperCase().indexOf("BLU-RAY")!=-1 || a.textContent.toUpperCase().indexOf("BLU RAY")!=-1,
+        DVD: a.textContent.toUpperCase().indexOf("DVD")!=-1,
+        PS3: a.textContent.toUpperCase().indexOf("PS3")!=-1,
+        WII: a.textContent.toUpperCase().indexOf("WII")!=-1,
+        URL: a.href.replace(/http:\/\/[^\/]*/,""),
+    };
+  });
+
+  // *** HIDE BLU-RAY ***
+  Filme.forEach(function (Film) {
+    if (Film.Blue || Film.PS3 || Film.WII) { Film.Elem.style.display="none"; return; }
+    var filme=deserialize('filme',{});
+    if (!filme[Film.URL])
+    {
+      filme[Film.URL]={ titel:Film.Titel, changed:new Date() }
+      serialize('filme',filme);
+    }
+    if (filme[Film.URL].hide) Film.Elem.style.opacity="0.5";
+  });
+  // *** Vote ***
+  var a=[
+     "<input type=checkbox name=want> Will ich sehen.",
+     "<input type=checkbox name=hide> Will ich nicht sehen.",
+     "<input type=checkbox name=seen> Habe ich gesehen.",
+  ];
+  var filme=deserialize('filme',{});
+  Filme.forEach(function (Film) { createElement('div', { id:"wVote", innerHTML:"Vote:<br>"+a.join("<br>") }, Film.Box); });
+  $x("//*[@id='wVote']/input").forEach(function (input) {
+    var URL=$xs('./ancestor::tbody[2]/tr[1]/td/a',input).href.replace(/http:\/\/[^\/]*/,"");
+    var titel=$xs('./ancestor::tbody[2]/tr[1]/td/a',input).textContent;
+    input.checked=(filme[URL]||{})[input.name];
+    input.addEventListener("change",function(event){
+      var URL=$xs('./ancestor::tbody[2]/tr[1]/td/a',event.target).href.replace(/http:\/\/[^\/]*/,"");
+      //alert([URL,Button].join("\n"));
+      var filme=deserialize('filme',{});
+      if (!filme[URL]) filme[URL]={};
+      filme[URL]["changed"]=new Date();
+      filme[URL]["titel"]=titel;
+      filme[URL][event.target.name]=event.target.checked;
+      //alert([uneval(filme)].join("\n"));
+      serialize('filme',filme);
+      event.stopPropagation();
+      event.preventDefault();
+    }, true);
+  });
+}

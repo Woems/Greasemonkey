@@ -163,7 +163,8 @@ $("wUebersicht").innerHTML="<a href=# id=wShowAll>Alles anzeigen</a><br>"+Aktuel
 // Filme nach Uhrzeit //
 insertBefore(createElement("div",{ id:"wUhrzeiten" }),$xs("id('contentRegionInner')//div[@class='wrapperInner']"));
 $("wUhrzeiten").innerHTML=FilmeNachZeit.filter(function (e) {
-  return e.Film.Status['cool'] && !e.Film.Status['seen'] && !e.Film.Status['del'] && (e.Tag==5 || e.Tag==e.Film.Today);
+  return e.Film.Status['cool'] && !e.Film.Status['seen'] && !e.Film.Status['del'] && (e.Tag==5);
+  //return e.Film.Status['cool'] && !e.Film.Status['seen'] && !e.Film.Status['del'] && (e.Tag==5 || e.Tag==e.Film.Today);
 }).map(function (e) {
   var Stunde=e.Zeit.substr(0,2)*1;
   return (19<=Stunde && Stunde<=20?"<b>":"")+w2t[e.Tag]+" "+e.Zeit+" ("+Math.floor(e.Film.DayDiff/7+1)+". Wo)<a href='"+e.Link+"' oldhref='#img_"+e.Film.Nr+"' target=_blank> "+e.Film.Titel+"</a>"+(19<=Stunde && Stunde<=20?"</b>":"");
