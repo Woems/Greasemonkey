@@ -199,8 +199,45 @@ function createHover(elem,text)
 
 var VideoID=getParam("v","");
 //GM_log("VideoID: "+VideoID);
-if (VideoID!="") Video(VideoID);
+try {
+if (VideoID!="") Video(VideoID); else NextVideo();
+} catch(e) { alert([e, uneval(e)].join("\n---\n")); }
 
+function NextVideo()
+{
+  //GM_log("Ende");
+  showmsg({
+    id: "default_msg_{rand}",
+    text: "<p style='padding:20px'>Öffnen nächstes Video in der Kategorie:<br><b>"+GM_getValue('lastKat','* Ohne Kategorie *')+"</b></p>",
+    color: "red",
+    OK: "OK",
+    Cancel: "Abbrechen",
+    Timeout: 20,
+    fixed:true,
+    onCancel: function (data) {},
+    onOKTimeout: function () {
+      var Video=deserialize("Video",{});
+      var youtube=['',new Date()];
+      var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
+      for (var i in Video)
+        if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
+        {
+          if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
+            youtube=[ Video[i].id, Video[i].lastseen ];
+        }
+      if (youtube[0]=='')
+      {
+        alert("Keine Videos in der Kategorie gefunden");
+        var k=deserialize('Kategorien',[]);
+        k.splice(k.indexOf(Kat),1);        
+        serialize('Kategorien',k);
+        GM_setValue('lastKat','* Ohne Kategorie *');
+        return;
+      }
+      location.href="http://www.youtube.com/watch?v="+youtube[0];
+    },
+  });
+}
 
 function Video(VideoID)
 {
@@ -328,37 +365,7 @@ function Video(VideoID)
       if (player.getPlayerState()==0)
       {
         //GM_log("Ende");
-        showmsg({
-          id: "default_msg_{rand}",
-          text: "<p style='padding:20px'>Öffnen nächstes Video in der Kategorie '"+GM_getValue('lastKat','* Ohne Kategorie *')+"'</p>",
-          color: "red",
-          OK: "OK",
-          Cancel: "Abbrechen",
-          Timeout: 20,
-          fixed:true,
-          onCancel: function (data) {},
-          onOKTimeout: function () {
-            var Video=deserialize("Video",{});
-            var youtube=['',new Date()];
-            var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
-            for (var i in Video)
-              if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
-              {
-                 if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-                   youtube=[ Video[i].id, Video[i].lastseen ];
-              }
-            if (youtube[0]=='')
-            {
-              alert("Keine Videos in der Kategorie gefunden");
-              var k=deserialize('Kategorien',[]);
-              k.splice(k.indexOf(Kat),1);        
-              serialize('Kategorien',k);
-              GM_setValue('lastKat','* Ohne Kategorie *');
-              return;
-            }
-            location.href="http://www.youtube.com/watch?v="+youtube[0];
-          },
-        });
+        NextVideo();
         window.clearInterval(intervalID);
       }
     },1000);
