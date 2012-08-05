@@ -348,6 +348,16 @@ function Vote()
   YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",700,500));
   //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
 
+  // *** Video Auto Play ***
+  var YouTubeIFrame=$xs("id('ContentSpalte')//iframe[contains(@src,'youtube')]");
+  Timeout(function () { YouTubeIFrame.scrollIntoView(false); }, 2000);
+  YouTubeIFrame.height=Math.floor(YouTubeIFrame.height*1.5);
+  YouTubeIFrame.width=Math.floor(YouTubeIFrame.width*1.5);
+  if (YouTubeIFrame.src.indexOf("?")==-1)
+    YouTubeIFrame.src=YouTubeIFrame.src+"?autoplay=1";
+  else
+    YouTubeIFrame.src=YouTubeIFrame.src+"&autoplay=1";
+
   /**/
   showmsg({
     id:"debug",
