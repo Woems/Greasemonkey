@@ -199,6 +199,7 @@ function createHover(elem,text)
 
 var VideoID=getParam("v","");
 //GM_log("VideoID: "+VideoID);
+if (location.href.indexOf("embed")==-1)
 try {
 if (VideoID!="") Video(VideoID); else NextVideo();
 } catch(e) { alert([e, uneval(e)].join("\n---\n")); }
