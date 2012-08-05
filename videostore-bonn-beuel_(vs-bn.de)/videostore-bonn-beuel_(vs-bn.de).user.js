@@ -225,6 +225,23 @@ function ElemMeineUebersicht(Titel, Liste, ID)
   );  
 }
 
+if ($("UserLogin") && $("UserPass"))
+{
+  var Login=deserialize('Login',{});
+  if (!Login.User) Login.User=prompt("Username:");
+  if (!Login.Passwd) Login.Passwd=prompt("Passwort:");
+  $("UserLogin").value=Login.User;
+  $("UserPass").value=Login.Passwd;
+  if (!Login.Last || Now()-Login.Last > 20)
+  {
+    Login.Last=Now();
+    serialize('Login',Login);
+    $xs("//input[@name='btnLogin']").click();
+  }
+  serialize('Login',Login);
+}
+  
+
 if (location.pathname=="/index.php" && location.search=="?load=showfsk18")
   GM_log("FSK18");
 else if (location.pathname.indexOf("/film_")==0)
@@ -327,7 +344,7 @@ function Vote()
 
   var Titelmin=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"").toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("&","und");
   var YoutubeHier=$xs("id('ContentSpalte')/div/table[3]/tbody/tr/td");
-  YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer" }));
+  YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer<br><a href='http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer")+"' target=_new>YouTube</a>", id:"wYouTubeText" }));
   YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",700,500));
   //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
 
