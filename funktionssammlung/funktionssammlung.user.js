@@ -137,6 +137,13 @@ function arrayRand(array) { if (!array || array.length==0) GM_log("ArrayGetRand 
 Array.prototype.trim = function () { return this.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
 Array.prototype.clean = function () { return this.filter(function (e) { return e!=""; }); };
 Array.prototype.uniq = function (array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
+// ** Objekte **
+function ObjKeys(Obj) { var t=[]; for (i in Obj) t.push(i); return t; }
+function ObjValues(Obj) { var t=[]; for (i in Obj) t.push(Obj[i]); return t; }
+function ObjKeysAndValues(Obj,sep) { var t=[]; for (i in Obj) t.push(i+(sep||": ")+Obj[i]); return t; }
+function ForEachObj(Obj,func) { for (i in Obj) func(i, Obj[i]); }
+function MapObj(Obj,func) { var t=[]; for (i in Obj) t.push(func(i, Obj[i])); return t; }
+function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); return t.sort().join(sep||"\n"); }
 // ** Parameter **
 function urlParse(url) { var a = urlParse.a = urlParse.a || document.createElement('a'); a.href = url; return { scheme: /^[^:]+/.exec(a.protocol)[0], host: a.host, hostname: a.hostname, pathname: a.pathname, search: a.search, hash: a.hash }; } //alert(mdump(urlParse(location.href)));
 function aa(obj) { alert(uneval(obj)); }
@@ -147,6 +154,7 @@ function getHost() { return location.host; } // hash, host, hostname, href, path
 function div(text) { return '<div>'+text+'</div>'; }
 function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
 // ** REST **
+function inFrame() { return self!=top; }
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
