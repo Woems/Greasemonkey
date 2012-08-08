@@ -77,7 +77,7 @@ function on(type, elm, func) {
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
 function onKey(func) { on('keydown',window,function (e) { 
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
-  var Code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
+  var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
@@ -357,6 +357,19 @@ function Vote()
     YouTubeIFrame.src=YouTubeIFrame.src+"?autoplay=1";
   else
     YouTubeIFrame.src=YouTubeIFrame.src+"&autoplay=1";
+
+  onKey(function (key, code, e) {
+    if ("SNGB".indexOf(key)!=-1)
+    {
+      $xs("//*[@accesskey='"+key.toLowerCase()+"']").checked =! $xs("//*[@accesskey='"+key.toLowerCase()+"']").checked;
+      return true;
+    }
+    if ("DWL".indexOf(key)!=-1)
+    {
+      $xs("//*[@accesskey='"+key.toLowerCase()+"']").click();
+      return true;
+    }
+  });
 
   /**/
   showmsg({
