@@ -243,7 +243,7 @@ function schlecht(ID) { setData(ID,"gut",false); }
 function thread()
 {
   var Content=$xs("//td[@style='background-image: url(http://www.bimmelbahn.de/hg2.gif);']/table[@align='center']");
-  var ID=location.href.replace(/^.*threadid=([0-9]*)&sid=([a-z0-9]*).*$/,"$1");
+  var ID=location.href.replace(/^.*threadid=([0-9]*).*sid=([a-z0-9]*).*$/,"$1");
   var data=deserialize("data",{});
   gelesen(ID);
   

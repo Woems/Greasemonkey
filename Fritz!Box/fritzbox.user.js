@@ -69,6 +69,7 @@ switch (location.pathname)
   case '/net/network_settings.lua': break; // Heimnetz/Netzwerk/Netzwerkeinstellungen
   case '/usb/show_usb_devices.lua': break; // Heimnetz/USB-Geräte
   default:
+    /*/
     var path=deserialize("path",{});
     if (!path[location.pathname])
       path[location.pathname]=prompt("Beschreibung zu "+location.pathname,path[location.pathname]);
@@ -77,6 +78,7 @@ switch (location.pathname)
     for (i in path)
       output+="  case '"+i+"': break; // "+path[i]+"<br>";
     createElement("pre",{ innerHTML:""+output+"" },$("page_content_menu_box"));
+    /**/
     break;
 }
 

@@ -77,7 +77,7 @@ function on(type, elm, func) {
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
 function onKey(func) { on('keydown',window,function (e) { 
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
-  var Code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
+  var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
@@ -225,6 +225,23 @@ function ElemMeineUebersicht(Titel, Liste, ID)
   );  
 }
 
+if ($("UserLogin") && $("UserPass"))
+{
+  var Login=deserialize('Login',{});
+  if (!Login.User) Login.User=prompt("Username:");
+  if (!Login.Passwd) Login.Passwd=prompt("Passwort:");
+  $("UserLogin").value=Login.User;
+  $("UserPass").value=Login.Passwd;
+  if (!Login.Last || Now()-Login.Last > 20)
+  {
+    Login.Last=Now();
+    serialize('Login',Login);
+    $xs("//input[@name='btnLogin']").click();
+  }
+  serialize('Login',Login);
+}
+  
+
 if (location.pathname=="/index.php" && location.search=="?load=showfsk18")
   GM_log("FSK18");
 else if (location.pathname.indexOf("/film_")==0)
@@ -327,9 +344,34 @@ function Vote()
 
   var Titelmin=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"").toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("&","und");
   var YoutubeHier=$xs("id('ContentSpalte')/div/table[3]/tbody/tr/td");
-  YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer" }));
+  YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer<br><a href='http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer")+"' target=_new>YouTube</a>", id:"wYouTubeText" }));
   YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",700,500));
   //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
+
+  // *** Video Auto Play ***
+  var YouTubeIFrame=$xs("id('ContentSpalte')//iframe[contains(@src,'youtube')]");
+  Timeout(function () { YouTubeIFrame.scrollIntoView(false); }, 2000);
+  YouTubeIFrame.height=Math.floor(YouTubeIFrame.height*1.5);
+  YouTubeIFrame.width=Math.floor(YouTubeIFrame.width*1.5);
+  if (YouTubeIFrame.src.indexOf("?")==-1)
+    YouTubeIFrame.src=YouTubeIFrame.src+"?autoplay=1";
+  else
+    YouTubeIFrame.src=YouTubeIFrame.src+"&autoplay=1";
+
+  onKey(function (key, code, e) {
+    if ("SNGB".indexOf(key)!=-1)
+    {
+      GM_log(["//input[@accesskey='"+key.toLowerCase()+"']", $xs("//input[@accesskey='"+key.toLowerCase()+"']"), $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked].join("\n"));
+      $xs("//input[@accesskey='"+key.toLowerCase()+"']").indeterminate=false;
+      $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked =! $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked;
+      return true;
+    }
+    if ("DWL".indexOf(key)!=-1)
+    {
+      $xs("//a[@accesskey='"+key.toLowerCase()+"']").click();
+      return true;
+    }
+  });
 
   /**/
   showmsg({

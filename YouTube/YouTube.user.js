@@ -200,6 +200,7 @@ function createHover(elem,text)
 var Kategorie=location.pathname.split("/")[1];
 var VideoID=getParam("v","");
 //GM_log("VideoID: "+VideoID);
+if (location.href.indexOf("embed")==-1)
 try {
 if (VideoID!="")
   Video(VideoID);
