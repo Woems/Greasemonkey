@@ -197,11 +197,29 @@ function createHover(elem,text)
 //GM_log=function (){}
 /********************************/
 
+var Kategorie=location.pathname.split("/")[1];
 var VideoID=getParam("v","");
 //GM_log("VideoID: "+VideoID);
 try {
-if (VideoID!="") Video(VideoID); else NextVideo();
+if (VideoID!="")
+  Video(VideoID);
+else if (Kategorie=="user")
+  Interval(UserGallerie,10000);
+else
+  NextVideo();
 } catch(e) { alert([e, uneval(e)].join("\n---\n")); }
+
+function UserGallerie()
+{
+  var Video=deserialize("Video",{});
+  // Vorschauliste bunt
+  var VideoLinks=$x("//a[contains(@href,'watch?v=')]")
+                   .map(function (a) { return { link:a.href, elem:a.parentNode }; })
+                   .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; });
+  //GM_log(uneval(VideoLinks));
+  VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
+  //showmsg({ text:"aaa" });
+}
 
 function NextVideo()
 {
