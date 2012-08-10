@@ -441,4 +441,7 @@
     <Include>http://*youtube.com*</Include>
     <Include>https://*youtube.com*</Include>
   </Script>
+  <Script basedir="schmalspur-modell.at" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Beitr&#xE4;ge markieren (gelesen, gut, schlecht)" enabled="true" filename="schmalspur-modell.at.user.js" name="schmalspur-modell.at" namespace="Woems" runAt="document-end" updateAvailable="false" version="1">
+    <Include>http://www.schmalspur-modell.at*</Include>
+  </Script>
 </UserScriptConfig>
