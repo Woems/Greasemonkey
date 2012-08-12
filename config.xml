@@ -433,8 +433,15 @@
   <Script basedir="videostore-bonn-beuel_(vs-bn.de)" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Bewerten und sortieren der Filme" enabled="true" filename="videostore-bonn-beuel_(vs-bn.de).user.js" name="videostore-bonn-beuel (vs-bn.de)" namespace="Woems" runAt="document-end" updateAvailable="false" version="1">
     <Include>http://www.videostore-bonn-beuel.de*</Include>
   </Script>
+  <Script basedir="commandlinefu" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zugriff auf die commandlinefu API" enabled="true" filename="commandlinefu.user.js" name="commandlinefu" namespace="Woems" runAt="document-end" updateAvailable="false" version="1">
+    <Include>http://www.commandlinefu.com*</Include>
+    <Include>*</Include>
+  </Script>
   <Script basedir="Youtube_Thumbs_Preview_on_hover" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="mouseover to animate thumbs" enabled="true" filename="108740.user.js" name="Youtube Thumbs Preview on hover" namespace="vfede" runAt="document-end" updateAvailable="false" version="1.1" installurl="https://userscripts.org/scripts/source/108740.user.js" updateurl="https://userscripts.org/scripts/source/108740.meta.js">
     <Include>http://*youtube.com*</Include>
     <Include>https://*youtube.com*</Include>
+  </Script>
+  <Script basedir="schmalspur-modell.at" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Beitr&#xE4;ge markieren (gelesen, gut, schlecht)" enabled="true" filename="schmalspur-modell.at.user.js" name="schmalspur-modell.at" namespace="Woems" runAt="document-end" updateAvailable="false" version="1">
+    <Include>http://www.schmalspur-modell.at*</Include>
   </Script>
 </UserScriptConfig>

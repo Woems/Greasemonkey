@@ -57,19 +57,39 @@ function aa(obj) { alert(uneval(obj)); }
 function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return (key)?r[key]:r; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
+function showmsg(data)
+{
+  if (!data.id) data.id="default_msg_{rand}";
+  data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
+  if ($(data.id)) remove($(data.id));
+  if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
+  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; color:"+(data.textcolor||"black")+"; text-align:center; z-index:9999;";
+  if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
+  if (data.top) style+=" position: absolute; top:0px; width: 100%;";
+  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+  if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
+  if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
+  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
+  return data;
+} // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
+// $xs('id("default_msg")/input[@value="OK"]').setAttribute("accesskey","o");
+// $xs('id("default_msg")/input[@value="Cancel"]').setAttribute("accesskey","c");
+// $('default_msg_ok').setAttribute("accesskey","o");
+// $('default_msg_cancel').setAttribute("accesskey","c");
 //GM_log=function (){}
+//GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
 globaleTasten();
 
 function globaleTasten () {
-  Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
+  Key('STRG+y',function (e) { // Taste zum aktivieren
     var webseiten=deserialize('webseiten',[]);
     webseiten.push({ url: location.href, host: location.host, titel:document.title });
     alert("'"+document.title+"'\nzur Wiedervorlage hinzugefügt...\nSTRG+ALT+x zum abrufen der "+webseiten.length+" Seiten.");
     serialize('webseiten',webseiten);
   });
-  Key('STRG+ALT+x',function (e) { // Taste zum aktivieren
+  Key('STRG+x',function (e) { // Taste zum aktivieren
     var webseiten=deserialize('webseiten',[]);
     if (webseiten.length==0) alert("Keine Seiten mehr gespeichert");
     var w=webseiten.pop();
@@ -78,7 +98,7 @@ function globaleTasten () {
   });
   $x("//a[@href]").forEach(function (a) { a.addEventListener("mousedown",function(event){
     var e=event.target;
-    GM_log("Target: "+e+"\nEvent: "+event+"\nCTRL: "+event.ctrlKey+"\nALT: "+event.altKey);
+    //GM_log("Target: "+e+"\nEvent: "+event+"\nCTRL: "+event.ctrlKey+"\nALT: "+event.altKey);
     if (event.ctrlKey && event.altKey)
     {
       var webseiten=deserialize('webseiten',[]);

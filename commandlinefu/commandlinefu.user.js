@@ -249,10 +249,10 @@ function showPopups(data)
 var cache=deserialize('cache',[]);
 if (cache && cache[0] && new Date().getTime()-cache[0].getTime() < 60*60*1000) // nur 1 mal die Stunde abfragen
 {
-  showmsg({ text: "Benutze cached Commandlinefu...", Timeout:2, onTimeout: function (data) {}, });
+  //showmsg({ text: "Benutze cached Commandlinefu...", Timeout:2, onTimeout: function (data) {}, });
   showPopups(cache[1]);
 } else {
-  showmsg({ text: "Rufe Commandlinefu ab...", color:"green", Timeout:2, onTimeout: function (data) {}, });
+  //showmsg({ text: "Rufe Commandlinefu ab...", color:"green", Timeout:2, onTimeout: function (data) {}, });
   get("http://www.commandlinefu.com/commands/browse/sort-by-votes/json", function (url, text, header, xhr) {
   //get("http://www.commandlinefu.com/commands/browse/last-week/json", function (url, text, header, xhr) {
     var data=eval(text);

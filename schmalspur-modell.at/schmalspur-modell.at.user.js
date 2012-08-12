@@ -1,8 +1,9 @@
 // ==UserScript==
-// @name           YouTube
-// @namespace      Woems
-// @description    Youtube
-// @include        http://*youtube.com*
+// @name        schmalspur-modell.at
+// @namespace   Woems
+// @description Beiträge markieren (gelesen, gut, schlecht)
+// @include     http://www.schmalspur-modell.at*
+// @version     1
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -37,7 +38,7 @@ function createElement(type, attributes, append){
     if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
     if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
     if (attr=="append") node.appendChild(attributes[attr]); else
-    if (attr=="childs") { for (var child in attributes[attr]) if (attributes[attr].hasOwnProperty(child)) node.appendChild(attributes[attr][child]); } else
+    if (attr=="childs") { for (var child in attributes[attr]) node.appendChild(attributes[attr][child]); } else
     try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
   if (append) append.appendChild(node);
   return node;
@@ -195,200 +196,74 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
+alert=function (txt) { showmsg({ text:txt, color:"red", onOK:function (){} }); }
 /********************************/
 
-var Kategorie=location.pathname.split("/")[1];
-var VideoID=getParam("v","");
-//GM_log("VideoID: "+VideoID);
-if (location.href.indexOf("embed")==-1)
-try {
-if (VideoID!="")
-  Video(VideoID);
-else if (Kategorie=="user")
-  Interval(UserGallerie,10000);
-else
-  NextVideo();
-} catch(e) { alert([e, uneval(e)].join("\n---\n")); }
-
-function UserGallerie()
+switch (location.pathname)
 {
-  var Video=deserialize("Video",{});
-  // Vorschauliste bunt
-  var VideoLinks=$x("//a[contains(@href,'watch?v=')]")
-                   .map(function (a) { return { link:a.href, elem:a.parentNode }; })
-                   .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; });
-  //GM_log(uneval(VideoLinks));
-  VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
-  //showmsg({ text:"aaa" });
+  case "/index.php":
+    board();
+    break;
+  case "/viewtopic.php":
+    thread();
+    break;
+  default:
+    alert("Schmalspurforum Script: Path "+location.pathname+" unbekannt.");
+    break;
 }
 
-function NextVideo()
+function setData(ID,attr,val)
 {
-  //GM_log("Ende");
-  showmsg({
-    id: "default_msg_{rand}",
-    text: "<p style='padding:20px'>Öffnen nächstes Video in der Kategorie:<br><b>"+GM_getValue('lastKat','* Ohne Kategorie *')+"</b></p>",
-    color: "red",
-    OK: "OK",
-    Cancel: "Abbrechen",
-    Timeout: 20,
-    fixed:true,
-    onCancel: function (data) {},
-    onOKTimeout: function () {
-      var Video=deserialize("Video",{});
-      var youtube=['',new Date()];
-      var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
-      for (var i in Video)
-        if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
-        {
-          if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-            youtube=[ Video[i].id, Video[i].lastseen ];
-        }
-      if (youtube[0]=='')
-      {
-        alert("Keine Videos in der Kategorie gefunden");
-        var k=deserialize('Kategorien',[]);
-        k.splice(k.indexOf(Kat),1);        
-        serialize('Kategorien',k);
-        GM_setValue('lastKat','* Ohne Kategorie *');
-        return;
-      }
-      location.href="http://www.youtube.com/watch?v="+youtube[0];
-    },
-  });
+  var data=deserialize("data",{});
+  if (!data[ID]) data[ID]={};
+  data[ID][attr]=val;
+  serialize("data",data);  
 }
-
-function Video(VideoID)
+function getData(ID,attr, def)
 {
-  var Video=deserialize("Video",{});
-  if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
-  Video[VideoID].anz+=1;
-  Video[VideoID].lastseen=new Date();
-  serialize("Video",Video);
-  var Kategorien=deserialize('Kategorien',[]).sort();
-  Kategorien.unshift("-- bitte auswählen --");
-  Kategorien.push("-- Eingeben --");
-  var SelectKat="<select id=wKategorie>"+
-                Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
-                "</select>"
-  showmsg({
-    id:"VideoStatus",
-    text: [uneval(Video[VideoID]),
-           "Kategorie: "+SelectKat,
-           "Bitte bewerten sie das Video:",
-           ""].join('<br>'),
-    color:(Video[VideoID].anz<=1)?"gray":{ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[getParam("v","")].qualitaet],
-    fixed:true,
-    OK: "Gut",
-    Cancel: "Schlecht",
-    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; serialize("Video",Video);  },
-    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video);  },
-  });
-  // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
-  var i=Kategorien.indexOf(Video[VideoID].Kategorie);
-  if (i>0) $('wKategorie').selectedIndex=i;
-  $('wKategorie').addEventListener("change",function(event){
-    var Video=deserialize("Video",{});
-    switch (event.target.value)
+  var data=deserialize("data",{});
+  if (!data[ID]) return def;
+  return data[ID][attr]||def;
+}
+function gelesen(ID) { setData(ID,"gelesen",new Date()); }
+function gelesenbis(ID, zeile) { if (getData(ID,"gelesenbis",0)<zeile) setData(ID,"gelesenbis",zeile); }
+function gut(ID) { setData(ID,"gut",true); }
+function schlecht(ID) { setData(ID,"gut",false); }
+
+
+function board()
+{
+  var Zeilen=$x("//form/table[@class='forumline']/tbody/tr[td[2]]");
+  Zeilen.forEach(function (row) {
+    var Link=$xs(".//a",row.cells[2]).href;
+    var ID=Link.replace(/^.*t=([0-9]*).*$/,"$1");
+    var data=deserialize("data",{});
+    if (data[ID])
     {
-      case "-- bitte auswählen --":
-        delete Video[VideoID].Kategorie;
-        break;
-      case "-- Eingeben --":
-        Video[VideoID].Kategorie=prompt("Bitte Name der Kategorie eingeben:");
-        var k=deserialize('Kategorien',[]);
-        k.push(Video[VideoID].Kategorie);
-        serialize('Kategorien',k);
-        break;
-      default:
-        Video[VideoID].Kategorie=event.target.value;
-        break;
+      //alert([Link, ID, uneval(data), data[ID].gut, data[ID].gut!=undefined, data[ID].gelesen].join("<br>"));
+      if (data[ID].gut!=undefined) row.cells[2].style.backgroundColor=data[ID].gut?"lightgreen":"#FAA"; else row.cells[2].style.backgroundColor="darkgray";
+      if (data[ID].gelesenbis) row.cells[4].firstChild.innerHTML=data[ID].gelesenbis+" / "+row.cells[4].firstChild.innerHTML.replace(/[^0-9]/g,"");
+      row.cells[2].appendChild(createElement("div",{ style:"font-size:xx-small", innerHTML:"Gelesen:&nbsp;"+data[ID].gelesen }));
     }
-    serialize("Video",Video);
-  }, true);
-
-  // Vorschauliste bunt
-  var VideoLinks=$x("//ul[@id='watch-related']//li")
-                   .map(function (e) { return { link:e.firstChild.href, elem:e }; })
-                   .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; })
-  //GM_log(uneval(VideoLinks));
-  VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
-  
-  // Links zu gespeicherten Videos
-  if ($('watch-actions'))
-  {
-    // Selectbox
-    var Kat=deserialize('Kategorien',[]).sort();
-    Kat.unshift("* Ohne Kategorie *");
-    Kat.unshift("- Kategorie öffnen -");
-    var c=Kat.map(function (e) { return createElement('option', { textContent:e }); });
-    var m=createElement('select', { className:"yt-uix-button-default", childs:c, onChange:function (e){ 
-      var Video=deserialize("Video",{});
-      GM_setValue('lastKat',e.value);
-      var youtube=['',new Date()];
-      var anz=0;
-      for (var i in Video)
-         if ((e.value=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==e.value)
-         {
-           anz+=1;
-           if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-             youtube=[ Video[i].id, Video[i].lastseen ];
-         }
-      if (youtube[0]=='')
-      {
-        alert("Keine Videos in der Kategorie gefunden");
-        var k=deserialize('Kategorien',[]);
-        k.splice(k.indexOf(e.value),1);        
-        serialize('Kategorien',k);
-        GM_setValue('lastKat','* Ohne Kategorie *');
-        return;
-      }
-      if (confirm('Anzahl Videos in der Kategorie: '+anz+'\n\nAktuelles Video im neuen Tab öffnen?'))
-        GM_openInTab("http://www.youtube.com/watch?v="+youtube[0]);
-      else
-        location.href="http://www.youtube.com/watch?v="+youtube[0];
-    } }, $('watch-actions'));
-    // Button
-    createElement('button',{
-        className: "yt-uix-button yt-uix-button-default",
-        textContent:'Next',
-        onClick:function (e) { 
-          var Video=deserialize("Video",{});
-          var youtube=['',new Date()];
-          var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
-          for (var i in Video)
-            if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
-            {
-               if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-                 youtube=[ Video[i].id, Video[i].lastseen ];
-            }
-          if (youtube[0]=='')
-          {
-            alert("Keine Videos in der Kategorie gefunden");
-            var k=deserialize('Kategorien',[]);
-            k.splice(k.indexOf(Kat),1);        
-            serialize('Kategorien',k);
-            GM_setValue('lastKat','* Ohne Kategorie *');
-            return;
-          }
-          location.href="http://www.youtube.com/watch?v="+youtube[0];
-        }
-    }, $('watch-actions'));
-  }
-  unsafeWindow.onYouTubePlayerReady = function (playerID)
-  {
-    var player=document.getElementById("movie_player").wrappedJSObject;
-    //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
-    var intervalID=window.setInterval(function () {
-      //GM_log("interval");
-      if (player.getPlayerState()==0)
-      {
-        //GM_log("Ende");
-        NextVideo();
-        window.clearInterval(intervalID);
-      }
-    },1000);
-  }
-  //GM_log("ALL DONE");
+    //row.appendChild(createElement("td",{ style:"font-size:xx-small", innerHTML:(!data[ID])?"-":"Gelesen:&nbsp;"+!!data[ID].gelesen }));
+  });
 }
-
+function thread()
+{
+  var ID=getParam("t");
+  var data=deserialize("data",{});
+  var Eintraege=$x("//form/table[@class='forumline']/tbody/tr[td/span[@class='postdetails']]");
+  gelesen(ID);
+  gelesenbis(ID, getParam("start", 0)*1+Eintraege.length-1);
+  //alert(uneval(deserialize("data",{})));
+  showmsg({
+    id:"quali",
+    text:"Gut?",
+    fixed:true,
+    color:(!data[ID] || data[ID].gut==undefined)?"lightgray":(data[ID].gut)?"green":"red",
+    OK:"Ja",
+    Cancel:"Nein",
+    onOK:function () { gut(ID); },
+    onCancel:function () { schlecht(ID); },
+  });
+}
