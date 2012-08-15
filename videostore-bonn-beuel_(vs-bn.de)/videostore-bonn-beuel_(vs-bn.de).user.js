@@ -361,9 +361,11 @@ function Vote()
   onKey(function (key, code, e) {
     if ("SNGB".indexOf(key)!=-1)
     {
-      GM_log(["//input[@accesskey='"+key.toLowerCase()+"']", $xs("//input[@accesskey='"+key.toLowerCase()+"']"), $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked].join("\n"));
-      $xs("//input[@accesskey='"+key.toLowerCase()+"']").indeterminate=false;
-      $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked =! $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked;
+      //GM_log(["//input[@accesskey='"+key.toLowerCase()+"']", $xs("//input[@accesskey='"+key.toLowerCase()+"']"), $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked].join("\n"));
+      //$xs("//input[@accesskey='"+key.toLowerCase()+"']").indeterminate=false;
+      //$xs("//input[@accesskey='"+key.toLowerCase()+"']").checked =! $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked;
+      $xs("//input[@accesskey='"+key.toLowerCase()+"']").scrollIntoView();
+      $xs("//input[@accesskey='"+key.toLowerCase()+"']").click();
       return true;
     }
     if ("DWL".indexOf(key)!=-1)
