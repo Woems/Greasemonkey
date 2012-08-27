@@ -268,7 +268,7 @@ function InfoBox()
     ElemMeineUebersicht(""+Filme.length+". Lange nicht angesehen (STRG+SHIFT+L)",
       Filme
       .slice(0,5)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), accessKey:(n==0)?'l':'' }) ] }); })
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), style:"color:blue;", accessKey:(n==0)?'l':'' }) ] }); })
     , "wUnseen");
     /**/
     var Filme=MapObj(filme,function (Key, Value) {  return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
@@ -277,7 +277,7 @@ function InfoBox()
     ElemMeineUebersicht(""+Filme.length+". Will ich sehen (STRG+SHIFT+W)",
       Filme
       .slice(0,20)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), accessKey:(n==0)?'w':'' }) ] }); })
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), style:"color:green;", accessKey:(n==0)?'w':'' }) ] }); })
     , "wWillSeen");
     /**/
     var Filme=MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
@@ -286,7 +286,7 @@ function InfoBox()
     ElemMeineUebersicht(""+Filme.length+". Unvoted (STRG+SHIFT+D)",
       Filme
       .slice(0,30)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",20), accessKey:(n==0)?'d':'' }) ] }); })
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",20), style:"color:red;", accessKey:(n==0)?'d':'' }) ] }); })
     , "wUnvoted");
     /**/
     $x("id('wUnvoted')//a").forEach(function (a) {
