@@ -75,9 +75,9 @@ function on(type, elm, func) {
   else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
-function onKey(func) { on('keydown',window,function (e) { 
+function onKey(func) { on('keydown',window,function (e) {
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
-  var Code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
+  var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
@@ -204,8 +204,7 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
-alert
-=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:false, Timeout:30, onTimeout: function (data) {}, }); };
+//alert=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:false, Timeout:30, onTimeout: function (data) {}, }); };
 /********************************/
 
 
@@ -284,5 +283,17 @@ function thread() {
     Cancel:"Nein",
     onOK:function () { gut(ID); },
     onCancel:function () { schlecht(ID); },
+  });
+  onKey(function (key, code, e) {
+    switch(code.KEY)
+    {
+      // Backspace
+      case 8: location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
+      // Cursor Left
+      case 37: try { location.href=$xs('//b/font/preceding-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      // Cursor Right
+      case 39: try { location.href=$xs('//b/font/following-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      //default: alert([key, uneval(code), e].join("\n")); break;
+    }
   });
 } // End: function thread()
