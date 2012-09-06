@@ -760,10 +760,14 @@
     <Include>http://fritz.box*</Include>
   </Script>
   <Script basedir="kgforum" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen" enabled="true" filename="kgforum.user.js" name="kgforum" namespace="Woems" runAt="document-end" updateAvailable="false" uuid="6315fbf9-9c35-4f75-8259-ed0d2e368a58" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
     <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
     <Grant>GM_setValue</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
     <Include>http://www.kgforum.org*</Include>
   </Script>
   <Script basedir="ogame_fast_login" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="with this script the login form will show up after ogame loaded. this will let your browser fill the login data (if login data is saved)." enabled="true" filename="ogame_fast_login.user.js" name="ogame fast login" namespace="ogamefl" runAt="document-end" updateAvailable="false" uuid="f087ef6e-2814-449a-aa8b-ac8f98e13d6c" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js">
@@ -868,7 +872,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.schmalspur-modell.at*</Include>
   </Script>
-  <Script basedir="H0_Modelbahnforum" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserung von http://www.nexusboard.net/forumdisplay.php?siteid=2408&amp;forumid=54887" enabled="true" filename="H0_Modelbahnforum.user.js" name="H0 Modelbahnforum" namespace="Woems" runAt="document-end" updateAvailable="" uuid="2f008ab9-002d-4e88-8041-bc9e43acd114" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/H0_Modelbahnforum/H0_Modelbahnforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/H0_Modelbahnforum/H0_Modelbahnforum.user.js">
+  <Script basedir="H0_Modelbahnforum" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserung von http://www.nexusboard.net/forumdisplay.php?siteid=2408&amp;forumid=54887" enabled="true" filename="H0_Modelbahnforum.user.js" name="H0 Modelbahnforum" namespace="Woems" runAt="document-end" updateAvailable="false" uuid="2f008ab9-002d-4e88-8041-bc9e43acd114" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/H0_Modelbahnforum/H0_Modelbahnforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/H0_Modelbahnforum/H0_Modelbahnforum.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
