@@ -1,8 +1,9 @@
 // ==UserScript==
-// @name           YouTube
-// @namespace      Woems
-// @description    Youtube
-// @include        http://*youtube.com*
+// @name        Kinkywear
+// @namespace   Woems
+// @description Bugfixes + Verbesserungen
+// @include     http://www.kinkywear.de*
+// @version     1
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -136,6 +137,13 @@ function arrayRand(array) { if (!array || array.length==0) GM_log("ArrayGetRand 
 Array.prototype.trim = function () { return this.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
 Array.prototype.clean = function () { return this.filter(function (e) { return e!=""; }); };
 Array.prototype.uniq = function (array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
+// ** Objekte **
+function ObjKeys(Obj) { var t=[]; for (i in Obj) t.push(i); return t; }
+function ObjValues(Obj) { var t=[]; for (i in Obj) t.push(Obj[i]); return t; }
+function ObjKeysAndValues(Obj,sep) { var t=[]; for (i in Obj) t.push(i+(sep||": ")+Obj[i]); return t; }
+function ForEachObj(Obj,func) { for (i in Obj) func(i, Obj[i]); }
+function MapObj(Obj,func) { var t=[]; for (i in Obj) t.push(func(i, Obj[i])); return t; }
+function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); return t.sort().join(sep||"\n"); }
 // ** Parameter **
 function urlParse(url) { var a = urlParse.a = urlParse.a || document.createElement('a'); a.href = url; return { scheme: /^[^:]+/.exec(a.protocol)[0], host: a.host, hostname: a.hostname, pathname: a.pathname, search: a.search, hash: a.hash }; } //alert(mdump(urlParse(location.href)));
 function aa(obj) { alert(uneval(obj)); }
@@ -146,6 +154,7 @@ function getHost() { return location.host; } // hash, host, hostname, href, path
 function div(text) { return '<div>'+text+'</div>'; }
 function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
 // ** REST **
+function inFrame() { return self!=top; }
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
@@ -195,207 +204,39 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
+//GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
+$xs("//div[@class='maincontainer_non']").style.width="700px";
+$xs("//div[@class='links']").style.float="left";
+$xs("//div[@class='links']").style.width="250px";
+$xs("//div[@class='main_content']").style.float="left";
+$xs("//div[@class='main_content']").style.width="200px";
 
-if (FrameBuster())
-{
-  var Kategorie=location.pathname.split("/")[1];
-  var VideoID=getParam("v","");
-  //GM_log("VideoID: "+VideoID);
-  if (location.href.indexOf("embed")==-1)
-  //try {
-  if (VideoID!="")
-    Video(VideoID);
-  else if (Kategorie=="user")
-    Interval(UserGallerie,10000);
-  else
-    NextVideo();
-  //} catch(e) { alert([e, uneval(e)].join("\n---\n")); }
-}
-
-function UserGallerie()
-{
-  var Video=deserialize("Video",{});
-  // Vorschauliste bunt
-  var VideoLinks=$x("//a[contains(@href,'watch?v=')]")
-                   .map(function (a) { return { link:a.href, elem:a.parentNode }; })
-                   .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; });
-  //GM_log(uneval(VideoLinks));
-  VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
-  //showmsg({ text:"aaa" });
-}
-
-function NextVideo()
-{
-  //GM_log("Ende");
-  showmsg({
-    id: "default_msg_{rand}",
-    text: "<p style='padding:20px'>Öffnen nächstes Video in der Kategorie:<br><b>"+GM_getValue('lastKat','* Ohne Kategorie *')+"</b></p>",
-    color: "red",
-    OK: "OK",
-    Cancel: "Abbrechen",
-    Timeout: 20,
-    fixed:true,
-    onCancel: function (data) {},
-    onOKTimeout: function () {
-      var Video=deserialize("Video",{});
-      var youtube=['',new Date()];
-      var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
-      for (var i in Video)
-        if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
-        {
-          if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-            youtube=[ Video[i].id, Video[i].lastseen ];
-        }
-      if (youtube[0]=='')
-      {
-        alert("Keine Videos in der Kategorie gefunden");
-        var k=deserialize('Kategorien',[]);
-        k.splice(k.indexOf(Kat),1);        
-        serialize('Kategorien',k);
-        GM_setValue('lastKat','* Ohne Kategorie *');
-        return;
-      }
-      location.href="http://www.youtube.com/watch?v="+youtube[0];
-    },
-  });
-}
-
-function Video(VideoID)
-{
-  var Video=deserialize("Video",{});
-  if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
-  Video[VideoID].anz+=1;
-  Video[VideoID].lastseen=new Date();
-  serialize("Video",Video);
-  var Kategorien=deserialize('Kategorien',[]).sort();
-  Kategorien.unshift("-- bitte auswählen --");
-  Kategorien.push("-- Eingeben --");
-  var SelectKat="<select id=wKategorie>"+
-                Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
-                "</select>"
-  showmsg({
-    id:"VideoStatus",
-    text: [uneval(Video[VideoID]),
-           "Kategorie: "+SelectKat,
-           "Bitte bewerten sie das Video:",
-           ""].join('<br>'),
-    color:(Video[VideoID].anz<=1)?"gray":{ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[getParam("v","")].qualitaet],
-    fixed:true,
-    OK: "Gut",
-    Cancel: "Schlecht",
-    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; serialize("Video",Video);  },
-    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video);  },
-  });
-  // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
-  var i=Kategorien.indexOf(Video[VideoID].Kategorie);
-  if (i>0) $('wKategorie').selectedIndex=i;
-  $('wKategorie').addEventListener("change",function(event){
-    var Video=deserialize("Video",{});
-    switch (event.target.value)
-    {
-      case "-- bitte auswählen --":
-        delete Video[VideoID].Kategorie;
-        break;
-      case "-- Eingeben --":
-        Video[VideoID].Kategorie=prompt("Bitte Name der Kategorie eingeben:");
-        var k=deserialize('Kategorien',[]);
-        k.push(Video[VideoID].Kategorie);
-        serialize('Kategorien',k);
-        break;
-      default:
-        Video[VideoID].Kategorie=event.target.value;
-        break;
-    }
-    serialize("Video",Video);
+$x("//a[contains(@href,'popupWindow')]").forEach(function (a) {
+  if (a.children[0]) a=a.children[0];
+  a.addEventListener("click",function(event){
+    if (event.target.href)
+      url=event.target.href.match(/'(.*)'/)[1];
+    else
+      url=event.target.parentNode.href.match(/'(.*)'/)[1];
+    var Param=[
+      'toolbar=no',
+      'location=no',
+      'directories=no',
+      'status=no',
+      'menubar=no',
+      'scrollbars=yes',
+      'resizable=yes',
+      'copyhistory=no',
+      'width=700',
+      'height=800',
+      'screenX=150',
+      'screenY=150',
+      'top=150',
+      'left=150'
+    ];
+    window.open(url,'popupWindow',Param.join(","));
+    event.stopPropagation(); event.preventDefault();
   }, true);
-
-  // Vorschauliste bunt
-  var VideoLinks=$x("//ul[@id='watch-related']//li")
-                   .map(function (e) { return { link:e.firstChild.href, elem:e }; })
-                   .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; })
-  //GM_log(uneval(VideoLinks));
-  Interval(function () {
-    var Video=deserialize("Video",{});
-    VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
-  }, 60000);
-  
-  // Links zu gespeicherten Videos
-  if ($('watch-actions'))
-  {
-    // Selectbox
-    var Kat=deserialize('Kategorien',[]).sort();
-    Kat.unshift("* Ohne Kategorie *");
-    Kat.unshift("- Kategorie öffnen -");
-    var c=Kat.map(function (e) { return createElement('option', { textContent:e }); });
-    var m=createElement('select', { className:"yt-uix-button-default", childs:c, onChange:function (e){ 
-      var Video=deserialize("Video",{});
-      GM_setValue('lastKat',e.value);
-      var youtube=['',new Date()];
-      var anz=0;
-      for (var i in Video)
-         if ((e.value=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==e.value)
-         {
-           anz+=1;
-           if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-             youtube=[ Video[i].id, Video[i].lastseen ];
-         }
-      if (youtube[0]=='')
-      {
-        alert("Keine Videos in der Kategorie gefunden");
-        var k=deserialize('Kategorien',[]);
-        k.splice(k.indexOf(e.value),1);        
-        serialize('Kategorien',k);
-        GM_setValue('lastKat','* Ohne Kategorie *');
-        return;
-      }
-      if (confirm('Anzahl Videos in der Kategorie: '+anz+'\n\nAktuelles Video im neuen Tab öffnen?'))
-        GM_openInTab("http://www.youtube.com/watch?v="+youtube[0]);
-      else
-        location.href="http://www.youtube.com/watch?v="+youtube[0];
-    } }, $('watch-actions'));
-    // Button
-    createElement('button',{
-        className: "yt-uix-button yt-uix-button-default",
-        textContent:'Next',
-        onClick:function (e) { 
-          var Video=deserialize("Video",{});
-          var youtube=['',new Date()];
-          var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
-          for (var i in Video)
-            if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
-            {
-               if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
-                 youtube=[ Video[i].id, Video[i].lastseen ];
-            }
-          if (youtube[0]=='')
-          {
-            alert("Keine Videos in der Kategorie gefunden");
-            var k=deserialize('Kategorien',[]);
-            k.splice(k.indexOf(Kat),1);        
-            serialize('Kategorien',k);
-            GM_setValue('lastKat','* Ohne Kategorie *');
-            return;
-          }
-          location.href="http://www.youtube.com/watch?v="+youtube[0];
-        }
-    }, $('watch-actions'));
-  }
-  unsafeWindow.onYouTubePlayerReady = function (playerID)
-  {
-    var player=document.getElementById("movie_player").wrappedJSObject;
-    //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
-    var intervalID=window.setInterval(function () {
-      //GM_log("interval");
-      if (player.getPlayerState()==0)
-      {
-        //GM_log("Ende");
-        NextVideo();
-        window.clearInterval(intervalID);
-      }
-    },1000);
-  }
-  //GM_log("ALL DONE");
-}
-
+})

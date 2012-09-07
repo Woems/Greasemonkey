@@ -2,9 +2,10 @@ echo GIT status:
 git status
 #echo Lösche alle Temp-Dateien...
 #find . -name "*.??~" -exec rm {} \;
+if [ -f config.xml.orig ]; then rm config.xml.orig; fi
 echo config.xml commiten...
 if git status | grep "modified:.*config.xml" > /dev/null; then
-  xmlstarlet ed -L -d "/UserScriptConfig/Script/@installTime" -d "/UserScriptConfig/Script/@lastUpdateCheck" -d "/UserScriptConfig/Script/@modified" config.xml
+  xmlstarlet ed -L -d "/UserScriptConfig/Script/@installTime" -d "/UserScriptConfig/Script/@lastUpdateCheck" -d "/UserScriptConfig/Script/@modified" -d "/UserScriptConfig/Script/@uuid" config.xml
   git add config.xml ; git commit -m "config"
 fi
 #echo GIT status:
