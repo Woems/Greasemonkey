@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name        videostore-bonn-beuel (vs-bn.de)
+// @name        H0 Modelbahnforum
 // @namespace   Woems
-// @description Bewerten und sortieren der Filme
-// @include     http://www.videostore-bonn-beuel.de*
+// @description Verbesserung von http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887
+// @include     http://www.nexusboard.net/*siteid=2408*
 // @version     1
 // ==/UserScript==
 
@@ -75,7 +75,7 @@ function on(type, elm, func) {
   else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
-function onKey(func) { on('keydown',window,function (e) { 
+function onKey(func) { on('keydown',window,function (e) {
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
   var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
@@ -137,6 +137,13 @@ function arrayRand(array) { if (!array || array.length==0) GM_log("ArrayGetRand 
 Array.prototype.trim = function () { return this.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
 Array.prototype.clean = function () { return this.filter(function (e) { return e!=""; }); };
 Array.prototype.uniq = function (array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
+// ** Objekte **
+function ObjKeys(Obj) { var t=[]; for (i in Obj) t.push(i); return t; }
+function ObjValues(Obj) { var t=[]; for (i in Obj) t.push(Obj[i]); return t; }
+function ObjKeysAndValues(Obj,sep) { var t=[]; for (i in Obj) t.push(i+(sep||": ")+Obj[i]); return t; }
+function ForEachObj(Obj,func) { for (i in Obj) func(i, Obj[i]); }
+function MapObj(Obj,func) { var t=[]; for (i in Obj) t.push(func(i, Obj[i])); return t; }
+function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); return t.sort().join(sep||"\n"); }
 // ** Parameter **
 function urlParse(url) { var a = urlParse.a = urlParse.a || document.createElement('a'); a.href = url; return { scheme: /^[^:]+/.exec(a.protocol)[0], host: a.host, hostname: a.hostname, pathname: a.pathname, search: a.search, hash: a.hash }; } //alert(mdump(urlParse(location.href)));
 function aa(obj) { alert(uneval(obj)); }
@@ -147,6 +154,7 @@ function getHost() { return location.host; } // hash, host, hostname, href, path
 function div(text) { return '<div>'+text+'</div>'; }
 function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
 // ** REST **
+function inFrame() { return self!=top; }
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
@@ -196,246 +204,96 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
+//alert=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:false, Timeout:30, onTimeout: function (data) {}, }); };
 /********************************/
 
-function ObjKeys(Obj) { var t=[]; for (i in Obj) t.push(i); return t; }
-function ObjValues(Obj) { var t=[]; for (i in Obj) t.push(Obj[i]); return t; }
-function ObjKeysAndValues(Obj,sep) { var t=[]; for (i in Obj) t.push(i+(sep||": ")+Obj[i]); return t; }
-function ForEachObj(Obj,func) { for (i in Obj) func(i, Obj[i]); }
-function MapObj(Obj,func) { var t=[]; for (i in Obj) t.push(func(i, Obj[i])); return t; }
-function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); return t.sort().join(sep||"\n"); }
 
-
-function ElemMeineUebersicht(Titel, Liste, ID)
+switch (location.pathname)
 {
-  insertBefore(
-    createElement('tr', {
-      childs:[
-        createElement('td', { className:"Boxtext", childs:[
-          Text(Titel),
-          createElement('br'),
-          createElement('span', {
-            id:ID,
-            childs:Liste
-          })
-        ]})
-      ]
-    }), 
-    $xs("//*[@id='searchBoxLT'][2]/tbody/tr[3]")
-  );  
+  case "/forumdisplay.php":
+    board();
+    break;
+  case "/showthread.php":
+    thread();
+    break;
+  default:
+    alert(GM_info.script.name+"Path "+location.pathname+" unbekannt.");
+    break;
 }
 
-if ($("UserLogin") && $("UserPass"))
+function setData(ID,attr,val)
 {
-  var Login=deserialize('Login',{});
-  if (!Login.User) Login.User=prompt("Username:");
-  if (!Login.Passwd) Login.Passwd=prompt("Passwort:");
-  $("UserLogin").value=Login.User;
-  $("UserPass").value=Login.Passwd;
-  if (!Login.Last || Now()-Login.Last > 20)
-  {
-    Login.Last=Now();
-    serialize('Login',Login);
-    $xs("//input[@name='btnLogin']").click();
-  }
-  serialize('Login',Login);
+  var data=deserialize("data",{});
+  if (!data[ID]) data[ID]={};
+  data[ID][attr]=val;
+  serialize("data",data);  
 }
-  
-
-if (location.pathname=="/index.php" && location.search=="?load=showfsk18")
-  GM_log("FSK18");
-else if (location.pathname.indexOf("/film_")==0)
-  Vote();
-else
-  FilmListe();
-InfoBox();
-
-function Kuerzen(text,anz)
+function getData(ID,attr, def)
 {
-  //alert([text,text.length,anz,text.substr(0,anz)].join("\n"));
-  if (text.length<anz) return text;
-  return text.substr(0,anz)+"...";
+  var data=deserialize("data",{});
+  if (!data[ID]) return def;
+  return data[ID][attr]||def;
 }
+function gelesen(ID) { setData(ID,"gelesen",new Date()); }
+function gelesenbis(ID, zeile) { if (getData(ID,"gelesenbis",0)<zeile) setData(ID,"gelesenbis",zeile); }
+function gut(ID) { setData(ID,"gut",true); }
+function schlecht(ID) { setData(ID,"gut",false); }
 
-function InfoBox()
-{
-  var filme=deserialize('filme',{});
-  if ($xs("//*[@id='searchBoxLT'][2]"))
-  {
-    /**/
-    var Filme=MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1) }; })
-      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); });
-    ElemMeineUebersicht(""+Filme.length+". Lange nicht angesehen (STRG+SHIFT+L)",
-      Filme
-      .slice(0,5)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), style:"color:blue;", accessKey:(n==0)?'l':'' }) ] }); })
-    , "wUnseen");
-    /**/
-    var Filme=MapObj(filme,function (Key, Value) {  return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
-      .filter(function (e) { return e.Val.want && !e.Val.seen; })
-      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); })
-    ElemMeineUebersicht(""+Filme.length+". Will ich sehen (STRG+SHIFT+W)",
-      Filme
-      .slice(0,20)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), style:"color:green;", accessKey:(n==0)?'w':'' }) ] }); })
-    , "wWillSeen");
-    /**/
-    var Filme=MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
-      .filter(function (e) { return !e.Val.want && !e.Val.seen && !e.Val.hide && !e.Val.blue; })
-      .sort(function (a, b) { return a.Changed.getTime()>b.Changed.getTime(); });
-    ElemMeineUebersicht(""+Filme.length+". Unvoted (STRG+SHIFT+D)",
-      Filme
-      .slice(0,30)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",20), style:"color:red;", accessKey:(n==0)?'d':'' }) ] }); })
-    , "wUnvoted");
-    /**/
-    $x("id('wUnvoted')//a").forEach(function (a) {
-      a.addEventListener("click",function(event){
-        var Link=a.href.replace(/http:\/\/[^\/]*/,"");
-        var filme=deserialize('filme',{});
-        filme[Link]["lastopen"]=new Date();
-        serialize('filme',filme);
-        //showmsg({ text: "a:"+a.href, onOK: function (data) {} });
-        //event.stopPropagation();
-        //event.preventDefault();
-      }, true);
-      
-    });
-  }
-}
 
-function Vote()
-{
-  $('ContentSpalte').scrollIntoView();
-
-  var Link=location.href.toString().replace(/http:\/\/[^\/]*/,"");
-  var Titel=$xs("//tr[td/b[text()='Titelsuche am Automat:']]/td[2]").textContent;
-  createElement('div', { style:"padding-top:1em", id:"wVote" }, $xs("id('exdata')/..")); // $('wVote')
-
-  // *** Daten hinzufügen ***
-  var filme=deserialize('filme',{});
-  if (!filme[Link]) filme[Link]={ };
-  filme[Link]["lastopen"]=new Date();
-  filme[Link]["titel"]=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"");
-  serialize('filme',filme);
-
-  // *** Vote ***
-  var a=[
-     "<input type=checkbox name=want accesskey=s> Will ich <b>s</b>ehen. ",
-     "<input type=checkbox name=hide accesskey=n> Will ich <b>n</b>icht sehen.",
-     "<input type=checkbox name=seen accesskey=g> Habe ich <b>g</b>esehen.",
-     "<input type=checkbox name=blue accesskey=b> <b>B</b>luRay",
-  ];1
-
-  $("wVote").innerHTML=a.join("<br>");
-  $x("id('wVote')/input").forEach(function (e) {
-    e.checked=filme[Link][e.name];
-    if (typeof filme[Link][e.name]=="undefined") e.indeterminate=true;
-    e.addEventListener("change",function(event){ 
-      var filme=deserialize('filme',{});
-      filme[Link][event.target.name]=event.target.checked;
-      serialize('filme',filme);
-      event.stopPropagation();
-      event.preventDefault();
-    }, true);
-  });
-  
-  // *** Youtube Videos ***
-
-  var Titelmin=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"").toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("&","und");
-  var YoutubeHier=$xs("id('ContentSpalte')/div/table[3]/tbody/tr/td");
-  YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer<br><a href='http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer")+"' target=_new>YouTube</a>", id:"wYouTubeText" }));
-  YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",700,500));
-  //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
-
-  // *** Video Auto Play ***
-  var YouTubeIFrame=$xs("id('ContentSpalte')//iframe[contains(@src,'youtube')]");
-  Timeout(function () { YouTubeIFrame.scrollIntoView(false); }, 2000);
-  YouTubeIFrame.height=Math.floor(YouTubeIFrame.height*1.5);
-  YouTubeIFrame.width=Math.floor(YouTubeIFrame.width*1.5);
-  if (YouTubeIFrame.src.indexOf("?")==-1)
-    YouTubeIFrame.src=YouTubeIFrame.src+"?autoplay=1";
-  else
-    YouTubeIFrame.src=YouTubeIFrame.src+"&autoplay=1";
-
-  onKey(function (key, code, e) {
-    if ("SNGB".indexOf(key)!=-1)
+function board() {
+  //css(".gut { background-color:lightgreen }");
+  //css(".schlecht { background-color: }");
+  var Zeilen=$x("//table[@class='bordered']/tbody/tr[td[@class='bgc6']]");
+  Zeilen.forEach(function (row) {
+    var Link=$xs(".//a",row.cells[2]).href;
+    var ID=Link.replace(/^.*threadid=([0-9]*).*$/,"$1");
+    var data=deserialize("data",{});
+    if (data[ID])
     {
-      //GM_log(["//input[@accesskey='"+key.toLowerCase()+"']", $xs("//input[@accesskey='"+key.toLowerCase()+"']"), $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked].join("\n"));
-      //$xs("//input[@accesskey='"+key.toLowerCase()+"']").indeterminate=false;
-      //$xs("//input[@accesskey='"+key.toLowerCase()+"']").checked =! $xs("//input[@accesskey='"+key.toLowerCase()+"']").checked;
-      $xs("//input[@accesskey='"+key.toLowerCase()+"']").scrollIntoView();
-      $xs("//input[@accesskey='"+key.toLowerCase()+"']").click();
-      return true;
+      //alert([Link, ID, uneval(data), data[ID].gut, data[ID].gut!=undefined, data[ID].gelesen].join("<br>"));
+      var ThreadEintraege=row.cells[4].firstChild.innerHTML.replace(/[^0-9]/g,"")*1+1;
+      var ColorGut=data[ID].gelesenbis >= ThreadEintraege ? "lightgreen" : "green";
+      if (data[ID].gut!=undefined) row.cells[2].style.backgroundColor=data[ID].gut?ColorGut:"#FAA"; else row.cells[2].style.backgroundColor="darkgray";
+      row.cells[2].setAttribute("onmouseout","this.style.background='"+row.cells[2].style.backgroundColor+"'");
+      //if (data[ID].gut!=undefined) row.className=data[ID].gut?"gut":"schlecht"; else row.className="unbekannt";
+      if (data[ID].gelesenbis) row.cells[4].firstChild.innerHTML=data[ID].gelesenbis+" / "+ThreadEintraege;
+      row.cells[2].appendChild(createElement("div",{ style:"font-size:xx-small", innerHTML:"Gelesen:&nbsp;"+data[ID].gelesen }));
+      $xs(".//a",row.cells[2]).href=Link+"&showpage="+((Math.floor((data[ID].gelesenbis-1)/20)+1));
     }
-    if ("DWL".indexOf(key)!=-1)
-    {
-      $xs("//a[@accesskey='"+key.toLowerCase()+"']").click();
-      return true;
-    }
+    //row.appendChild(createElement("td",{ style:"font-size:xx-small", innerHTML:(!data[ID])?"-":"Gelesen:&nbsp;"+!!data[ID].gelesen }));
   });
+} // End: function board()
 
-  /**/
+function thread() {
+  var ID=getParam("threadid");
+  var data=deserialize("data",{});
+  var Eintraege=$x("//table[@class='bordered']/tbody/tr[td/table]");
+  gelesen(ID);
+  var Anfang=(getParam("showpage", 1)*1-1)*20;
+  var Ende=Anfang+Eintraege.length;
+  gelesenbis(ID, Ende);
+  //alert([getParam("showpage", 1), Anfang, Ende, ID, uneval(deserialize("data",{})[ID])].join("\n"));
+  //alert(uneval(deserialize("data",{})));
   showmsg({
-    id:"debug",
-    //text:[Link,Titel,uneval(filme[Link]),Obj2String(filme[Link],"<br>")].join("<br>"),
-    text:Obj2String(filme[Link],"<br>")+"<br>",
-    onOK:function (data) {},
+    id:"quali",
+    text:"Gut?",
+    fixed:true,
+    color:(!data[ID] || data[ID].gut==undefined)?"lightgray":(data[ID].gut)?"green":"red",
+    OK:"Ja",
+    Cancel:"Nein",
+    onOK:function () { gut(ID); },
+    onCancel:function () { schlecht(ID); },
   });
-  /**/
-}
-
-function FilmListe()
-{
-  var Filme=$x("id('ContentSpalte')/div/table[tbody/tr[1]/td/a]").map(function (e) {
-    var a=$xs("./tbody/tr[1]/td/a",e);
-    return {
-        Elem: e,
-        Box: $xs('./tbody/tr[2]/td[2]/table/tbody/tr/td',e),
-        Titel: trim(a.textContent).replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,""),
-        Blue: a.textContent.toUpperCase().indexOf("BLU-RAY")!=-1 || a.textContent.toUpperCase().indexOf("BLU RAY")!=-1,
-        DVD: a.textContent.toUpperCase().indexOf("DVD")!=-1,
-        PS3: a.textContent.toUpperCase().indexOf("PS3")!=-1,
-        WII: a.textContent.toUpperCase().indexOf("WII")!=-1,
-        URL: a.href.replace(/http:\/\/[^\/]*/,""),
-    };
-  });
-
-  // *** HIDE BLU-RAY ***
-  Filme.forEach(function (Film) {
-    if (Film.Blue || Film.PS3 || Film.WII) { Film.Elem.style.display="none"; return; }
-    var filme=deserialize('filme',{});
-    if (!filme[Film.URL])
+  onKey(function (key, code, e) {
+    switch(code.KEY)
     {
-      filme[Film.URL]={ titel:Film.Titel, changed:new Date() }
-      serialize('filme',filme);
+      // Backspace
+      case 8: location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
+      // Cursor Left
+      case 37: try { location.href=$xs('//b/font/preceding-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      // Cursor Right
+      case 39: try { location.href=$xs('//b/font/following-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      //default: alert([key, uneval(code), e].join("\n")); break;
     }
-    if (filme[Film.URL].hide) Film.Elem.style.opacity="0.5";
   });
-  // *** Vote ***
-  var a=[
-     "<input type=checkbox name=want> Will ich sehen.",
-     "<input type=checkbox name=hide> Will ich nicht sehen.",
-     "<input type=checkbox name=seen> Habe ich gesehen.",
-  ];
-  var filme=deserialize('filme',{});
-  Filme.forEach(function (Film) { createElement('div', { id:"wVote", innerHTML:"Vote:<br>"+a.join("<br>") }, Film.Box); });
-  $x("//*[@id='wVote']/input").forEach(function (input) {
-    var URL=$xs('./ancestor::tbody[2]/tr[1]/td/a',input).href.replace(/http:\/\/[^\/]*/,"");
-    var titel=$xs('./ancestor::tbody[2]/tr[1]/td/a',input).textContent;
-    input.checked=(filme[URL]||{})[input.name];
-    input.addEventListener("change",function(event){
-      var URL=$xs('./ancestor::tbody[2]/tr[1]/td/a',event.target).href.replace(/http:\/\/[^\/]*/,"");
-      //alert([URL,Button].join("\n"));
-      var filme=deserialize('filme',{});
-      if (!filme[URL]) filme[URL]={};
-      filme[URL]["changed"]=new Date();
-      filme[URL]["titel"]=titel;
-      filme[URL][event.target.name]=event.target.checked;
-      //alert([uneval(filme)].join("\n"));
-      serialize('filme',filme);
-      event.stopPropagation();
-      event.preventDefault();
-    }, true);
-  });
-}
+} // End: function thread()
