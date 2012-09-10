@@ -345,18 +345,27 @@ function Vote()
   var Titelmin=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"").toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("&","und");
   var YoutubeHier=$xs("id('ContentSpalte')/div/table[3]/tbody/tr/td");
   YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer<br><a href='http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer")+"' target=_new>YouTube</a>", id:"wYouTubeText" }));
-  YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",700,500));
+  YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",600,400));//700,500));
   //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
 
   // *** Video Auto Play ***
-  var YouTubeIFrame=$xs("id('ContentSpalte')//iframe[contains(@src,'youtube')]");
-  Timeout(function () { YouTubeIFrame.scrollIntoView(false); }, 2000);
-  YouTubeIFrame.height=Math.floor(YouTubeIFrame.height*1.5);
-  YouTubeIFrame.width=Math.floor(YouTubeIFrame.width*1.5);
-  if (YouTubeIFrame.src.indexOf("?")==-1)
-    YouTubeIFrame.src=YouTubeIFrame.src+"?autoplay=1";
-  else
-    YouTubeIFrame.src=YouTubeIFrame.src+"&autoplay=1";
+  $x("id('ContentSpalte')//embed | id('ContentSpalte')//iframe[contains(@src,'youtube')]").forEach(function (Video) {
+    Video.height=Math.floor(Video.height*1.5);
+    Video.width=Math.floor(Video.width*1.5);
+  })
+  
+  var Video=$xs("id('ContentSpalte')//embed | id('ContentSpalte')//iframe[contains(@src,'youtube')]");
+  Timeout(function () { Video.scrollIntoView(false); }, 2000);
+  if (Video.src.indexOf("moviemaze")!=-1)
+  {
+    Video.setAttribute("flashvars",Video.getAttribute("flashvars").replace("autostart=false","autostart=true"));
+    Video.src=Video.src+"?";
+  } else {
+    if (Video.src.indexOf("?")==-1)
+      Video.src=Video.src+"?autoplay=1";
+    else
+      Video.src=Video.src+"&autoplay=1";
+  }
 
   onKey(function (key, code, e) {
     if ("SNGB".indexOf(key)!=-1)
