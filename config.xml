@@ -894,4 +894,8 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.kinkywear.de*</Include>
   </Script>
+  <Script basedir="deviantArt" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen der Seite deviantart.com" enabled="true" filename="deviantArt.user.js" name="deviantArt" namespace="Woems" runAt="document-end" updateAvailable="" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js">
+    <Grant>none</Grant>
+    <Include>http://*deviantart.com*</Include>
+  </Script>
 </UserScriptConfig>
