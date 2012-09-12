@@ -798,15 +798,12 @@
     <Include>http://german-bash.org/*</Include>
   </Script>
   <Script basedir="YouTube" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" name="YouTube" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
-    <Grant>GM_openInTab</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
     <Grant>GM_setValue</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_addStyle</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
+    <Grant>GM_log</Grant>
     <Include>http://*youtube.com*</Include>
   </Script>
   <Script basedir="Bimmelbahn-Forum" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Bimmelbahn-Forum.user.js" name="Bimmelbahn-Forum" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
@@ -821,14 +818,12 @@
     <Include>http://www.boards-4you.de/wbb13/60/*</Include>
   </Script>
   <Script basedir="funktionssammlung" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="funktionssammlung.user.js" name="Funktionssammlung" namespace="Woems" runAt="document-end" updateAvailable="false" version="0.1">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
     <Grant>GM_setValue</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_addStyle</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
+    <Grant>GM_log</Grant>
     <Include>*</Include>
   </Script>
   <Script basedir="videostore-bonn-beuel_(vs-bn.de)" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Bewerten und sortieren der Filme" enabled="true" filename="videostore-bonn-beuel_(vs-bn.de).user.js" name="videostore-bonn-beuel (vs-bn.de)" namespace="Woems" runAt="document-end" updateAvailable="false" version="1">
@@ -894,8 +889,15 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.kinkywear.de*</Include>
   </Script>
-  <Script basedir="deviantArt" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen der Seite deviantart.com" enabled="true" filename="deviantArt.user.js" name="deviantArt" namespace="Woems" runAt="document-end" updateAvailable="" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js">
-    <Grant>none</Grant>
+  <Script basedir="deviantArt" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen der Seite deviantart.com" enabled="true" filename="deviantArt.user.js" name="deviantArt" namespace="Woems" runAt="document-end" updateAvailable="false" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
     <Include>http://*deviantart.com*</Include>
   </Script>
 </UserScriptConfig>
