@@ -2,6 +2,12 @@
 // @name           YouTube
 // @namespace      Woems
 // @description    Youtube
+// @grant          GM_getValue
+// @grant          GM_setValue
+// @grant          GM_deleteValue
+// @grant          GM_addStyle
+// @grant          GM_xmlhttpRequest
+// @grant          GM_log
 // @include        http://*youtube.com*
 // ==/UserScript==
 
@@ -231,14 +237,16 @@ function NextVideo()
   //GM_log("Ende");
   showmsg({
     id: "default_msg_{rand}",
-    text: "<p style='padding:20px'>Öffnen nächstes Video in der Kategorie:<br><b>"+GM_getValue('lastKat','* Ohne Kategorie *')+"</b></p>",
+    //text: "<p style='padding:20px'>Öffnen nächstes Video in der Kategorie:<br><b>"+GM_getValue('lastKat','* Ohne Kategorie *')+"</b></p>",
+    text: "Öffnen nächstes Video in der Kategorie: <b>"+GM_getValue('lastKat','* Ohne Kategorie *')+"</b>",
     color: "red",
     OK: "OK",
     Cancel: "Abbrechen",
-    Timeout: 20,
+    //Timeout: 20,
     fixed:true,
     onCancel: function (data) {},
-    onOKTimeout: function () {
+    //onOKTimeout: function () {
+    onOK: function () {
       var Video=deserialize("Video",{});
       var youtube=['',new Date()];
       var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
