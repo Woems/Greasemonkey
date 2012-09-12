@@ -207,4 +207,19 @@ function createHover(elem,text)
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
+GM_log([location.href, location.search, location.pathname, location.host, location.hostname].join('\n'));
+//hash, host, hostname, href, pathname, port, protocol, search
 
+var Category=deserialize('Category',{}); //serialize('Category',Category);
+if (!Category[location.host.split(".")[0]])
+{
+  
+  var data=showmsg({
+    id: "default_msg_{rand}",
+    text: "Category nicht gefunden.<br>Bitte Beschreibung angeben:<br><input name=CategoryDesc size=50>",
+    color: "lightgray",
+    OK: "OK",
+    onOK: function (data) {},
+  });
+  data.style.zIndex=999;
+}
