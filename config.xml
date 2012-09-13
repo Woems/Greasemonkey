@@ -883,4 +883,26 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.nexusboard.net/*siteid=2408*</Include>
   </Script>
+  <Script basedir="Kinkywear" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Bugfixes + Verbesserungen" enabled="true" filename="Kinkywear.user.js" name="Kinkywear" namespace="Woems" runAt="document-end" updateAvailable="false" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Kinkywear/Kinkywear.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Kinkywear/Kinkywear.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>http://www.kinkywear.de*</Include>
+  </Script>
+  <Script basedir="deviantArt" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen der Seite deviantart.com" enabled="true" filename="deviantArt.user.js" name="deviantArt" namespace="Woems" runAt="document-end" updateAvailable="false" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>http://*deviantart.com*</Include>
+  </Script>
 </UserScriptConfig>

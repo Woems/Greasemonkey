@@ -4,6 +4,12 @@
 // @include        *
 // @decription     Erweiterungen für die Greasmonkey Funktionen
 // @version        0.1
+// @grant          GM_getValue
+// @grant          GM_setValue
+// @grant          GM_deleteValue
+// @grant          GM_addStyle
+// @grant          GM_xmlhttpRequest
+// @grant          GM_log
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
