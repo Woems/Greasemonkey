@@ -9,6 +9,7 @@
 // @grant          GM_xmlhttpRequest
 // @grant          GM_log
 // @include        http://*youtube.com*
+// @include        about:blank#YouTube
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -81,8 +82,8 @@ function on(type, elm, func) {
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
 function onKey(func) { on('keydown',window,function (e) { 
-  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
-  var Code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
+  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
+  var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
@@ -206,18 +207,86 @@ function createHover(elem,text)
 
 if (FrameBuster())
 {
+  /*onKey(function (key, code, e) {
+    switch(key)
+    {
+      case 'ALT+SHIFT+Z': alert("TEST"); break;
+      default: GM_log(["",key, uneval(code), e].join("\n")); break;
+    }
+    return true;
+  });*/
   var Kategorie=location.pathname.split("/")[1];
   var VideoID=getParam("v","");
   //GM_log("VideoID: "+VideoID);
+  if (location.href=="about:blank#YouTube") CreateVideoGalerie(); else
   if (location.href.indexOf("embed")==-1)
-  //try {
-  if (VideoID!="")
-    Video(VideoID);
-  else if (Kategorie=="user")
-    Interval(UserGallerie,10000);
-  else
-    NextVideo();
-  //} catch(e) { alert([e, uneval(e)].join("\n---\n")); }
+  {
+    //try {
+    if (VideoID!="")
+      Video(VideoID);
+    else if (Kategorie=="user")
+      Interval(UserGallerie,10000);
+    else
+      NextVideo();
+    //} catch(e) { alert([e, uneval(e)].join("\n---\n")); }
+  }
+}
+
+
+function ObjValues(obj) {
+  var tmp=[];
+  for (i in obj)
+     tmp.push(obj[i]);
+  return tmp;
+}
+function ObjKeys(obj) {
+  var tmp=[];
+  for (i in obj)
+     tmp.push(i);
+  return tmp;
+}
+
+function CreateVideoGalerie()
+{
+  var Kategorien=deserialize('Kategorien',[]).sort();
+  Kategorien.unshift("-- bitte auswählen --");
+  Kategorien.push("-- Eingeben --");
+  var SelectKat="<select name=Kategorie>"+
+                Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
+                "</select>"
+  var Video=deserialize("Video",[]);
+  var VideoArr=ObjValues(Video)
+              .filter(function (e) { return !e.Kategorie && !e.qualitaet; })
+              .sort(function (a,b) { return a.lastseen-b.lastseen; })
+              .slice(0,4)
+              .map(function (e) { return '<form style="float:left" id='+e.id+'>'+
+                  '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-70)+'" src="http://www.youtube.com/embed/'+e.id+'" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
+                  '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
+                  '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
+                  '<input type=radio name=qualitaet value=schlecht>Schlecht</td>'+
+                  '</tr></table>'+
+                  //uneval(e)+
+                  "</form>"; });
+  //alert(uneval(VideoArr.join("<br>")));
+  document.body.innerHTML=VideoArr.join(" ");
+  $x("//input | //select").forEach(function (e) { e.addEventListener("change",function(event){
+    var VideoID=event.target.form.id;
+    var Video=deserialize("Video",{});
+    Video[VideoID].lastseen=new Date();
+    Video[VideoID][event.target.name]=event.target.value;
+    serialize("Video",Video);
+    /*/
+    switch(Name)
+    {
+      case 'qualitaet': alert(ID+": "+event.target.value); break;
+      case 'kategorie': alert(ID+": "+event.target.value); break;
+      default: alert([ID,Name].join("\n")); break;
+    }
+    /*/
+    
+    event.stopPropagation();
+    event.preventDefault();
+  }, true); })
 }
 
 function UserGallerie()
