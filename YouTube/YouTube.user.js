@@ -218,20 +218,20 @@ if (FrameBuster())
   });*/
   var Kategorie=location.pathname.split("/")[1];
   var VideoID=getParam("v","");
-  if (VideoID.length!=11) alert("VideoID muss 11 Zeichen haben. Hat aber nur "+VideoID.length+". Hier die ID: "+VideoID);
+  if (VideoID.length!=11 && VideoID.length!=0) alert("VideoID muss 11 Zeichen haben. Hat aber nur "+VideoID.length+". Hier die ID: "+VideoID);
   //GM_log("VideoID: "+VideoID);
   if (location.href=="about:blank#YouTube") CreateVideoGalerie(); else
-  if (location.href.indexOf("embed")==-1)
-  {
+  //if (location.href.indexOf("embed")==-1)
+  //{
     //try {
-    if (VideoID!="")
+    if (VideoID!="" && VideoID.length==11)
       Video(VideoID);
     else if (Kategorie=="user")
       Interval(UserGallerie,10000);
     else
       NextVideo();
     //} catch(e) { alert([e, uneval(e)].join("\n---\n")); }
-  }
+  //}
 }
 
 
@@ -262,7 +262,7 @@ function CreateVideoGalerie()
               .sort(function (a,b) { return a.lastseen-b.lastseen; })
               .slice(0,4)
               .map(function (e) { return '<form style="float:left" id='+e.id+'>'+
-                  '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-70)+'" src="http://www.youtube.com/embed/'+e.id+'" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
+                  '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-70)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
                   '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
                   '<input type=radio name=qualitaet value=schlecht>Schlecht</td>'+
