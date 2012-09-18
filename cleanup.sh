@@ -7,8 +7,8 @@ do
   echo 2. cleanup
   echo 3. git gui
   echo 4. git pull
-  echo 5. git mergetool -y
-  echo 6. git commit -m "Merge"
+  echo 5.   git mergetool -y
+  echo 6.   git commit -m "Merge"
   echo 7. git push -u origin master
   echo Q. Quit
   echo "----------"
