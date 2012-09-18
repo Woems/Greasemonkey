@@ -248,6 +248,7 @@ function ObjKeys(obj) {
   return tmp;
 }
 
+
 function CreateVideoGalerie()
 {
   var Kategorien=deserialize('Kategorien',[]).sort();
@@ -259,9 +260,9 @@ function CreateVideoGalerie()
   var Video=deserialize("Video",[]);
   var VideoArr=ObjValues(Video)
               .filter(function (e) { return !e.Kategorie && !e.qualitaet; })
-              .sort(function (a,b) { return a.lastseen-b.lastseen; })
-              .slice(0,4)
-              .map(function (e) { return '<form style="float:left" id='+e.id+'>'+
+              //.sort(function (a,b) { return a.lastseen-b.lastseen; })
+              .slice(0,10)
+              .map(function (e) { return '<form style="float:left; padding-right:8px" id='+e.id+'>'+
                   '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-70)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
                   '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
