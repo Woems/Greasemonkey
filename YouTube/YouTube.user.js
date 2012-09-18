@@ -8,6 +8,7 @@
 // @grant          GM_addStyle
 // @grant          GM_xmlhttpRequest
 // @grant          GM_log
+// @grant          GM_openInTab
 // @include        http://*youtube.com*
 // ==/UserScript==
 
@@ -208,6 +209,7 @@ if (FrameBuster())
 {
   var Kategorie=location.pathname.split("/")[1];
   var VideoID=getParam("v","");
+  if (VideoID.length!=11) alert("VideoID muss 11 Zeichen haben. Hat aber nur "+VideoID.length+". Hier die ID: "+VideoID);
   //GM_log("VideoID: "+VideoID);
   if (location.href.indexOf("embed")==-1)
   //try {
