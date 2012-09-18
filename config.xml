@@ -10,7 +10,7 @@
     <Grant>GM_setValue</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
-    <Include>http://www.kinopolis.de/filme/filminfo.dhtml?filmoid=*</Include>
+    <Include>http://www.kinopolis.de/bn/film_details*</Include>
   </Script>
   <Script basedir="notpron_sound" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="notpron_sound.user.js" name="notpron sound" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
     <Grant>none</Grant>
@@ -806,6 +806,7 @@
     <Grant>GM_log</Grant>
     <Grant>GM_openInTab</Grant>
     <Include>http://*youtube.com*</Include>
+    <Include>about:blank#YouTube</Include>
   </Script>
   <Script basedir="Bimmelbahn-Forum" checkRemoteUpdates="true" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Bimmelbahn-Forum.user.js" name="Bimmelbahn-Forum" namespace="Woems" runAt="document-end" updateAvailable="false" version="">
     <Grant>GM_addStyle</Grant>
