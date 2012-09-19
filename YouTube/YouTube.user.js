@@ -251,6 +251,7 @@ function ObjKeys(obj) {
 
 function CreateVideoGalerie()
 {
+  css("body { background-color:#222; color:white;  }");
   var Kategorien=deserialize('Kategorien',[]).sort();
   Kategorien.unshift("-- bitte auswählen --");
   Kategorien.push("-- Eingeben --");
@@ -267,17 +268,31 @@ function CreateVideoGalerie()
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
                   '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
                   '<input type=radio name=qualitaet value=schlecht>Schlecht</td>'+
+                  '<td>'+e.lastseen.getShortDate()+'<br><a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href=#60 name='+e.id+'>+1 Stunde</a></td>'+
                   '</tr></table>'+
                   //uneval(e)+
                   "</form>"; });
   //alert(uneval(VideoArr.join("<br>")));
   document.body.innerHTML=VideoArr.join(" ");
+  $x("//a[contains(@href,'#')]").forEach(function (e) { e.addEventListener("click",function(event){
+    var VideoID=event.target.name;
+    var Plus=event.target.href.split('#')[1]*1;
+    var Video=deserialize("Video",{});
+    Video[VideoID].lastseen=new Date(Video[VideoID].lastseen.getTime()+(Plus*60000));
+    serialize("Video",Video);
+    //event.target.href="#"+(Plus-1);
+    //event.target.innerHTML="+"+(Plus-1)+" Min";
+    event.target.innerHTML="";
+    event.stopPropagation();
+    event.preventDefault();
+  }, true); });
   $x("//input | //select").forEach(function (e) { e.addEventListener("change",function(event){
     var VideoID=event.target.form.id;
     var Video=deserialize("Video",{});
     Video[VideoID].lastseen=new Date();
     Video[VideoID][event.target.name]=event.target.value;
     serialize("Video",Video);
+    $x("//a[@name='"+VideoID+"']").forEach(function (e) { e.style.display="none"; })
     /*/
     switch(Name)
     {
@@ -286,10 +301,11 @@ function CreateVideoGalerie()
       default: alert([ID,Name].join("\n")); break;
     }
     /*/
-    
+
     event.stopPropagation();
     event.preventDefault();
-  }, true); })
+  }, true); });
+  document.body.scrollIntoView(true);
 }
 
 function UserGallerie()
