@@ -268,7 +268,7 @@ function CreateVideoGalerie()
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
                   '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
                   '<input type=radio name=qualitaet value=schlecht>Schlecht</td>'+
-                  '<td>'+e.lastseen.getShortDate()+'<br><a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href=#60 name='+e.id+'>+1 Stunde</a></td>'+
+                  '<td>'+e.lastseen.getShortDate()+'<br><a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href=#60 name='+e.id+'>+1 Stunde</a> <a href="hide" name='+e.id+'>Hide</a></td>'+
                   '</tr></table>'+
                   //uneval(e)+
                   "</form>"; });
@@ -286,13 +286,20 @@ function CreateVideoGalerie()
     event.stopPropagation();
     event.preventDefault();
   }, true); });
+  $x("//a[@href='hide']").forEach(function (e) { e.addEventListener("click",function(event){
+    var VideoID=event.target.name;
+    $(VideoID).style.display="none";
+    remove($(VideoID));
+    event.stopPropagation();
+    event.preventDefault();
+  }, true); });
   $x("//input | //select").forEach(function (e) { e.addEventListener("change",function(event){
     var VideoID=event.target.form.id;
     var Video=deserialize("Video",{});
     Video[VideoID].lastseen=new Date();
     Video[VideoID][event.target.name]=event.target.value;
     serialize("Video",Video);
-    $x("//a[@name='"+VideoID+"']").forEach(function (e) { e.style.display="none"; })
+    $x("//a[@name='"+VideoID+"'][contains(@href,'#')]").forEach(function (e) { e.style.display="none"; })
     /*/
     switch(Name)
     {
