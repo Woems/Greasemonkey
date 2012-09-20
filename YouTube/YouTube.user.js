@@ -10,7 +10,7 @@
 // @grant          GM_log
 // @grant          GM_openInTab
 // @include        http://*youtube.com*
-// @include        about:blank#YouTube
+// @include        about:blank#YouTube*
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -150,6 +150,7 @@ function aa(obj) { alert(uneval(obj)); }
 function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
+// alert([location.href, location.hash, location.host, location.hostname, location.pathname, location.port, location.protocol, location.search].join("\n"));
 // ** HTML-Code
 function div(text) { return '<div>'+text+'</div>'; }
 function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
@@ -220,7 +221,7 @@ if (FrameBuster())
   var VideoID=getParam("v","");
   if (VideoID.length!=11 && VideoID.length!=0) alert("VideoID muss 11 Zeichen haben. Hat aber nur "+VideoID.length+". Hier die ID: "+VideoID);
   //GM_log("VideoID: "+VideoID);
-  if (location.href=="about:blank#YouTube") CreateVideoGalerie(); else
+  if (location.hash.indexOf("#YouTube")!=-1) CreateVideoGalerie(); else
   //if (location.href.indexOf("embed")==-1)
   //{
     //try {
@@ -248,6 +249,17 @@ function ObjKeys(obj) {
   return tmp;
 }
 
+function ShowDateDiff(sec)
+{
+  var teile={ MSec:1000, Sec:60, Min:60, H:24, Tage:7, Wochen:99999 };
+  var tmp='';
+  for (i in teile)
+  {
+    if (Math.floor(sec%teile[i])!=0) tmp=Math.floor(sec%teile[i])+' '+i+' '+tmp;
+    sec=sec/teile[i];
+  }
+  return tmp;
+}
 
 function CreateVideoGalerie()
 {
@@ -259,16 +271,18 @@ function CreateVideoGalerie()
                 Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
                 "</select>"
   var Video=deserialize("Video",[]);
+  var showX=location.hash.indexOf('x')==8;
   var VideoArr=ObjValues(Video)
-              .filter(function (e) { return !e.Kategorie && !e.qualitaet; })
+              .filter(function (e) { return !e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX); })
               .sort(function (a,b) { return a.lastseen-b.lastseen; })
               .slice(0,10)
               .map(function (e) { return '<form style="float:left; padding-right:8px" id='+e.id+'>'+
                   '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-70)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
                   '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
-                  '<input type=radio name=qualitaet value=schlecht>Schlecht</td>'+
-                  '<td>'+e.lastseen.getShortDate()+'<br><a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href=#60 name='+e.id+'>+1 Stunde</a> <a href="hide" name='+e.id+'>Hide</a></td>'+
+                  '<input type=radio name=qualitaet value=schlecht>Schlecht<br>'+
+                  '<input type=checkbox name=x>'+e.x+'</td>'+
+                  '<td>'+e.lastseen.getShortDate()+'<br><a href=#'+7*24*60+' name='+e.id+'>+1 Woche</a> <a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href="hide" name='+e.id+'>Hide</a></td>'+
                   '</tr></table>'+
                   //uneval(e)+
                   "</form>"; });
@@ -280,9 +294,12 @@ function CreateVideoGalerie()
     var Video=deserialize("Video",{});
     Video[VideoID].lastseen=new Date(Video[VideoID].lastseen.getTime()+(Plus*60000));
     serialize("Video",Video);
-    //event.target.href="#"+(Plus-1);
-    //event.target.innerHTML="+"+(Plus-1)+" Min";
-    event.target.innerHTML="";
+    event.target.innerHTML="";    
+    window.setTimeout(function () {
+      event.target.href="#"+(Plus*10);
+      //event.target.innerHTML="+"+(Plus*10)+" Min";
+      event.target.innerHTML="+"+ShowDateDiff(Plus*10*60000);
+    }, 10*1000);
     event.stopPropagation();
     event.preventDefault();
   }, true); });
@@ -296,19 +313,14 @@ function CreateVideoGalerie()
   $x("//input | //select").forEach(function (e) { e.addEventListener("change",function(event){
     var VideoID=event.target.form.id;
     var Video=deserialize("Video",{});
-    Video[VideoID].lastseen=new Date();
-    Video[VideoID][event.target.name]=event.target.value;
+    if (event.target.name!="x") Video[VideoID].lastseen=new Date();
+    if (event.target.type=="checkbox")
+      Video[VideoID][event.target.name]=event.target.checked;
+    else
+      Video[VideoID][event.target.name]=event.target.value;
     serialize("Video",Video);
-    $x("//a[@name='"+VideoID+"'][contains(@href,'#')]").forEach(function (e) { e.style.display="none"; })
-    /*/
-    switch(Name)
-    {
-      case 'qualitaet': alert(ID+": "+event.target.value); break;
-      case 'kategorie': alert(ID+": "+event.target.value); break;
-      default: alert([ID,Name].join("\n")); break;
-    }
-    /*/
-
+    $x("//a[@name='"+VideoID+"'][contains(@href,'#')]").forEach(function (e) { e.style.display="none"; });
+    //GM_log("Youtube: "+uneval(Video[VideoID]));
     event.stopPropagation();
     event.preventDefault();
   }, true); });
