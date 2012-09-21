@@ -272,10 +272,11 @@ function CreateVideoGalerie()
                 "</select>"
   var Video=deserialize("Video",[]);
   var showX=location.hash.indexOf('x')==8;
-  var VideoArr=ObjValues(Video)
-              .filter(function (e) { return !e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX); })
-              .sort(function (a,b) { return a.lastseen-b.lastseen; })
-              .slice(0,10)
+  var VideoData=ObjValues(Video)
+                  .filter(function (e) { return !e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX); })
+                  .sort(function (a,b) { return a.lastseen-b.lastseen; })
+  document.title="about:blank#"+VideoData.length;
+  document.body.innerHTML=VideoData.slice(0,30)
               .map(function (e) { return '<form style="float:left; padding-right:8px" id='+e.id+'>'+
                   '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-70)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
@@ -285,9 +286,9 @@ function CreateVideoGalerie()
                   '<td>'+e.lastseen.getShortDate()+'<br><a href=#'+7*24*60+' name='+e.id+'>+1 Woche</a> <a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href="hide" name='+e.id+'>Hide</a></td>'+
                   '</tr></table>'+
                   //uneval(e)+
-                  "</form>"; });
+                  "</form>"; }).join(" ");
   //alert(uneval(VideoArr.join("<br>")));
-  document.body.innerHTML=VideoArr.join(" ");
+
   $x("//a[contains(@href,'#')]").forEach(function (e) { e.addEventListener("click",function(event){
     var VideoID=event.target.name;
     var Plus=event.target.href.split('#')[1]*1;
@@ -320,6 +321,7 @@ function CreateVideoGalerie()
       Video[VideoID][event.target.name]=event.target.value;
     serialize("Video",Video);
     $x("//a[@name='"+VideoID+"'][contains(@href,'#')]").forEach(function (e) { e.style.display="none"; });
+    if (event.target.name=="x") remove($(VideoID));
     //GM_log("Youtube: "+uneval(Video[VideoID]));
     event.stopPropagation();
     event.preventDefault();
