@@ -83,13 +83,13 @@ function showmsg(data)
 globaleTasten();
 
 function globaleTasten () {
-  Key('STRG+y',function (e) { // Taste zum aktivieren
+  Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
     var webseiten=deserialize('webseiten',[]);
     webseiten.push({ url: location.href, host: location.host, titel:document.title });
     alert("'"+document.title+"'\nzur Wiedervorlage hinzugefügt...\nSTRG+ALT+x zum abrufen der "+webseiten.length+" Seiten.");
     serialize('webseiten',webseiten);
   });
-  Key('STRG+x',function (e) { // Taste zum aktivieren
+  Key('STRG+ALT+x',function (e) { // Taste zum aktivieren
     var webseiten=deserialize('webseiten',[]);
     if (webseiten.length==0) alert("Keine Seiten mehr gespeichert");
     var w=webseiten.pop();
@@ -98,6 +98,7 @@ function globaleTasten () {
   });
   $x("//a[@href]").forEach(function (a) { a.addEventListener("mousedown",function(event){
     var e=event.target;
+    while (!e || !e.href) e=e.parentNode;
     //GM_log("Target: "+e+"\nEvent: "+event+"\nCTRL: "+event.ctrlKey+"\nALT: "+event.altKey);
     if (event.ctrlKey && event.altKey)
     {
