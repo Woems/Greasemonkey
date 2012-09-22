@@ -276,7 +276,7 @@ function CreateVideoGalerie()
                   .filter(function (e) { return !e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX); })
                   .sort(function (a,b) { return a.lastseen-b.lastseen; })
   document.title="about:blank#"+VideoData.length;
-  document.body.innerHTML=VideoData.slice(0,30)
+  document.body.innerHTML=VideoData.slice(0,10)
               .map(function (e) { return '<form style="float:left; padding-right:8px" id='+e.id+'>'+
                   '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-70)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
@@ -499,6 +499,24 @@ function Video(VideoID)
         }
     }, $('watch-actions'));
   }
+  $x("//a[contains(@href,'v=')]").forEach(function (a) { a.addEventListener("click",function(event){
+    //if (event.ctrlKey) // && event.altKey)
+    {
+      var e=event.target;
+      while (!e || !e.href) e=e.parentNode;
+      var VideoID=e.href.match(/v=([a-zA-Z0-9-_]*)/)[1];
+      var Video=deserialize("Video",{});
+      if (!Video[VideoID])
+      {
+        Video[VideoID]={ id:VideoID, anz:0 };
+        serialize("Video",Video);
+        e.style.color="lightgray";
+        e.style.backgroundColor="darkgray";
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }
+  }, true); });
   unsafeWindow.onYouTubePlayerReady = function (playerID)
   {
     var player=document.getElementById("movie_player").wrappedJSObject;
