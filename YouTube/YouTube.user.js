@@ -67,7 +67,7 @@ function fade(node, speed, to, endfunc) {
     }
   }, 50);
 }
-function Text(txt) { return document.createTextNode(txt); }
+function text(txt) { return document.createTextNode(txt); }
 function remove(node) {if(node)node.parentNode.removeChild(node);return remove;}
 function insertAfter(newNode, node) { return node.parentNode.insertBefore(newNode, node.nextSibling); }
 function insertBefore(newNode, node) { return node.parentNode.insertBefore(newNode, node); }
@@ -267,6 +267,7 @@ function CreateVideoGalerie()
   var Kategorien=deserialize('Kategorien',[]).sort();
   Kategorien.unshift("-- bitte auswählen --");
   Kategorien.push("-- Eingeben --");
+  /**/
   var SelectKat="<select name=Kategorie>"+
                 Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
                 "</select>"
@@ -276,19 +277,19 @@ function CreateVideoGalerie()
                   .filter(function (e) { return !e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX); })
                   .sort(function (a,b) { return a.lastseen-b.lastseen; })
   document.title="about:blank#"+VideoData.length;
-  document.body.innerHTML=VideoData.slice(0,10)
-              .map(function (e) { return '<form style="float:left; padding-right:8px" id='+e.id+'>'+
-                  '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-70)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
+  GM_setValue("GalerieAnz",GM_getValue("GalerieAnz",10));
+  document.body.innerHTML=VideoData.slice(0,GM_getValue("GalerieAnz",10))
+              .map(function (e,i) { return '<form style="float:left; padding-right:8px" id='+e.id+'>'+
+                  '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-90)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
                   '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
                   '<input type=radio name=qualitaet value=schlecht>Schlecht<br>'+
                   '<input type=checkbox name=x>'+e.x+'</td>'+
-                  '<td>'+e.lastseen.getShortDate()+'<br><a href=#'+7*24*60+' name='+e.id+'>+1 Woche</a> <a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href="hide" name='+e.id+'>Hide</a></td>'+
+                  '<td>'+e.lastseen.getShortDate()+' ('+(i+1)+')<br><a href=#'+7*24*60+' name='+e.id+'>+1 Woche</a> <a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href="hide" name='+e.id+'>Hide</a></td>'+
                   '</tr></table>'+
                   //uneval(e)+
                   "</form>"; }).join(" ");
   //alert(uneval(VideoArr.join("<br>")));
-
   $x("//a[contains(@href,'#')]").forEach(function (e) { e.addEventListener("click",function(event){
     var VideoID=event.target.name;
     var Plus=event.target.href.split('#')[1]*1;
@@ -327,6 +328,83 @@ function CreateVideoGalerie()
     event.preventDefault();
   }, true); });
   document.body.scrollIntoView(true);
+  /*/
+  function verzclick(target, event){
+    var VideoID=event.target.name;
+    var Plus=event.target.href.split('#')[1]*1;
+    var Video=deserialize("Video",{});
+    Video[VideoID].lastseen=new Date(Video[VideoID].lastseen.getTime()+(Plus*60000));
+    serialize("Video",Video);
+    event.target.innerHTML="";    
+    window.setTimeout(function () {
+      event.target.href="#"+(Plus*10);
+      //event.target.innerHTML="+"+(Plus*10)+" Min";
+      event.target.innerHTML="+"+ShowDateDiff(Plus*10*60000);
+    }, 10*1000);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  function hideclick(target, event){
+    var VideoID=event.target.name;
+    $(VideoID).style.display="none";
+    remove($(VideoID));
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  function inputclick(target, event){
+    var VideoID=event.target.form.id;
+    var Video=deserialize("Video",{});
+    if (event.target.name!="x") Video[VideoID].lastseen=new Date();
+    if (event.target.type=="checkbox")
+      Video[VideoID][event.target.name]=event.target.checked;
+    else
+      Video[VideoID][event.target.name]=event.target.value;
+    serialize("Video",Video);
+    $x("//a[@name='"+VideoID+"'][contains(@href,'#')]").forEach(function (e) { e.style.display="none"; });
+    if (event.target.name=="x") remove($(VideoID));
+    //GM_log("Youtube: "+uneval(Video[VideoID]));
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  var size=[window.innerWidth/2-30, window.innerHeight/2-90];
+  Interval(function () { 
+    var AktiveVideoIDs=$x("//form[@id]").map(function (e) { return e.id; });
+    //alert(AktiveVideoIDs.join("\n"));
+    
+    var Video=deserialize("Video",[]);
+    var showX=location.hash.indexOf('x')==8;
+    var VideoData=ObjValues(Video)
+                  .filter(function (e) { return !e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX); })
+                  .sort(function (a,b) { return a.lastseen-b.lastseen; })
+    document.title="about:blank#"+VideoData.length;
+    VideoData.slice(0,4).forEach(function (e,i) {
+      if (AktiveVideoIDs.indexOf(e.id)==-1)
+      {
+        GM_log("+++");
+        var iframe=createElement('iframe',{ id:"ytplayer", type:"text/html", width:size[0], height:size[1], 
+                src:'http://www.youtube.com/embed/'+e.id+'?rel=0', frameBorder:0 });
+        
+        var select=createElement('select',{ name:"Kategorie", onChange:function (t, e) { inputclick(t,e); }, childs: Kategorien.map(function (e) { return createElement('option',{ innerHTML:e }) }) });
+        var td1=createElement('td',{ innerHTML:'ID: '+e.id+'<br>Kategorie: ', childs:[ select ] });
+        
+        var gut=createElement('input',{ type:'radio', name:'qualitaet', value:'gut', onChange:function (t, e) { inputclick(t,e); } });
+        var schlecht=createElement('input',{ type:'radio', name:'qualitaet', value:'schlecht', onChange:function (t, e) { inputclick(t,e); } });
+        var x=createElement('input',{ type:'checkbox', name:'x', onChange:function (t, e) { inputclick(t,e); }});
+        var td2=createElement('td',{ childs:[ gut, text("Gut"), createElement('br'), schlecht, text("Schlecht"), createElement('br'), x, text(e.x) ] });
+        
+        var alter=text(e.lastseen.getShortDate()+' ('+(i+1)+')');
+        var link1=createElement('a',{ href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
+        var link2=createElement('a',{ href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
+        var linkhide=createElement('a',{ href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
+        var td3=createElement('td',{ childs:[ alter, createElement('br'), link1, link2, linkhide ] });
+        
+        var tr=createElement('tr',{ childs: [ td1, td2, td3] });
+        var table=createElement('table',{ childs:[ tr ] });
+        createElement('form',{ style:"float:left; padding-right:8px", id:e.id, childs:[ iframe, createElement('br'), table ]}, document.body);
+      }
+    });
+  },20000);
+  /**/
 }
 
 function UserGallerie()
@@ -339,6 +417,24 @@ function UserGallerie()
   //GM_log(uneval(VideoLinks));
   VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
   //showmsg({ text:"aaa" });
+  $x("//a[contains(@href,'v=')]").forEach(function (a) { a.addEventListener("click",function(event){
+    //if (event.ctrlKey) // && event.altKey)
+    {
+      var e=event.target;
+      while (!e || !e.href) e=e.parentNode;
+      var VideoID=e.href.match(/v=([a-zA-Z0-9-_]*)/)[1];
+      var Video=deserialize("Video",{});
+      if (!Video[VideoID])
+      {
+        Video[VideoID]={ id:VideoID, anz:0 };
+        serialize("Video",Video);
+        e.parentNode.style.color="lightgray";
+        e.parentNode.style.backgroundColor="darkgray";
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }
+  }, true); });
 }
 
 function NextVideo()
