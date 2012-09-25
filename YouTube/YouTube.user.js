@@ -294,7 +294,7 @@ function CreateVideoGalerie()
     var VideoID=event.target.name;
     var Plus=event.target.href.split('#')[1]*1;
     var Video=deserialize("Video",{});
-    Video[VideoID].lastseen=new Date(Video[VideoID].lastseen.getTime()+(Plus*60000));
+    Video[VideoID].lastseen=new Date((Video[VideoID].lastseen||new Date()).getTime()+(Plus*60000));
     serialize("Video",Video);
     event.target.innerHTML="";    
     window.setTimeout(function () {
