@@ -227,7 +227,7 @@ if (FrameBuster())
     //try {
     if (VideoID!="" && VideoID.length==11)
       Video(VideoID);
-    else if (Kategorie=="user")
+    else if (Kategorie=="user" || Kategorie=="channel")
       Interval(UserGallerie,10000);
     else
       NextVideo();
@@ -280,12 +280,12 @@ function CreateVideoGalerie()
   GM_setValue("GalerieAnz",GM_getValue("GalerieAnz",10));
   document.body.innerHTML=VideoData.slice(0,GM_getValue("GalerieAnz",10))
               .map(function (e,i) { return '<form style="float:left; padding-right:8px" id='+e.id+'>'+
-                  '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-90)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
+                  '<iframe id="ytplayer" type="text/html" width="'+(window.innerWidth/2-30)+'" height="'+(window.innerHeight/2-90)+'" src="http://www.youtube.com/embed/'+e.id+'?rel=0&enablejsapi=1" frameborder="0"/></iframe><br>'+ // 640x390 640x480 
                   '<table><tr><td>ID: '+e.id+'<br>Kategorie: '+SelectKat+'</td>'+
                   '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
                   '<input type=radio name=qualitaet value=schlecht>Schlecht<br>'+
                   '<input type=checkbox name=x>'+e.x+'</td>'+
-                  '<td>'+e.lastseen.getShortDate()+' ('+(i+1)+')<br><a href=#'+7*24*60+' name='+e.id+'>+1 Woche</a> <a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href="hide" name='+e.id+'>Hide</a></td>'+
+                  '<td>'+e.lastseen.getShortDate()+' ('+(i+1)+')<br><a href=#'+7*24*60+' name='+e.id+'>+1 Woche</a> <a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href="hide" name='+e.id+' style="display: none">Hide</a></td>'+
                   '</tr></table>'+
                   //uneval(e)+
                   "</form>"; }).join(" ");
@@ -302,6 +302,7 @@ function CreateVideoGalerie()
       //event.target.innerHTML="+"+(Plus*10)+" Min";
       event.target.innerHTML="+"+ShowDateDiff(Plus*10*60000);
     }, 10*1000);
+    $x("//a[@name='"+VideoID+"'][@href='hide']").forEach(function (e) { e.style.display=""; });
     event.stopPropagation();
     event.preventDefault();
   }, true); });
@@ -322,12 +323,33 @@ function CreateVideoGalerie()
       Video[VideoID][event.target.name]=event.target.value;
     serialize("Video",Video);
     $x("//a[@name='"+VideoID+"'][contains(@href,'#')]").forEach(function (e) { e.style.display="none"; });
+    $x("//a[@name='"+VideoID+"'][@href='hide']").forEach(function (e) { e.style.display=""; });
     if (event.target.name=="x") remove($(VideoID));
     //GM_log("Youtube: "+uneval(Video[VideoID]));
     event.stopPropagation();
     event.preventDefault();
   }, true); });
   document.body.scrollIntoView(true);
+  window.setTimeout(function () {
+    $x("//iframe").forEach(function (e) { GM_log(e.wrappedJSObject.getPlayerState()); });
+  }, 10*1000);
+  unsafeWindow.onYouTubePlayerReady = function (playerID)
+  {
+    alert(playerID);
+    /*/
+    var player=document.getElementById("movie_player").wrappedJSObject;
+    //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
+    var intervalID=window.setInterval(function () {
+      //GM_log("interval");
+      if (player.getPlayerState()==0)
+      {
+        //GM_log("Ende");
+        NextVideo();
+        window.clearInterval(intervalID);
+      }
+    },1000);
+    /**/
+  }
   /*/
   function verzclick(target, event){
     var VideoID=event.target.name;
