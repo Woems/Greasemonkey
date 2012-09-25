@@ -285,7 +285,7 @@ function CreateVideoGalerie()
                   '<td><input type=radio name=qualitaet value=gut>Gut<br>'+
                   '<input type=radio name=qualitaet value=schlecht>Schlecht<br>'+
                   '<input type=checkbox name=x>'+e.x+'</td>'+
-                  '<td>'+e.lastseen.getShortDate()+' ('+(i+1)+')<br><a href=#'+7*24*60+' name='+e.id+'>+1 Woche</a> <a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href="hide" name='+e.id+' style="display: none">Hide</a></td>'+
+                  '<td>'+(e.lastseen||new Date()).getShortDate()+' ('+(i+1)+')<br><a href=#'+7*24*60+' name='+e.id+'>+1 Woche</a> <a href=#'+24*60+' name='+e.id+'>+1 Tag</a> <a href="hide" name='+e.id+' style="display: none">Hide</a></td>'+
                   '</tr></table>'+
                   //uneval(e)+
                   "</form>"; }).join(" ");
@@ -448,7 +448,7 @@ function UserGallerie()
       var Video=deserialize("Video",{});
       if (!Video[VideoID])
       {
-        Video[VideoID]={ id:VideoID, anz:0 };
+        Video[VideoID]={ id:VideoID, anz:0, lastseen:new Date() };
         serialize("Video",Video);
         e.parentNode.style.color="lightgray";
         e.parentNode.style.backgroundColor="darkgray";
@@ -626,7 +626,7 @@ function Video(VideoID)
       var Video=deserialize("Video",{});
       if (!Video[VideoID])
       {
-        Video[VideoID]={ id:VideoID, anz:0 };
+        Video[VideoID]={ id:VideoID, anz:0, lastseen:new Date() };
         serialize("Video",Video);
         e.style.color="lightgray";
         e.style.backgroundColor="darkgray";
