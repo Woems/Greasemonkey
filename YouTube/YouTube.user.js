@@ -227,7 +227,7 @@ if (FrameBuster())
     //try {
     if (VideoID!="" && VideoID.length==11)
       Video(VideoID);
-    else if (Kategorie=="user" || Kategorie=="channel")
+    else if (Kategorie=="user" || Kategorie=="channel" || Kategorie=="results")
       Interval(UserGallerie,10000);
     else
       NextVideo();
@@ -266,7 +266,7 @@ function CreateVideoGalerie()
   css("body { background-color:#222; color:white;  }");
   var Kategorien=deserialize('Kategorien',[]).sort();
   Kategorien.unshift("-- bitte auswählen --");
-  Kategorien.push("-- Eingeben --");
+  //Kategorien.push("-- Eingeben --");
   /*/
   var SelectKat="<select name=Kategorie>"+
                 Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
@@ -336,7 +336,6 @@ function CreateVideoGalerie()
   unsafeWindow.onYouTubePlayerReady = function (playerID)
   {
     alert(playerID);
-    /*/
     var player=document.getElementById("movie_player").wrappedJSObject;
     //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
     var intervalID=window.setInterval(function () {
@@ -348,13 +347,13 @@ function CreateVideoGalerie()
         window.clearInterval(intervalID);
       }
     },1000);
-    /**/
   }
   /*/
   function verzclick(target, event){
     var VideoID=event.target.name;
     var Plus=event.target.href.split('#')[1]*1;
     var Video=deserialize("Video",{});
+    if (!Video[VideoID].lastseen) Video[VideoID].lastseen=new Date();
     Video[VideoID].lastseen=new Date(Video[VideoID].lastseen.getTime()+(Plus*60000));
     serialize("Video",Video);
     event.target.innerHTML="";    
@@ -376,7 +375,7 @@ function CreateVideoGalerie()
   function inputclick(target, event){
     var VideoID=event.target.form.id;
     var Video=deserialize("Video",{});
-    if (event.target.name!="x") Video[VideoID].lastseen=new Date();
+    if (event.target.name!="x" || !Video[VideoID].lastseen) Video[VideoID].lastseen=new Date();
     if (event.target.type=="checkbox")
       Video[VideoID][event.target.name]=event.target.checked;
     else
@@ -397,7 +396,7 @@ function CreateVideoGalerie()
     var Video=deserialize("Video",[]);
     var showX=location.hash.indexOf('x')==8;
     var VideoData=ObjValues(Video)
-                  .filter(function (e) { return !e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX); })
+                  .filter(function (e) { return !e.lastseen || (!e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX)); })
                   .sort(function (a,b) { return a.lastseen-b.lastseen; })
     document.title="about:blank#"+VideoData.length;
     VideoData.slice(0,6).forEach(function (e,i) {
@@ -417,9 +416,9 @@ function CreateVideoGalerie()
         var gut=createElement('input',{ type:'radio', name:'qualitaet', value:'gut', onChange:function (t, e) { inputclick(t,e); } });
         var schlecht=createElement('input',{ type:'radio', name:'qualitaet', value:'schlecht', onChange:function (t, e) { inputclick(t,e); } });
         var x=createElement('input',{ type:'checkbox', name:'x', onChange:function (t, e) { inputclick(t,e); }});
-        var td2=createElement('td',{ childs:[ gut, text("Gut"), createElement('br'), schlecht, text("Schlecht"), createElement('br'), x, text(e.x) ] });
+        var td2=createElement('td',{ childs:[ gut, text("Gut"), createElement('br'), schlecht, text("Schlecht"), createElement('br'), x, text({undefined:'?', true:'+', false:'-'}[e.x]||e.x) ] });
         
-        var alter=text(e.lastseen.getShortDate()+' ('+(i+1)+')');
+        var alter=text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate()+' ('+(i+1)+')');
         var link1=createElement('a',{ href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
         var link2=createElement('a',{ href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
         var linkhide=createElement('a',{ href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
@@ -431,7 +430,6 @@ function CreateVideoGalerie()
       }
     });
   },10000);
-  /**/
 }
 
 function UserGallerie()
@@ -483,7 +481,7 @@ function NextVideo()
       var youtube=['',new Date()];
       var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
       for (var i in Video)
-        if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
+        if ((Kat=="* Ohne Kategorie mit X *" && !Video[i].Kategorie && Video[i].x) || (Kat=="* Ohne Kategorie *" && !Video[i].Kategorie && !Video[i].x) || Video[i].Kategorie==Kat)
         {
           if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
             youtube=[ Video[i].id, Video[i].lastseen ];
@@ -505,10 +503,6 @@ function NextVideo()
 function Video(VideoID)
 {
   var Video=deserialize("Video",{});
-  if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
-  Video[VideoID].anz+=1;
-  Video[VideoID].lastseen=new Date();
-  serialize("Video",Video);
   var Kategorien=deserialize('Kategorien',[]).sort();
   Kategorien.unshift("-- bitte auswählen --");
   Kategorien.push("-- Eingeben --");
@@ -518,6 +512,7 @@ function Video(VideoID)
   showmsg({
     id:"VideoStatus",
     text: [uneval(Video[VideoID]),
+           "Datum: "+(Video[VideoID].lastseen||{ getShortDate:function () {return "???";}}).getShortDate(),
            "Kategorie: "+SelectKat,
            "Bitte bewerten sie das Video:",
            ""].join('<br>'),
@@ -566,6 +561,7 @@ function Video(VideoID)
   {
     // Selectbox
     var Kat=deserialize('Kategorien',[]).sort();
+    Kat.push("* Ohne Kategorie mit X *");
     Kat.unshift("* Ohne Kategorie *");
     Kat.unshift("- Kategorie öffnen -");
     var c=Kat.map(function (e) { return createElement('option', { textContent:e }); });
@@ -575,7 +571,7 @@ function Video(VideoID)
       var youtube=['',new Date()];
       var anz=0;
       for (var i in Video)
-         if ((e.value=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==e.value)
+         if ((e.value=="* Ohne Kategorie mit X *" && !Video[i].Kategorie && Video[i].x) || (e.value=="* Ohne Kategorie *" && !Video[i].Kategorie && !Video[i].x) || Video[i].Kategorie==e.value)
          {
            anz+=1;
            if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
@@ -604,7 +600,7 @@ function Video(VideoID)
           var youtube=['',new Date()];
           var Kat=GM_getValue('lastKat','* Ohne Kategorie *');
           for (var i in Video)
-            if ((Kat=="* Ohne Kategorie *" && !Video[i].Kategorie) || Video[i].Kategorie==Kat)
+            if ((Kat=="* Ohne Kategorie mit X *" && !Video[i].Kategorie && Video[i].x) || (Kat=="* Ohne Kategorie *" && !Video[i].Kategorie && !Video[i].x) || Video[i].Kategorie==Kat)
             {
                if (Video[i].lastseen<youtube[1] && Video[i].qualitaet!="schlecht")
                  youtube=[ Video[i].id, Video[i].lastseen ];
@@ -654,6 +650,11 @@ function Video(VideoID)
       }
     },1000);
   }
+  var Video=deserialize("Video",{});
+  if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
+  Video[VideoID].anz+=1;
+  Video[VideoID].lastseen=new Date();
+  serialize("Video",Video);
   //GM_log("ALL DONE");
 }
 
