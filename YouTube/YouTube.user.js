@@ -227,7 +227,7 @@ if (FrameBuster())
     //try {
     if (VideoID!="" && VideoID.length==11)
       Video(VideoID);
-    else if (Kategorie=="user")
+    else if (Kategorie=="user" || Kategorie=="channel")
       Interval(UserGallerie,10000);
     else
       NextVideo();
@@ -267,7 +267,7 @@ function CreateVideoGalerie()
   var Kategorien=deserialize('Kategorien',[]).sort();
   Kategorien.unshift("-- bitte auswählen --");
   Kategorien.push("-- Eingeben --");
-  /**/
+  /*/
   var SelectKat="<select name=Kategorie>"+
                 Kategorien.map(function (e) { return "<option>"+e+"</option>" }).join("")+
                 "</select>"
@@ -362,6 +362,7 @@ function CreateVideoGalerie()
     serialize("Video",Video);
     $x("//a[@name='"+VideoID+"'][contains(@href,'#')]").forEach(function (e) { e.style.display="none"; });
     if (event.target.name=="x") remove($(VideoID));
+    //alert([event.target.form.id, event.target.type, event.target.name, event.target.value, event.target.checked].join("\n"));;
     //GM_log("Youtube: "+uneval(Video[VideoID]));
     event.stopPropagation();
     event.preventDefault();
@@ -377,14 +378,18 @@ function CreateVideoGalerie()
                   .filter(function (e) { return !e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX); })
                   .sort(function (a,b) { return a.lastseen-b.lastseen; })
     document.title="about:blank#"+VideoData.length;
-    VideoData.slice(0,4).forEach(function (e,i) {
+    VideoData.slice(0,6).forEach(function (e,i) {
       if (AktiveVideoIDs.indexOf(e.id)==-1)
       {
-        GM_log("+++");
         var iframe=createElement('iframe',{ id:"ytplayer", type:"text/html", width:size[0], height:size[1], 
                 src:'http://www.youtube.com/embed/'+e.id+'?rel=0', frameBorder:0 });
         
-        var select=createElement('select',{ name:"Kategorie", onChange:function (t, e) { inputclick(t,e); }, childs: Kategorien.map(function (e) { return createElement('option',{ innerHTML:e }) }) });
+        var select=createElement('select',{ name:"Kategorie", childs: Kategorien.map(function (e) { return createElement('option',{ innerHTML:e }) }) });
+        select.addEventListener("change",function(event){ 
+          inputclick(event.target, event);
+          event.stopPropagation();
+          event.preventDefault();
+        }, true);
         var td1=createElement('td',{ innerHTML:'ID: '+e.id+'<br>Kategorie: ', childs:[ select ] });
         
         var gut=createElement('input',{ type:'radio', name:'qualitaet', value:'gut', onChange:function (t, e) { inputclick(t,e); } });
@@ -403,7 +408,7 @@ function CreateVideoGalerie()
         createElement('form',{ style:"float:left; padding-right:8px", id:e.id, childs:[ iframe, createElement('br'), table ]}, document.body);
       }
     });
-  },20000);
+  },10000);
   /**/
 }
 
