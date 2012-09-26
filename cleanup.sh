@@ -10,6 +10,7 @@ do
   echo 5.   git mergetool -y
   echo 6.   git commit -m "Merge"
   echo 7. git push -u origin master
+  echo 8. mail prefs.js
   echo Q. Quit
   echo "----------"
   read -n 1 -p "Nr:" Nr
@@ -50,6 +51,19 @@ do
   7)
     git push -u origin master
     read -n 1 -p "Beliebige Taste zum fortsetzen"
+    ;;
+  8)
+    TO="nils.schneider@freenet.de"
+    echo "To: $TO"
+    SUBJ="$(date +%F) prefs.js von  $(hostname -f)"
+    echo "Subject: $SUBJ"
+    BODY="Hier die prefs.js vom $(date) vom Rechner $(hostname -f)"
+    echo "Body: $BODY"
+    PROFIL="$(grep Path ~/.mozilla/firefox/profiles.ini | cut -d "=" -f 2)"
+    echo "Profil: $PROFIL"
+    PREFSJS=~/.mozilla/firefox/$PROFIL/prefs.js
+    echo "Prefs.js: $PREFSJS"
+    thunderbird -compose "to='$TO',subject='$SUBJ',body='$BODY',attachment='$PREFSJS'"
     ;;
   q) exit ;;
   *)
