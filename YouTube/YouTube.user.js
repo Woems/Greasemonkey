@@ -418,7 +418,7 @@ function CreateVideoGalerie()
         var x=createElement('input',{ type:'checkbox', name:'x', onChange:function (t, e) { inputclick(t,e); }});
         var td2=createElement('td',{ childs:[ gut, text("Gut"), createElement('br'), schlecht, text("Schlecht"), createElement('br'), x, text({undefined:'?', true:'+', false:'-'}[e.x]||e.x) ] });
         
-        var alter=text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate()+' ('+(i+1)+')');
+        var alter=text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate());
         var link1=createElement('a',{ href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
         var link2=createElement('a',{ href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
         var linkhide=createElement('a',{ href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
@@ -503,6 +503,11 @@ function NextVideo()
 function Video(VideoID)
 {
   var Video=deserialize("Video",{});
+  if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
+  Video[VideoID].anz+=1;
+  var lastseen=Video[VideoID].lastseen;
+  Video[VideoID].lastseen=new Date();
+  serialize("Video",Video);
   var Kategorien=deserialize('Kategorien',[]).sort();
   Kategorien.unshift("-- bitte auswählen --");
   Kategorien.push("-- Eingeben --");
@@ -512,7 +517,7 @@ function Video(VideoID)
   showmsg({
     id:"VideoStatus",
     text: [uneval(Video[VideoID]),
-           "Datum: "+(Video[VideoID].lastseen||{ getShortDate:function () {return "???";}}).getShortDate(),
+           "Datum: "+(lastseen||{ getShortDate:function () {return "???";}}).getShortDate(),
            "Kategorie: "+SelectKat,
            "Bitte bewerten sie das Video:",
            ""].join('<br>'),
@@ -650,11 +655,6 @@ function Video(VideoID)
       }
     },1000);
   }
-  var Video=deserialize("Video",{});
-  if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
-  Video[VideoID].anz+=1;
-  Video[VideoID].lastseen=new Date();
-  serialize("Video",Video);
   //GM_log("ALL DONE");
 }
 
