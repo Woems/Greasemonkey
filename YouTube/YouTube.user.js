@@ -502,6 +502,7 @@ function NextVideo()
 
 function Video(VideoID)
 {
+  //alert("Video: "+VideoID);
   var Video=deserialize("Video",{});
   var Kategorien=deserialize('Kategorien',[]).sort();
   Kategorien.unshift("-- bitte auswählen --");
@@ -636,15 +637,17 @@ function Video(VideoID)
       }
     }
   }, true); });
+  GM_log("Ready?");
   unsafeWindow.onYouTubePlayerReady = function (playerID)
   {
+    GM_log("youtube Ready");
     var player=document.getElementById("movie_player").wrappedJSObject;
     //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
     var intervalID=window.setInterval(function () {
-      //GM_log("interval");
+      GM_log("interval");
       if (player.getPlayerState()==0)
       {
-        //GM_log("Ende");
+        GM_log("Ende");
         NextVideo();
         window.clearInterval(intervalID);
       }
