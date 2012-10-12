@@ -206,6 +206,7 @@ function createHover(elem,text)
 //GM_log=function (){}
 /********************************/
 
+//GM_log([location.href, FrameBuster(), top.location.href].join("\n"));
 
 if (FrameBuster())
 {
@@ -221,18 +222,34 @@ if (FrameBuster())
   var VideoID=getParam("v","");
   if (VideoID.length!=11 && VideoID.length!=0) alert("VideoID muss 11 Zeichen haben. Hat aber nur "+VideoID.length+". Hier die ID: "+VideoID);
   //GM_log("VideoID: "+VideoID);
-  if (location.hash.indexOf("#YouTube")!=-1) CreateVideoGalerie(); else
-  //if (location.href.indexOf("embed")==-1)
-  //{
-    //try {
-    if (VideoID!="" && VideoID.length==11)
-      Video(VideoID);
-    else if (Kategorie=="user" || Kategorie=="channel" || Kategorie=="results")
-      Interval(UserGallerie,10000);
-    else
-      NextVideo();
-    //} catch(e) { alert([e, uneval(e)].join("\n---\n")); }
-  //}
+  if (location.hash.indexOf("#YouTube")!=-1)
+    CreateVideoGalerie();
+  else if (VideoID!="" && VideoID.length==11)
+    Video(VideoID);
+  else if (Kategorie=="user" || Kategorie=="channel" || Kategorie=="results")
+    Interval(UserGallerie,10000);
+  else
+    NextVideo();
+} else {
+  if (location.href.indexOf("GalerieAutoHide=true")!=-1)
+  {
+    GM_log(location.href);
+    unsafeWindow.onYouTubePlayerReady = function (playerID)
+    {
+      alert(playerID);
+      var player=document.getElementById("movie_player").wrappedJSObject;
+      //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
+      var intervalID=window.setInterval(function () {
+        GM_log("interval");
+        if (player.getPlayerState()==0)
+        {
+          GM_log("Ende");
+          //NextVideo();
+          window.clearInterval(intervalID);
+        }
+      },1000);  
+    }
+  }
 }
 
 
@@ -249,16 +266,18 @@ function ObjKeys(obj) {
   return tmp;
 }
 
-function ShowDateDiff(sec)
+function ShowDateDiff(sec, anz)
 {
   var teile={ MSec:1000, Sec:60, Min:60, H:24, Tage:7, Wochen:99999 };
-  var tmp='';
+  var tmp=[];
   for (i in teile)
   {
-    if (Math.floor(sec%teile[i])!=0) tmp=Math.floor(sec%teile[i])+' '+i+' '+tmp;
+    if (Math.floor(sec%teile[i])!=0) tmp.push(Math.floor(sec%teile[i])+' '+i);
     sec=sec/teile[i];
   }
-  return tmp;
+  tmp=tmp.reverse();
+  if (anz) tmp=tmp.slice(0,anz);
+  return tmp.join(" ");
 }
 
 function CreateVideoGalerie()
@@ -396,16 +415,17 @@ function CreateVideoGalerie()
     var Video=deserialize("Video",[]);
     var showX=location.hash.indexOf('x')==8;
     var VideoData=ObjValues(Video)
-                  .filter(function (e) { return !e.lastseen || (!e.Kategorie && !e.qualitaet && (e.x==undefined || e.x==showX)); })
-                  .sort(function (a,b) { return a.lastseen-b.lastseen; })
+                  .filter(function (e) { return !e.lastseen || ((!e.Kategorie || !e.qualitaet) && (e.x==undefined || e.x==showX)); })
+                  //.filter(function (e) { return !e.lastseen || (e.Kategorie=="Modelbahn Tutorial" && e.qualitaet && (e.x==undefined || e.x==showX)); })
+                  .sort(function (a,b) { return (a.lastseen||0)-(b.lastseen||0); })
     document.title="about:blank#"+VideoData.length;
     VideoData.slice(0,6).forEach(function (e,i) {
       if (AktiveVideoIDs.indexOf(e.id)==-1)
       {
         var iframe=createElement('iframe',{ id:"ytplayer", type:"text/html", width:size[0], height:size[1], 
-                src:'http://www.youtube.com/embed/'+e.id+'?rel=0', frameBorder:0 });
+                src:'http://www.youtube.com/embed/'+e.id+'?rel=0&enablejsapi=1&GalerieAutoHide=true', frameBorder:0 });
         
-        var select=createElement('select',{ name:"Kategorie", childs: Kategorien.map(function (e) { return createElement('option',{ innerHTML:e }) }) });
+        var select=createElement('select',{ name:"Kategorie", title:e.Kategorie, childs: Kategorien.map(function (kat) { var tmp=createElement('option',{ innerHTML:kat }); if (kat==e.Kategorie) tmp.selected=true; return tmp; }) });
         select.addEventListener("change",function(event){ 
           inputclick(event.target, event);
           event.stopPropagation();
@@ -415,14 +435,17 @@ function CreateVideoGalerie()
         
         var gut=createElement('input',{ type:'radio', name:'qualitaet', value:'gut', onChange:function (t, e) { inputclick(t,e); } });
         var schlecht=createElement('input',{ type:'radio', name:'qualitaet', value:'schlecht', onChange:function (t, e) { inputclick(t,e); } });
+        if (e.qualitaet=='schlecht') schlecht.checked=true;
+        if (e.qualitaet=='gut') gut.checked=true;
         var x=createElement('input',{ type:'checkbox', name:'x', onChange:function (t, e) { inputclick(t,e); }});
         var td2=createElement('td',{ childs:[ gut, text("Gut"), createElement('br'), schlecht, text("Schlecht"), createElement('br'), x, text({undefined:'?', true:'+', false:'-'}[e.x]||e.x) ] });
         
         var alter=text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate());
+        var alterdiff=text(ShowDateDiff(new Date()-(e.lastseen||new Date()), 3));
         var link1=createElement('a',{ href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
         var link2=createElement('a',{ href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
         var linkhide=createElement('a',{ href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
-        var td3=createElement('td',{ childs:[ alter, createElement('br'), link1, link2, linkhide ] });
+        var td3=createElement('td',{ childs:[ alter, createElement('br'), alterdiff, createElement('br'), link1, link2, linkhide ] });
         
         var tr=createElement('tr',{ childs: [ td1, td2, td3] });
         var table=createElement('table',{ childs:[ tr ] });
@@ -437,14 +460,14 @@ function UserGallerie()
   var Video=deserialize("Video",{});
   // Vorschauliste bunt
   var VideoLinks=$x("//a[contains(@href,'watch?v=')]")
-                   .map(function (a) { return { link:a.href, elem:a.parentNode }; })
+                   .map(function (a) { return { link:a.href, elem:a.parentNode }; })  // user/Uploads: li/span/a
                    .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; });
   //GM_log(uneval(VideoLinks));
-  VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
+  VideoLinks.forEach(function (vid) {  if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
   //showmsg({ text:"aaa" });
   $x("//a[contains(@href,'v=')]").forEach(function (a) { a.addEventListener("click",function(event){
     //if (event.ctrlKey) // && event.altKey)
-    {
+    //{
       var e=event.target;
       while (!e || !e.href) e=e.parentNode;
       var VideoID=e.href.match(/v=([a-zA-Z0-9-_]*)/)[1];
@@ -458,8 +481,9 @@ function UserGallerie()
         event.stopPropagation();
         event.preventDefault();
       }
-    }
+    //}
   }, true); });
+  //showmsg({ text:"bbb" });
 }
 
 function NextVideo()
@@ -502,6 +526,7 @@ function NextVideo()
 
 function Video(VideoID)
 {
+
   var Video=deserialize("Video",{});
   if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
   Video[VideoID].anz+=1;
