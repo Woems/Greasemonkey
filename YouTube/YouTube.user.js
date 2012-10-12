@@ -375,18 +375,22 @@ function CreateVideoGalerie()
     if (!Video[VideoID].lastseen) Video[VideoID].lastseen=new Date();
     Video[VideoID].lastseen=new Date(Video[VideoID].lastseen.getTime()+(Plus*60000));
     serialize("Video",Video);
-    event.target.innerHTML="";    
+    event.target.innerHTML="";
+    /**/
+    remove($(VideoID));    
+    /*/
     window.setTimeout(function () {
       event.target.href="#"+(Plus*10);
       //event.target.innerHTML="+"+(Plus*10)+" Min";
       event.target.innerHTML="+"+ShowDateDiff(Plus*10*60000);
     }, 10*1000);
+    /**/
     event.stopPropagation();
     event.preventDefault();
   }
   function hideclick(target, event){
     var VideoID=event.target.name;
-    $(VideoID).style.display="none";
+    //$(VideoID).style.display="none";
     remove($(VideoID));
     event.stopPropagation();
     event.preventDefault();
@@ -460,10 +464,10 @@ function UserGallerie()
   var Video=deserialize("Video",{});
   // Vorschauliste bunt
   var VideoLinks=$x("//a[contains(@href,'watch?v=')]")
-                   .map(function (a) { return { link:a.href, elem:a.parentNode }; })  // user/Uploads: li/span/a
+                   .map(function (a) { return { link:a.href, elem:('user'==Kategorie?$xs("ancestor::div[@class='video yt-tile-visible'] | ancestor::li[@class='channels-content-item']",a):'channel'==Kategorie?$xs('../..',a):a.parentNode)||a }; })
                    .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; });
   //GM_log(uneval(VideoLinks));
-  VideoLinks.forEach(function (vid) {  if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
+  VideoLinks.forEach(function (vid) { if (Video[vid.id]) /*vid.elem.className="w"+Video[vid.id].qualitaet;*/ vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
   //showmsg({ text:"aaa" });
   $x("//a[contains(@href,'v=')]").forEach(function (a) { a.addEventListener("click",function(event){
     //if (event.ctrlKey) // && event.altKey)
@@ -476,14 +480,14 @@ function UserGallerie()
       {
         Video[VideoID]={ id:VideoID, anz:0, lastseen:new Date() };
         serialize("Video",Video);
-        e.parentNode.style.color="lightgray";
-        e.parentNode.style.backgroundColor="darkgray";
+        var ColorNode=$xs("ancestor::div[@class='video yt-tile-visible'] | ancestor::li[@class='channels-content-item']",a)||a;
+        ColorNode.style.color="lightgray";
+        ColorNode.style.backgroundColor="darkgray";
         event.stopPropagation();
         event.preventDefault();
       }
     //}
   }, true); });
-  //showmsg({ text:"bbb" });
 }
 
 function NextVideo()
@@ -526,7 +530,6 @@ function NextVideo()
 
 function Video(VideoID)
 {
-
   var Video=deserialize("Video",{});
   if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
   Video[VideoID].anz+=1;
@@ -666,15 +669,17 @@ function Video(VideoID)
       }
     }
   }, true); });
+  GM_log("Ready?");
   unsafeWindow.onYouTubePlayerReady = function (playerID)
   {
+    GM_log("youtube Ready");
     var player=document.getElementById("movie_player").wrappedJSObject;
     //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
     var intervalID=window.setInterval(function () {
       //GM_log("interval");
       if (player.getPlayerState()==0)
       {
-        //GM_log("Ende");
+        GM_log("Ende");
         NextVideo();
         window.clearInterval(intervalID);
       }
