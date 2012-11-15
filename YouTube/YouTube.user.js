@@ -479,7 +479,7 @@ function UserGallerie()
   var VideoLinks=$x("//a[contains(@href,'watch?v=')]")
                    .map(function (a) { return { link:a.href, elem:('user'==Kategorie?$xs("ancestor::div[@class='video yt-tile-visible'] | ancestor::li[@class='channels-content-item']",a):'channel'==Kategorie?$xs('../..',a):a.parentNode)||a }; })
                    .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; });
-  //GM_log(uneval(VideoLinks));
+  //alert(uneval(VideoLinks));
   VideoLinks.forEach(function (vid) { if (Video[vid.id]) /*vid.elem.className="w"+Video[vid.id].qualitaet;*/ vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
   //showmsg({ text:"aaa" });
   $x("//a[contains(@href,'v=')]").forEach(function (a) { a.addEventListener("click",function(event){
