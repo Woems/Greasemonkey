@@ -207,7 +207,7 @@ function createHover(elem,text)
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
-GM_log([location.href, location.search, location.pathname, location.host, location.hostname].join('\n'));
+//GM_log([location.href, location.search, location.pathname, location.host, location.hostname].join('\n'));
 //hash, host, hostname, href, pathname, port, protocol, search
 
 var Category=deserialize('Category',{}); //serialize('Category',Category);
@@ -221,5 +221,22 @@ if (!Category[location.host.split(".")[0]])
     OK: "OK",
     onOK: function (data) {},
   });
-  data.style.zIndex=999;
+  //data.style.zIndex=99999;
 }
+
+  var gesehen=deserialize('data',{});
+  var tmp=gesehen;
+  var url=location.href.replace('http://','').replace('.deviantart.com','').split('/');
+  GM_log('1: '+uneval(gesehen));
+  for (i in url) if (url.hasOwnProperty(i))
+  {
+    //GM_logs([uneval(gesehen), url[i], uneval(tmp), uneval(tmp[url[i]])].join("\n\n"));
+    if (!tmp[url[i]]) tmp[url[i]]={};
+    tmp=tmp[url[i]];
+  }
+  GM_log('2: '+uneval(gesehen));
+  if (tmp['seen']) { alert('seen'); $('gmi-ResourcePageDisplayPane').style.backgroundColor='lightgray'; };
+  tmp['seen']=true;
+  GM_log('3: '+uneval(gesehen));
+  serialize('data',gesehen);
+
