@@ -2,6 +2,7 @@
 // @name           FritzBox Netzwerk-IP-Liste sortieren
 // @namespace      Woems
 // @include        https://*.dyndns.org*
+// @include        https://*.dyndns-ip.com*
 // @include        http://fritz.box
 // ==/UserScript==
 
@@ -49,7 +50,7 @@ function trim(text) { return text.replace(/(^\s*|\s*$)/g,""); }
 function uniq(array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
 function Object2HTMLTable(obj) { var rows=""; for (var i in obj) rows+="<tr><td><b>"+i+":</b></td><td>"+obj[i]+"</td></tr>"; return "<table>"+rows+"</table>"; }
 function aa(obj) { alert(uneval(obj)); }
-function ga(obj) { GM_log(uneval(obj)); }
+function ga(obj) { GM_log(uneval(obj)); }https://github.com/Woems/Greasemonkey/blob/master/fritzbox_-_netadd/fritzbox_-_netadd.user.js
 function getParam(key) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return (key)?r[key]:r; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
 //GM_log=function (){}
