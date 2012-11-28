@@ -412,6 +412,17 @@ function CreateVideoGalerie()
     event.preventDefault();
   }
   var size=[window.innerWidth/2-30, window.innerHeight/2-90];
+/*
+function onKey(func) { on('keydown',window,function (e) { 
+  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
+  var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
+  if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
+function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
+function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
+function getAccesskeys() { return $x('//*[@accesskey]').map(function (e) { return e.getAttribute("accesskey"); }).sort().join(", "); }
+function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmnopqrstuvwxyz1234567890+-#<".split("").filter(function (e) { return keys.indexOf(e)==-1; }).sort().join(", "); }
+*/
+  onAccesskey(function (key, node, e) { if (key=='x') node.click(); });
   Interval(function () { 
     var AktiveVideoIDs=$x("//form[@id]").map(function (e) { return e.id; });
     //alert(AktiveVideoIDs.join("\n"));
@@ -423,7 +434,7 @@ function CreateVideoGalerie()
                   //.filter(function (e) { return !e.lastseen || (e.Kategorie=="Modelbahn Tutorial" && e.qualitaet && (e.x==undefined || e.x==showX)); })
                   .sort(function (a,b) { return (a.lastseen||0)-(b.lastseen||0); })
     document.title="about:blank#"+VideoData.length;
-    VideoData.slice(0,6).forEach(function (e,i) {
+    VideoData.slice(0,8).forEach(function (e,i) {
       if (AktiveVideoIDs.indexOf(e.id)==-1)
       {
         var iframe=createElement('iframe',{ id:"ytplayer", type:"text/html", width:size[0], height:size[1], 
@@ -435,13 +446,13 @@ function CreateVideoGalerie()
           event.stopPropagation();
           event.preventDefault();
         }, true);
-        var td1=createElement('td',{ innerHTML:'ID: '+e.id+'<br>Kategorie: ', childs:[ select ] });
+        var td1=createElement('td',{ innerHTML:'ID: '+e.id+'<br>Kategorie: ', childs:[ select ], title:uneval(e) });
         
         var gut=createElement('input',{ type:'radio', name:'qualitaet', value:'gut', onChange:function (t, e) { inputclick(t,e); } });
         var schlecht=createElement('input',{ type:'radio', name:'qualitaet', value:'schlecht', onChange:function (t, e) { inputclick(t,e); } });
         if (e.qualitaet=='schlecht') schlecht.checked=true;
         if (e.qualitaet=='gut') gut.checked=true;
-        var x=createElement('input',{ type:'checkbox', name:'x', onChange:function (t, e) { inputclick(t,e); }});
+        var x=createElement('input',{ type:'checkbox', name:'x', title:"AccessKey: x", accessKey:'x', onChange:function (t, e) { inputclick(t,e); }});
         var td2=createElement('td',{ childs:[ gut, text("Gut"), createElement('br'), schlecht, text("Schlecht"), createElement('br'), x, text({undefined:'?', true:'+', false:'-'}[e.x]||e.x) ] });
         
         var alter=text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate());
