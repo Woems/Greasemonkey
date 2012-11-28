@@ -59,6 +59,7 @@ function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return (key)?r[key]:r; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
 //GM_log=function (){}
+function inFrame() { return self!=top; }
 /********************************/
 
 globaleTasten();
@@ -66,6 +67,14 @@ var galerie=deserialize('galerie',{});
 if (galerie[location.host]) window.setTimeout(galerieAnzeigen,1000);
 
 //serialize('galerie',galerie);
+
+
+if (!inFrame())
+  window.setTimeout(function () {
+    var img=$x("//img");
+    var sortedimg=img.sort(function (a,b) { return b.width*b.height-a.width*a.height; });
+    sortedimg[0].scrollIntoView();
+  }, 2*1000);
 
 /**
 	@name globaleTasten
@@ -78,7 +87,7 @@ function globaleTasten () {
     if (galerie[location.host]) 
       delete galerie[location.host];
     else
-      galerie[location.host]={ pathname:"", bilder:"//img", next:"", preview:"", minheight:100, minwidth:100 };
+      galerie[location.host]={ pathname:"", bilder:"//img", next:"", preview:"", minheight:200, minwidth:200 };
     alert("Galerie "+(galerie[location.host]?'':'de')+"aktiviert. Bitte die Seite neu laden...");
     serialize('galerie',galerie);
   });

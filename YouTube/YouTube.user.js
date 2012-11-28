@@ -280,6 +280,12 @@ function ShowDateDiff(sec, anz)
   return tmp.join(" ");
 }
 
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+/////////////////////////////// Video GALERIE ///////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
 function CreateVideoGalerie()
 {
   css("body { background-color:#222; color:white;  }");
@@ -426,13 +432,14 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
   Interval(function () { 
     var AktiveVideoIDs=$x("//form[@id]").map(function (e) { return e.id; });
     //alert(AktiveVideoIDs.join("\n"));
-    
+    if (AktiveVideoIDs.length>6) return;
     var Video=deserialize("Video",[]);
     var showX=location.hash.indexOf('x')==8;
     var VideoData=ObjValues(Video)
                   .filter(function (e) { return !e.lastseen || ((!e.Kategorie || !e.qualitaet) && (e.x==undefined || e.x==showX)); })
                   //.filter(function (e) { return !e.lastseen || (e.Kategorie=="Modelbahn Tutorial" && e.qualitaet && (e.x==undefined || e.x==showX)); })
                   .sort(function (a,b) { return (a.lastseen||0)-(b.lastseen||0); })
+                  //.sort(function (){ return (Math.round(Math.random())-0.5); })
     document.title="about:blank#"+VideoData.length;
     VideoData.slice(0,8).forEach(function (e,i) {
       if (AktiveVideoIDs.indexOf(e.id)==-1)
@@ -470,6 +477,12 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
   },10000);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+////////////////////////// USERGALERIE ///////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
 function UserGallerie()
 {
   var Video=deserialize("Video",{});
@@ -500,6 +513,12 @@ function UserGallerie()
     //}
   }, true); });
 }
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+////////////////////////////// Video /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 function NextVideo()
 {
@@ -590,18 +609,20 @@ function Video(VideoID)
     serialize("Video",Video);
   }, true);
 
-  // Vorschauliste bunt
+  // Vorschauliste BUNT
   var VideoLinks=$x("//ul[@id='watch-related']//li")
                    .map(function (e) { return { link:$xs(".//a",e).href, elem:e }; })
                    .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; })
-  //alert(uneval(VideoLinks));
+  //alert([ uneval(VideoLinks) ].join("\n"));
   Interval(function () {
     var Video=deserialize("Video",{});
     VideoLinks.forEach(function (vid) { if (Video[vid.id]) vid.elem.style.backgroundColor={ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[vid.id].qualitaet]; });
   }, 60000);
   
-  // Links zu gespeicherten Videos
-  if ($('watch-actions'))
+  // LINKS zu gespeicherten Videos
+  var MenuBase=$('watch-actions');
+  if (!MenuBase) MenuBase=$('watch7-secondary-actions');
+  if (MenuBase)
   {
     // Selectbox
     var Kat=deserialize('Kategorien',[]).sort();
@@ -634,7 +655,7 @@ function Video(VideoID)
         GM_openInTab("http://www.youtube.com/watch?v="+youtube[0]);
       else
         location.href="http://www.youtube.com/watch?v="+youtube[0];
-    } }, $('watch-actions'));
+    } }, MenuBase);
     // Button
     createElement('button',{
         className: "yt-uix-button yt-uix-button-default",
@@ -660,7 +681,7 @@ function Video(VideoID)
           }
           location.href="http://www.youtube.com/watch?v="+youtube[0];
         }
-    }, $('watch-actions'));
+    }, MenuBase);
   }
   $x("//a[contains(@href,'v=')]").forEach(function (a) { a.addEventListener("click",function(event){
     //if (event.ctrlKey) // && event.altKey)
@@ -680,17 +701,17 @@ function Video(VideoID)
       }
     }
   }, true); });
-  GM_log("Ready?");
+  //GM_log("Ready?");
   unsafeWindow.onYouTubePlayerReady = function (playerID)
   {
-    GM_log("youtube Ready");
+    //GM_log("youtube Ready");
     var player=document.getElementById("movie_player").wrappedJSObject;
     //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
     var intervalID=window.setInterval(function () {
       //GM_log("interval");
       if (player.getPlayerState()==0)
       {
-        GM_log("Ende");
+        //GM_log("Ende");
         NextVideo();
         window.clearInterval(intervalID);
       }
