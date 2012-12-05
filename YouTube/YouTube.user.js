@@ -10,6 +10,7 @@
 // @grant          GM_log
 // @grant          GM_openInTab
 // @include        http://*youtube.com*
+// @include        https://*youtube.com*
 // @include        about:blank#YouTube*
 // ==/UserScript==
 
