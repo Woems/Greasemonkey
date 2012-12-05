@@ -2,7 +2,8 @@
 // @name           FritzBox - NetAdd
 // @namespace      Woems
 // @description    Im DHCP eine neue feste IP vergeben
-// @include        https://woems.dyndns.org/net/newdevice.lua*
+// @include        https://*.dyndns.org/net/newdevice.lua*
+// @include        https://*.dyndns-ip.com/net/newdevice.lua*
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
