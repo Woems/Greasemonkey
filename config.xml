@@ -582,7 +582,8 @@
     <Grant>GM_log</Grant>
     <Grant>GM_setValue</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
-    <Include>https://woems.dyndns.org/net/newdevice.lua*</Include>
+    <Include>https://*.dyndns.org/net/newdevice.lua*</Include>
+    <Include>https://*.dyndns-ip.com/net/newdevice.lua*</Include>
   </Script>
   <Script basedir="fritzbox_netzwerk-ip-lis" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="fritzbox_netzwerk-ip-lis.user.js" name="FritzBox Netzwerk-IP-Liste sortieren" namespace="Woems" runAt="document-end" version="">
     <Grant>GM_getValue</Grant>
@@ -590,6 +591,7 @@
     <Grant>GM_setValue</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
     <Include>https://*.dyndns.org*</Include>
+    <Include>https://*.dyndns-ip.com*</Include>
     <Include>http://fritz.box</Include>
   </Script>
   <Script basedir="no_middle_man" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Rewrites URLs to remove redirection scripts" enabled="false" filename="no_middle_man.user.js" name="No Middle Man" namespace="http://fivethreenine.blogspot.com/2006/03/no-middle-man.html" runAt="document-end" version="">
