@@ -68,13 +68,15 @@ if (galerie[location.host]) window.setTimeout(galerieAnzeigen,1000);
 
 //serialize('galerie',galerie);
 
-
-if (!inFrame())
-  window.setTimeout(function () {
-    var img=$x("//img");
-    var sortedimg=img.sort(function (a,b) { return b.width*b.height-a.width*a.height; });
-    sortedimg[0].scrollIntoView();
-  }, 2*1000);
+function ScrollToPicture()
+{
+  if (!inFrame())
+    window.setTimeout(function () {
+      var img=$x("//img");
+      var sortedimg=img.sort(function (a,b) { return b.width*b.height-a.width*a.height; });
+      sortedimg[0].scrollIntoView();
+    }, 2*1000);
+}
 
 /**
 	@name globaleTasten
