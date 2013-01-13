@@ -376,10 +376,13 @@ function CreateVideoGalerie()
   /*/
   function verzclick(target, event){
     var VideoID=event.target.name;
-    var Plus=event.target.href.split('#')[1]*1;
+    var Plus=event.target.href.split('#')[1];
     var Video=deserialize("Video",{});
     if (!Video[VideoID].lastseen) Video[VideoID].lastseen=new Date();
-    Video[VideoID].lastseen=new Date(Video[VideoID].lastseen.getTime()+(Plus*60000));
+    if (Plus=="now")
+      Video[VideoID].lastseen=new Date();
+    else
+      Video[VideoID].lastseen=new Date(Video[VideoID].lastseen.getTime()+(Plus*60000));
     serialize("Video",Video);
     event.target.innerHTML="";
     /**/
@@ -417,7 +420,7 @@ function CreateVideoGalerie()
     event.stopPropagation();
     event.preventDefault();
   }
-  var size=[window.innerWidth/2-30, window.innerHeight/2-90];
+  var size=[window.innerWidth/2-30, window.innerHeight-90];
 /*
 function onKey(func) { on('keydown',window,function (e) { 
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
@@ -464,8 +467,10 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
         
         var alter=text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate());
         var alterdiff=text(ShowDateDiff(new Date()-(e.lastseen||new Date()), 3));
-        var link1=createElement('a',{ href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
-        var link2=createElement('a',{ href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
+        //var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
+        //var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+30*24*60, name:e.id, textContent:'+1 Monat', onClick:verzclick });
+        var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#now', name:e.id, textContent:'=now', onClick:verzclick });
+        var link2=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
         var linkhide=createElement('a',{ href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
         var td3=createElement('td',{ childs:[ alter, createElement('br'), alterdiff, createElement('br'), link1, link2, linkhide ] });
         
