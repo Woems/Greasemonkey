@@ -10,6 +10,7 @@
 // @grant          GM_log
 // @grant          GM_openInTab
 // @include        http://*youtube.com*
+// @include        https://*youtube.com*
 // @include        about:blank#YouTube*
 // ==/UserScript==
 
@@ -420,6 +421,7 @@ function CreateVideoGalerie()
     event.stopPropagation();
     event.preventDefault();
   }
+  //var size=[window.innerWidth/2-30, window.innerHeight/2-90];
   var size=[window.innerWidth/2-30, window.innerHeight-90];
 /*
 function onKey(func) { on('keydown',window,function (e) { 
@@ -563,6 +565,24 @@ function NextVideo()
   });
 }
 
+function ObjOut(o)
+{
+  tmp=[];
+  for (var i in o)
+  {
+    var j={ id:'ID', anz:'Anzahl', lastseen:'Zuletzt angesehen', qualitaet:'Qualitaet' }[i] || i;
+    j='<b>'+j+'</b>'
+    switch(typeof o[i])
+    {
+      case 'string': tmp.push(j+': "'+o[i]+'"'); break;
+      case 'number': tmp.push(j+': '+o[i]); break;
+      case 'object': tmp.push(j+': '+o[i].getShortDate()); break;
+      default: tmp.push(j+': ('+typeof o[i]+') '+o[i]); break;
+    }
+  }
+  return tmp.join(', ');
+}
+
 function Video(VideoID)
 {
   var Video=deserialize("Video",{});
@@ -579,10 +599,10 @@ function Video(VideoID)
                 "</select>"
   showmsg({
     id:"VideoStatus",
-    text: [uneval(Video[VideoID]),
-           "Datum: "+(lastseen||{ getShortDate:function () {return "???";}}).getShortDate(),
+    text: ['<span style="font-size:0.8em">'+ObjOut(Video[VideoID])+'</span>',
+           //"Datum: "+(lastseen||{ getShortDate:function () {return "???";}}).getShortDate(),
            "Kategorie: "+SelectKat,
-           "Bitte bewerten sie das Video:",
+           //"Bitte bewerten sie das Video:",
            ""].join('<br>'),
     color:(Video[VideoID].anz<=1)?"gray":{ "gut":"green", "schlecht":"red", undefined:"yellow" }[Video[getParam("v","")].qualitaet],
     fixed:true,
