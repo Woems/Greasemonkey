@@ -235,7 +235,7 @@ if (!Category[location.host.split(".")[0]])
     tmp=tmp[url[i]];
   }
   GM_log('2: '+uneval(gesehen));
-  if (tmp['seen']) { alert('seen'); $('gmi-ResourcePageDisplayPane').style.backgroundColor='lightgray'; };
+  if (tmp['seen']) { showmsg({text:'seen'}); $('gmi-ResourcePageDisplayPane').style.backgroundColor='lightgray'; };
   tmp['seen']=true;
   GM_log('3: '+uneval(gesehen));
   serialize('data',gesehen);
