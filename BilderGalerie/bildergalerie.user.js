@@ -68,14 +68,22 @@ if (galerie[location.host]) window.setTimeout(galerieAnzeigen,1000);
 
 //serialize('galerie',galerie);
 
+var STP=deserialize('ScrollToPicture',{});
+if (!inFrame() && STP[location.host]) window.setTimeout(ScrollToPicture,1000);
 
-if (!inFrame())
-  window.setTimeout(function () {
-    var img=$x("//img");
-    var sortedimg=img.sort(function (a,b) { return b.width*b.height-a.width*a.height; });
-    sortedimg[0].scrollIntoView();
-  }, 2*1000);
+function ScrollToPicture()
+{
+  var img=$x("//img");
+  for (i in img)
+    if (img[i].width*img[i].height > 800*200)
+    { img[i].scrollIntoView(); break; }
+    
+  var sortedimg=img.filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
+  GM_log(sortedimg.map(function (e) { return [e.width, e.height, e.width*e.height, e.src].join(" "); }).join("\n"));
 
+  //GM_log(["ScrollToPicture",sortedimg[0].width, sortedimg[0].height, sortedimg[0].width*sortedimg[0].height].join("\n"));
+  //if (sortedimg[0].width*sortedimg[0].height > 640*480) sortedimg[0].scrollIntoView();
+}
 /**
 	@name globaleTasten
 	@function
@@ -90,6 +98,12 @@ function globaleTasten () {
       galerie[location.host]={ pathname:"", bilder:"//img", next:"", preview:"", minheight:200, minwidth:200 };
     alert("Galerie "+(galerie[location.host]?'':'de')+"aktiviert. Bitte die Seite neu laden...");
     serialize('galerie',galerie);
+  });
+  Key('STRG+ALT+U',function (e) { // Taste zum aktivieren
+    var STP=deserialize('ScrollToPicture',{});
+    STP[location.host]=!STP[location.host];
+    alert("ScrollToPicture "+(STP[location.host]?'':'de')+"aktiviert. Bitte die Seite neu laden...");
+    serialize('ScrollToPicture',STP);
   });
 } // End globaleTasten
 
