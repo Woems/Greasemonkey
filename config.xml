@@ -746,7 +746,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*.ogame.*/game/index.php?page=*</Include>
   </Script>
-  <Script basedir="BilderGalerie" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nach dr&#xFC;cken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert." enabled="false" filename="bildergalerie.user.js" name="BilderGalerie" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js">
+  <Script basedir="BilderGalerie" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nach dr&#xFC;cken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert." enabled="true" filename="bildergalerie.user.js" name="BilderGalerie" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js">
     <Grant>GM_getValue</Grant>
     <Grant>GM_log</Grant>
     <Grant>GM_setValue</Grant>
@@ -926,5 +926,27 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>http://plugins.bukkit.org*</Include>
+  </Script>
+  <Script basedir="Pornhide" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Versteckt PornTitel" enabled="true" filename="Pornhide.user.js" name="Pornhide" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Pornhide/Pornhide.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Pornhide/Pornhide.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>*</Include>
+  </Script>
+  <Script basedir="Google_Maps" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Google_Maps.user.js" name="Google Maps" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Google_Maps/Google_Maps.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Google_Maps/Google_Maps.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>https://maps.google.de*</Include>
   </Script>
 </UserScriptConfig>
