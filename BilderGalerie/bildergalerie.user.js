@@ -84,6 +84,7 @@ function ScrollToPicture()
   //GM_log(["ScrollToPicture",sortedimg[0].width, sortedimg[0].height, sortedimg[0].width*sortedimg[0].height].join("\n"));
   //if (sortedimg[0].width*sortedimg[0].height > 640*480) sortedimg[0].scrollIntoView();
 }
+
 /**
 	@name globaleTasten
 	@function
