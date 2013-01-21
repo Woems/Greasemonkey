@@ -477,9 +477,9 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
         //var link2=createElement('a',{ href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
         //var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
         //var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+30*24*60, name:e.id, textContent:'+1 Monat', onClick:verzclick });
-        var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#now', name:e.id, textContent:'=now', onClick:verzclick });
-        var link2=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
-        var linkhide=createElement('a',{ href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
+        var link1=createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#now', name:e.id, textContent:'=now', onClick:verzclick });
+        var link2=createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
+        var linkhide=createElement('a',{ style:'color:gray', href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
         var td3=createElement('td',{ childs:[ alter, createElement('br'), alterdiff, createElement('br'), link1, link2, linkhide ] });
         
         var tr=createElement('tr',{ childs: [ td1, td2, td3] });
