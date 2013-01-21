@@ -927,17 +927,6 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://plugins.bukkit.org*</Include>
   </Script>
-  <Script basedir="Rapidshare_-_Link_sammler" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Rapidshare_-_Link_sammler.user.js" name="Rapidshare - Link sammler" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
-    <Grant>GM_setValue</Grant>
-    <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
-    <Include>*</Include>
-  </Script>
   <Script basedir="Pornhide" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Versteckt PornTitel" enabled="true" filename="Pornhide.user.js" name="Pornhide" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Pornhide/Pornhide.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Pornhide/Pornhide.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
