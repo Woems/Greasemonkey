@@ -305,8 +305,23 @@ function threads(ForumsID, Bereich, Thread) // Uebersicht über alle Treads
   $x("id('wThreads')/tbody/tr/td[3]/font/a").forEach(function (a) {
     var param=a.href.match(/\/([a-z]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+))?)?)?)?)?.html$/);
     var data=deserialize('data',{});
-    if (data[param[2]][param[3]][param[4]]) a.style.color="green";
-    GM_log(param);
+    if (data[param[2]][param[3]][param[4]])
+    {
+      a.style.color="green";
+      //$xs("./ancestor::tr/td[5]",a).bgColor="red";
+      var Beitraege=$xs("./ancestor::tr/td[5]/font",a).textContent*1;
+      var Hidden=data[param[2]][param[3]][param[4]].hide.sort(function (a,b) { return a*1-b*1 });
+      var HighestHidden=Hidden.pop()*1;
+      
+      var Color="#dbdbdb";
+      if (HighestHidden == Beitraege) Color="lightgreen";
+      if (HighestHidden < Beitraege) Color="green";
+      if (HighestHidden < Beitraege-5) Color="yellow";
+      if (HighestHidden < Beitraege-10) Color="red";
+      $xs("./ancestor::tr/td[5]",a).bgColor=Color;
+      $xs("./ancestor::tr/td[5]/font",a).textContent=HighestHidden+" / "+Beitraege;
+      a.href="/display_"+param[2]+"_"+param[3]+"_"+param[4]+"_"+Beitraege+"_"+HighestHidden+".html";
+    }
   })
 } // threads()
 
@@ -402,7 +417,7 @@ function display(ForumsID, Bereich, Thread, MaxArtikel, Artikel) // Einzelner Tr
 
           return true;
           break;
-        default: GM_log([key, uneval(code), e].join("\n")); break;
+        //default: GM_log([key, uneval(code), e].join("\n")); break;
       }
     });
     /**/
