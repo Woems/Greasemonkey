@@ -207,9 +207,85 @@ function createHover(elem,text)
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
-Ausstatungen=['Unbekannt','Trend', 'Titanium'];
+/*
+
+Ambiente
+    Antiblockier-Bremssystem (ABS) mit elektronischer Bremskraftverteilung (EBD)
+    Außenspiegel in Wagenfarbe lackiert, elektrisch einstellbar, mit integrierten Blinkleuchten
+    Bordcomputer mit Verbrauchs- und Kilometerangaben
+    Dachspoiler, in Wagenfarbe lackiert (bei 5-türiger Limousine und Turnier)
+    Elektronisches Sicherheits- und Stabilitätsprogramm (ESP) mit Traktionskontrolle (TCS)
+    Fahrersitz, manuell höhenverstellbar
+    Fensterheber vorn, elektrisch
+    Ford Easy Fuel
+    IPS Intelligent Protection System u.a. mit Front- und Seitenairbag für Fahrer- und Beifahrerseite; Kopf-Schulterairbags vorn und hinten
+    Lenksäule, in Höhe und Reichweite einstellbar
+    Leselampen vorn und hinten
+    Mittelkonsole mit Becherhaltern und Ablagefächern
+    Stoßfänger in Wagenfarbe lackiert
+    Torque Vectoring Control
+    Zentralverriegelung mit Fernbedienung, inkl. zweier klappbarer Schlüssel
+    16"-Stahlräder mit 205/55 R16 Reifen
+    
+Trend
+    Audiosystem CD mit USB-Schnittstelle und Audio-Fernbedienung
+    Außenspiegel, beheizbar
+    Fahrersitz mit einstellbarer Lendenwirbelstütze
+    Kartentasche an Fahrer- und Beifahrersitzrückenlehne
+    Klimaanlage, manuell
+    Türgriffe in Wagenfarbe lackiert
+    16"-Stahlräder mit 215/55 R16 Reifen (bei 2,0-l-TDCi-Motoren)
+    
+Titanium
+    Ambientebeleuchtung vorn (LED)
+    Audiosystem Sony inkl. Ford SYNC (Mobiltelefon-Vorbereitung, Sprachsteuerung etc.)
+    Beifahrersitz, manuell höhenverstellbar, mit einstellbarer Lendenwirbelstütze
+    Berganfahrassistent
+    Einstiegszierleisten vorn mit „Ford“-Logo
+    Fensterheber hinten, elektrisch, mit Gesamtschließungsfunktion
+    Ford Power-Startfunktion
+    Geschwindigkeitsregelanlage mit Geschwindigkeitsbegrenzer
+    Innenspiegel, automatisch abblendend
+    Klimaanlage mit automatischer Temperaturkontrolle (2-Zonen-Klimaautomatik)
+    Lederlenkrad und Lederschaltknauf
+    Mittelkonsole „Premium“ vorn, Handbremse im Z-Design; Armauflage, darunter großes Staufach; Getränkehalter; 12-Volt-Anschluss vorn und hinten
+    Nebelscheinwerfer
+    Reifendruckkontrollsystem
+    Scheibenwischer mit Regensensor
+    Scheinwerfer-Assistent mit Tag/Nacht-Sensor
+    Sportsitze vorn
+    Teppichfußmatten vorn und hinten, Velours
+    Zierleisten im Chrom-Dekor unterhalb der Seitenscheiben
+    16"-Leichtmetallräder im 7x2-Speichen-Design mit 215/55 R16 Reifen (nicht serienmäßig bei ECOnetic 88g)
+    
+Active City Stop-Paket
+    - Active City Stop
+    - Frontscheibe und Scheibenwaschdüsen, beheizbar
+    
+Business-Paket II
+    - Einpark-Assistent
+    - Ford Navigationssystem und Straßenkarte für Westeuropa (SD-Karte)
+    - Ford SYNC (Mobiltelefon-Vorbereitung mit Bluetooth&reg;-Schnittstelle, Sprachsteuerung, Notruf-Assistent, USB-Schnittstelle und AUX-Eingang)<br>
+    - Park-Pilot-System vorn und hinten
+    
+Easy-Driver-Paket 
+    - Außenspiegel, elektrisch anklappbar, mit Umfeldbeleuchtung
+    - Fensterheber hinten, elektrisch, mit Gesamtschließungsfunktion (bereits serienmäßig bei Titanium)
+    - Park-Pilot-System hinten
+    
+Fahrer-Assistenz-Paket I
+    - Außenspiegel, elektrisch anklappbar, mit Umfeldbeleuchtung
+    - Einpark-Assistent (Active Park Assist)
+    - Fensterheber hinten, elektrisch, mit Gesamtschließungsfunktion (bereits serienmäßig bei Titanium)
+    - Nebelscheinwerfer und regelbare Instrumentenbeleuchtung (bereits serienmäßig bei Titanium)
+    - Park-Pilot-System vorn und hinten
+*/
+
+Ausstatungen=['Unbekannt','Err','Spezial','Ambiente', 'Trend', 'Titanium', 'Motor', 'Stoffsitze', 'Teillederausstattung', 'Active City Stop-Paket', 'Business-Paket II', 'Easy-Driver-Paket', 'Fahrer-Assistenz-Paket I', 'Fahrer-Assistenz-Paket II', 'Fahrer-Assistenz-Paket III', 'Family-Paket', 'Licht-Paket', 'Titanium-Style-Paket', 'Titanium X-Paket', 'Titanium X-plus-Paket', 'Winter-Paket', 'Ford Focus Individual-Styling-Paket', 'Ford Focus Individual-Innenraum-Styling-Paket I', 'Ford Focus Individual-Innenraum-Styling-Paket II', "Geschwindigkeitsregelanlage, adaptiv"];
 AusstatungenSelect='<select name="Ausstattung">'+Ausstatungen.map(function (e) { return '<option>'+e+'</option>'; }).join('')+'</select>'
-var Fahrzeugbeschreibung=$xs("id('technicalDetails')/article[header/h2[text()='Fahrzeugbeschreibung']]/div").textContent.split(",");
+var FahrzeugbeschreibungDiv=$xs("id('technicalDetails')/article[header/h2[text()='Fahrzeugbeschreibung']]/div");
+var Fahrzeugbeschreibung=FahrzeugbeschreibungDiv.textContent.split(",");
+var FahrzeugbeschreibungNeu={};
 Fahrzeugbeschreibung.forEach(function (FahrzeugDetail) { 
   var data=deserialize('data',{});
   if (!data[FahrzeugDetail])
@@ -228,7 +304,15 @@ Fahrzeugbeschreibung.forEach(function (FahrzeugDetail) {
        Cancel:'Cancel',
        onCancel:function (e) { },
      });
+  } else {
+    if (!FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst]) FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst]=[];
+    FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst].push(FahrzeugDetail);
   }
-  
 });
+var Out="";
+for (var i in Ausstatungen) if (FahrzeugbeschreibungNeu[Ausstatungen[i]])
+{
+  Out+="<b>"+Ausstatungen[i]+"</b><br>"+FahrzeugbeschreibungNeu[Ausstatungen[i]].join(', ')+"<br><br>";
+}
+FahrzeugbeschreibungDiv.innerHTML=Out;
 
