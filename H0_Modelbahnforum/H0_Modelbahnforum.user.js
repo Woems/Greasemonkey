@@ -216,6 +216,8 @@ switch (location.pathname)
   case "/showthread.php":
     thread();
     break;
+  case "/file_manager.php":
+    break;
   default:
     alert(GM_info.script.name+"Path "+location.pathname+" unbekannt.");
     break;
