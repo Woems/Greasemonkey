@@ -413,6 +413,7 @@ function FilmListe()
   // *** HIDE BLU-RAY ***
   Filme.forEach(function (Film) {
     if (Film.Blue || Film.PS3 || Film.WII) { Film.Elem.style.display="none"; return; }
+    Film.Box.style.backgroundColor="green";
     var filme=deserialize('filme',{});
     if (!filme[Film.URL])
     {
