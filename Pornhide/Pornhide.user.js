@@ -208,6 +208,7 @@ function createHover(elem,text)
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
+/*
 var data=deserialize('data',{});
 //data[]
 //serialize('data',data);
@@ -239,3 +240,28 @@ if (!data[location.host])
   if (data[location.host].porn)
     document.title="Google"; //TitelListe[Rand(0,TitelListe.length)];
 }
+*/
+
+//serialize('data',0);
+
+document.title.split(" ").forEach(function (e) {
+  e=e.toUpperCase(); 
+  var PORN=aget('Porn',e);
+  //GM_log([PORN, uneval(PORN), typeof PORN, typeof PORN == "undefined", PORN == undefined, PORN === undefined].join("\n"));
+  if (typeof PORN == "undefined")
+  {
+    var data = showmsg({
+      //id:'default_msg',
+      text:"Hide '"+e+"'?",
+      color:'lightgray',
+      OK:'Ja',
+      onOK:function (data) { aset('Porn',e,true); document.title="Google"; },
+      Cancel:'Nein',
+      onCancel:function (data) { aset('Porn',e,false); },
+    });
+    data.okbtn.accessKey="j";
+    data.cancelbtn.accessKey="n";
+    
+  }
+  if (PORN) document.title="Google";
+});
