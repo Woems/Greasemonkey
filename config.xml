@@ -927,7 +927,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://plugins.bukkit.org*</Include>
   </Script>
-  <Script basedir="Pornhide" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Versteckt PornTitel" enabled="true" filename="Pornhide.user.js" name="Pornhide" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Pornhide/Pornhide.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Pornhide/Pornhide.user.js">
+  <Script basedir="Pornhide" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Versteckt PornTitel" enabled="false" filename="Pornhide.user.js" name="Pornhide" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Pornhide/Pornhide.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Pornhide/Pornhide.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -948,5 +948,16 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>https://maps.google.de*</Include>
+  </Script>
+  <Script basedir="Mobile" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Mobile.user.js" name="Mobile" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Mobile/Mobile.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Mobile/Mobile.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>http://suchen.mobile.de*</Include>
   </Script>
 </UserScriptConfig>
