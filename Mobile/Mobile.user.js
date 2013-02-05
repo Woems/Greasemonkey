@@ -281,38 +281,87 @@ Fahrer-Assistenz-Paket I
     - Park-Pilot-System vorn und hinten
 */
 
-Ausstatungen=['Unbekannt','Err','Spezial','Ambiente', 'Trend', 'Titanium', 'Motor', 'Stoffsitze', 'Teillederausstattung', 'Active City Stop-Paket', 'Business-Paket II', 'Easy-Driver-Paket', 'Fahrer-Assistenz-Paket I', 'Fahrer-Assistenz-Paket II', 'Fahrer-Assistenz-Paket III', 'Family-Paket', 'Licht-Paket', 'Titanium-Style-Paket', 'Titanium X-Paket', 'Titanium X-plus-Paket', 'Winter-Paket', 'Ford Focus Individual-Styling-Paket', 'Ford Focus Individual-Innenraum-Styling-Paket I', 'Ford Focus Individual-Innenraum-Styling-Paket II', "Geschwindigkeitsregelanlage, adaptiv"];
-AusstatungenSelect='<select name="Ausstattung">'+Ausstatungen.map(function (e) { return '<option>'+e+'</option>'; }).join('')+'</select>'
-var FahrzeugbeschreibungDiv=$xs("id('technicalDetails')/article[header/h2[text()='Fahrzeugbeschreibung']]/div");
-var Fahrzeugbeschreibung=FahrzeugbeschreibungDiv.textContent.split(",");
-var FahrzeugbeschreibungNeu={};
-Fahrzeugbeschreibung.forEach(function (FahrzeugDetail) { 
-  var data=deserialize('data',{});
-  if (!data[FahrzeugDetail])
-  {
-     showmsg({
-       id:'Fahrzeugdetail_{rand}',
-       detail:FahrzeugDetail,
-       text:['<b>'+FahrzeugDetail+'</b>', 'Gehört zur Ausstattung: '+AusstatungenSelect,''].join('<br>'),
-       color:'lightgray',
-       OK:'OK',
-       onOK:function (e) { 
-         var data=deserialize('data',{});
-         data[e.detail]={ Ausst:e.content.elements.namedItem("Ausstattung").value };
-         serialize('data',data);
-       },
-       Cancel:'Cancel',
-       onCancel:function (e) { },
-     });
-  } else {
-    if (!FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst]) FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst]=[];
-    FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst].push(FahrzeugDetail);
-  }
-});
-var Out="";
-for (var i in Ausstatungen) if (FahrzeugbeschreibungNeu[Ausstatungen[i]])
+function Fahrzeugbeschreibung()
 {
-  Out+="<b>"+Ausstatungen[i]+"</b><br>"+FahrzeugbeschreibungNeu[Ausstatungen[i]].join(', ')+"<br><br>";
+  Ausstatungen=['Unbekannt','Err','Spezial','Ambiente', 'Trend', 'Titanium', 'Motor', 'Stoffsitze', 'Teillederausstattung', 'Active City Stop-Paket', 'Business-Paket II', 'Easy-Driver-Paket', 'Fahrer-Assistenz-Paket I', 'Fahrer-Assistenz-Paket II', 'Fahrer-Assistenz-Paket III', 'Family-Paket', 'Licht-Paket', 'Titanium-Style-Paket', 'Titanium X-Paket', 'Titanium X-plus-Paket', 'Winter-Paket', 'Ford Focus Individual-Styling-Paket', 'Ford Focus Individual-Innenraum-Styling-Paket I', 'Ford Focus Individual-Innenraum-Styling-Paket II', "Geschwindigkeitsregelanlage, adaptiv"];
+  AusstatungenSelect='<select name="Ausstattung">'+Ausstatungen.map(function (e) { return '<option>'+e+'</option>'; }).join('')+'</select>'
+  var FahrzeugbeschreibungDiv=$xs("id('technicalDetails')/article[header/h2[text()='Fahrzeugbeschreibung']]/div");
+  var Fahrzeugbeschreibung=FahrzeugbeschreibungDiv.textContent.split(",");
+  var FahrzeugbeschreibungNeu={};
+  Fahrzeugbeschreibung.forEach(function (FahrzeugDetail) { 
+    var data=deserialize('data',{});
+    if (!data[FahrzeugDetail])
+    {
+      showmsg({
+        id:'Fahrzeugdetail_{rand}',
+        detail:FahrzeugDetail,
+        text:['<b>'+FahrzeugDetail+'</b>', 'Gehört zur Ausstattung: '+AusstatungenSelect,''].join('<br>'),
+        color:'lightgray',
+        OK:'OK',
+        onOK:function (e) { 
+          var data=deserialize('data',{});
+          data[e.detail]={ Ausst:e.content.elements.namedItem("Ausstattung").value };
+          serialize('data',data);
+        },
+        Cancel:'Cancel',
+        onCancel:function (e) { },
+      });
+    } else {
+      if (!FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst]) FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst]=[];
+      FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst].push(FahrzeugDetail);
+    }
+  });
+  var Out="";
+  for (var i in Ausstatungen) if (FahrzeugbeschreibungNeu[Ausstatungen[i]])
+  {
+    Out+="<b>"+Ausstatungen[i]+"</b><br>"+FahrzeugbeschreibungNeu[Ausstatungen[i]].join(', ')+"<br><br>";
+  }
+  FahrzeugbeschreibungDiv.innerHTML=FahrzeugbeschreibungDiv.innerHTML+"<hr>"+Out;
 }
-FahrzeugbeschreibungDiv.innerHTML=Out;
+
+function Bewertung()
+{
+  if (location.pathname.split("/")[1]=="auto-inserat")
+  {
+    var Bewertungen=deserialize('Bewertungen',{});
+    if (!Bewertungen[location.pathname]) Bewertungen[location.pathname]={};
+    var Color=["lightgray", "green", "lightgreen", "blue", "yellow", "orange", "red"];
+    var Text=["unbekannt", "sehrgut (1)", "gut (2)", "befriedigend (3)", "ausreichend (4)", "mangelhaft (5)", "ungenügend (6)"];
+    var SelectBox="<select name=Bewertung>"+Text.map(function (e, nr) { return "<option"+(nr==Bewertungen[location.pathname].Note?" selected":"")+">"+e+"</option>"; })+"</select>";
+    showmsg({
+      id: "default_msg_{rand}",
+      text: [
+              //Text[Bewertungen[location.pathname].Note||0]||"unbekannt",
+              "Note: "+SelectBox,
+              "Begründung: <input size=40 name=Begruendung value='"+(Bewertungen[location.pathname].Begr||"")+"'>",
+              ""].join("<br>") ,
+      fixed:true,
+      color: Color[Bewertungen[location.pathname].Note||0]||"lightgray",
+      OK: "OK",
+      Cancel: "Cancel",
+      onOK: function (data) {
+        var Bewertungen=deserialize('Bewertungen',{});
+        if (!Bewertungen[location.pathname]) Bewertungen[location.pathname]={};
+        Bewertungen[location.pathname].Note=Text.indexOf(data.content.elements.namedItem("Bewertung").value);
+        Bewertungen[location.pathname].Begr=data.content.elements.namedItem("Begruendung").value
+        serialize('Bewertungen',Bewertungen);
+      },
+      onCancel: function (data) {},
+    });
+  } else if (location.pathname=="/fahrzeuge/search.html")
+  {
+    var Bewertungen=deserialize('Bewertungen',{});
+    $x("id('parkAndCompareVehicle')//a[@class='infoLink detailsViewLink']").forEach(function (a) {
+      var Color=["lightgray", "green", "lightgreen", "blue", "yellow", "orange", "red"];
+      if (Bewertungen[a.pathname])
+      {
+        GM_log([uneval(Bewertungen[a.pathname]), Color[Bewertungen[a.pathname].Note||0]||"lightgray"].join('\n'));
+        a.parentNode.parentNode.style.backgroundColor=Color[Bewertungen[a.pathname].Note||0]||"lightgray";
+      }
+    });
+  }
+}
+
+Bewertung();
+//Fahrzeugbeschreibung();
 
