@@ -1,8 +1,7 @@
 // ==UserScript==
-// @name        H0 Modelbahnforum
+// @name        Mobile
 // @namespace   Woems
-// @description Verbesserung von http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887
-// @include     http://www.nexusboard.net/*siteid=2408*
+// @include     http://suchen.mobile.de*
 // @version     1
 // ==/UserScript==
 
@@ -75,8 +74,8 @@ function on(type, elm, func) {
   else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
-function onKey(func) { on('keydown',window,function (e) {
-  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
+function onKey(func) { on('keydown',window,function (e) { 
+  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
   var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
@@ -118,6 +117,7 @@ Date.prototype.diff = function(date) { var tmp="in "; var diff=this.getTime()-da
 function Now(d) { return (d||new Date()).getTime()/1000; }
 function NowOut(d) { return new Date(d*1000).getShortDate(); }
 function ParseDate(d) { var sp=d.match(/(([0-9]{2})\.([0-9]{2})\.([0-9]{2,4}))? ?(([0-9]{1,2}):([0-9]{2}))?/); return new Date(sp[4]||1970,(sp[3]||1)-1,sp[2]||1,sp[6]||0,sp[7]||0,0); }
+function ShowDateDiff(sec) { var teile={ MSec:1000, Sec:60, Min:60, H:24, Tage:7, Wochen:99999 }; var tmp=''; for (i in teile) { if (Math.floor(sec%teile[i])!=0) tmp=Math.floor(sec%teile[i])+' '+i+' '+tmp; sec=sec/teile[i]; } return tmp; }
 // ** Text **
 String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,""); }
 String.prototype.ltrim = function() { return this.replace(/^\s+/,""); }
@@ -155,10 +155,10 @@ function div(text) { return '<div>'+text+'</div>'; }
 function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
 // ** REST **
 function inFrame() { return self!=top; }
+function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
-function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) { window[key] = GM_getValue(key, defaultValue); GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() { GM_setValue(key, !window[key]); location.reload(); }); }
 function showmsg(data)
 {
@@ -169,9 +169,9 @@ function showmsg(data)
   var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999;";
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
-  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
-  if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
-  if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
+  data.content=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+  if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.content);
+  if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.content);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
   return data;
 } // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
@@ -204,98 +204,115 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
-//alert=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:false, Timeout:30, onTimeout: function (data) {}, }); };
+//GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
+/*
 
-switch (location.pathname)
+Ambiente
+    Antiblockier-Bremssystem (ABS) mit elektronischer Bremskraftverteilung (EBD)
+    Außenspiegel in Wagenfarbe lackiert, elektrisch einstellbar, mit integrierten Blinkleuchten
+    Bordcomputer mit Verbrauchs- und Kilometerangaben
+    Dachspoiler, in Wagenfarbe lackiert (bei 5-türiger Limousine und Turnier)
+    Elektronisches Sicherheits- und Stabilitätsprogramm (ESP) mit Traktionskontrolle (TCS)
+    Fahrersitz, manuell höhenverstellbar
+    Fensterheber vorn, elektrisch
+    Ford Easy Fuel
+    IPS Intelligent Protection System u.a. mit Front- und Seitenairbag für Fahrer- und Beifahrerseite; Kopf-Schulterairbags vorn und hinten
+    Lenksäule, in Höhe und Reichweite einstellbar
+    Leselampen vorn und hinten
+    Mittelkonsole mit Becherhaltern und Ablagefächern
+    Stoßfänger in Wagenfarbe lackiert
+    Torque Vectoring Control
+    Zentralverriegelung mit Fernbedienung, inkl. zweier klappbarer Schlüssel
+    16"-Stahlräder mit 205/55 R16 Reifen
+    
+Trend
+    Audiosystem CD mit USB-Schnittstelle und Audio-Fernbedienung
+    Außenspiegel, beheizbar
+    Fahrersitz mit einstellbarer Lendenwirbelstütze
+    Kartentasche an Fahrer- und Beifahrersitzrückenlehne
+    Klimaanlage, manuell
+    Türgriffe in Wagenfarbe lackiert
+    16"-Stahlräder mit 215/55 R16 Reifen (bei 2,0-l-TDCi-Motoren)
+    
+Titanium
+    Ambientebeleuchtung vorn (LED)
+    Audiosystem Sony inkl. Ford SYNC (Mobiltelefon-Vorbereitung, Sprachsteuerung etc.)
+    Beifahrersitz, manuell höhenverstellbar, mit einstellbarer Lendenwirbelstütze
+    Berganfahrassistent
+    Einstiegszierleisten vorn mit „Ford“-Logo
+    Fensterheber hinten, elektrisch, mit Gesamtschließungsfunktion
+    Ford Power-Startfunktion
+    Geschwindigkeitsregelanlage mit Geschwindigkeitsbegrenzer
+    Innenspiegel, automatisch abblendend
+    Klimaanlage mit automatischer Temperaturkontrolle (2-Zonen-Klimaautomatik)
+    Lederlenkrad und Lederschaltknauf
+    Mittelkonsole „Premium“ vorn, Handbremse im Z-Design; Armauflage, darunter großes Staufach; Getränkehalter; 12-Volt-Anschluss vorn und hinten
+    Nebelscheinwerfer
+    Reifendruckkontrollsystem
+    Scheibenwischer mit Regensensor
+    Scheinwerfer-Assistent mit Tag/Nacht-Sensor
+    Sportsitze vorn
+    Teppichfußmatten vorn und hinten, Velours
+    Zierleisten im Chrom-Dekor unterhalb der Seitenscheiben
+    16"-Leichtmetallräder im 7x2-Speichen-Design mit 215/55 R16 Reifen (nicht serienmäßig bei ECOnetic 88g)
+    
+Active City Stop-Paket
+    - Active City Stop
+    - Frontscheibe und Scheibenwaschdüsen, beheizbar
+    
+Business-Paket II
+    - Einpark-Assistent
+    - Ford Navigationssystem und Straßenkarte für Westeuropa (SD-Karte)
+    - Ford SYNC (Mobiltelefon-Vorbereitung mit Bluetooth&reg;-Schnittstelle, Sprachsteuerung, Notruf-Assistent, USB-Schnittstelle und AUX-Eingang)<br>
+    - Park-Pilot-System vorn und hinten
+    
+Easy-Driver-Paket 
+    - Außenspiegel, elektrisch anklappbar, mit Umfeldbeleuchtung
+    - Fensterheber hinten, elektrisch, mit Gesamtschließungsfunktion (bereits serienmäßig bei Titanium)
+    - Park-Pilot-System hinten
+    
+Fahrer-Assistenz-Paket I
+    - Außenspiegel, elektrisch anklappbar, mit Umfeldbeleuchtung
+    - Einpark-Assistent (Active Park Assist)
+    - Fensterheber hinten, elektrisch, mit Gesamtschließungsfunktion (bereits serienmäßig bei Titanium)
+    - Nebelscheinwerfer und regelbare Instrumentenbeleuchtung (bereits serienmäßig bei Titanium)
+    - Park-Pilot-System vorn und hinten
+*/
+
+Ausstatungen=['Unbekannt','Err','Spezial','Ambiente', 'Trend', 'Titanium', 'Motor', 'Stoffsitze', 'Teillederausstattung', 'Active City Stop-Paket', 'Business-Paket II', 'Easy-Driver-Paket', 'Fahrer-Assistenz-Paket I', 'Fahrer-Assistenz-Paket II', 'Fahrer-Assistenz-Paket III', 'Family-Paket', 'Licht-Paket', 'Titanium-Style-Paket', 'Titanium X-Paket', 'Titanium X-plus-Paket', 'Winter-Paket', 'Ford Focus Individual-Styling-Paket', 'Ford Focus Individual-Innenraum-Styling-Paket I', 'Ford Focus Individual-Innenraum-Styling-Paket II', "Geschwindigkeitsregelanlage, adaptiv"];
+AusstatungenSelect='<select name="Ausstattung">'+Ausstatungen.map(function (e) { return '<option>'+e+'</option>'; }).join('')+'</select>'
+var FahrzeugbeschreibungDiv=$xs("id('technicalDetails')/article[header/h2[text()='Fahrzeugbeschreibung']]/div");
+var Fahrzeugbeschreibung=FahrzeugbeschreibungDiv.textContent.split(",");
+var FahrzeugbeschreibungNeu={};
+Fahrzeugbeschreibung.forEach(function (FahrzeugDetail) { 
+  var data=deserialize('data',{});
+  if (!data[FahrzeugDetail])
+  {
+     showmsg({
+       id:'Fahrzeugdetail_{rand}',
+       detail:FahrzeugDetail,
+       text:['<b>'+FahrzeugDetail+'</b>', 'Gehört zur Ausstattung: '+AusstatungenSelect,''].join('<br>'),
+       color:'lightgray',
+       OK:'OK',
+       onOK:function (e) { 
+         var data=deserialize('data',{});
+         data[e.detail]={ Ausst:e.content.elements.namedItem("Ausstattung").value };
+         serialize('data',data);
+       },
+       Cancel:'Cancel',
+       onCancel:function (e) { },
+     });
+  } else {
+    if (!FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst]) FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst]=[];
+    FahrzeugbeschreibungNeu[data[FahrzeugDetail].Ausst].push(FahrzeugDetail);
+  }
+});
+var Out="";
+for (var i in Ausstatungen) if (FahrzeugbeschreibungNeu[Ausstatungen[i]])
 {
-  case "/forumdisplay.php":
-    board();
-    break;
-  case "/showthread.php":
-    thread();
-    break;
-  case "/file_manager.php":
-    break;
-  default:
-    //alert(GM_info.script.name+"Path "+location.pathname+" unbekannt.");
-    break;
+  Out+="<b>"+Ausstatungen[i]+"</b><br>"+FahrzeugbeschreibungNeu[Ausstatungen[i]].join(', ')+"<br><br>";
 }
+FahrzeugbeschreibungDiv.innerHTML=Out;
 
-function setData(ID,attr,val)
-{
-  var data=deserialize("data",{});
-  if (!data[ID]) data[ID]={};
-  data[ID][attr]=val;
-  serialize("data",data);  
-}
-function getData(ID,attr, def)
-{
-  var data=deserialize("data",{});
-  if (!data[ID]) return def;
-  return data[ID][attr]||def;
-}
-function gelesen(ID) { setData(ID,"gelesen",new Date()); }
-function gelesenbis(ID, zeile) { if (getData(ID,"gelesenbis",0)<zeile) setData(ID,"gelesenbis",zeile); }
-function gut(ID) { setData(ID,"gut",true); }
-function schlecht(ID) { setData(ID,"gut",false); }
-
-
-function board() {
-  //css(".gut { background-color:lightgreen }");
-  //css(".schlecht { background-color: }");
-  var Zeilen=$x("//table[@class='bordered']/tbody/tr[td[@class='bgc6']]");
-  Zeilen.forEach(function (row) {
-    var Link=$xs(".//a",row.cells[2]).href;
-    var ID=Link.replace(/^.*threadid=([0-9]*).*$/,"$1");
-    var data=deserialize("data",{});
-    if (data[ID])
-    {
-      //alert([Link, ID, uneval(data), data[ID].gut, data[ID].gut!=undefined, data[ID].gelesen].join("<br>"));
-      var ThreadEintraege=row.cells[4].firstChild.innerHTML.replace(/[^0-9]/g,"")*1+1;
-      var ColorGut=data[ID].gelesenbis >= ThreadEintraege ? "lightgreen" : "green";
-      if (data[ID].gut!=undefined) row.cells[2].style.backgroundColor=data[ID].gut?ColorGut:"#FAA"; else row.cells[2].style.backgroundColor="darkgray";
-      row.cells[2].setAttribute("onmouseout","this.style.background='"+row.cells[2].style.backgroundColor+"'");
-      //if (data[ID].gut!=undefined) row.className=data[ID].gut?"gut":"schlecht"; else row.className="unbekannt";
-      if (data[ID].gelesenbis) row.cells[4].firstChild.innerHTML=data[ID].gelesenbis+" / "+ThreadEintraege;
-      row.cells[2].appendChild(createElement("div",{ style:"font-size:xx-small", innerHTML:"Gelesen:&nbsp;"+data[ID].gelesen }));
-      $xs(".//a",row.cells[2]).href=Link+"&showpage="+((Math.floor((data[ID].gelesenbis-1)/20)+1));
-    }
-    //row.appendChild(createElement("td",{ style:"font-size:xx-small", innerHTML:(!data[ID])?"-":"Gelesen:&nbsp;"+!!data[ID].gelesen }));
-  });
-} // End: function board()
-
-function thread() {
-  var ID=getParam("threadid");
-  var data=deserialize("data",{});
-  var Eintraege=$x("//table[@class='bordered']/tbody/tr[td/table]");
-  gelesen(ID);
-  var Anfang=(getParam("showpage", 1)*1-1)*20;
-  var Ende=Anfang+Eintraege.length;
-  gelesenbis(ID, Ende);
-  //alert([getParam("showpage", 1), Anfang, Ende, ID, uneval(deserialize("data",{})[ID])].join("\n"));
-  //alert(uneval(deserialize("data",{})));
-  showmsg({
-    id:"quali",
-    text:"Gut?",
-    fixed:true,
-    color:(!data[ID] || data[ID].gut==undefined)?"lightgray":(data[ID].gut)?"green":"red",
-    OK:"Ja",
-    Cancel:"Nein",
-    onOK:function () { gut(ID); },
-    onCancel:function () { schlecht(ID); },
-  });
-  onKey(function (key, code, e) {
-    switch(code.KEY)
-    {
-      // Backspace
-      case 8: location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
-      // Cursor Left
-      case 37: try { location.href=$xs('//b/font/preceding-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
-      // Cursor Right
-      case 39: try { location.href=$xs('//b/font/following-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
-      //default: alert([key, uneval(code), e].join("\n")); break;
-    }
-  });
-} // End: function thread()

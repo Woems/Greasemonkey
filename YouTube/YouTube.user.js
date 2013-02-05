@@ -156,6 +156,7 @@ function getHost() { return location.host; } // hash, host, hostname, href, path
 function div(text) { return '<div>'+text+'</div>'; }
 function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
 // ** REST **
+function Rand(a,b) { return Math.floor((Math.random()*(b-a))+a) }
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
@@ -469,11 +470,16 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
         
         var alter=text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate());
         var alterdiff=text(ShowDateDiff(new Date()-(e.lastseen||new Date()), 3));
+        var alterdiffInTage=(new Date()-(e.lastseen||new Date()))/1000/60/60/24;
+        var Tage=Rand(1,alterdiffInTage+7);
+        //var link1=createElement('a',{ href:'#'+Tage*24*60, name:e.id, textContent:'+'+Math.floor(Tage/7)+','+(Tage%7)+' Wochen', title:'+'+Tage+' Tage', onClick:verzclick });
+        //var link1=createElement('a',{ href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
+        //var link2=createElement('a',{ href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
         //var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
         //var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+30*24*60, name:e.id, textContent:'+1 Monat', onClick:verzclick });
-        var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#now', name:e.id, textContent:'=now', onClick:verzclick });
-        var link2=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
-        var linkhide=createElement('a',{ href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
+        var link1=createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#now', name:e.id, textContent:'=now', onClick:verzclick });
+        var link2=createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
+        var linkhide=createElement('a',{ style:'color:gray', href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
         var td3=createElement('td',{ childs:[ alter, createElement('br'), alterdiff, createElement('br'), link1, link2, linkhide ] });
         
         var tr=createElement('tr',{ childs: [ td1, td2, td3] });
@@ -705,6 +711,13 @@ function Video(VideoID)
             return;
           }
           location.href="http://www.youtube.com/watch?v="+youtube[0];
+        }
+    }, MenuBase);
+    createElement('button',{
+        className: "yt-uix-button yt-uix-button-default",
+        textContent:'Galerie',
+        onClick:function (e) { 
+          location.href="about:blank#YouTube";
         }
     }, MenuBase);
   }

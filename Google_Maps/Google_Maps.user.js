@@ -1,8 +1,7 @@
 // ==UserScript==
-// @name        H0 Modelbahnforum
+// @name        Google Maps
 // @namespace   Woems
-// @description Verbesserung von http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887
-// @include     http://www.nexusboard.net/*siteid=2408*
+// @include     https://maps.google.de*
 // @version     1
 // ==/UserScript==
 
@@ -75,8 +74,8 @@ function on(type, elm, func) {
   else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
-function onKey(func) { on('keydown',window,function (e) {
-  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
+function onKey(func) { on('keydown',window,function (e) { 
+  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
   var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
@@ -118,6 +117,7 @@ Date.prototype.diff = function(date) { var tmp="in "; var diff=this.getTime()-da
 function Now(d) { return (d||new Date()).getTime()/1000; }
 function NowOut(d) { return new Date(d*1000).getShortDate(); }
 function ParseDate(d) { var sp=d.match(/(([0-9]{2})\.([0-9]{2})\.([0-9]{2,4}))? ?(([0-9]{1,2}):([0-9]{2}))?/); return new Date(sp[4]||1970,(sp[3]||1)-1,sp[2]||1,sp[6]||0,sp[7]||0,0); }
+function ShowDateDiff(sec) { var teile={ MSec:1000, Sec:60, Min:60, H:24, Tage:7, Wochen:99999 }; var tmp=''; for (i in teile) { if (Math.floor(sec%teile[i])!=0) tmp=Math.floor(sec%teile[i])+' '+i+' '+tmp; sec=sec/teile[i]; } return tmp; }
 // ** Text **
 String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,""); }
 String.prototype.ltrim = function() { return this.replace(/^\s+/,""); }
@@ -150,15 +150,17 @@ function aa(obj) { alert(uneval(obj)); }
 function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
+function Location() { var tmp={}; list="hash,host,hostname,href,pathname,port,protocol,search".split(',').map(function (l) { tmp[l]=location[l]; }); return tmp; }
+function alertLocation() { alert(dump(Location())); }
 // ** HTML-Code
 function div(text) { return '<div>'+text+'</div>'; }
 function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
 // ** REST **
 function inFrame() { return self!=top; }
+function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
-function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) { window[key] = GM_getValue(key, defaultValue); GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() { GM_setValue(key, !window[key]); location.reload(); }); }
 function showmsg(data)
 {
@@ -204,98 +206,58 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
-//alert=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:false, Timeout:30, onTimeout: function (data) {}, }); };
+//GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
 
-switch (location.pathname)
+if (location.pathname=="/maps" && getParam("output")!="js" && getParam("sll") && getParam("sspn"))
 {
-  case "/forumdisplay.php":
-    board();
-    break;
-  case "/showthread.php":
-    thread();
-    break;
-  case "/file_manager.php":
-    break;
-  default:
-    //alert(GM_info.script.name+"Path "+location.pathname+" unbekannt.");
-    break;
+  GM_log(location.search.split("&").join("\n"));
+  alertLocation();
+  window.setTimeout(function () {
+    createElement('img',{ src:$xs("//div[@id='map_printimage']/img").src }, document.body);
+  }, 2*1000);
 }
 
-function setData(ID,attr,val)
-{
-  var data=deserialize("data",{});
-  if (!data[ID]) data[ID]={};
-  data[ID][attr]=val;
-  serialize("data",data);  
-}
-function getData(ID,attr, def)
-{
-  var data=deserialize("data",{});
-  if (!data[ID]) return def;
-  return data[ID][attr]||def;
-}
-function gelesen(ID) { setData(ID,"gelesen",new Date()); }
-function gelesenbis(ID, zeile) { if (getData(ID,"gelesenbis",0)<zeile) setData(ID,"gelesenbis",zeile); }
-function gut(ID) { setData(ID,"gut",true); }
-function schlecht(ID) { setData(ID,"gut",false); }
+/*
+NEIN
+?f=q
+source=s_q
+output=js
+hl=de
+geocode=
+abauth=50df7f83DW9gvWla1rS_EjeYEwWbTxxZ3mA
+authuser=0
+q=Kaiserplatz+11%2C+Bonn
+aq=t
+vps=6
+vrp=4
+ei=nYrfUIzHJcf08QOzlYH4BQ
+jsv=444e
+sll=50.729827%2C7.100151
+sspn=0.011409%2C0.029612
+vpsrc=0
+g=Prinz-Albert-Stra%C3%9Fe+2%2C+Bonn
 
+JA
+?f=q
+source=s_q
+hl=de
+geocode=
+q=Kaiserplatz+11,+Bonn
+aq=t
+sll=50.729827,7.100151
+sspn=0.011409,0.029612
+vpsrc=0
+ie=UTF8
+hq=
+hnear=Kaiserplatz+11,+53113+Bonn,+K%C3%B6ln,+Nordrhein-Westfalen
+ll=50.731321,7.101438
+spn=0.011409,0.029612
+t=m
+z=16
+ei=movfUKv1Hcqu8QOPq4CYDw
+pw=2
 
-function board() {
-  //css(".gut { background-color:lightgreen }");
-  //css(".schlecht { background-color: }");
-  var Zeilen=$x("//table[@class='bordered']/tbody/tr[td[@class='bgc6']]");
-  Zeilen.forEach(function (row) {
-    var Link=$xs(".//a",row.cells[2]).href;
-    var ID=Link.replace(/^.*threadid=([0-9]*).*$/,"$1");
-    var data=deserialize("data",{});
-    if (data[ID])
-    {
-      //alert([Link, ID, uneval(data), data[ID].gut, data[ID].gut!=undefined, data[ID].gelesen].join("<br>"));
-      var ThreadEintraege=row.cells[4].firstChild.innerHTML.replace(/[^0-9]/g,"")*1+1;
-      var ColorGut=data[ID].gelesenbis >= ThreadEintraege ? "lightgreen" : "green";
-      if (data[ID].gut!=undefined) row.cells[2].style.backgroundColor=data[ID].gut?ColorGut:"#FAA"; else row.cells[2].style.backgroundColor="darkgray";
-      row.cells[2].setAttribute("onmouseout","this.style.background='"+row.cells[2].style.backgroundColor+"'");
-      //if (data[ID].gut!=undefined) row.className=data[ID].gut?"gut":"schlecht"; else row.className="unbekannt";
-      if (data[ID].gelesenbis) row.cells[4].firstChild.innerHTML=data[ID].gelesenbis+" / "+ThreadEintraege;
-      row.cells[2].appendChild(createElement("div",{ style:"font-size:xx-small", innerHTML:"Gelesen:&nbsp;"+data[ID].gelesen }));
-      $xs(".//a",row.cells[2]).href=Link+"&showpage="+((Math.floor((data[ID].gelesenbis-1)/20)+1));
-    }
-    //row.appendChild(createElement("td",{ style:"font-size:xx-small", innerHTML:(!data[ID])?"-":"Gelesen:&nbsp;"+!!data[ID].gelesen }));
-  });
-} // End: function board()
+*/
 
-function thread() {
-  var ID=getParam("threadid");
-  var data=deserialize("data",{});
-  var Eintraege=$x("//table[@class='bordered']/tbody/tr[td/table]");
-  gelesen(ID);
-  var Anfang=(getParam("showpage", 1)*1-1)*20;
-  var Ende=Anfang+Eintraege.length;
-  gelesenbis(ID, Ende);
-  //alert([getParam("showpage", 1), Anfang, Ende, ID, uneval(deserialize("data",{})[ID])].join("\n"));
-  //alert(uneval(deserialize("data",{})));
-  showmsg({
-    id:"quali",
-    text:"Gut?",
-    fixed:true,
-    color:(!data[ID] || data[ID].gut==undefined)?"lightgray":(data[ID].gut)?"green":"red",
-    OK:"Ja",
-    Cancel:"Nein",
-    onOK:function () { gut(ID); },
-    onCancel:function () { schlecht(ID); },
-  });
-  onKey(function (key, code, e) {
-    switch(code.KEY)
-    {
-      // Backspace
-      case 8: location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
-      // Cursor Left
-      case 37: try { location.href=$xs('//b/font/preceding-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
-      // Cursor Right
-      case 39: try { location.href=$xs('//b/font/following-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
-      //default: alert([key, uneval(code), e].join("\n")); break;
-    }
-  });
-} // End: function thread()
