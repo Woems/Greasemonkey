@@ -217,7 +217,7 @@ switch (location.pathname)
     thread();
     break;
   default:
-    alert(GM_info.script.name+"Path "+location.pathname+" unbekannt.");
+    //alert(GM_info.script.name+"Path "+location.pathname+" unbekannt.");
     break;
 }
 
