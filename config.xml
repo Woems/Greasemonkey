@@ -905,28 +905,6 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*deviantart.com*</Include>
   </Script>
-  <Script basedir="BukkitDev" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="BukkitDev.user.js" name="BukkitDev" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/BukkitDev/BukkitDev.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/BukkitDev/BukkitDev.user.js">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
-    <Grant>GM_setValue</Grant>
-    <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
-    <Include>http://dev.bukkit.org/server-mods/</Include>
-  </Script>
-  <Script basedir="BukkitPlugins" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="BukkitPlugins.user.js" name="BukkitPlugins" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/BukkitPlugins/BukkitPlugins.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/BukkitPlugins/BukkitPlugins.user.js">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
-    <Grant>GM_setValue</Grant>
-    <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
-    <Include>http://plugins.bukkit.org*</Include>
-  </Script>
   <Script basedir="Rapidshare_-_Link_sammler" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Rapidshare_-_Link_sammler.user.js" name="Rapidshare - Link sammler" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
@@ -937,5 +915,16 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>*</Include>
+  </Script>
+  <Script basedir="sweet-sin" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="sweet-sin.user.js" name="sweet-sin" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/sweet-sin/sweet-sin.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/sweet-sin/sweet-sin.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>http://www.sweet-sin.de*</Include>
   </Script>
 </UserScriptConfig>
