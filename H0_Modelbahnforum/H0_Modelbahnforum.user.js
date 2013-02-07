@@ -297,7 +297,7 @@ function thread() {
     id:"quali",
     //text:["Qualität:  "+HTML.selectbox(1,'WQuali',['Unbekannt','Gut','Schlecht']),''].join("<br>"),
     text:"<div style='margin:auto;text-align:left; width:200px'>"+
-         [HTML.checkbox("gut",data[ID].gut)+" Gut"].join("<br>")+
+         [HTML.checkbox("gut",(data[ID]||{}).gut)+" Gut"].join("<br>")+
          "</div>",
     fixed:true,
     color:(!data[ID] || data[ID].gut==undefined)?"lightgray":(data[ID].gut)?"green":"red",
