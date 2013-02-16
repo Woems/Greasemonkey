@@ -79,7 +79,7 @@ function ScrollToPicture()
     { img[i].scrollIntoView(); break; }
     
   var sortedimg=img.filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
-  GM_log(sortedimg.map(function (e) { return [e.width, e.height, e.width*e.height, e.src].join(" "); }).join("\n"));
+  //GM_log(sortedimg.map(function (e) { return [e.width, e.height, e.width*e.height, e.src].join(" "); }).join("\n"));
 
   //GM_log(["ScrollToPicture",sortedimg[0].width, sortedimg[0].height, sortedimg[0].width*sortedimg[0].height].join("\n"));
   //if (sortedimg[0].width*sortedimg[0].height > 640*480) sortedimg[0].scrollIntoView();
