@@ -63,7 +63,8 @@ function showmsg(data)
   data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; color:"+(data.textcolor||"black")+"; text-align:center; z-index:9999;";
+  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; color:"+(data.textcolor||"black")+"; text-align:center;";
+  style+=" font:normal medium sans-serif; z-index:9999;"; // Schönheitskorrekturen
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
   data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
@@ -84,6 +85,20 @@ globaleTasten();
 
 function globaleTasten () {
   Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
+    wvShow();
+  });
+  Key('STRG+ALT+x',function (e) { // Taste zum aktivieren
+    wvAdd('http://www.kinopolis.de/bn/programm_wochenansicht', 'Kinopolis', 'weekly on do');
+
+    wvAdd('http://www.google.com/calendar/render', 'Google Kalender', 'weekly');
+
+    wvAdd('http://www.google.com/reader/view/', 'Google Reader', 'daily');
+    wvAdd('http://vs-bn.de/', 'VideoStore Bonn', 'daily');
+    wvAdd('http://www.elwis.de/gewaesserkunde/Wasserstaende/wasserstaendeUebersichtGrafik.html.php?pegelId=b45359df-c020-4314-adb1-d1921db642da', 'Elwis', 'daily');
+    
+    wvAdd('http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=40122', 'H0-Modellbahnforum - Anlagenbau', 'hourly');
+  });
+/*  Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
     var webseiten=deserialize('webseiten',[]);
     webseiten.push({ url: location.href, host: location.host, titel:document.title });
     alert("'"+document.title+"'\nzur Wiedervorlage hinzugefügt...\nSTRG+ALT+x zum abrufen der "+webseiten.length+" Seiten.");
@@ -108,5 +123,89 @@ function globaleTasten () {
       serialize('webseiten',webseiten);    
       event.stopPropagation(); event.preventDefault();
     }
-  }, true); });
+  }, true); });*/
 } // End globaleTasten
+
+wvNow();
+//wvShow();
+
+function wvAdd(Url, Titel, Wiederhohlung)
+{
+  if (!Url) Url=prompt("URL:");
+  if (!Url) return;
+  if (!Titel) Titel=prompt("Titel:");
+  if (!Titel) return;
+  if (!Wiederhohlung) Wiederhohlung=prompt("minutly, hourly, daily, weekly, weekly on do, monthly, yearly:");
+  if (!Wiederhohlung) return;
+  wvDel(Url)
+  var WV=deserialize('WV',[]);
+  WV.push({ url:Url, t:Titel, wh:Wiederhohlung, last:new Date() });
+  serialize('WV',WV);
+  //wvShow();
+} // End: function wvAdd()
+
+function wvDel(Url)
+{
+  var WV=deserialize('WV',[]);
+  WV=WV.filter(function (e) { return e.url!=Url; });
+  serialize('WV',WV);
+  //wvShow();
+} // End: function wvDel()
+
+function wvCheck(Url) {
+  var WV=deserialize('WV',[]);
+  WV=WV.map(function (f) { if (f.url==Url) f.last=new Date(); return f; });
+  serialize('WV',WV);
+} // End: function wvOpen()
+
+function wvNow() {
+  var WV=deserialize('WV',[]);
+  WV=WV.map(function (wv) {
+    var now=new Date();
+    if (!wv.last
+       || (wv.wh=='minutly' && wv.last.getMinutes() != now.getMinutes())
+       || (wv.wh=='hourly' && wv.last.getHours() != now.getHours())
+       || (wv.wh=='daily' && wv.last.getDate() != now.getDate())
+       || (wv.wh=='monthly' && wv.last.getMonth() != now.getMonth())
+       || (wv.wh=='yearly' && wv.last.getFullYear() != now.getFullYear())
+       || (wv.wh=='weekly' && wv.last.getTime()+((6-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (6 - Wochentag) = Montag
+       || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
+       )
+    {
+      showmsg({
+        id:'WV_oeffnen_{rand}',
+        text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url+'">'+wv.t+'</a> öffnen?</p>',
+        fixed: true,
+        url: wv.url,
+        color:'red',
+        OK:'OK',
+        onOK:function (e) { wvCheck(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
+        Cancel:'Cancel',
+        onCancel:function (e) { wvCheck(e.url); },
+        Timeout:30,
+        onTimeout:function (e) { },
+      });
+      //wv.last=new Date(); window.setTimeout(function () { GM_openInTab(wv.url); }, 10*1000);
+    }
+    return wv;
+  });
+  serialize('WV',WV);  
+} // End: function wvNow()
+
+function wvShow()
+{
+  var WV=deserialize('WV',[]);
+  WV.forEach(function (wv) {
+    showmsg({
+      id:'WV_anzeigen_{rand}',
+      text:'<a href="'+wv.url+'">'+wv.t+'</a>: <b>'+wv.wh+'</b> / '+wv.last,
+      color:'lightgray',
+      OK: 'Hinzufügen',
+      onOK:function (e) { wvAdd(); },
+      Cancel: 'löschen',
+      onCancel:function (e) { wvDel(wv.url); },
+      Timeout:10,
+      onTimeout:function (e) {},
+    });
+  });
+}
