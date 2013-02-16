@@ -247,6 +247,8 @@ function board() {
   //css(".schlecht { background-color: }");
   var Zeilen=$x("//table[@class='bordered']/tbody/tr[td[@class='bgc6']]");
   Zeilen.forEach(function (row) {
+    row.cells[2].setAttribute("onclick","");
+    $xs(".//a",row.cells[2]).target="_blank";
     var Link=$xs(".//a",row.cells[2]).href;
     var ID=Link.replace(/^.*threadid=([0-9]*).*$/,"$1");
     var data=deserialize("data",{});
@@ -254,7 +256,7 @@ function board() {
     {
       //alert([Link, ID, uneval(data), data[ID].gut, data[ID].gut!=undefined, data[ID].gelesen].join("<br>"));
       var ThreadEintraege=row.cells[4].firstChild.innerHTML.replace(/[^0-9]/g,"")*1+1;
-      var ColorGut=data[ID].gelesenbis >= ThreadEintraege ? "lightgreen" : "green";
+      var ColorGut=data[ID].gelesenbis >= ThreadEintraege-2 ? "lightgreen" : "green";
       if (data[ID].gut!=undefined) row.cells[2].style.backgroundColor=data[ID].gut?ColorGut:"#FAA"; else row.cells[2].style.backgroundColor="darkgray";
       row.cells[2].setAttribute("onmouseout","this.style.background='"+row.cells[2].style.backgroundColor+"'");
       //if (data[ID].gut!=undefined) row.className=data[ID].gut?"gut":"schlecht"; else row.className="unbekannt";
@@ -285,6 +287,8 @@ function thread() {
     Cancel:"Nein",
     onOK:function () { gut(ID); },
     onCancel:function () { schlecht(ID); },
+    Timeout:(!data[ID] || data[ID].gut==undefined)?120:10,
+    onTimeout:function () { },
   });
   onKey(function (key, code, e) {
     switch(code.KEY)
