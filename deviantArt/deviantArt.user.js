@@ -227,16 +227,30 @@ if (!Category[location.host.split(".")[0]])
   var gesehen=deserialize('data',{});
   var tmp=gesehen;
   var url=location.href.replace('http://','').replace('.deviantart.com','').split('/');
-  GM_log('1: '+uneval(gesehen));
+  //GM_log('1: '+uneval(gesehen));
   for (i in url) if (url.hasOwnProperty(i))
   {
     //GM_logs([uneval(gesehen), url[i], uneval(tmp), uneval(tmp[url[i]])].join("\n\n"));
     if (!tmp[url[i]]) tmp[url[i]]={};
     tmp=tmp[url[i]];
   }
-  GM_log('2: '+uneval(gesehen));
+  //GM_log('2: '+uneval(gesehen));
   if (tmp['seen']) { showmsg({text:'seen'}); $('gmi-ResourcePageDisplayPane').style.backgroundColor='lightgray'; };
   tmp['seen']=true;
-  GM_log('3: '+uneval(gesehen));
+  //GM_log('3: '+uneval(gesehen));
   serialize('data',gesehen);
+
+
+//**********************************************
+// Links in neuem Tab öffnen
+//$x("//a[contains(@class,'thumb')][img]").forEach(function (a) { a.target="_blank"; });
+$x("//a[contains(@class,'thumb')][img]").forEach(function (a) { a.addEventListener("click",function(event){
+  GM_openInTab($xs("ancestor::a",event.target).href);
+  event.stopPropagation();
+  event.preventDefault();
+}, true); });
+
+// Ausblenden
+$x("id('print-button') | id('gmi-ResourceViewShare') | id('mlt-button') | id('gmi-ResourceViewPrintButton') | id('download-button') | id('gmi-ResourceViewFaveButton')").forEach(function (e) { e.style.display="none"; });
+
 
