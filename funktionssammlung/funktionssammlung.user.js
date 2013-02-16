@@ -173,7 +173,8 @@ function showmsg(data)
   data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999;";
+  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center;";
+  style+=" font:normal medium sans-serif; z-index:9999;"; // Schönheitskorrekturen
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
   data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
