@@ -158,8 +158,25 @@ function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
 // ** HTML-Code
-function div(text) { return '<div>'+text+'</div>'; }
-function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
+var HTML={
+  div: function (text) { return '<div>'+text+'</div>'; },
+  row: function (cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; },
+  table: function (rows) { return '<table>' + rows.join('') +'</table>'; },
+  elem: function (name,param,inhalt) { return '<'+name+(param?' '+param.join(" "):"")+'>'+(inhalt||'')+'</'+name+'>'; },
+  br: function () { return '<br>'; },
+  divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
+  form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
+  input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
+  button: function (name,value) { return input("button",name,value); },
+  submitbutton: function (name,value) { return input("submit",name,value); },
+  resetbutton:function (name,value) { return input("reset",name,value); },
+  textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
+  selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
+  dropdownbox:function (name,lines) { return selectbox(1,name,lines); },
+  link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
+  checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
+  radio: function (name,checked) { return '<input type="radio" name="'+(name||'')+'"'+(checked?" checked":"")+'">'; },
+};
 // ** REST **
 function inFrame() { return self!=top; }
 function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
@@ -177,12 +194,13 @@ function showmsg(data)
   style+=" font:normal medium sans-serif; z-index:9999;"; // Schönheitskorrekturen
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
-  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+  data.box=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
   return data;
 } // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
+//data.box.elements.namedItem('').value;
 // $xs('id("default_msg")/input[@value="OK"]').setAttribute("accesskey","o");
 // $xs('id("default_msg")/input[@value="Cancel"]').setAttribute("accesskey","c");
 // $('default_msg_ok').setAttribute("accesskey","o");
@@ -719,18 +737,6 @@ function green(e)
 
 
 
-function br() { return '<br>'; }
-function divright(content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; }
-function form(uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; }
-function input(type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; }
-function button(name,value) { return input("button",name,value); }
-function submitbutton(name,value) { return input("submit",name,value); }
-function resetbutton(name,value) { return input("reset",name,value); }
-function textarea(cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; }
-function selectbox(height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';}
-function dropdownbox(name,lines) { return selectbox(1,name,lines);}
-
-function link(url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; }
 
 if (!$("wWindows")) createElement("div",{ id:"wWindows" },document.body); // Beinhaltet alle Fenster
 css(".wOuterWindow { border:        3px solid black; background-color:#EEEEEE; z-index:999; }");
@@ -753,12 +759,12 @@ function simpleWindow(t,l,w,h,titel,text,onClose,fixed)
 var text=
         //form("https://it-service.intra.aa/it-service/index.pl?","testform",
         "<table border=1>"+
-        row(['IT-Service',link('https://it-service.intra.aa')])+
-        row(['Webmin',link('https://www.intra.aa:10000')])+
-        row(['Nagios',link('https://mgmt09.intra.aa/cms/index.php?id=91&no_cache=1')])+
-        //row(["Inputfeld:",input("password","pwd","Test")])+
-        row(["TicketID:",input("text","TicketID","268216")])+
-        row(["Ort:",dropdownbox("Action",["AgentZoom","AgentQueueView"])])+
+        HTML.row(['IT-Service',link('https://it-service.intra.aa')])+
+        HTML.row(['Webmin',link('https://www.intra.aa:10000')])+
+        HTML.row(['Nagios',link('https://mgmt09.intra.aa/cms/index.php?id=91&no_cache=1')])+
+        //HTML.row(["Inputfeld:",input("password","pwd","Test")])+
+        HTML.row(["TicketID:",input("text","TicketID","268216")])+
+        HTML.row(["Ort:",dropdownbox("Action",["AgentZoom","AgentQueueView"])])+
         "</table>"+divright(button("ok","OK")+" "+button("cancel","abbrechen")+" "+button("save","Anwenden"));
 
 //var w1=simpleWindow(100,50,500,100,"Test2",text,function (button, outW, inW, e) { if (button=='cancel') return true; alert(button+"\n"+outW+"\n"+inW+"\n"+e.target+"\n"+e.type+"\n"+e.currentTarget+"\n"+e.eventPhase+"\n"+e.bubbles+"\n"+e.cancelable+"\n"+e.timeStamp); if (button=='ok') return true; },true);

@@ -151,8 +151,25 @@ function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
 // ** HTML-Code
-function div(text) { return '<div>'+text+'</div>'; }
-function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
+var HTML={
+  div: function (text) { return '<div>'+text+'</div>'; },
+  row: function (cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; },
+  table: function (rows) { return '<table>' + rows.join('') +'</table>'; },
+  elem: function (name,param,inhalt) { return '<'+name+(param?' '+param.join(" "):"")+'>'+(inhalt||'')+'</'+name+'>'; },
+  br: function () { return '<br>'; },
+  divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
+  form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
+  input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
+  button: function (name,value) { return input("button",name,value); },
+  submitbutton: function (name,value) { return input("submit",name,value); },
+  resetbutton:function (name,value) { return input("reset",name,value); },
+  textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
+  selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
+  dropdownbox:function (name,lines) { return selectbox(1,name,lines); },
+  link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
+  checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
+  radio: function (name,checked) { return '<input type="radio" name="'+(name||'')+'"'+(checked?" checked":"")+'">'; },
+};
 // ** REST **
 function inFrame() { return self!=top; }
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
@@ -169,7 +186,7 @@ function showmsg(data)
   var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999;";
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
-  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+  data.box=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
@@ -280,6 +297,10 @@ function thread() {
   //alert(uneval(deserialize("data",{})));
   showmsg({
     id:"quali",
+    //text:["Qualität:  "+HTML.selectbox(1,'WQuali',['Unbekannt','Gut','Schlecht']),''].join("<br>"),
+    //text:"<div style='margin:auto;text-align:left; width:200px'>"+
+    //     [HTML.checkbox("gut",(data[ID]||{}).gut)+" Gut"].join("<br>")+
+    //     "</div>",
     text:"Gut?",
     fixed:true,
     color:(!data[ID] || data[ID].gut==undefined)?"lightgray":(data[ID].gut)?"green":"red",
@@ -289,6 +310,9 @@ function thread() {
     onCancel:function () { schlecht(ID); },
     Timeout:(!data[ID] || data[ID].gut==undefined)?120:10,
     onTimeout:function () { },
+    //Cancel:"Abbrechen",
+    //onOK:function (data) { setData(ID,"gut",data.box.elements.namedItem("gut").checked); },
+    //onCancel:function (data) { },
   });
   onKey(function (key, code, e) {
     switch(code.KEY)

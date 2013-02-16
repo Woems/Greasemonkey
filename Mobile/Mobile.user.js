@@ -348,11 +348,14 @@ function Bewertung()
       },
       onCancel: function (data) {},
     });
-  } else if (location.pathname=="/fahrzeuge/search.html")
+  } else if (location.pathname=="/fahrzeuge/search.html" || location.pathname.split("/")[1]=="auto")
   {
     var Bewertungen=deserialize('Bewertungen',{});
     $x("id('parkAndCompareVehicle')//a[@class='infoLink detailsViewLink']").forEach(function (a) {
-      var Color=["lightgray", "green", "lightgreen", "blue", "yellow", "orange", "red"];
+      // http://www.lerneniminternet.de/htm/tip_farbtabelle.html
+      // 0123456789ABCDEF
+      //var Color=["lightgray", "green", "lightgreen", "powderblue", "khaki", "peachpuff", "salmon"];
+      var Color=["lightgray", "#AFA", "#CFA", "#EFA", "#FEA", "#FCA", "#FAA"];
       if (Bewertungen[a.pathname])
       {
         GM_log([uneval(Bewertungen[a.pathname]), Color[Bewertungen[a.pathname].Note||0]||"lightgray"].join('\n'));
