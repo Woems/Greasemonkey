@@ -468,8 +468,11 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
         var x=createElement('input',{ type:'checkbox', name:'x', title:"AccessKey: x", accessKey:'x', onChange:function (t, e) { inputclick(t,e); }});
         var td2=createElement('td',{ childs:[ gut, text("Gut"), createElement('br'), schlecht, text("Schlecht"), createElement('br'), x, text({undefined:'?', true:'+', false:'-'}[e.x]||e.x) ] });
         
-        var alter=text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate());
-        var alterdiff=text(ShowDateDiff(new Date()-(e.lastseen||new Date()), 3));
+        var c=[];
+        c.push(text((e.lastseen||{ getShortDate:function () {return "???";}}).getShortDate()));
+        c.push(createElement('br'));
+        c.push(text(ShowDateDiff(new Date()-(e.lastseen||new Date()), 3)));
+        c.push(createElement('br'));
         var alterdiffInTage=(new Date()-(e.lastseen||new Date()))/1000/60/60/24;
         var Tage=Rand(1,alterdiffInTage+7);
         //var link1=createElement('a',{ href:'#'+Tage*24*60, name:e.id, textContent:'+'+Math.floor(Tage/7)+','+(Tage%7)+' Wochen', title:'+'+Tage+' Tage', onClick:verzclick });
@@ -477,10 +480,12 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
         //var link2=createElement('a',{ href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
         //var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+7*24*60, name:e.id, textContent:'+1 Woche', onClick:verzclick });
         //var link1=createElement('a',{ style:'padding:0 7px 0 0', href:'#'+30*24*60, name:e.id, textContent:'+1 Monat', onClick:verzclick });
-        var link1=createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#now', name:e.id, textContent:'=now', onClick:verzclick });
-        var link2=createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick });
-        var linkhide=createElement('a',{ style:'color:gray', href:"hide", name:e.id, textContent:'Hide', onClick:hideclick });
-        var td3=createElement('td',{ childs:[ alter, createElement('br'), alterdiff, createElement('br'), link1, link2, linkhide ] });
+        c.push(createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#now', name:e.id, textContent:'=now', onClick:verzclick }));
+        c.push(createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#'+24*60, name:e.id, textContent:'+1 Tag', onClick:verzclick }));
+        c.push(createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#'+30*24*60, name:e.id, textContent:'+1 Monat', onClick:verzclick }));
+        c.push(createElement('a',{ style:'padding:0 7px 0 0; color:gray', href:'#'+365*24*60, name:e.id, textContent:'+1 Jahr', onClick:verzclick }));
+        c.push(createElement('a',{ style:'color:gray', href:"hide", name:e.id, textContent:'Hide', onClick:hideclick }));
+        var td3=createElement('td',{ childs:c });
         
         var tr=createElement('tr',{ childs: [ td1, td2, td3] });
         var table=createElement('table',{ childs:[ tr ] });
