@@ -133,9 +133,10 @@ function wvAdd(Url, Titel, Wiederhohlung)
 {
   if (!Url) Url=prompt("URL:");
   if (!Url) return;
-  if (!Titel) Titel=prompt("Titel:");
+  var exist=deserialize('WV',[]).filter(function (e) { return e.url==Url; });
+  if (!Titel) Titel=prompt("Titel:",(exist.length > 0?exist[0].t:''));
   if (!Titel) return;
-  if (!Wiederhohlung) Wiederhohlung=prompt("minutly, hourly, daily, weekly, weekly on do, monthly, yearly:");
+  if (!Wiederhohlung) Wiederhohlung=prompt("minut(e|ly), hour(ly), da(y|ily), week(ly) (on do|;4), month(ly), year(ly):",(exist.length > 0?exist[0].wh:''));
   if (!Wiederhohlung) return;
   wvDel(Url)
   var WV=deserialize('WV',[]);
@@ -159,16 +160,21 @@ function wvCheck(Url) {
 } // End: function wvOpen()
 
 function wvNow() {
+  var Z={ minute: 60*1000, hour:60*60*1000, day: 24*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
+  var F={ minutly: 'getMinutes', hourly:'getHours', daily:'getDate', monthly:'getMonth', yearly:'getFullYear' }
   var WV=deserialize('WV',[]);
   WV=WV.map(function (wv) {
     var now=new Date();
+    //GM_log(uneval(wv.wh.split(";")));
     if (!wv.last
-       || (wv.wh=='minutly' && wv.last.getMinutes() != now.getMinutes())
-       || (wv.wh=='hourly' && wv.last.getHours() != now.getHours())
-       || (wv.wh=='daily' && wv.last.getDate() != now.getDate())
-       || (wv.wh=='monthly' && wv.last.getMonth() != now.getMonth())
-       || (wv.wh=='yearly' && wv.last.getFullYear() != now.getFullYear())
-       || (wv.wh=='weekly' && wv.last.getTime()+((6-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (6 - Wochentag) = Montag
+       || (Z[wv.wh] && wv.last.getTime()+Z[wv.wh] < now.getTime())
+       || (F[wv.wh] && wv.last[F[wv.wh]]() != now[F[wv.wh]]())
+       //|| (wv.wh=='minutly' && wv.last.getMinutes() != now.getMinutes())
+       //|| (wv.wh=='hourly' && wv.last.getHours() != now.getHours())
+       //|| (wv.wh=='daily' && wv.last.getDate() != now.getDate())
+       //|| (wv.wh=='monthly' && wv.last.getMonth() != now.getMonth())
+       //|| (wv.wh=='yearly' && wv.last.getFullYear() != now.getFullYear())
+       || (wv.wh.split(";")[0]=='weekly' && wv.last.getTime()+(((wv.wh.split(";")[1]||0)+6-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (6 - Wochentag) = Montag
        || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
        )
     {
