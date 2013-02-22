@@ -265,7 +265,7 @@ function board() {
   var Zeilen=$x("//table[@class='bordered']/tbody/tr[td[@class='bgc6']]");
   Zeilen.forEach(function (row) {
     row.cells[2].setAttribute("onclick","");
-    $xs(".//a",row.cells[2]).target="_blank";
+    //$xs(".//a",row.cells[2]).target="_blank";
     var Link=$xs(".//a",row.cells[2]).href;
     var ID=Link.replace(/^.*threadid=([0-9]*).*$/,"$1");
     var data=deserialize("data",{});
@@ -282,6 +282,18 @@ function board() {
       $xs(".//a",row.cells[2]).href=Link+"&showpage="+((Math.floor((data[ID].gelesenbis-1)/20)+1));
     }
     //row.appendChild(createElement("td",{ style:"font-size:xx-small", innerHTML:(!data[ID])?"-":"Gelesen:&nbsp;"+!!data[ID].gelesen }));
+  });
+  onKey(function (key, code, e) {
+    switch(code.KEY)
+    {
+      // Backspace
+      case 8: location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
+      // Cursor Left
+      case 37: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff")]/font/a').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      // Cursor Right
+      case 39: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').href; } catch(e) { location.href=$xs('//a[text()="»"]').href; } break;
+      //default: alert([key, uneval(code), e].join("\n")); break;
+    }
   });
 } // End: function board()
 
@@ -318,11 +330,11 @@ function thread() {
     switch(code.KEY)
     {
       // Backspace
-      case 8: location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
+      case 8: location.href=$xs("//td[@class='head']/font/a[last()]").href; break; //location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
       // Cursor Left
       case 37: try { location.href=$xs('//b/font/preceding-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
       // Cursor Right
-      case 39: try { location.href=$xs('//b/font/following-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      case 39: try { location.href=$xs('//b/font/following-sibling::a[1]').href; } catch(e) { /*alert("Keine weitere Seite");*/ location.href=$xs("//td[@class='head']/font/a[last()]").href; } break;
       //default: alert([key, uneval(code), e].join("\n")); break;
     }
   });
