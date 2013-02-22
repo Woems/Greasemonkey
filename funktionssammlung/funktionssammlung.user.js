@@ -167,12 +167,12 @@ var HTML={
   divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
   form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
   input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
-  button: function (name,value) { return input("button",name,value); },
-  submitbutton: function (name,value) { return input("submit",name,value); },
-  resetbutton:function (name,value) { return input("reset",name,value); },
+  button: function (name,value) { return this.input("button",name,value); },
+  submitbutton: function (name,value) { return this.input("submit",name,value); },
+  resetbutton:function (name,value) { return this.input("reset",name,value); },
   textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
   selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
-  dropdownbox:function (name,lines) { return selectbox(1,name,lines); },
+  dropdownbox:function (name,lines) { return this.selectbox(1,name,lines); },
   link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
   checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
   radio: function (name,checked) { return '<input type="radio" name="'+(name||'')+'"'+(checked?" checked":"")+'">'; },
@@ -759,13 +759,13 @@ function simpleWindow(t,l,w,h,titel,text,onClose,fixed)
 var text=
         //form("https://it-service.intra.aa/it-service/index.pl?","testform",
         "<table border=1>"+
-        HTML.row(['IT-Service',link('https://it-service.intra.aa')])+
-        HTML.row(['Webmin',link('https://www.intra.aa:10000')])+
-        HTML.row(['Nagios',link('https://mgmt09.intra.aa/cms/index.php?id=91&no_cache=1')])+
+        HTML.row(['IT-Service',HTML.link('https://it-service.intra.aa')])+
+        HTML.row(['Webmin',HTML.link('https://www.intra.aa:10000')])+
+        HTML.row(['Nagios',HTML.link('https://mgmt09.intra.aa/cms/index.php?id=91&no_cache=1')])+
         //HTML.row(["Inputfeld:",input("password","pwd","Test")])+
-        HTML.row(["TicketID:",input("text","TicketID","268216")])+
-        HTML.row(["Ort:",dropdownbox("Action",["AgentZoom","AgentQueueView"])])+
-        "</table>"+divright(button("ok","OK")+" "+button("cancel","abbrechen")+" "+button("save","Anwenden"));
+        HTML.row(["TicketID:",HTML.input("text","TicketID","268216")])+
+        HTML.row(["Ort:",HTML.dropdownbox("Action",["AgentZoom","AgentQueueView"])])+
+        "</table>"+HTML.divright(HTML.button("ok","OK")+" "+HTML.button("cancel","abbrechen")+" "+HTML.button("save","Anwenden"));
 
 //var w1=simpleWindow(100,50,500,100,"Test2",text,function (button, outW, inW, e) { if (button=='cancel') return true; alert(button+"\n"+outW+"\n"+inW+"\n"+e.target+"\n"+e.type+"\n"+e.currentTarget+"\n"+e.eventPhase+"\n"+e.bubbles+"\n"+e.cancelable+"\n"+e.timeStamp); if (button=='ok') return true; },true);
 //GM_log("aaaa: "+document.forms.testform);
