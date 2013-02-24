@@ -159,6 +159,12 @@ function wvCheck(Url) {
   serialize('WV',WV);
 } // End: function wvOpen()
 
+function wvAufschieben(Url) {
+  var WV=deserialize('WV',[]);
+  WV=WV.map(function (f) { if (f.url==Url) f.aufschieben=new Date(new Date().getTime()+10*60*1000); return f; });
+  serialize('WV',WV);
+} // End: function wvOpen()
+
 function wvNow() {
   var Z={ minute: 60*1000, hour:60*60*1000, day: 24*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
   var F={ minutly: 'getMinutes', hourly:'getHours', daily:'getDate', monthly:'getMonth', yearly:'getFullYear' }
@@ -166,7 +172,8 @@ function wvNow() {
   WV=WV.map(function (wv) {
     var now=new Date();
     //GM_log(uneval(wv.wh.split(";")));
-    if (!wv.last
+    if ((!wv.aufschieben || wv.aufschieben < now.getTime()) &&
+       (!wv.last
        || (Z[wv.wh] && wv.last.getTime()+Z[wv.wh] < now.getTime())
        || (F[wv.wh] && wv.last[F[wv.wh]]() != now[F[wv.wh]]())
        //|| (wv.wh=='minutly' && wv.last.getMinutes() != now.getMinutes())
@@ -176,18 +183,18 @@ function wvNow() {
        //|| (wv.wh=='yearly' && wv.last.getFullYear() != now.getFullYear())
        || (wv.wh.split(";")[0]=='weekly' && wv.last.getTime()+(((wv.wh.split(";")[1]||0)+6-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (6 - Wochentag) = Montag
        || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
-       )
+       ))
     {
       showmsg({
-        id:'WV_oeffnen_{rand}',
+        id:'WV_oeffnen', //_{rand}
         text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url+'">'+wv.t+'</a> öffnen?</p>',
         fixed: true,
         url: wv.url,
         color:'red',
         OK:'OK',
         onOK:function (e) { wvCheck(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
-        Cancel:'Cancel',
-        onCancel:function (e) { wvCheck(e.url); },
+        Cancel:'Aufschieben',
+        onCancel:function (e) { wvAufschieben(e.url); },
         Timeout:30,
         onTimeout:function (e) { },
       });
