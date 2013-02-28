@@ -291,7 +291,7 @@ function board() {
       // Cursor Left
       case 37: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff")]/font/a').href; } catch(e) { alert("Keine weitere Seite"); } break;
       // Cursor Right
-      case 39: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').href; } catch(e) { location.href=$xs('//a[text()="»"]').href; } break;
+      case 39: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').href; } catch(e) { location.href=$xs('//a[text()="»"] | //font/font/following::a[1]').href; } break;
       //default: alert([key, uneval(code), e].join("\n")); break;
     }
   });
