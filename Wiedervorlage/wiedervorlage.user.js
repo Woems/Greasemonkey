@@ -159,14 +159,16 @@ function wvCheck(Url) {
   serialize('WV',WV);
 } // End: function wvOpen()
 
-function wvAufschieben(Url) {
+function Rand(min, max) { return Math.floor(min+Math.random()*(max-min)); }
+
+function wvAufschieben(Url,sec) {
   var WV=deserialize('WV',[]);
-  WV=WV.map(function (f) { if (f.url==Url) f.aufschieben=new Date(new Date().getTime()+10*60*1000); return f; });
+  WV=WV.map(function (f) { if (f.url==Url) f.aufschieben=new Date(new Date().getTime()+(sec||30)*60*1000); return f; });
   serialize('WV',WV);
 } // End: function wvOpen()
 
 function wvNow() {
-  var Z={ minute: 60*1000, hour:60*60*1000, day: 24*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
+  var Z={ minute: 60*1000, hour:60*60*1000, day: 20*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
   var F={ minutly: 'getMinutes', hourly:'getHours', daily:'getDate', monthly:'getMonth', yearly:'getFullYear' }
   var WV=deserialize('WV',[]);
   WV=WV.map(function (wv) {
@@ -185,16 +187,19 @@ function wvNow() {
        || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
        ))
     {
+      //var r=Rand(1,6)*10;
+      var r=Rand(10,60);
       showmsg({
-        id:'WV_oeffnen', //_{rand}
+        id:'WV_oeffnen_{rand}',
         text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url+'">'+wv.t+'</a> öffnen?</p>',
         fixed: true,
         url: wv.url,
+        sec:r,
         color:'red',
         OK:'OK',
         onOK:function (e) { wvCheck(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
-        Cancel:'Aufschieben',
-        onCancel:function (e) { wvAufschieben(e.url); },
+        Cancel:'Aufschieben um '+r+'min',
+        onCancel:function (e) { wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
         Timeout:30,
         onTimeout:function (e) { },
       });
