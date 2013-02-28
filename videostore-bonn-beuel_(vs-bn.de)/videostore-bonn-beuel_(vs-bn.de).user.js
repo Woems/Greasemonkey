@@ -268,7 +268,7 @@ function InfoBox()
     ElemMeineUebersicht(""+Filme.length+". Lange nicht angesehen (STRG+SHIFT+L)",
       Filme
       .slice(0,5)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), style:"color:blue;", accessKey:(n==0)?'l':'' }) ] }); })
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel+" ("+e.Changed.toLocaleDateString()+" "+e.Changed.toLocaleTimeString()+")", innerHTML:Kuerzen(e.Titel||"???",25), style:"color:blue;", accessKey:(n==0)?'l':'' }) ] }); })
     , "wUnseen");
     /**/
     var Filme=MapObj(filme,function (Key, Value) {  return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
@@ -277,7 +277,7 @@ function InfoBox()
     ElemMeineUebersicht(""+Filme.length+". Will ich sehen (STRG+SHIFT+W)",
       Filme
       .slice(0,20)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",25), style:"color:green;", accessKey:(n==0)?'w':'' }) ] }); })
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel+" ("+e.Changed.toLocaleDateString()+" "+e.Changed.toLocaleTimeString()+")", innerHTML:Kuerzen(e.Titel||"???",25), style:"color:green;", accessKey:(n==0)?'w':'' }) ] }); })
     , "wWillSeen");
     /**/
     var Filme=MapObj(filme,function (Key, Value) { return { Link:Key, Titel:Value.titel, Changed:Value["lastopen"]||Value["changed"]||new Date(1970,1,1), Val:Value }; })
@@ -286,7 +286,7 @@ function InfoBox()
     ElemMeineUebersicht(""+Filme.length+". Unvoted (STRG+SHIFT+D)",
       Filme
       .slice(0,30)
-      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel, innerHTML:Kuerzen(e.Titel||"???",20), style:"color:red;", accessKey:(n==0)?'d':'' }) ] }); })
+      .map(function (e, n) { return createElement('li', { childs:[ createElement('a', { href:e.Link, title:e.Titel+" ("+e.Changed.toLocaleDateString()+" "+e.Changed.toLocaleTimeString()+")", innerHTML:Kuerzen(e.Titel||"???",20), style:"color:red;", accessKey:(n==0)?'d':'' }) ] }); })
     , "wUnvoted");
     /**/
     $x("id('wUnvoted')//a").forEach(function (a) {
@@ -344,7 +344,13 @@ function Vote()
 
   var Titelmin=Titel.replace(/[- ]*(Blu-Ray|DVD)[ !]*/i,"").toLowerCase().replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("&","und");
   var YoutubeHier=$xs("id('ContentSpalte')/div/table[3]/tbody/tr/td");
-  YoutubeHier.appendChild(createElement('div', { innerHTML:"<b>-- Youtube --</b><br>"+Titelmin+" trailer<br><a href='http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer")+"' target=_new>YouTube</a>", id:"wYouTubeText" }));
+  var c=[];
+  c.push("<b>-- Youtube --</b>");
+  c.push(Titelmin+" trailer");
+  c.push("<a href='http://www.youtube.com/results?search_query="+encodeURI(Titelmin+" trailer")+"' target=_blank>YouTube Search</a>");
+  c.push("<a href='http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer")+"' target=_blank>YouTube Fullscreen</a>");
+  c.push("<a href='http://www.google.de?q="+encodeURI(Titelmin+" trailer")+"' target=_blank>YouTube Fullscreen</a>");
+  YoutubeHier.appendChild(createElement('div', { innerHTML:c.join("<br>"), id:"wYouTubeText" }));
   YoutubeHier.appendChild(iframe("http://www.youtube.com/embed/results?q="+encodeURI(Titelmin+" trailer"),"YouTube",600,400));//700,500));
   //createElement('div', { innerHTML:"YOUTUBE HIER!!!" }, YoutubeHier);
 
