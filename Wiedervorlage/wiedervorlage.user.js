@@ -131,12 +131,12 @@ wvNow();
 
 function wvAdd(Url, Titel, Wiederhohlung)
 {
-  if (!Url) Url=prompt("URL:");
+  Url=prompt("URL:",Url);
   if (!Url) return;
   var exist=deserialize('WV',[]).filter(function (e) { return e.url==Url; });
-  if (!Titel) Titel=prompt("Titel:",(exist.length > 0?exist[0].t:''));
+  Titel=prompt("Titel:",Titel||(exist.length > 0?exist[0].t:''));
   if (!Titel) return;
-  if (!Wiederhohlung) Wiederhohlung=prompt("minut(e|ly), hour(ly), da(y|ily), week(ly) (on do|;4), month(ly), year(ly):",(exist.length > 0?exist[0].wh:''));
+  Wiederhohlung=prompt("minut(e|ly), hour(ly), da(y|ily), week(ly) (on do|;4), month(ly), year(ly):",Wiederhohlung||(exist.length > 0?exist[0].wh:''));
   if (!Wiederhohlung) return;
   wvDel(Url)
   var WV=deserialize('WV',[]);
@@ -158,6 +158,13 @@ function wvCheck(Url) {
   WV=WV.map(function (f) { if (f.url==Url) f.last=new Date(); return f; });
   serialize('WV',WV);
 } // End: function wvOpen()
+
+function wvUrlRotate(Url) {
+  var WV=deserialize('WV',[]);
+  WV=WV.map(function (f) { if (f.url==Url) { var u=f.url.split(","); var fu=u.shift(); u.push(fu); /*alert("-> "+f.url+"\n-> "+u.join(","));*/ f.url=u.join(","); } return f; });
+  serialize('WV',WV);
+  
+} // End: function wvUrlRotate()
 
 function Rand(min, max) { return Math.floor(min+Math.random()*(max-min)); }
 
@@ -195,19 +202,21 @@ function wvNow() {
       serialize('rand',rand);
       GM_log("Random Verteilung: "+uneval(rand));
       //var r=Rand(10,60);
+      //alert("URL: "+uneval(wv.url.split(","))+"\nLength:"+wv.url.split(",").length);
+      //var urls=wv.url.split(","); firsturl=urls.shift(); urls.push(firsturl); wv.url=urls.join(",");
       showmsg({
-        id:'WV_oeffnen_{rand}',
-        text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url+'">'+wv.t+'</a> öffnen?</p>',
-        fixed: true,
-        url: wv.url,
-        sec:r,
-        color:'red',
-        OK:'OK',
-        onOK:function (e) { wvCheck(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
-        Cancel:'Aufschieben um '+r+'min',
-        onCancel:function (e) { wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
-        Timeout:30,
-        onTimeout:function (e) { },
+          id:'WV_oeffnen_{rand}',
+          text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
+          fixed: true,
+          url: wv.url,
+          sec:r,
+          color:'red',
+          OK:'OK',
+          onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
+          Cancel:'Aufschieben um '+r+'min',
+          onCancel:function (e) { wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
+          Timeout:30,
+          onTimeout:function (e) { },
       });
       //wv.last=new Date(); window.setTimeout(function () { GM_openInTab(wv.url); }, 10*1000);
     }
@@ -224,12 +233,23 @@ function wvShow()
       id:'WV_anzeigen_{rand}',
       text:'<a href="'+wv.url+'">'+wv.t+'</a>: <b>'+wv.wh+'</b> / '+wv.last,
       color:'lightgray',
-      OK: 'Hinzufügen',
-      onOK:function (e) { wvAdd(); },
+      OK: 'Bearbeiten',
+      onOK:function (e) { wvAdd(wv.url); },
       Cancel: 'löschen',
       onCancel:function (e) { wvDel(wv.url); },
       Timeout:10,
       onTimeout:function (e) {},
     });
   });
+    showmsg({
+      id:'WV_anzeigen',
+      text:'Neuen Eintrag hinzufügen?',
+      color:'lightgray',
+      OK: 'Ja',
+      onOK:function (e) { wvAdd(); },
+      Cancel: 'Nein',
+      onCancel:function (e) {},
+      Timeout:10,
+      onTimeout:function (e) {},
+    });
 }

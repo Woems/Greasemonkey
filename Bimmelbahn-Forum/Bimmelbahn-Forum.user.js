@@ -36,7 +36,7 @@ function createElement(type, attributes, append){
     if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
     if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
     if (attr=="append") node.appendChild(attributes[attr]); else
-    if (attr=="childs") { for (var child in attributes[attr]) node.appendChild(attributes[attr][child]); } else
+    if (attr=="childs") { for (var child in attributes[attr]) if (attributes[attr].hasOwnProperty(child)) node.appendChild(attributes[attr][child]); } else
     try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
   if (append) append.appendChild(node);
   return node;
@@ -74,8 +74,8 @@ function on(type, elm, func) {
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
 function onKey(func) { on('keydown',window,function (e) { 
-  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
-  var Code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
+  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
+  var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
@@ -116,6 +116,7 @@ Date.prototype.diff = function(date) { var tmp="in "; var diff=this.getTime()-da
 function Now(d) { return (d||new Date()).getTime()/1000; }
 function NowOut(d) { return new Date(d*1000).getShortDate(); }
 function ParseDate(d) { var sp=d.match(/(([0-9]{2})\.([0-9]{2})\.([0-9]{2,4}))? ?(([0-9]{1,2}):([0-9]{2}))?/); return new Date(sp[4]||1970,(sp[3]||1)-1,sp[2]||1,sp[6]||0,sp[7]||0,0); }
+function ShowDateDiff(sec) { var teile={ MSec:1000, Sec:60, Min:60, H:24, Tage:7, Wochen:99999 }; var tmp=''; for (i in teile) { if (Math.floor(sec%teile[i])!=0) tmp=Math.floor(sec%teile[i])+' '+i+' '+tmp; sec=sec/teile[i]; } return tmp; }
 // ** Text **
 String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,""); }
 String.prototype.ltrim = function() { return this.replace(/^\s+/,""); }
@@ -135,6 +136,13 @@ function arrayRand(array) { if (!array || array.length==0) GM_log("ArrayGetRand 
 Array.prototype.trim = function () { return this.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
 Array.prototype.clean = function () { return this.filter(function (e) { return e!=""; }); };
 Array.prototype.uniq = function (array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
+// ** Objekte **
+function ObjKeys(Obj) { var t=[]; for (i in Obj) t.push(i); return t; }
+function ObjValues(Obj) { var t=[]; for (i in Obj) t.push(Obj[i]); return t; }
+function ObjKeysAndValues(Obj,sep) { var t=[]; for (i in Obj) t.push(i+(sep||": ")+Obj[i]); return t; }
+function ForEachObj(Obj,func) { for (i in Obj) func(i, Obj[i]); }
+function MapObj(Obj,func) { var t=[]; for (i in Obj) t.push(func(i, Obj[i])); return t; }
+function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); return t.sort().join(sep||"\n"); }
 // ** Parameter **
 function urlParse(url) { var a = urlParse.a = urlParse.a || document.createElement('a'); a.href = url; return { scheme: /^[^:]+/.exec(a.protocol)[0], host: a.host, hostname: a.hostname, pathname: a.pathname, search: a.search, hash: a.hash }; } //alert(mdump(urlParse(location.href)));
 function aa(obj) { alert(uneval(obj)); }
@@ -142,13 +150,31 @@ function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
 // ** HTML-Code
-function div(text) { return '<div>'+text+'</div>'; }
-function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
+var HTML={
+  div: function (text) { return '<div>'+text+'</div>'; },
+  row: function (cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; },
+  table: function (rows) { return '<table>' + rows.join('') +'</table>'; },
+  elem: function (name,param,inhalt) { return '<'+name+(param?' '+param.join(" "):"")+'>'+(inhalt||'')+'</'+name+'>'; },
+  br: function () { return '<br>'; },
+  divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
+  form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
+  input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
+  button: function (name,value) { return this.input("button",name,value); },
+  submitbutton: function (name,value) { return this.input("submit",name,value); },
+  resetbutton:function (name,value) { return this.input("reset",name,value); },
+  textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
+  selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
+  dropdownbox:function (name,lines) { return this.selectbox(1,name,lines); },
+  link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
+  checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
+  radio: function (name,checked) { return '<input type="radio" name="'+(name||'')+'"'+(checked?" checked":"")+'">'; },
+};
 // ** REST **
+function inFrame() { return self!=top; }
+function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
-function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) { window[key] = GM_getValue(key, defaultValue); GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() { GM_setValue(key, !window[key]); location.reload(); }); }
 function showmsg(data)
 {
@@ -156,15 +182,17 @@ function showmsg(data)
   data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999;";
+  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center;";
+  style+=" font:normal medium sans-serif; z-index:9999;"; // Schönheitskorrekturen
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
-  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+  data.box=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
   return data;
 } // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
+//data.box.elements.namedItem('').value;
 // $xs('id("default_msg")/input[@value="OK"]').setAttribute("accesskey","o");
 // $xs('id("default_msg")/input[@value="Cancel"]').setAttribute("accesskey","c");
 // $('default_msg_ok').setAttribute("accesskey","o");
@@ -194,6 +222,7 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
+//GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
 //if (getParam("boardid")==7)
