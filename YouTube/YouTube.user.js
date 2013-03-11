@@ -459,7 +459,7 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
           event.stopPropagation();
           event.preventDefault();
         }, true);
-        var td1=createElement('td',{ innerHTML:'ID: '+e.id+'<br>Kategorie: ', childs:[ select ], title:uneval(e) });
+        var td1=createElement('td',{ innerHTML:'ID: '+e.id+'<br>', childs:[ select ], title:uneval(e) });
         
         var gut=createElement('input',{ type:'radio', name:'qualitaet', value:'gut', onChange:function (t, e) { inputclick(t,e); } });
         var schlecht=createElement('input',{ type:'radio', name:'qualitaet', value:'schlecht', onChange:function (t, e) { inputclick(t,e); } });
@@ -596,6 +596,8 @@ function ObjOut(o)
 
 function Video(VideoID)
 {
+  css("#watch7-player { z-index:9999; position: fixed; bottom:0px; left:10px; width: 800px; height:600px;  }");
+  css("#watch7-discussion, #watch7-action-panels { display:none; }");
   var Video=deserialize("Video",{});
   if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
   Video[VideoID].anz+=1;
