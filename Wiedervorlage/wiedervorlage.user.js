@@ -187,8 +187,14 @@ function wvNow() {
        || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
        ))
     {
-      //var r=Rand(1,6)*10;
-      var r=Rand(10,60);
+      var r=Rand(2,12)*10;
+      var rand=deserialize('rand',{});
+      var v=1;
+      if (!rand["v"] && rand["v"]!=v) rand={ 10:0, 20:0, 30:0, 40:0, 50:0, 60:0, 70:0, 80:0, 90:0, 100:0, 110:0, 120:0, v:v };
+      rand[r]=(rand[r]||0)+1;
+      serialize('rand',rand);
+      GM_log("Random Verteilung: "+uneval(rand));
+      //var r=Rand(10,60);
       showmsg({
         id:'WV_oeffnen_{rand}',
         text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url+'">'+wv.t+'</a> öffnen?</p>',
