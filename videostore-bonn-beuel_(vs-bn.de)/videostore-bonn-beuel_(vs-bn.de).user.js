@@ -244,6 +244,8 @@ if ($("UserLogin") && $("UserPass"))
 
 if (location.pathname=="/index.php" && location.search=="?load=showfsk18")
   GM_log("FSK18");
+else if (location.pathname=="/index.php" && location.search=="?load=loadbasket&favorites=1")
+  Favoriten();
 else if (location.pathname.indexOf("/film_")==0)
   Vote();
 else
@@ -454,4 +456,9 @@ function FilmListe()
       event.preventDefault();
     }, true);
   });
+}
+
+function Favoriten()
+{
+  $x("//input[@type='checkbox'][@checked]").forEach(function (checkbox) { checkbox.checked=false; });
 }
