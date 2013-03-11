@@ -226,4 +226,15 @@ function wvShow()
       onTimeout:function (e) {},
     });
   });
+    showmsg({
+      id:'WV_anzeigen',
+      text:'Neuen Eintrag hinzufügen?',
+      color:'lightgray',
+      OK: 'Ja',
+      onOK:function (e) { wvAdd(); },
+      Cancel: 'Nein',
+      onCancel:function (e) {},
+      Timeout:10,
+      onTimeout:function (e) {},
+    });
 }
