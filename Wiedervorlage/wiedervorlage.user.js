@@ -423,7 +423,7 @@ function wvShow()
       onOK:function (e) { wvChange(wv.url); },
       Cancel: 'löschen',
       onCancel:function (e) { wvDel(wv.url); },
-      Timeout:10,
+      Timeout:30,
       onTimeout:function (e) {},
     });
   });
@@ -435,7 +435,7 @@ function wvShow()
       onOK:function (e) { wvAdd(); },
       Cancel: 'Nein',
       onCancel:function (e) {},
-      Timeout:10,
+      Timeout:30,
       onTimeout:function (e) {},
     });
 }
