@@ -955,4 +955,15 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.portablefreeware.com*</Include>
   </Script>
+  <Script basedir="Buntbahn" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Forum Steuerung" enabled="true" filename="Buntbahn.user.js" name="Buntbahn" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Buntbahn/Buntbahn.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Buntbahn/Buntbahn.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>http://www.buntbahn.de*</Include>
+  </Script>
 </UserScriptConfig>

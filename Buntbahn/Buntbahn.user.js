@@ -1,8 +1,9 @@
 // ==UserScript==
-// @name           Wiedervorlage
-// @namespace      Woems
-// @description    Seite auf wiedervorlage legen
-// @include        *
+// @name        Buntbahn
+// @namespace   Woems
+// @description Forum Steuerung
+// @include     http://www.buntbahn.de*
+// @version     1
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -78,7 +79,6 @@ function onKey(func) { on('keydown',window,function (e) {
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
   var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
-function Key(key,func) { document.addEventListener('keypress', function (e) { k=e.keyCode||e.which; k=(e.metaKey?'META+':'')+(e.ctrlKey?'STRG+':'')+(e.altKey?'ALT+':'')+(String.fromCharCode(k)||k); if (key==k) func(); }, true);  }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
 function getAccesskeys() { return $x('//*[@accesskey]').map(function (e) { return e.getAttribute("accesskey"); }).sort().join(", "); }
@@ -149,21 +149,10 @@ function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); 
 function urlParse(url) { var a = urlParse.a = urlParse.a || document.createElement('a'); a.href = url; return { scheme: /^[^:]+/.exec(a.protocol)[0], host: a.host, hostname: a.hostname, pathname: a.pathname, search: a.search, hash: a.hash }; } //alert(mdump(urlParse(location.href)));
 function aa(obj) { alert(uneval(obj)); }
 function ga(obj) { GM_log(uneval(obj)); }
-function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
+function getParam(key, def, loc) { var a=(loc||location).search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
+          // getParam("", "", urlParse(a.href));
 // ** HTML-Code
-function createHTMLCode(elem, attributes,content)
-{
-  var param="";
-  if (attributes) for (var attr in attributes) if (attributes.hasOwnProperty(attr))
-    //  if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
-    // if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
-    // if (attr=="append") node.appendChild(attributes[attr]); else
-    if (attr=="childs") { for (var child in attributes[attr]) if (attributes[attr].hasOwnProperty(child)) node.appendChild(attributes[attr][child]); } else
-    if (typeof attributes[attr]=="string") param+=" "+attr+"='"+attributes[attr]+"'"; else param+=" "+attr+"="+attributes[attr];
-  if (append) append.appendChild(node);  
-  return "<"+elem+param+">"+(content||"")+"</"+elem+">";
-}
 var HTML={
   div: function (text) { return '<div>'+text+'</div>'; },
   row: function (cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; },
@@ -172,12 +161,13 @@ var HTML={
   br: function () { return '<br>'; },
   divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
   form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
-  input: function (type,name,value,content,size) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'" size="'+(size||20)+'">'+(content||"")+'</input>'; },
+  input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
   button: function (name,value) { return this.input("button",name,value); },
   submitbutton: function (name,value) { return this.input("submit",name,value); },
   resetbutton:function (name,value) { return this.input("reset",name,value); },
   textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
   selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
+  selectboxplus:function (height,name,lines, def) { var l=""; for (var i in lines) { l+="<option value='"+i+"'"+(def==i?" selected":"")+">"+lines[i]+"</option>" }; return '<select size="'+height+'" name="'+name+'">'+l+'</select>';},
   dropdownbox:function (name,lines) { return this.selectbox(1,name,lines); },
   link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
   checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
@@ -201,7 +191,6 @@ function showmsg(data)
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
   data.box=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
-  $x(".//*[@name]",data.box).forEach(function (e) { if (!data[e.name]) data[e.name]=e; });
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
@@ -238,204 +227,81 @@ function createHover(elem,text)
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
+// ** Infos **
+// location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
 
-globaleTasten();
 
-function globaleTasten () {
-  Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
-    wvShow();
-  });
-  Key('STRG+ALT+x',function (e) { // Taste zum aktivieren
-    wvAdd('http://www.kinopolis.de/bn/programm_wochenansicht', 'Kinopolis', 'weekly on do');
-
-    wvAdd('http://www.google.com/calendar/render', 'Google Kalender', 'weekly');
-
-    wvAdd('http://www.google.com/reader/view/', 'Google Reader', 'daily');
-    wvAdd('http://vs-bn.de/', 'VideoStore Bonn', 'daily');
-    wvAdd('http://www.elwis.de/gewaesserkunde/Wasserstaende/wasserstaendeUebersichtGrafik.html.php?pegelId=b45359df-c020-4314-adb1-d1921db642da', 'Elwis', 'daily');
-    
-    wvAdd('http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=40122', 'H0-Modellbahnforum - Anlagenbau', 'hourly');
-  });
-/*  Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
-    var webseiten=deserialize('webseiten',[]);
-    webseiten.push({ url: location.href, host: location.host, titel:document.title });
-    alert("'"+document.title+"'\nzur Wiedervorlage hinzugefügt...\nSTRG+ALT+x zum abrufen der "+webseiten.length+" Seiten.");
-    serialize('webseiten',webseiten);
-  });
-  Key('STRG+ALT+x',function (e) { // Taste zum aktivieren
-    var webseiten=deserialize('webseiten',[]);
-    if (webseiten.length==0) alert("Keine Seiten mehr gespeichert");
-    var w=webseiten.pop();
-    location.href=w.url;
-    serialize('webseiten',webseiten);
-  });
-  $x("//a[@href]").forEach(function (a) { a.addEventListener("mousedown",function(event){
-    var e=event.target;
-    while (!e || !e.href) e=e.parentNode;
-    //GM_log("Target: "+e+"\nEvent: "+event+"\nCTRL: "+event.ctrlKey+"\nALT: "+event.altKey);
-    if (event.ctrlKey && event.altKey)
-    {
-      var webseiten=deserialize('webseiten',[]);
-      webseiten.push({ url: event.target.href, host: "", titel:event.target.textContent });
-      alert("'"+event.target.textContent+"'\nzur Wiedervorlage hinzugefügt...\nSTRG+ALT+x zum abrufen der "+webseiten.length+" Seiten.");
-      serialize('webseiten',webseiten);    
-      event.stopPropagation(); event.preventDefault();
-    }
-  }, true); });*/
-} // End globaleTasten
-
-wvNow();
-//wvShow();
-
-function wvAdd(Url, Titel, Wiederhohlung)
+var Farben={ undefined:"lightgray", 1:"darkgreen", 2:"green", 3:"gray", 4:"yellow", 5:"red", 6:"black"};
+var Noten={ undefined:"Unbekannt", 1:"1 sehr gut", 2:"2 gut", 3:"3 befriedigend", 4:"4 ausreichend", 5:"5 mangelhaft", 6:"6 ungenügend"};
+switch(location.pathname)
 {
-  Url=prompt("URL:",Url);
-  if (!Url) return;
-  var exist=deserialize('WV',[]).filter(function (e) { return e.url==Url; });
-  Titel=prompt("Titel:",Titel||(exist.length > 0?exist[0].t:''));
-  if (!Titel) return;
-  Wiederhohlung=prompt("minut(e|ly), hour(ly), da(y|ily), week(ly) (on do|;4), month(ly), year(ly):",Wiederhohlung||(exist.length > 0?exist[0].wh:''));
-  if (!Wiederhohlung) return;
-  wvDel(Url)
-  var WV=deserialize('WV',[]);
-  WV.push({ url:Url, t:Titel, wh:Wiederhohlung, last:new Date() });
-  serialize('WV',WV);
-  //wvShow();
-} // End: function wvAdd()
+  case '/modellbau/': ForenUebersicht(); break;
+  case '/modellbau/viewforum.php': Foren(); break;
+  case '/modellbau/viewtopic.php': Threads(); break;
+  default: GM_log("Location '"+location.pathname+"' unbekannt"); break;
+}
 
-function wvChange(Url)
+function ForenUebersicht()
 {
-  deserialize('WV',[]).forEach(function (wv) {
-    if (wv.url==Url)
-    {
-      showmsg({
-        url: Url,
-        id: "default_msg_{rand}",
-        text: ["Url: "+HTML.input("text","wUrl",wv.url,"",80),
-               "Titel: "+HTML.input("text","wTitel",wv.t),
-               "Wiederhohlung: "+HTML.input("text","wWh",wv.wh),
-               "Last: "+wv.last, ""].join("<br>"),
-        color: "lightgray",
-        OK: "Ok",
-        Cancel: "Cancel",
-        onOK: function (data) {
-          var WV=deserialize('WV',[]);
-          WV=WV.map(function (f) { if (f.url==data.url) { f.url=data.wUrl.value; f.t=data.wTitel.value; f.wh=data.wWh.value; }; return f; });
-          serialize('WV',WV);
-          //alert([data.url,data.wUrl.value,data.wTitel.value,data.wWh.value].join("\n\n"));
-        },
-        onCancel: function (data) {},
-      });
-    }
+  alert('Uebersicht');
+}
+
+function Foren()
+{
+  var data=deserialize('data',{});
+  $x("//a[@class='topictitle']").forEach(function (a) {
+    t=getParam("t", "", urlParse(a.href));
+    if (!data[t]) data[t]={};
+    GM_log("T: "+t+" - "+(Farben[data[t].Note]||'lightgray'));
+    if (data[t].G||data[t].Start) a.href=a.href+"&start="+(data[t].G||data[t].Start||0);
+    a.parentNode.parentNode.style.backgroundColor=Farben[data[t].Note]||'lightgray';
+    var Antworten=$xs("ancestor::tr/td[3]/span",a);
+    var Max=Antworten.textContent*1;
+    var diff=Max-(data[t].G||data[t].Start||0);
+    Antworten.parentNode.style.backgroundColor=diff<2?"lightgray":diff<10?"gray":diff<20?"#FBB":"red";
+    Antworten.textContent=(data[t].G||data[t].Start||0)+" / "+Max;
   });
 }
 
-function wvDel(Url)
+function Threads()
 {
-  var WV=deserialize('WV',[]);
-  WV=WV.filter(function (e) { return e.url!=Url; });
-  serialize('WV',WV);
-  //wvShow();
-} // End: function wvDel()
-
-function wvCheck(Url) {
-  var WV=deserialize('WV',[]);
-  WV=WV.map(function (f) { if (f.url==Url) f.last=new Date(); return f; });
-  serialize('WV',WV);
-} // End: function wvOpen()
-
-function wvUrlRotate(Url) {
-  var WV=deserialize('WV',[]);
-  WV=WV.map(function (f) { if (f.url==Url) { var u=f.url.split(","); var fu=u.shift(); u.push(fu); /*alert("-> "+f.url+"\n-> "+u.join(","));*/ f.url=u.join(","); } return f; });
-  serialize('WV',WV);
+  var Beitraege=$x("//tr[td/span[@class='postdetails']/img]");
+  var data=deserialize('data',{});
+  if (!data[getParam('t')]) data[getParam('t')]={};
+  data[getParam('t')].S=getParam('start',0)*1;
+  data[getParam('t')].G=Math.max(getParam('start',0)*1+Beitraege.length, data[getParam('t')].G||0);
+  serialize('data',data);
+  //var Noten={ undefined:"Unbekannt", 1:"1 sehr gut", 2:"2 gut", 3:"3 befriedigend", 4:"4 ausreichend", 5:"5 mangelhaft", 6:"6 ungenügend"};
+  //var Farben={ undefined:"lightgray", 1:"darkgreen", 2:"green", 3:"gray", 4:"yellow", 5:"red", 6:"black"};
+  showmsg({
+    id:'default_msg_{rand}',
+    text:"Note: "+HTML.selectboxplus(1,"Note",Noten,data[getParam('t')].Note),
+    color:Farben[data[getParam('t')].Note]||'lightgray',
+    fixed:true,
+    onOK:function (e) {
+        var data=deserialize('data',{});
+        if (!data[getParam('t')]) data[getParam('t')]={};
+        data[getParam('t')].Note=e.box.elements.namedItem("Note").value;
+        serialize('data',data);
+    },
+    onCancel:function (e) {},
+    Timeout:!data[getParam('t')].Note?120:10,
+    onTimeout:function (e) {},
+  });//.box.elements.namedItem("Note").selectedIndex=ObjKeys(Noten).indexOf(data[getParam('t')].Note);
+  //alert([getParam('t'), data[getParam('t')].Note, Noten[data[getParam('t')].Note], uneval(ObjValues(Noten)), ObjValues(Noten).indexOf(Noten[data[getParam('t')].Note]), uneval(ObjKeys(Noten)), ObjKeys(Noten).indexOf(data[getParam('t')].Note) ].join("\n"));
   
-} // End: function wvUrlRotate()
-
-function Rand(min, max) { return Math.floor(min+Math.random()*(max-min)); }
-
-function wvAufschieben(Url,sec) {
-  var WV=deserialize('WV',[]);
-  WV=WV.map(function (f) { if (f.url==Url) f.aufschieben=new Date(new Date().getTime()+(sec||30)*60*1000); return f; });
-  serialize('WV',WV);
-} // End: function wvOpen()
-
-function wvNow() {
-  var Z={ minute: 60*1000, hour:60*60*1000, day: 20*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
-  var F={ minutly: 'getMinutes', hourly:'getHours', daily:'getDate', monthly:'getMonth', yearly:'getFullYear' }
-  var WV=deserialize('WV',[]);
-  WV=WV.map(function (wv) {
-    var now=new Date();
-    //GM_log(uneval(wv.wh.split(";")));
-    if ((!wv.aufschieben || wv.aufschieben < now.getTime()) &&
-       (!wv.last
-       || (Z[wv.wh] && wv.last.getTime()+Z[wv.wh] < now.getTime())
-       || (F[wv.wh] && wv.last[F[wv.wh]]() != now[F[wv.wh]]())
-       //|| (wv.wh=='minutly' && wv.last.getMinutes() != now.getMinutes())
-       //|| (wv.wh=='hourly' && wv.last.getHours() != now.getHours())
-       //|| (wv.wh=='daily' && wv.last.getDate() != now.getDate())
-       //|| (wv.wh=='monthly' && wv.last.getMonth() != now.getMonth())
-       //|| (wv.wh=='yearly' && wv.last.getFullYear() != now.getFullYear())
-       || (wv.wh.split(";")[0]=='weekly' && wv.last.getTime()+(((wv.wh.split(";")[1]||0)+6-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (6 - Wochentag) = Montag
-       || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
-       ))
+  onKey(function (key, code, e) {
+    switch(code.KEY)
     {
-      var r=Rand(2,12)*10;
-      var rand=deserialize('rand',{});
-      var v=1;
-      if (!rand["v"] && rand["v"]!=v) rand={ 10:0, 20:0, 30:0, 40:0, 50:0, 60:0, 70:0, 80:0, 90:0, 100:0, 110:0, 120:0, v:v };
-      rand[r]=(rand[r]||0)+1;
-      serialize('rand',rand);
-      GM_log("Random Verteilung: "+uneval(rand));
-      //var r=Rand(10,60);
-      //alert("URL: "+uneval(wv.url.split(","))+"\nLength:"+wv.url.split(",").length);
-      //var urls=wv.url.split(","); firsturl=urls.shift(); urls.push(firsturl); wv.url=urls.join(",");
-      showmsg({
-          id:'WV_oeffnen_{rand}',
-          text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
-          fixed: true,
-          url: wv.url,
-          sec:r,
-          color:'red',
-          OK:'OK',
-          onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
-          Cancel:'Aufschieben um '+r+'min',
-          onCancel:function (e) { wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
-          Timeout:30,
-          onTimeout:function (e) { },
-      });
-      //wv.last=new Date(); window.setTimeout(function () { GM_openInTab(wv.url); }, 10*1000);
+      // Backspace
+      case 8: location.href=$xs('//span[@class="nav"]/a[contains(@href,"viewforum")]').href; break; //location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
+      // Cursor Left
+      case 37: try { location.href=$xs('//a[text()="Zurück"]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      // Cursor Right
+      case 39: try { location.href=$xs('//a[text()="Weiter"]').href; } catch(e) { /*alert("Keine weitere Seite");*/ location.href=$xs('//span[@class="nav"]/a[contains(@href,"viewforum")]').href; } break;
+      //default: alert([key, uneval(code), e].join("\n")); break;
     }
-    return wv;
   });
-  serialize('WV',WV);  
-} // End: function wvNow()
 
-function wvShow()
-{
-  var WV=deserialize('WV',[]);
-  WV.forEach(function (wv) {
-    showmsg({
-      id:'WV_anzeigen_{rand}',
-      text:'<a href="'+wv.url+'">'+wv.t+'</a>: <b>'+wv.wh+'</b> / '+wv.last,
-      color:'lightgray',
-      OK: 'Bearbeiten',
-      onOK:function (e) { wvChange(wv.url); },
-      Cancel: 'löschen',
-      onCancel:function (e) { wvDel(wv.url); },
-      Timeout:10,
-      onTimeout:function (e) {},
-    });
-  });
-    showmsg({
-      id:'WV_anzeigen',
-      text:'Neuen Eintrag hinzufügen?',
-      color:'lightgray',
-      OK: 'Ja',
-      onOK:function (e) { wvAdd(); },
-      Cancel: 'Nein',
-      onCancel:function (e) {},
-      Timeout:10,
-      onTimeout:function (e) {},
-    });
 }

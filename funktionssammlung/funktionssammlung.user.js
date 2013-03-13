@@ -173,6 +173,7 @@ var HTML={
   resetbutton:function (name,value) { return this.input("reset",name,value); },
   textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
   selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
+  selectboxplus:function (height,name,lines, def) { var l=""; for (var i in lines) { l+="<option value='"+i+"'"+(def==i?" selected":"")+">"+lines[i]+"</option>" }; return '<select size="'+height+'" name="'+name+'">'+l+'</select>';},
   dropdownbox:function (name,lines) { return this.selectbox(1,name,lines); },
   link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
   checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
@@ -233,6 +234,8 @@ function createHover(elem,text)
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
+// ** Infos **
+// location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
 
 function iframe(url,className,w,h,noframetext)
