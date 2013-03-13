@@ -327,6 +327,7 @@ function thread() {
     //onCancel:function (data) { },
   });
   onKey(function (key, code, e) {
+    if (["INPUT"].indexOf(document.activeElement.tagName)==-1)
     switch(code.KEY)
     {
       // Backspace
