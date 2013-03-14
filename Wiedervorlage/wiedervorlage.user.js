@@ -380,6 +380,8 @@ function wvNow() {
        || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
        ))
     {
+      var r=Math.round((new Date().getTime() - wv.last.getTime())/60000);
+      /*
       var r=Rand(2,12)*10;
       var rand=deserialize('rand',{});
       var v=1;
@@ -387,6 +389,7 @@ function wvNow() {
       rand[r]=(rand[r]||0)+1;
       serialize('rand',rand);
       GM_log("Random Verteilung: "+uneval(rand));
+      */
       //var r=Rand(10,60);
       //alert("URL: "+uneval(wv.url.split(","))+"\nLength:"+wv.url.split(",").length);
       //var urls=wv.url.split(","); firsturl=urls.shift(); urls.push(firsturl); wv.url=urls.join(",");
@@ -395,7 +398,7 @@ function wvNow() {
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
           fixed: true,
           url: wv.url,
-          sec:r,
+          sec:r, 
           color:'red',
           OK:'OK',
           onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
