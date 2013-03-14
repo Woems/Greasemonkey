@@ -597,7 +597,7 @@ function ObjOut(o)
 function Video(VideoID)
 {
   css("#watch7-player { z-index:9999; position: fixed; bottom:0px; left:10px; width: 800px; height:600px;  }");
-  css("#watch7-discussion, #watch7-action-panels { display:none; }");
+  css("#watch7-discussion, #watch7-action-panels, #footer-container { display:none; }");
   var Video=deserialize("Video",{});
   if (!Video[VideoID]) Video[VideoID]={ id:VideoID, anz:0 };
   Video[VideoID].anz+=1;
