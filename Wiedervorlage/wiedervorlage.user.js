@@ -380,7 +380,8 @@ function wvNow() {
        || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
        ))
     {
-      var r=Math.round((new Date().getTime() - wv.last.getTime())/60000);
+      translate={ minutly:"minute", hourly:"hour", daily:"day", monthly:"month", yearly: "year" }
+      var r=Math.round((new Date().getTime() - wv.last.getTime() - (Z[wv.wh]||Z[translate[wv.wh]]||0) )/60000);
       /*
       var r=Rand(2,12)*10;
       var rand=deserialize('rand',{});
