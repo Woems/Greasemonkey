@@ -62,6 +62,18 @@ function getHost() { return location.host; } // hash, host, hostname, href, path
 function inFrame() { return self!=top; }
 /********************************/
 
+window.setTimeout(function () {
+  $x('//img').forEach(function (img) {
+    var teilerH=Math.min(img.height,window.innerHeight*2) / img.height;
+    var teilerW=Math.min(img.width,window.innerWidth) / img.width;
+    if (Math.min(teilerH,teilerW) < 1 ) {
+      img.style.height='';
+      img.style.width=img.width*Math.min(teilerH,teilerW)+'px';
+      //img.height=img.height*Math.min(teilerH,teilerW);
+    }
+  });
+},2000);
+
 globaleTasten();
 var galerie=deserialize('galerie',{});
 if (galerie[location.host]) window.setTimeout(galerieAnzeigen,1000);
