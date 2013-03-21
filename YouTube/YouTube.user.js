@@ -727,6 +727,14 @@ function Video(VideoID)
           location.href="about:blank#YouTube";
         }
     }, MenuBase);
+    if (getParam('list'))
+    createElement('button',{
+        className: "yt-uix-button yt-uix-button-default",
+        textContent:'Playlist',
+        onClick:function (e) { 
+          location.href="/playlist?list="+getParam('list');
+        }
+    }, MenuBase);
   }
   $x("//a[contains(@href,'v=')]").forEach(function (a) { a.addEventListener("click",function(event){
     //if (event.ctrlKey) // && event.altKey)

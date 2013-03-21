@@ -73,6 +73,7 @@ function on(type, elm, func) {
   else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
+function Key(key,func) { document.addEventListener('keypress', function (e) { k=e.keyCode||e.which; k=(e.metaKey?'META+':'')+(e.ctrlKey?'STRG+':'')+(e.altKey?'ALT+':'')+(String.fromCharCode(k)||k); if (key==k) func(); }, true);  }
 function onKey(func) { on('keydown',window,function (e) { 
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
   var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
@@ -250,6 +251,18 @@ function board()
     }
     //row.appendChild(createElement("td",{ style:"font-size:xx-small", innerHTML:(!data[ID])?"-":"Gelesen:&nbsp;"+!!data[ID].gelesen }));
   });
+  onKey(function (key, code, e) {
+    switch(code.KEY)
+    {
+      // Backspace
+      case 8: location.href="http://www.boards-4you.de/wbb13/60/index.php";  break;
+      // Cursor Left
+      case 37: try { location.href=$xs('//a[contains(text(),"vorherige")]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      // Cursor Right
+      case 39: try { location.href=$xs('//td[@bgcolor="#FFFFCC"][@width="80%"]/font[1]/a').href; } catch(e) { location.href=$xs('//a[contains(text(),"nächste")]').href; } break;
+      //default: alert([key, uneval(code), e].join("\n")); break;
+    }
+  });
 }
 
 function setData(ID,attr,val)
@@ -285,6 +298,18 @@ function thread()
     Cancel:"Nein",
     onOK:function () { gut(ID); },
     onCancel:function () { schlecht(ID); },
+  });
+  onKey(function (key, code, e) {
+    switch(code.KEY)
+    {
+      // Backspace
+      case 8: location.href=$xs('id("tablea")//td[1]/font/b[1]/a[last()]');  break;
+      // Cursor Left
+      case 37: try { location.href=$xs('//a[contains(text(),"vorherige")]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      // Cursor Right
+      case 39: try { location.href=$xs('//a[contains(text(),"nächste")]').href; } catch(e) { location.href=$xs('id("tablea")//td[1]/font/b[1]/a[last()]').href; } break;
+      //default: alert([key, uneval(code), e].join("\n")); break;
+    }
   });
 }
 
