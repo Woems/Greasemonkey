@@ -69,11 +69,6 @@
     <Include>http://s*.wurzelimperium.de/main.php?page=garden</Include>
     <Include>http://s*.wurzelimperium.de/menu.php</Include>
   </Script>
-  <Script basedir="wurzelimperium_-_login_s" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="wurzelimperium_-_login_s.user.js" name="Wurzelimperium - Login Server" namespace="Woems" runAt="document-end" version="">
-    <Grant>GM_getValue</Grant>
-    <Grant>GM_setValue</Grant>
-    <Include>http://*wurzelimperium.de/*</Include>
-  </Script>
   <Script basedir="wurzelimperium" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium.user.js" name="Wurzelimperium" namespace="www.wurzelimperium.de" runAt="document-end" version="updatet-1.0">
     <Grant>GM_getValue</Grant>
     <Grant>GM_log</Grant>
@@ -84,7 +79,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.wurzelimperium.de/*</Include>
   </Script>
-  <Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="false" filename="wurzelimperium_-_giescri.user.js" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="true" filename="wurzelimperium_-_giescri.user.js" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" version="">
     <Grant>GM_log</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>http://s*.wurzelimperium.de*</Include>
