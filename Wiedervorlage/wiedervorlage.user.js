@@ -380,8 +380,8 @@ function wvNow() {
        || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
        ))
     {
-      translate={ minutly:"minute", hourly:"hour", daily:"day", monthly:"month", yearly: "year" }
-      var r=Math.round((new Date().getTime() - wv.last.getTime() - (Z[wv.wh]||Z[translate[wv.wh]]||0) )/60000);
+      //translate={ minutly:"minute", hourly:"hour", daily:"day", monthly:"month", yearly: "year" }
+      //var r=Math.round((new Date().getTime() - wv.last.getTime() - (Z[wv.wh]||Z[translate[wv.wh]]||0) )/60000);
       /*
       var r=Rand(2,12)*10;
       var rand=deserialize('rand',{});
@@ -394,6 +394,8 @@ function wvNow() {
       //var r=Rand(10,60);
       //alert("URL: "+uneval(wv.url.split(","))+"\nLength:"+wv.url.split(",").length);
       //var urls=wv.url.split(","); firsturl=urls.shift(); urls.push(firsturl); wv.url=urls.join(",");
+      //GM_delete('rand');
+      var r=deserialize('waittime',{})['timer']||5;
       showmsg({
           id:'WV_oeffnen_{rand}',
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
@@ -404,7 +406,13 @@ function wvNow() {
           OK:'OK',
           onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
           Cancel:'Aufschieben um '+r+'min',
-          onCancel:function (e) { wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
+          onCancel:function (e) { 
+            var waittime=deserialize('waittime',{});
+            if (!waittime['day'] || waittime['day']!=now.getDate())
+              waittime={ day:now.getDate(), timer:5 };
+            waittime['timer']=waittime['timer']+5;
+            serialize('waittime',waittime);
+            wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
           Timeout:30,
           onTimeout:function (e) { },
       });
