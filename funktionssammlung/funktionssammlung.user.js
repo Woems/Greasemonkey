@@ -237,7 +237,7 @@ function createHover(elem,text)
 // ** Infos **
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
-
+ 
 function iframe(url,className,w,h,noframetext)
 {
   var iframe=document.createElement("iframe");
