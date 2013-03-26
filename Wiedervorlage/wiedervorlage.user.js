@@ -397,7 +397,7 @@ function wvNow() {
       //GM_delete('rand');
       var r=deserialize('waittime',{})['timer']||5;
       showmsg({
-          id:'WV_oeffnen_{rand}',
+          id:'WV_oeffnen', // _{rand}
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
           fixed: true,
           url: wv.url,
