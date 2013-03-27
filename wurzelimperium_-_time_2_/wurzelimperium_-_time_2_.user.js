@@ -299,6 +299,23 @@ function do_garten_map()
   },500);
 }
 
+function openInTab(link)
+{
+  var a=document.createElement("a");
+  a.href=link;
+  a.target="_blank";
+  document.body.appendChild(a);
+  a.click();
+  a.parentNode.removeChild(a);
+}
+
+function openInTabt(link)
+{
+  var a=createElement('a', { href:link, target:"_blank" },document.body);
+  a.click();
+  remove(a);
+}
+
 function ShowReminder()
 {
     var Now=Math.round((new Date()).getTime()/1000);
@@ -311,7 +328,7 @@ function ShowReminder()
         fixed: true,
         color: "red",
         //Timeout:60,
-        onOK: function (data) { GM_openInTab(aget('data','url',"http://www.wurzelimperium.de")); },
+        onOK: function (data) { openInTab(aget('data','url',"http://www.wurzelimperium.de"));  },
         onCancel: function (data) { aset('data','lasttime',Now+60*10) },
         onTimeout: function (data) { ShowReminder(); },
       });
