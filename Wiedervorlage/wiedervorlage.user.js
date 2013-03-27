@@ -395,7 +395,8 @@ function wvNow() {
       //alert("URL: "+uneval(wv.url.split(","))+"\nLength:"+wv.url.split(",").length);
       //var urls=wv.url.split(","); firsturl=urls.shift(); urls.push(firsturl); wv.url=urls.join(",");
       //GM_delete('rand');
-      var r=deserialize('waittime',{})['timer']||5;
+      //var r=deserialize('waittime',{})['timer']||5;
+      var r=10;
       showmsg({
           id:'WV_oeffnen', // _{rand}
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
@@ -407,11 +408,11 @@ function wvNow() {
           onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
           Cancel:'Aufschieben um '+r+'min',
           onCancel:function (e) { 
-            var waittime=deserialize('waittime',{});
-            if (!waittime['day'] || waittime['day']!=now.getDate())
-              waittime={ day:now.getDate(), timer:5 };
-            waittime['timer']=waittime['timer']+5;
-            serialize('waittime',waittime);
+            //var waittime=deserialize('waittime',{});
+            //if (!waittime['day'] || waittime['day']!=now.getDate())
+            //  waittime={ day:now.getDate(), timer:5 };
+            //waittime['timer']=waittime['timer']+5;
+            //serialize('waittime',waittime);
             wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
           Timeout:30,
           onTimeout:function (e) { },
