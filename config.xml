@@ -232,7 +232,6 @@
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
     <Grant>GM_log</Grant>
-    <Grant>GM_openInTab</Grant>
     <Grant>GM_registerMenuCommand</Grant>
     <Grant>GM_setValue</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
