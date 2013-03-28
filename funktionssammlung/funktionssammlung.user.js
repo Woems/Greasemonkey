@@ -137,6 +137,8 @@ function trim(text) { return text.replace(/(^\s*|\s*$)/g,""); }
 function pad(text,anz,chr) { return text.replace(/(^\s*|\s*$)/g,""); }
 function fill(text,fillchar,anz) { var f=""; for (; anz>text.toString().length; anz--) f+=fillchar; return f+text; }
 // ** Array **
+function isArray(obj) { return typeof obj == "object" && obj instanceof Array; }
+function isObject(obj) { return typeof obj == "object" && !obj instanceof Array; }
 function uniq(array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
 function Object2HTMLTable(obj) { var rows=""; for (var i in obj) rows+="<tr><td><b>"+i+":</b></td><td>"+obj[i]+"</td></tr>"; return "<table>"+rows+"</table>"; }
 function arrayTrim(a) { return a.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
