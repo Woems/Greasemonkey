@@ -69,7 +69,7 @@
     <Include>http://s*.wurzelimperium.de/main.php?page=garden</Include>
     <Include>http://s*.wurzelimperium.de/menu.php</Include>
   </Script>
-  <Script basedir="wurzelimperium" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium.user.js" name="Wurzelimperium" namespace="www.wurzelimperium.de" runAt="document-end" version="updatet-1.0">
+  <Script basedir="wurzelimperium" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="wurzelimperium.user.js" name="Wurzelimperium" namespace="www.wurzelimperium.de" runAt="document-end" version="updatet-1.0">
     <Grant>GM_getValue</Grant>
     <Grant>GM_log</Grant>
     <Grant>GM_setValue</Grant>
@@ -79,7 +79,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.wurzelimperium.de/*</Include>
   </Script>
-  <Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="true" filename="wurzelimperium_-_giescri.user.js" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="false" filename="wurzelimperium_-_giescri.user.js" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" version="">
     <Grant>GM_log</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>http://s*.wurzelimperium.de*</Include>
@@ -246,7 +246,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://s*.wurzelimperium.de*</Include>
   </Script>
-  <Script basedir="wurzelimperium_-_feld_au" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_feld_au.user.js" name="Wurzelimperium - Feld aufraeumen" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="wurzelimperium_-_feld_au" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="wurzelimperium_-_feld_au.user.js" name="Wurzelimperium - Feld aufraeumen" namespace="Woems" runAt="document-end" version="">
     <Grant>GM_getValue</Grant>
     <Grant>GM_log</Grant>
     <Grant>GM_setValue</Grant>
@@ -966,5 +966,40 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>http://board.keenmedia.de*</Include>
+  </Script>
+  <Script basedir="Wurzelimperium" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="34110.user.js" name="Wurzelimperium" namespace="http://userscripts.org/scripts/show/34110" runAt="document-end" version="1.0.1" installurl="https://userscripts.org/scripts/source/34110.user.js" updateurl="http://userscripts.org.nyud.net/scripts/source/34110.meta.js">
+    <Exclude>http://forum.bg.molehillempire.com/*</Exclude>
+    <Exclude>http://forum.zeleneimperium.cz/*</Exclude>
+    <Exclude>http://wurzelforum.wurzelimperium.de/*</Exclude>
+    <Exclude>http://forum.molehillempire.es/*</Exclude>
+    <Exclude>http://forum.molehillempire.fr/*</Exclude>
+    <Exclude>http://forum.kipourosendrasi.gr/*</Exclude>
+    <Exclude>http://forum.kertbirodalom.hu/*</Exclude>
+    <Exclude>http://forum.molehillempire.nl/*</Exclude>
+    <Exclude>http://forum.zieloneimperium.pl/*</Exclude>
+    <Exclude>http://forum.pt.molehillempire.com/*</Exclude>
+    <Exclude>http://forum.molehillempire.se/*</Exclude>
+    <Exclude>http://forum.bahcivanlardiyari.com/*</Exclude>
+    <Exclude>http://board.molehillempire.com/*</Exclude>
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>http://userscripts.org/scripts/show/34110</Include>
+    <Include>http://*bg.molehillempire.com/*</Include>
+    <Include>http://*zeleneimperium.cz/*</Include>
+    <Include>http://*wurzelimperium.de/*</Include>
+    <Include>http://*molehillempire.es/*</Include>
+    <Include>http://*molehillempire.fr/*</Include>
+    <Include>http://*kipourosendrasi.gr/*</Include>
+    <Include>http://*kertbirodalom.hu/*</Include>
+    <Include>http://*molehillempire.nl/*</Include>
+    <Include>http://*zieloneimperium.pl/*</Include>
+    <Include>http://*pt.molehillempire.com/*</Include>
+    <Include>http://*molehillempire.se/*</Include>
+    <Include>http://*bahcivanlardiyari.com/*</Include>
+    <Include>http://*molehillempire.com/*</Include>
   </Script>
 </UserScriptConfig>
