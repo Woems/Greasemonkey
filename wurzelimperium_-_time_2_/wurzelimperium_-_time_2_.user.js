@@ -238,7 +238,7 @@ if (location.host.indexOf("wurzelimperium.de")==-1)
   ShowReminder();
 else
   switch (location.pathname) {
-    case "/garten_map.php" : do_garten_map(); break;
+    case "/garten_map.php" : map_time2title(); break;
     case "/main.php": aset('data','url',location.href); break;
     //default: alert(location.pathname); break;
   }
@@ -279,7 +279,7 @@ function soundstop()
   }
 }
 
-function do_garten_map()
+function map_time2title()
 {
   var lasttime = 9999999999;
   window.setInterval(function () {
@@ -299,22 +299,7 @@ function do_garten_map()
   },500);
 }
 
-function openInTab(link)
-{
-  var a=document.createElement("a");
-  a.href=link;
-  a.target="_blank";
-  document.body.appendChild(a);
-  a.click();
-  a.parentNode.removeChild(a);
-}
-
-function openInTabt(link)
-{
-  var a=createElement('a', { href:link, target:"_blank" },document.body);
-  a.click();
-  remove(a);
-}
+function openInTab(link) { var a=createElement('a', { href:link, target:"_blank" },document.body); a.click(); remove(a); }
 
 function ShowReminder()
 {
