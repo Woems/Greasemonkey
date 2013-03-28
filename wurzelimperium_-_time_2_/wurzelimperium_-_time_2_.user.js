@@ -313,8 +313,8 @@ function ShowReminder()
         fixed: true,
         color: "red",
         //Timeout:60,
-        onOK: function (data) { openInTab(aget('data','url',"http://www.wurzelimperium.de"));  },
-        onCancel: function (data) { aset('data','lasttime',Now+60*10) },
+        onOK: function (data) { openInTab(aget('data','url',"http://www.wurzelimperium.de")); ShowReminder(); },
+        onCancel: function (data) { aset('data','lasttime',Now+60*10); ShowReminder(); },
         onTimeout: function (data) { ShowReminder(); },
       });
     } else window.setTimeout(function () { ShowReminder(); },(lasttime-Now)<60000?60000:(lasttime-Now)*1000);
