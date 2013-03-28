@@ -232,7 +232,13 @@ function createHover(elem,text)
 /********************************/
 
 
-var Farben={ undefined:"lightgray", 1:"darkgreen", 2:"green", 3:"gray", 4:"yellow", 5:"red", 6:"black"};
+//var Farben={ undefined:"lightgray", 1:"darkgreen", 2:"green", 3:"gray", 4:"yellow", 5:"red", 6:"black"};
+//var Farben={ undefined:"lightgray", 1:"green", 2:"limegreen", 3:"navajowhite", 4:"lightsalmon", 5:"tomato", 6:"dimgray"};
+//var Farben={ undefined:"lightgray", 1:"#0B6121", 2:"#088A29", 3:"#5FB404", 4:"#D7DF01", 5:"#DF7401", 6:"#B43104"};
+//var Farben={ undefined:"lightgray", 1:"#58FA58", 2:"#ACFA58", 3:"#F3F781", 4:"#F7D358", 5:"#F79F81", 6:"#F5A9A9"};
+//var Farben={ undefined:"lightgray", 1:"#74DF00", 2:"#D0F5A9", 3:"#E0F8E0", 4:"#FBEFEF", 5:"#F8E0E0", 6:"#F5A9A9"};
+var Farben={ undefined:"lightgray", 1:"#7D2", 2:"#DFA", 3:"#EFE", 4:"#FEE", 5:"#FDD", 6:"#FAA"};
+// http://html-color-codes.info/webfarben_hexcodes/
 var Noten={ undefined:"Unbekannt", 1:"1 sehr gut", 2:"2 gut", 3:"3 befriedigend", 4:"4 ausreichend", 5:"5 mangelhaft", 6:"6 ungenügend"};
 switch(location.pathname)
 {
@@ -258,15 +264,15 @@ function Foren()
     a.parentNode.parentNode.style.backgroundColor=Farben[data[t].Note]||'lightgray';
     var Antworten=$xs("ancestor::tr/td[3]/span",a);
     var Max=Antworten.textContent*1;
-    var diff=Max-(data[t].G||data[t].Start||0);
+    var diff=Max-(data[t].G-1||data[t].Start-1||0);
     Antworten.parentNode.style.backgroundColor=diff<2?"lightgray":diff<10?"gray":diff<20?"#FBB":"red";
-    Antworten.textContent=(data[t].G||data[t].Start||0)+" / "+Max;
+    Antworten.textContent=(data[t].G-1||data[t].Start-1||0)+" / "+Max;
   });
 }
 
 function Threads()
 {
-  var Beitraege=$x("//tr[td/span[@class='postdetails']/img]");
+  var Beitraege=$x("//table[@class='forumline']/tbody/tr[td/span[@class='postdetails']]");
   var data=deserialize('data',{});
   if (!data[getParam('t')]) data[getParam('t')]={};
   data[getParam('t')].S=getParam('start',0)*1;
