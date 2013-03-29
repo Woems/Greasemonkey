@@ -79,7 +79,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.wurzelimperium.de/*</Include>
   </Script>
-  <Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="false" filename="wurzelimperium_-_giescri.user.js" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="true" filename="wurzelimperium_-_giescri.user.js" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" version="">
     <Grant>GM_log</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>http://s*.wurzelimperium.de*</Include>
