@@ -443,7 +443,8 @@ function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmno
     var showX=location.hash.indexOf('x')==8;
     var VideoData=ObjValues(Video)
                   .filter(function (e) { return !e.lastseen || ((!e.Kategorie || !e.qualitaet) && (e.x==undefined || e.x==showX)); })
-                  //.filter(function (e) { return !e.lastseen || (e.Kategorie=="Modelbahn Tutorial" && e.qualitaet && (e.x==undefined || e.x==showX)); })
+                  //.filter(function (e) { return !e.lastseen || (e.Kategorie=="Modelbahn Tutorial" && e.qualitaet=="gut" && (e.x==undefined || e.x==showX)); })
+                  //.filter(function (e) { return !e.lastseen || (e.Kategorie=="Musik - Mittelalter" && e.qualitaet=="gut" && (e.x==undefined || e.x==showX)); })
                   .sort(function (a,b) { return (a.lastseen||0)-(b.lastseen||0); })
                   //.sort(function (){ return (Math.round(Math.random())-0.5); })
     document.title="about:blank#"+VideoData.length;
