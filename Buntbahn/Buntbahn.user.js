@@ -237,7 +237,8 @@ function createHover(elem,text)
 //var Farben={ undefined:"lightgray", 1:"#0B6121", 2:"#088A29", 3:"#5FB404", 4:"#D7DF01", 5:"#DF7401", 6:"#B43104"};
 //var Farben={ undefined:"lightgray", 1:"#58FA58", 2:"#ACFA58", 3:"#F3F781", 4:"#F7D358", 5:"#F79F81", 6:"#F5A9A9"};
 //var Farben={ undefined:"lightgray", 1:"#74DF00", 2:"#D0F5A9", 3:"#E0F8E0", 4:"#FBEFEF", 5:"#F8E0E0", 6:"#F5A9A9"};
-var Farben={ undefined:"lightgray", 1:"#7D2", 2:"#DFA", 3:"#EFE", 4:"#FEE", 5:"#FDD", 6:"#FAA"};
+//var Farben={ undefined:"lightgray", 1:"#7D2", 2:"#DFA", 3:"#EFE", 4:"#FEE", 5:"#FDD", 6:"#FAA"};
+var Farben={ undefined:"lightgray", 1:"green", 2:"lightgreen", 3:"lightgreen", 4:"lightgreen", 5:"navajowhite", 6:"#FAA"};
 // http://html-color-codes.info/webfarben_hexcodes/
 var Noten={ undefined:"Unbekannt", 1:"1 sehr gut", 2:"2 gut", 3:"3 befriedigend", 4:"4 ausreichend", 5:"5 mangelhaft", 6:"6 ungenügend"};
 switch(location.pathname)
