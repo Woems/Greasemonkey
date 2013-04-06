@@ -253,8 +253,9 @@ function getData(ID,attr, def)
   if (!data[ID]) return def;
   return data[ID][attr]||def;
 }
+function lastpid(ID,PID) { setData(ID,"pid",PID); }
 function gelesen(ID) { setData(ID,"gelesen",new Date()); }
-function gelesenbis(ID, zeile) { if (getData(ID,"gelesenbis",0)<zeile) setData(ID,"gelesenbis",zeile); }
+function gelesenbis(ID, zeile) { if (getData(ID,"gelesenbis",0)<zeile) { setData(ID,"gelesenbis",zeile); return true; } }
 function gut(ID) { setData(ID,"gut",true); }
 function schlecht(ID) { setData(ID,"gut",false); }
 
@@ -279,7 +280,7 @@ function board() {
       //if (data[ID].gut!=undefined) row.className=data[ID].gut?"gut":"schlecht"; else row.className="unbekannt";
       if (data[ID].gelesenbis) row.cells[4].firstChild.innerHTML=data[ID].gelesenbis+" / "+ThreadEintraege;
       row.cells[2].appendChild(createElement("div",{ style:"font-size:xx-small", innerHTML:"Gelesen:&nbsp;"+data[ID].gelesen }));
-      $xs(".//a",row.cells[2]).href=Link+"&showpage="+((Math.floor((data[ID].gelesenbis-1)/20)+1));
+      $xs(".//a",row.cells[2]).href=Link+"&showpage="+((Math.floor((data[ID].gelesenbis-1)/20)+1))+(data[ID].pid?'#'+data[ID].pid:'');
     }
     //row.appendChild(createElement("td",{ style:"font-size:xx-small", innerHTML:(!data[ID])?"-":"Gelesen:&nbsp;"+!!data[ID].gelesen }));
   });
@@ -304,9 +305,9 @@ function thread() {
   gelesen(ID);
   var Anfang=(getParam("showpage", 1)*1-1)*20;
   var Ende=Anfang+Eintraege.length;
-  gelesenbis(ID, Ende);
+  if (gelesenbis(ID, Ende)) lastpid(ID,$x("//a[contains(@name,'pid')]").pop().name);  
   //alert([getParam("showpage", 1), Anfang, Ende, ID, uneval(deserialize("data",{})[ID])].join("\n"));
-  //alert(uneval(deserialize("data",{})));
+  //alert(uneval(deserialize("data",{})[ID]));
   showmsg({
     id:"quali",
     //text:["Qualität:  "+HTML.selectbox(1,'WQuali',['Unbekannt','Gut','Schlecht']),''].join("<br>"),
