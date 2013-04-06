@@ -289,6 +289,16 @@ function statusDownloads(func) {
   });  
 } // End: function statusDownloads()
 
+function addPackage(pname,links,dest,func) {
+  GM_log(server+'/api/addPackage?name='+pname+'&links='+links+(dest?'&dest='+dest:''));
+  post(server+'/api/addPackage','name='+pname+'&links='+links+(dest?'&dest='+dest:''),function (url, text, header, xhr) {
+    GM_log([url,header,text].join("\n\n"));
+    var ret=eval(text);
+    if (func) func(ret);
+  });  
+} // End: function statusDownloads()
+
+
 //restartFailed(function (e) { alert(e); });
 //getQueue(function (e) { if (e.length>0) alert(uneval(e)); });
 //getCollector(function (e) { if (e.length>0) alert(e.map(function (e) { return e.order+" "+e.name+": "+Math.round(e.sizetotal/1024/1024)+" MB"; }).join("\n") ); });
@@ -312,24 +322,52 @@ if (nodl>=3)
 */
 
 if (location.protocol+"//"+location.host == server)
-showmsg({
-  id:'default_msg_{rand}',
-  text:'Open Warteschlange',
-  color:'lightgray',
-  OK:'Ja',
-  onOK:function (e) { getQueueData(function (e) { if (e.length>0) e.forEach(function (e) { e.links.forEach(function (e) { GM_openInTab(e.url); }); }); }); },
-  Cancel:'Nein',
-  onCancel:function (e) {},
-  onTimeout:function (e) {},
-});
+{
+  showmsg({
+    id:'default_msg_{rand}',
+    text:'Open Warteschlange',
+    color:'lightgray',
+    OK:'Ja',
+    onOK:function (e) { getQueueData(function (e) { if (e.length>0) e.forEach(function (e) { e.links.forEach(function (e) { GM_openInTab(e.url); }); }); }); },
+    Cancel:'Nein',
+    onCancel:function (e) {},
+    onTimeout:function (e) {},
+  });
+  
+  showmsg({
+    id:'default_msg_{rand}',
+    text:'Open Linksammler',
+    color:'lightgray',
+    OK:'Ja',
+    onOK:function (e) { getCollectorData(function (e) { if (e.length>0) e.forEach(function (e) { e.links.forEach(function (e) { GM_openInTab(e.url); }); }); }); },
+    Cancel:'Nein',
+    onCancel:function (e) {},
+    onTimeout:function (e) {},
+  });
+}
 
-showmsg({
-  id:'default_msg_{rand}',
-  text:'Open Linksammler',
-  color:'lightgray',
-  OK:'Ja',
-  onOK:function (e) { getCollectorData(function (e) { if (e.length>0) e.forEach(function (e) { e.links.forEach(function (e) { GM_openInTab(e.url); }); }); }); },
-  Cancel:'Nein',
-  onCancel:function (e) {},
-  onTimeout:function (e) {},
+function addShare(link) {
+  addPackage(prompt("Packagename:"),link,1,function (e) { alert(uneval(e)+e); });
+} // End: function addShare()
+
+/*/
+if (aget("hosts",location.host))
+{
+  alert("Download: "+location.href);
+  addShare(location.href);
+  location.href=server;
+}
+
+$x("//a[@href]").forEach(function (a) {
+  a.addEventListener("click",function(event){
+    if (aget("hosts",event.target.host))
+    {
+      alert("Download: "+event.target.href);
+      addShare(event.target.href);
+      GM_openInTab(server);
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  });
 });
+/**/
