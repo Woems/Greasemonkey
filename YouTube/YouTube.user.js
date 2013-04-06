@@ -595,8 +595,30 @@ function ObjOut(o)
   return tmp.join(', ');
 }
 
+function JSONdir() {
+  if (aget('options','JSON')==undefined) aset('options','JSON',prompt('JSON dir?'));
+  return aget('options','JSON');
+}
+function JSONget(id,func) {
+  if (JSONdir())
+    get(JSONdir()+'?action=get&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",id,e,text].join("\n")); } });
+}
+function JSONkat(id,kat,func) {
+  if (JSONdir())
+    get(JSONdir()+'?action=kat&id='+id+'&kat='+kat,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",id,e,text].join("\n")); } });
+}
+function JSONquali(id,quali,func) {
+  if (JSONdir())
+    get(JSONdir()+'?action=quali&id='+id+'&quali='+quali,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",id,e,text].join("\n")); } });
+}
+function JSONseen(id,func) {
+  if (JSONdir())
+    get(JSONdir()+'?action=seen&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",id,e,text].join("\n")); } });
+}
+
 function Video(VideoID)
 {
+  JSONseen(VideoID,function (e) { if (e['ret']!=true) alert("YouTube: Fehler beim Seen: "+uneval(e)); });
   css("#watch7-player { z-index:9999; position: fixed; bottom:0px; left:10px; width: 800px; height:600px;  }");
   css("#watch7-discussion, #watch7-action-panels, #footer-container { display:none; }");
   var Video=deserialize("Video",{});
@@ -622,8 +644,8 @@ function Video(VideoID)
     fixed:true,
     OK: "Gut",
     Cancel: "Schlecht",
-    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; serialize("Video",Video);  },
-    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video);  },
+    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; serialize("Video",Video); JSONquali(getParam("v",""),2); },
+    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video); JSONquali(getParam("v",""),5); },
   });
   // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
   var i=Kategorien.indexOf(Video[VideoID].Kategorie);
