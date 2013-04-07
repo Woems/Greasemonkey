@@ -269,6 +269,18 @@ function Foren()
     Antworten.parentNode.style.backgroundColor=diff<2?"lightgray":diff<10?"gray":diff<20?"#FBB":"red";
     Antworten.textContent=(data[t].G-1||data[t].Start-1||0)+" / "+Max;
   });
+  onKey(function (key, code, e) {
+    switch(code.KEY)
+    {
+      // Backspace
+      //case 8: location.href=$xs('//span[@class="nav"]/a[contains(@href,"viewforum")]').href; break; //location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
+      // Cursor Left
+      //case 37: try { location.href=$xs('//a[text()="Zurück"]').href; } catch(e) { alert("Keine weitere Seite"); } break;
+      // Cursor Right
+      case 39: try { location.href=$xs('//td[@class="row2"][contains(@style,"red")]/..//a[@class="topictitle"]').href || $xs('//td[@class="row2"][contains(@style,"rgb(255, 187, 187)")]/..//a[@class="topictitle"]').href; } catch(e) { /*alert("Keine weitere Seite");*/ location.href=$xs('//a[text()="Weiter"]').href; } break;
+      //default: alert([key, uneval(code), e].join("\n")); break;
+    }
+  });
 }
 
 function Threads()
