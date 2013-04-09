@@ -366,7 +366,7 @@ function wvNow() {
   var WV=deserialize('WV',[]);
   WV=WV.map(function (wv) {
     var now=new Date();
-    //GM_log(uneval(wv.wh.split(";")));
+    //GM_log([uneval(wv), "Aufschieben: "+(wv.aufschieben-now.getTime()), "Wiederhohlung: "+wv.wh].join("\n"));
     if ((!wv.aufschieben || wv.aufschieben < now.getTime()) &&
        (!wv.last
        || (Z[wv.wh] && wv.last.getTime()+Z[wv.wh] < now.getTime())
@@ -424,13 +424,36 @@ function wvNow() {
   serialize('WV',WV);  
 } // End: function wvNow()
 
+function markdiff(out, orig)
+{
+  var tmp=['','',''];
+  for (var i=0; i<out.length; i++)
+  {
+    if ('0123456789'.indexOf(out[i])!=-1)
+    {
+      tmp[1]+=out[i];
+      tmp[2]+=orig[i];
+    } else {
+      tmp[0]+=(tmp[1]==tmp[2] ? tmp[1] : '<b>'+tmp[1]+'</b>')+out[i];
+      tmp[1]='';
+      tmp[2]='';
+    }
+  }
+  tmp[0]+=(tmp[1]==tmp[2] ? tmp[1] : '<b>'+tmp[1]+'</b>');
+  return tmp[0].replace(/<\/b><b>/g,'');
+}
+
 function wvShow()
 {
   var WV=deserialize('WV',[]);
-  WV.forEach(function (wv) {
+  WV.sort(function (a,b) { return a.last-b.last; }).forEach(function (wv) {
+    var now=new Date();
+    var laststr=wv.last.toLocaleDateString()+' '+wv.last.toLocaleTimeString();
+    var nowstr=now.toLocaleDateString()+' '+now.toLocaleTimeString();
+    aufs=(wv.aufschieben-new Date().getTime())/1000/60;
     showmsg({
       id:'WV_anzeigen_{rand}',
-      text:'<a href="'+wv.url+'">'+wv.t+'</a>: <b>'+wv.wh+'</b> / '+wv.last,
+      text:'<a href="'+wv.url+'">'+wv.t+'</a>: <b>'+wv.wh+'</b> / '+markdiff(laststr,nowstr)+(aufs>0?' / noch '+aufs+' min':''),
       color:'lightgray',
       OK: 'Bearbeiten',
       onOK:function (e) { wvChange(wv.url); },
