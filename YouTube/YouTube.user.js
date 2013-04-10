@@ -601,19 +601,19 @@ function JSONdir() {
 }
 function JSONget(id,func) {
   if (JSONdir())
-    get(JSONdir()+'?action=get&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",id,e,text].join("\n")); } });
+    get(JSONdir()+'?action=get&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 function JSONkat(id,kat,func) {
   if (JSONdir())
-    get(JSONdir()+'?action=kat&id='+id+'&kat='+kat,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",id,e,text].join("\n")); } });
+    get(JSONdir()+'?action=kat&id='+id+'&kat='+kat,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 function JSONquali(id,quali,func) {
   if (JSONdir())
-    get(JSONdir()+'?action=quali&id='+id+'&quali='+quali,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",id,e,text].join("\n")); } });
+    get(JSONdir()+'?action=quali&id='+id+'&quali='+quali,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 function JSONseen(id,func) {
   if (JSONdir())
-    get(JSONdir()+'?action=seen&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",id,e,text].join("\n")); } });
+    get(JSONdir()+'?action=seen&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 
 function Video(VideoID)
@@ -665,6 +665,7 @@ function Video(VideoID)
         break;
       default:
         Video[VideoID].Kategorie=event.target.value;
+        JSONkat(VideoID,event.target.value);
         break;
     }
     serialize("Video",Video);

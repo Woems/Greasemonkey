@@ -240,6 +240,23 @@ switch (location.pathname)
     break;
 }
 
+function JSONdir() {
+  if (aget('options','JSON')==undefined) aset('options','JSON',prompt('JSON dir?'));
+  return aget('options','JSON');
+}
+function JSONget(id,func) {
+  if (JSONdir())
+    get(JSONdir()+'?action=get&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
+}
+function JSONkat(id,pid,bis,func) {
+  if (JSONdir())
+    get(JSONdir()+'?action=read&id='+id+'&pid='+pid+'&bis='+bis,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
+}
+function JSONquali(id,quali,func) {
+  if (JSONdir())
+    get(JSONdir()+'?action=quali&id='+id+'&quali='+quali,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
+}
+
 function setData(ID,attr,val)
 {
   var data=deserialize("data",{});
@@ -305,7 +322,8 @@ function thread() {
   gelesen(ID);
   var Anfang=(getParam("showpage", 1)*1-1)*20;
   var Ende=Anfang+Eintraege.length;
-  if (gelesenbis(ID, Ende)) lastpid(ID,$x("//a[contains(@name,'pid')]").pop().name);  
+  if (gelesenbis(ID, Ende)) lastpid(ID,$x("//a[contains(@name,'pid')]").pop().name);
+  JSONkat(ID,$x("//a[contains(@name,'pid')]").pop().name,Ende);
   //alert([getParam("showpage", 1), Anfang, Ende, ID, uneval(deserialize("data",{})[ID])].join("\n"));
   //alert(uneval(deserialize("data",{})[ID]));
   showmsg({
@@ -319,8 +337,8 @@ function thread() {
     color:(!data[ID] || data[ID].gut==undefined)?"lightgray":(data[ID].gut)?"green":"red",
     OK:"Ja",
     Cancel:"Nein",
-    onOK:function () { gut(ID); },
-    onCancel:function () { schlecht(ID); },
+    onOK:function () { gut(ID); JSONquali(ID,2); },
+    onCancel:function () { schlecht(ID); JSONquali(ID,5); },
     Timeout:(!data[ID] || data[ID].gut==undefined)?120:10,
     onTimeout:function () { },
     //Cancel:"Abbrechen",
