@@ -450,10 +450,10 @@ function wvShow()
     var now=new Date();
     var laststr=wv.last.toLocaleDateString()+' '+wv.last.toLocaleTimeString();
     var nowstr=now.toLocaleDateString()+' '+now.toLocaleTimeString();
-    aufs=(wv.aufschieben-new Date().getTime())/1000/60;
+    aufs=Math.round((wv.aufschieben-new Date().getTime())/1000/60);
     showmsg({
       id:'WV_anzeigen_{rand}',
-      text:'<a href="'+wv.url+'">'+wv.t+'</a>: <b>'+wv.wh+'</b> / '+markdiff(laststr,nowstr)+(aufs>0?' / noch '+aufs+' min':''),
+      text:'<a href="'+wv.url+'">'+wv.t+'</a>: <b>'+wv.wh+'</b> / '+markdiff(laststr,nowstr)+(aufs>0?' / <b><u>noch '+aufs+' min</u></b>':''),
       color:'lightgray',
       OK: 'Bearbeiten',
       onOK:function (e) { wvChange(wv.url); },
