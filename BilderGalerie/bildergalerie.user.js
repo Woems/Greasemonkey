@@ -64,7 +64,7 @@ function inFrame() { return self!=top; }
 
 window.setTimeout(function () {
   $x('//img').forEach(function (img) {
-    var teilerH=Math.min(img.height,window.innerHeight*2) / img.height;
+    var teilerH=1; //Math.min(img.height,window.innerHeight*2) / img.height;
     var teilerW=Math.min(img.width,window.innerWidth) / img.width;
     if (Math.min(teilerH,teilerW) < 1 ) {
       img.style.height='';
