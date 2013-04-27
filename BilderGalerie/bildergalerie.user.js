@@ -70,6 +70,7 @@ window.setTimeout(function () {
       img.style.height='';
       img.style.width=img.width*Math.min(teilerH,teilerW)+'px';
       //img.height=img.height*Math.min(teilerH,teilerW);
+      img.scrollIntoView();
     }
   });
 },2000);
