@@ -247,7 +247,7 @@ if (!Category[location.host.split(".")[0]])
 
 // Links in neuem Tab öffnen
 //$x("//a[contains(@class,'thumb')][img]").forEach(function (a) { a.target="_blank"; });
-$x("//a[contains(@class,'thumb')][img] | //div[@class='stream']/a/div[@class='tinythumb scaledown']").forEach(function (a) { a.addEventListener("click",function(event){
+$x("//a[contains(@class,'thumb')][img] | //a[div[@class='tinythumb scaledown']]").forEach(function (a) { a.addEventListener("click",function(event){
   GM_openInTab($xs("ancestor::a",event.target).href);
   event.stopPropagation();
   event.preventDefault();
