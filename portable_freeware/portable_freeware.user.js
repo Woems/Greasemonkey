@@ -29,7 +29,7 @@ function serialize(name, val) {
 
 // Bild anzeigen
 var line=$x('/html/body/table[3]/tbody/tr/td/table[2]/tbody/tr/td[2]/table/tbody')[0];
-$x('//a[text()="Screenshot"]').forEach(function (a) {
+$x('//a[text()="Screenshot"] | //a[span[contains(text(),"Screenshot")]]').forEach(function (a) {
   var tr=document.createElement('tr');
   var td=document.createElement('td');
   var img=document.createElement('img');
