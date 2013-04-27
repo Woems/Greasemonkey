@@ -260,15 +260,16 @@ function Foren()
   $x("//a[@class='topictitle']").forEach(function (a) {
     t=getParam("t", "", urlParse(a.href));
     if (!data[t]) data[t]={};
-    GM_log("T: "+t+" - "+(Farben[data[t].Note]||'lightgray'));
+    //GM_log("T: "+t+" - "+(Farben[data[t].Note]||'lightgray'));
     if (data[t].G||data[t].Start) a.href=a.href+"&start="+(data[t].G||data[t].Start||0);
     a.parentNode.parentNode.style.backgroundColor=Farben[data[t].Note]||'lightgray';
     var Antworten=$xs("ancestor::tr/td[3]/span",a);
-    var Max=Antworten.textContent*1;
-    var diff=Max-(data[t].G-1||data[t].Start-1||0);
-    Antworten.parentNode.style.backgroundColor=diff<2?"lightgray":diff<10?"gray":diff<20?"#FBB":"red";
-    Antworten.textContent=(data[t].G-1||data[t].Start-1||0)+" / "+Max;
+    data[t].Max=Antworten.textContent*1;
+    data[t].Diff=data[t].Max-(data[t].G-1||data[t].Start-1||0);
+    Antworten.parentNode.style.backgroundColor=data[t].Diff<2?"lightgray":data[t].Diff<10?"gray":data[t].Diff<20?"#FBB":"red";
+    Antworten.textContent=(data[t].G-1||data[t].Start-1||0)+" / "+data[t].Max;
   });
+  serialize('data',data);
   onKey(function (key, code, e) {
     switch(code.KEY)
     {
@@ -277,7 +278,29 @@ function Foren()
       // Cursor Left
       //case 37: try { location.href=$xs('//a[text()="Zurück"]').href; } catch(e) { alert("Keine weitere Seite"); } break;
       // Cursor Right
-      case 39: try { location.href=$xs('//td[@class="row2"][contains(@style,"red")]/..//a[@class="topictitle"]').href || $xs('//td[@class="row2"][contains(@style,"rgb(255, 187, 187)")]/..//a[@class="topictitle"]').href; } catch(e) { /*alert("Keine weitere Seite");*/ location.href=$xs('//a[text()="Weiter"]').href; } break;
+      //case 39: try { location.href=$xs('//td[@class="row2"][contains(@style,"red")]/..//a[@class="topictitle"]').href || $xs('//td[@class="row2"][contains(@style,"rgb(255, 187, 187)")]/..//a[@class="topictitle"]').href; } catch(e) { /*alert("Keine weitere Seite");*/ location.href=$xs('//a[text()="Weiter"]').href; } break;
+      case 39:
+        var Lines=$x("//tr[td/span[@class='topictitle']/a]").map(function (tr) {
+          var a=$xs("./td[2]/span/a[@class='topictitle']",tr);
+          //var antworten=$xs("//tr[td/span[@class='topictitle']/a]/td[3]/span");
+          return {
+            link:a.href,
+            titel:a.textContent,
+            t:getParam("t", "", urlParse(a.href)),            
+          };
+        });
+        var data=deserialize('data',{});
+        var ok=Lines.some(function (e) { 
+          data[e.t].NOW=data[e.t].Diff-Math.pow(parseInt(data[e.t].Note)||3,2);
+          //GM_log(uneval(e)+"\n"+uneval(data[e.t]));
+          if (data[e.t].NOW>0)
+          {
+            location.href=e.link;
+            return true;          
+          }
+        });
+        if (!ok) location.href=$xs("//a[text()='Weiter']").href;
+        break;
       //default: alert([key, uneval(code), e].join("\n")); break;
     }
   });
