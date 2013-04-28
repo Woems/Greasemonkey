@@ -286,6 +286,25 @@ function board() {
     //$xs(".//a",row.cells[2]).target="_blank";
     var Link=$xs(".//a",row.cells[2]).href;
     var ID=Link.replace(/^.*threadid=([0-9]*).*$/,"$1");
+    JSONget(ID,function (arr,id) { 
+      if (arr.length!=1) { GM_log("length!=1"); return; }
+      if (typeof arr[0]=="string") return;
+      var data=deserialize('data',{});
+      if (!data[arr[0].ID])
+      {
+        data[arr[0].ID]={ id:arr[0].ID, gelesenbis:parseInt(arr[0].gelesenBis), pid:arr[0].pid, gut:(arr[0].Qualitaet<4) };
+        GM_log(["NEW",arr[0].ID,uneval(data[arr[0].ID])].join('\n'));
+      }
+      if (!data[arr[0].ID].gut) data[arr[0].ID].gut=(arr[0].Qualitaet<4);
+      if (parseInt(arr[0].gelesenBis) > data[arr[0].ID].gelesenbis)
+      {
+        //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
+        data[arr[0].ID].gelesenbis=parseInt(arr[0].gelesenBis);
+        data[arr[0].ID].pid=arr[0].pid;
+      }
+      serialize('data',data);
+      //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
+    });
     var data=deserialize("data",{});
     if (data[ID])
     {
