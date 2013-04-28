@@ -443,8 +443,14 @@
     <Include>http://www.amazon.*/*</Include>
   </Script>
   <Script basedir="portable_freeware" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="portable_freeware.user.js" name="Portable Freeware" namespace="Woems" runAt="document-end" version="">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
     <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
     <Include>http://www.portablefreeware.com/*</Include>
   </Script>
   <Script basedir="crazy_heels_-_details" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt bei dem Titel die Heelgroe&#xDF;e mit an" enabled="true" filename="crazy_heels_-_details.user.js" name="Crazy Heels - Details" namespace="Woems" runAt="document-end" version="">
