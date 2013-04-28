@@ -295,7 +295,7 @@ function board() {
         data[arr[0].ID]={ id:arr[0].ID, gelesenbis:parseInt(arr[0].gelesenBis), pid:arr[0].pid, gut:(arr[0].Qualitaet<4) };
         GM_log(["NEW",arr[0].ID,uneval(data[arr[0].ID])].join('\n'));
       }
-      if (!data[arr[0].ID].gut) data[arr[0].ID].gut=(arr[0].Qualitaet<4);
+      if (data[arr[0].ID].gut==undefined) data[arr[0].ID].gut=(arr[0].Qualitaet<4);
       if (parseInt(arr[0].gelesenBis) > data[arr[0].ID].gelesenbis)
       {
         //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
