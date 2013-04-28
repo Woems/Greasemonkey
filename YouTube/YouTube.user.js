@@ -235,17 +235,17 @@ if (FrameBuster())
 } else {
   if (location.href.indexOf("GalerieAutoHide=true")!=-1)
   {
-    GM_log(location.href);
+    //GM_log(location.href);
     unsafeWindow.onYouTubePlayerReady = function (playerID)
     {
       alert(playerID);
       var player=document.getElementById("movie_player").wrappedJSObject;
       //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
       var intervalID=window.setInterval(function () {
-        GM_log("interval");
+        //GM_log("interval");
         if (player.getPlayerState()==0)
         {
-          GM_log("Ende");
+          //GM_log("Ende");
           //NextVideo();
           window.clearInterval(intervalID);
         }
