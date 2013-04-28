@@ -299,8 +299,11 @@ function board() {
       if (parseInt(arr[0].gelesenBis) > data[arr[0].ID].gelesenbis)
       {
         //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
+        GM_log(["Weitergelesen:",arr[0].ID,$xs("//a[contains(@href,'"+arr[0].ID+"')]").textContent,parseInt(arr[0].gelesenBis),arr[0].pid,data[arr[0].ID].gelesenbis,data[arr[0].ID].pid].join('\n'));
         data[arr[0].ID].gelesenbis=parseInt(arr[0].gelesenBis);
         data[arr[0].ID].pid=arr[0].pid;
+      } else if (parseInt(arr[0].gelesenBis) < data[arr[0].ID].gelesenbis) {
+        GM_log(["Server out of gelesen:",arr[0].ID,$xs("//a[contains(@href,'"+arr[0].ID+"')]").textContent,parseInt(arr[0].gelesenBis),arr[0].pid,data[arr[0].ID].gelesenbis,data[arr[0].ID].pid].join('\n'));
       }
       serialize('data',data);
       //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
