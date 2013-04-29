@@ -293,7 +293,7 @@ function board() {
       var changed=false;
       if (!data[arr[0].ID])
       {
-        data[arr[0].ID]={ id:arr[0].ID, gelesenbis:parseInt(arr[0].gelesenBis), pid:arr[0].pid, gut:(arr[0].Qualitaet<4) };
+        data[arr[0].ID]={ id:arr[0].ID, gelesenbis:parseInt(arr[0].gelesenBis), pid:arr[0].pid, gut:(arr[0].Qualitaet?arr[0].Qualitaet<4:undefined) };
         GM_log(["NEW",arr[0].ID,uneval(data[arr[0].ID])].join('\n'));
         changed=true;
       }
