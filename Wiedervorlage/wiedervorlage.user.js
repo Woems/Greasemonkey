@@ -314,7 +314,7 @@ function wvChange(Url)
       showmsg({
         url: Url,
         id: "default_msg_{rand}",
-        text: ["Url: "+HTML.input("text","wUrl",wv.url,"",80),
+        text: ["Url: "+HTML.input("text","wUrl",wv.url,"",80)+"<br>"+wv.url.split(",").join("<br>"),
                "Titel: "+HTML.input("text","wTitel",wv.t),
                "Wiederhohlung: "+HTML.input("text","wWh",wv.wh),
                "Last: "+wv.last, ""].join("<br>"),
