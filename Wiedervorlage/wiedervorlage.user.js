@@ -241,11 +241,14 @@ function createHover(elem,text)
 /********************************/
 
 globaleTasten();
+window.setTimeout(function () { wvNow(); }, 10*1000);
+//wvShow();
 
 function globaleTasten () {
   Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
     wvShow();
   });
+  /*
   Key('STRG+ALT+x',function (e) { // Taste zum aktivieren
     wvAdd('http://www.kinopolis.de/bn/programm_wochenansicht', 'Kinopolis', 'weekly on do');
 
@@ -257,6 +260,7 @@ function globaleTasten () {
     
     wvAdd('http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=40122', 'H0-Modellbahnforum - Anlagenbau', 'hourly');
   });
+  */
 /*  Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
     var webseiten=deserialize('webseiten',[]);
     webseiten.push({ url: location.href, host: location.host, titel:document.title });
@@ -285,8 +289,6 @@ function globaleTasten () {
   }, true); });*/
 } // End globaleTasten
 
-wvNow();
-//wvShow();
 
 function wvAdd(Url, Titel, Wiederhohlung)
 {
