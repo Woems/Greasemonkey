@@ -417,8 +417,8 @@ function wvNow() {
             //waittime['timer']=waittime['timer']+5;
             //serialize('waittime',waittime);
             wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
-          Timeout:120,
-          onTimeout:function (e) { wvCheck(e.url); wvUrlRotate(e.url); GM_openInTab(e.url); },
+          //Timeout:120,
+          //onTimeout:function (e) { wvCheck(e.url); wvUrlRotate(e.url); GM_openInTab(e.url.split(",")[0]); },
       });
       //wv.last=new Date(); window.setTimeout(function () { GM_openInTab(wv.url); }, 10*1000);
     }
