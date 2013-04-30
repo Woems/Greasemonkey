@@ -240,14 +240,13 @@ switch(getParam('action'))
 }
 
 function autoreload() {
-  window.setTimeout(function () { location.reload(); }, 2*60*1000);
+  window.setTimeout(function () { location.reload(); }, 1*60*1000);
 }
 
 function datumberechnen() {
   $x("id('content')/table/tbody/tr/td[5]").forEach(function (e) {
     if (e.textContent=='Datum') return;
-    Datum=e.textContent.match(/([0-9]+)\.([0-9]+)\.([0-9]+).*([0-9]+):([0-9]+):([0-9]+)/);
-    GM_log(Datum);
-    GM_log([Datum, Datum[0], new Date(Datum)].join("\n"));
+    Datum=e.textContent.match(/(([0-9]+)\.([0-9]+)\.([0-9]+)).*(([0-9]+):([0-9]+):([0-9]+))/);
+    GM_log([Datum, Datum[1]+" "+Datum[5], new Date(Datum[1])].join("\n"));
   });
 }
