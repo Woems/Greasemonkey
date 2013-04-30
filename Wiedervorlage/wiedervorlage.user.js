@@ -416,7 +416,7 @@ function wvNow() {
             //waittime['timer']=waittime['timer']+5;
             //serialize('waittime',waittime);
             wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
-          Timeout:30,
+          Timeout:120,
           onTimeout:function (e) { },
       });
       //wv.last=new Date(); window.setTimeout(function () { GM_openInTab(wv.url); }, 10*1000);
