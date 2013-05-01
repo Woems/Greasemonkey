@@ -242,7 +242,8 @@ function createHover(elem,text)
 /********************************/
 
 globaleTasten();
-window.setTimeout(function () { wvNow(); }, 60*1000);
+//window.setTimeout(function () { wvNow(); }, 60*1000);
+window.setInterval(function () { wvNow(); },4*60*1000);
 //wvShow();
 
 function globaleTasten () {
@@ -417,7 +418,8 @@ function wvNow() {
             //waittime['timer']=waittime['timer']+5;
             //serialize('waittime',waittime);
             wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
-          //Timeout:120,
+          Timeout:120,
+          onTimeout:function (e) { },
           //onTimeout:function (e) { wvCheck(e.url); wvUrlRotate(e.url); GM_openInTab(e.url.split(",")[0]); },
       });
       //wv.last=new Date(); window.setTimeout(function () { GM_openInTab(wv.url); }, 10*1000);
