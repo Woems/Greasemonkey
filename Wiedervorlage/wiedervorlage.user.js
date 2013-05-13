@@ -244,6 +244,7 @@ function createHover(elem,text)
 globaleTasten();
 //window.setTimeout(function () { wvNow(); }, 60*1000);
 window.setInterval(function () { wvNow(); },4*60*1000);
+wvNow();
 //wvShow();
 
 function globaleTasten () {
