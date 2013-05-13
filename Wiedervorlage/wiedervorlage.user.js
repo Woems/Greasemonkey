@@ -243,7 +243,7 @@ function createHover(elem,text)
 
 globaleTasten();
 //window.setTimeout(function () { wvNow(); }, 60*1000);
-window.setInterval(function () { wvNow(); },4*60*1000);
+window.setInterval(function () { wvNow(); },2*60*1000);
 wvNow();
 //wvShow();
 
@@ -419,7 +419,7 @@ function wvNow() {
             //waittime['timer']=waittime['timer']+5;
             //serialize('waittime',waittime);
             wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
-          Timeout:4*60,
+          Timeout:2*60,
           onTimeout:function (e) { },
           //onTimeout:function (e) { wvCheck(e.url); wvUrlRotate(e.url); GM_openInTab(e.url.split(",")[0]); },
       });
