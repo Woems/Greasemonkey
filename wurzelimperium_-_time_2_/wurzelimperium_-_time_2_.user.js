@@ -312,7 +312,7 @@ function ShowReminder()
         text: "Wurzelimperium fertig",
         fixed: true,
         color: "red",
-        //Timeout:60,
+        Timeout:60,
         onOK: function (data) { openInTab(aget('data','url',"http://www.wurzelimperium.de")); ShowReminder(); },
         onCancel: function (data) { aset('data','lasttime',Now+60*10); ShowReminder(); },
         onTimeout: function (data) { ShowReminder(); },
