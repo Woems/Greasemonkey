@@ -124,7 +124,7 @@
     <Grant>GM_addStyle</Grant>
     <Include>http://userscripts.org/*</Include>
   </Script>
-  <Script basedir="google_account_multi-log" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Replaces &quot;Sign Out&quot; link on Google pages with a select box of accounts." enabled="true" filename="google_account_multi-log.user.js" name="Google Account Multi-Login" namespace="http://www.crappytools.net" runAt="document-end" version="">
+  <Script basedir="google_account_multi-log" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Replaces &quot;Sign Out&quot; link on Google pages with a select box of accounts." enabled="false" filename="google_account_multi-log.user.js" name="Google Account Multi-Login" namespace="http://www.crappytools.net" runAt="document-end" version="">
     <Exclude>http*://mail.google.tld/*ui=1*</Exclude>
     <Grant>GM_getValue</Grant>
     <Grant>GM_openInTab</Grant>
