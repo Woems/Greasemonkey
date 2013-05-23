@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<snippets language="js">
+  <snippet>
+    <text><![CDATA[forEach(function (e) { $0 })$1]]></text>
+    <tag>forEach</tag>
+    <description>forEach</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[window.setTimeout(function () { $0 }, ${1:10}*1000);]]></text>
+    <tag>timeout</tag>
+    <description>timeout</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[addEventListener("${1:click}",function(event){
+  var e=event.target;
+  $0
+  event.stopPropagation();
+  event.preventDefault();
+}, true);]]></text>
+    <tag>click</tag>
+    <description>click</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[switch (location.pathname)
+{
+  case '': break;
+  default: break;
+}]]></text>
+    <tag>pathname</tag>
+    <description>location.pathname</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[createElement('${1:div}',{ $0 });]]></text>
+    <tag>ce</tag>
+    <description>createElement</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[alert([$0].join("\n"));]]></text>
+    <tag>alert</tag>
+    <description>alert</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[function $1($2) {
+  $0
+}]]></text>
+    <tag>func</tag>
+    <description>Function</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+///////////////////////////////$0///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////]]></text>
+    <tag>/</tag>
+    <description>//</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[showmsg({ text:'$0', onOKTimeout:function (e) {} });]]></text>
+    <tag>msg</tag>
+    <description>msg</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[function ($1) { $0 }]]></text>
+    <tag>f</tag>
+    <description>Function</description>
+  </snippet>
+</snippets>

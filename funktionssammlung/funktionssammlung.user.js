@@ -239,7 +239,7 @@ function createHover(elem,text)
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 // ** Infos **
 // location.hash, host, hostname, href, pathname, port, protocol, search
-/********************************/
+/********************************/ 
  
 function iframe(url,className,w,h,noframetext)
 {
