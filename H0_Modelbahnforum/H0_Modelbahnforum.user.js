@@ -290,23 +290,27 @@ function board() {
       if (arr.length!=1) { GM_log("length!=1"); return; }
       if (typeof arr[0]=="string") return;
       var data=deserialize('data',{});
+      var changed=false;
       if (!data[arr[0].ID])
       {
-        data[arr[0].ID]={ id:arr[0].ID, gelesenbis:parseInt(arr[0].gelesenBis), pid:arr[0].pid, gut:(arr[0].Qualitaet<4) };
+        data[arr[0].ID]={ id:arr[0].ID, gelesenbis:parseInt(arr[0].gelesenBis), pid:arr[0].pid, gut:(arr[0].Qualitaet?arr[0].Qualitaet<4:undefined) };
         GM_log(["NEW",arr[0].ID,uneval(data[arr[0].ID])].join('\n'));
+        changed=true;
       }
-      if (data[arr[0].ID].gut==undefined) data[arr[0].ID].gut=(arr[0].Qualitaet<4);
+      if (data[arr[0].ID].gut==undefined) data[arr[0].ID].gut=(arr[0].Qualitaet?arr[0].Qualitaet<4:undefined);
       if (parseInt(arr[0].gelesenBis) > data[arr[0].ID].gelesenbis)
       {
         //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
         GM_log(["Weitergelesen:",arr[0].ID,$xs("//a[contains(@href,'"+arr[0].ID+"')]").textContent,parseInt(arr[0].gelesenBis),arr[0].pid,data[arr[0].ID].gelesenbis,data[arr[0].ID].pid].join('\n'));
         data[arr[0].ID].gelesenbis=parseInt(arr[0].gelesenBis);
         data[arr[0].ID].pid=arr[0].pid;
+        changed=true;
       } else if (parseInt(arr[0].gelesenBis) < data[arr[0].ID].gelesenbis) {
         GM_log(["Server out of gelesen:",arr[0].ID,$xs("//a[contains(@href,'"+arr[0].ID+"')]").textContent,parseInt(arr[0].gelesenBis),arr[0].pid,data[arr[0].ID].gelesenbis,data[arr[0].ID].pid].join('\n'));
       }
       serialize('data',data);
       //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
+      if (changed) window.setTimeout(function () { location.reload(); }, 4*1000);
     });
     var data=deserialize("data",{});
     if (data[ID])

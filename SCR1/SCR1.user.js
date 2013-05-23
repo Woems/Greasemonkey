@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name        9kw.eu
+// @name        SCR1
 // @namespace   Woems
-// @include     http://www.9kw.eu*
+// @include     http://www.scr1.de*
 // @version     1
 // ==/UserScript==
 
@@ -187,6 +187,7 @@ function showmsg(data)
   data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
+  if (data.onCancelTimeout) { data.onCancel=data.onCancelTimeout; data.onTimeout=data.onCancelTimeout; }
   var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center;";
   style+=" font:normal medium sans-serif; z-index:9999;"; // Schönheitskorrekturen
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
@@ -195,7 +196,7 @@ function showmsg(data)
     $x(".//*[@name]",data.box).forEach(function (e) { if (!data[e.name]) data[e.name]=e; });
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
-  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
+  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { data.onTimeout(data); remove($(data.id)); } },(data.Timeout||60)*1000);
   return data;
 } // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
 //data.box.elements.namedItem('').value;
@@ -233,20 +234,14 @@ function createHover(elem,text)
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
 
-switch(getParam('action'))
+switch(location.pathname)
 {
-  case 'userhistory2': autoreload(); datumberechnen(); break;
-  default:  break;
+  case '/wochenplan.php': FindeToxicon(); break;
+  default: alert(location.pathname); break;
 }
 
-function autoreload() {
-  window.setTimeout(function () { location.reload(); }, 1*60*1000);
+function FindeToxicon() {
+  var Tox=$x("//*[@class='SCR1' or @class='SCR2' or @class='SCR3']");
+  Tox.forEach(function (e) { if (e.innerHTML.indexOf('Toxikon')!=-1) { e.style.backgroundColor="blue"; e.style.color='white'; } })
 }
 
-function datumberechnen() {
-  $x("id('content')/table/tbody/tr/td[5]").forEach(function (e) {
-    if (e.textContent=='Datum') return;
-    Datum=e.textContent.match(/(([0-9]+)\.([0-9]+)\.([0-9]+)).*(([0-9]+):([0-9]+):([0-9]+))/);
-    GM_log([Datum, Datum[1]+" "+Datum[5], new Date(Datum[1])].join("\n"));
-  });
-}

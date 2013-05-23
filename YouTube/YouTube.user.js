@@ -673,7 +673,7 @@ function Video(VideoID)
 
   // Vorschauliste BUNT
   var VideoLinks=$x("//ul[@id='watch-related']//li")
-                   .map(function (e) { return { link:$xs(".//a",e).href, elem:e }; })
+                   .map(function (e) { return { link:($xs(".//a",e)||{href:"ERROR"}).href, elem:e }; })
                    .map(function (vid) { vid.id=((vid.link||"").match(/v=([a-zA-Z0-9-_]*)/)||["",""])[1]; return vid; })
   //alert([ uneval(VideoLinks) ].join("\n"));
   Interval(function () {
