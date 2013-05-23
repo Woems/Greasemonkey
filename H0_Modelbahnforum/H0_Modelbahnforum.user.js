@@ -246,15 +246,15 @@ function JSONdir() {
 }
 function JSONget(id,func) {
   if (JSONdir())
-    get(JSONdir()+'?action=get&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
+    get(JSONdir()+'?action=get&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { GM_log(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 function JSONkat(id,pid,bis,func) {
   if (JSONdir())
-    get(JSONdir()+'?action=read&id='+id+'&pid='+pid+'&bis='+bis,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
+    get(JSONdir()+'?action=read&id='+id+'&pid='+pid+'&bis='+bis,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { GM_log(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 function JSONquali(id,quali,func) {
   if (JSONdir())
-    get(JSONdir()+'?action=quali&id='+id+'&quali='+quali,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
+    get(JSONdir()+'?action=quali&id='+id+'&quali='+quali,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { GM_log(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 
 function setData(ID,attr,val)
