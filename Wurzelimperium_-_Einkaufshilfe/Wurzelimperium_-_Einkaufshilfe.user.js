@@ -1,8 +1,7 @@
 // ==UserScript==
-// @name        H0 Modelbahnforum
+// @name        Wurzelimperium - Einkaufshilfe
 // @namespace   Woems
-// @description Verbesserung von http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887
-// @include     http://www.nexusboard.net/*siteid=2408*
+// @include     http://*.wurzelimperium.de*
 // @version     1
 // ==/UserScript==
 
@@ -75,10 +74,11 @@ function on(type, elm, func) {
   else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
   else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
 } // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
-function onKey(func) { on('keydown',window,function (e) {
-  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
+function onKey(func) { on('keydown',window,function (e) { 
+  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
   var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
+function Key(key,func) { document.addEventListener('keypress', function (e) { k=e.keyCode||e.which; k=(e.metaKey?'META+':'')+(e.ctrlKey?'STRG+':'')+(e.altKey?'ALT+':'')+(String.fromCharCode(k)||k); if (key==k) func(); }, true);  }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
 function getAccesskeys() { return $x('//*[@accesskey]').map(function (e) { return e.getAttribute("accesskey"); }).sort().join(", "); }
@@ -118,6 +118,7 @@ Date.prototype.diff = function(date) { var tmp="in "; var diff=this.getTime()-da
 function Now(d) { return (d||new Date()).getTime()/1000; }
 function NowOut(d) { return new Date(d*1000).getShortDate(); }
 function ParseDate(d) { var sp=d.match(/(([0-9]{2})\.([0-9]{2})\.([0-9]{2,4}))? ?(([0-9]{1,2}):([0-9]{2}))?/); return new Date(sp[4]||1970,(sp[3]||1)-1,sp[2]||1,sp[6]||0,sp[7]||0,0); }
+function ShowDateDiff(sec) { var teile={ MSec:1000, Sec:60, Min:60, H:24, Tage:7, Wochen:99999 }; var tmp=''; for (i in teile) { if (Math.floor(sec%teile[i])!=0) tmp=Math.floor(sec%teile[i])+' '+i+' '+tmp; sec=sec/teile[i]; } return tmp; }
 // ** Text **
 String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,""); }
 String.prototype.ltrim = function() { return this.replace(/^\s+/,""); }
@@ -129,6 +130,8 @@ function trim(text) { return text.replace(/(^\s*|\s*$)/g,""); }
 function pad(text,anz,chr) { return text.replace(/(^\s*|\s*$)/g,""); }
 function fill(text,fillchar,anz) { var f=""; for (; anz>text.toString().length; anz--) f+=fillchar; return f+text; }
 // ** Array **
+function isArray(obj) { return typeof obj == "object" && obj instanceof Array; }
+function isObject(obj) { return typeof obj == "object" && !obj instanceof Array; }
 function uniq(array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
 function Object2HTMLTable(obj) { var rows=""; for (var i in obj) rows+="<tr><td><b>"+i+":</b></td><td>"+obj[i]+"</td></tr>"; return "<table>"+rows+"</table>"; }
 function arrayTrim(a) { return a.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
@@ -160,22 +163,23 @@ var HTML={
   divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
   form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
   input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
-  button: function (name,value) { return input("button",name,value); },
-  submitbutton: function (name,value) { return input("submit",name,value); },
-  resetbutton:function (name,value) { return input("reset",name,value); },
+  button: function (name,value) { return this.input("button",name,value); },
+  submitbutton: function (name,value) { return this.input("submit",name,value); },
+  resetbutton:function (name,value) { return this.input("reset",name,value); },
   textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
   selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
-  dropdownbox:function (name,lines) { return selectbox(1,name,lines); },
+  selectboxplus:function (height,name,lines, def) { var l=""; for (var i in lines) { l+="<option value='"+i+"'"+(def==i?" selected":"")+">"+lines[i]+"</option>" }; return '<select size="'+height+'" name="'+name+'">'+l+'</select>';},
+  dropdownbox:function (name,lines) { return this.selectbox(1,name,lines); },
   link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
   checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
   radio: function (name,checked) { return '<input type="radio" name="'+(name||'')+'"'+(checked?" checked":"")+'">'; },
 };
 // ** REST **
 function inFrame() { return self!=top; }
+function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
-function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) { window[key] = GM_getValue(key, defaultValue); GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() { GM_setValue(key, !window[key]); location.reload(); }); }
 function showmsg(data)
 {
@@ -183,15 +187,18 @@ function showmsg(data)
   data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999;";
+  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center;";
+  style+=" font:normal medium sans-serif; z-index:9999;"; // Schönheitskorrekturen
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
   data.box=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+    $x(".//*[@name]",data.box).forEach(function (e) { if (!data[e.name]) data[e.name]=e; });
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
   if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
   return data;
 } // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
+//data.box.elements.namedItem('').value;
 // $xs('id("default_msg")/input[@value="OK"]').setAttribute("accesskey","o");
 // $xs('id("default_msg")/input[@value="Cancel"]').setAttribute("accesskey","c");
 // $('default_msg_ok').setAttribute("accesskey","o");
@@ -221,167 +228,34 @@ function createHover(elem,text)
 // ** Log **
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
-//alert=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:false, Timeout:30, onTimeout: function (data) {}, }); };
+//GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
+// ** Infos **
+// location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
 
+Einkaufsliste_summieren();
 
-switch (location.pathname)
+function Einkaufsliste_summieren()
 {
-  case "/forumdisplay.php":
-    board();
-    break;
-  case "/showthread.php":
-    thread();
-    break;
-  case "/file_manager.php":
-    break;
-  default:
-    //alert(GM_info.script.name+"Path "+location.pathname+" unbekannt.");
-    break;
-}
-
-function JSONdir() {
-  if (aget('options','JSON')==undefined) aset('options','JSON',prompt('JSON dir?'));
-  return aget('options','JSON');
-}
-function JSONget(id,func) {
-  if (JSONdir())
-    get(JSONdir()+'?action=get&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { GM_log(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
-}
-function JSONkat(id,pid,bis,func) {
-  if (JSONdir())
-    get(JSONdir()+'?action=read&id='+id+'&pid='+pid+'&bis='+bis,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { GM_log(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
-}
-function JSONquali(id,quali,func) {
-  if (JSONdir())
-    get(JSONdir()+'?action=quali&id='+id+'&quali='+quali,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { GM_log(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
-}
-
-function setData(ID,attr,val)
-{
-  var data=deserialize("data",{});
-  if (!data[ID]) data[ID]={};
-  data[ID][attr]=val;
-  serialize("data",data);  
-}
-function getData(ID,attr, def)
-{
-  var data=deserialize("data",{});
-  if (!data[ID]) return def;
-  return data[ID][attr]||def;
-}
-function lastpid(ID,PID) { setData(ID,"pid",PID); }
-function gelesen(ID) { setData(ID,"gelesen",new Date()); }
-function gelesenbis(ID, zeile) { if (getData(ID,"gelesenbis",0)<zeile) { setData(ID,"gelesenbis",zeile); return true; } }
-function gut(ID) { setData(ID,"gut",true); }
-function schlecht(ID) { setData(ID,"gut",false); }
-
-
-function board() {
-  //css(".gut { background-color:lightgreen }");
-  //css(".schlecht { background-color: }");
-  var Zeilen=$x("//table[@class='bordered']/tbody/tr[td[@class='bgc6']]");
-  Zeilen.forEach(function (row) {
-    row.cells[2].setAttribute("onclick","");
-    //$xs(".//a",row.cells[2]).target="_blank";
-    var Link=$xs(".//a",row.cells[2]).href;
-    var ID=Link.replace(/^.*threadid=([0-9]*).*$/,"$1");
-    JSONget(ID,function (arr,id) { 
-      if (arr.length!=1) { GM_log("length!=1"); return; }
-      if (typeof arr[0]=="string") return;
-      var data=deserialize('data',{});
-      var changed=false;
-      if (!data[arr[0].ID])
-      {
-        data[arr[0].ID]={ id:arr[0].ID, gelesenbis:parseInt(arr[0].gelesenBis), pid:arr[0].pid, gut:(arr[0].Qualitaet?arr[0].Qualitaet<4:undefined) };
-        GM_log(["NEW",arr[0].ID,uneval(data[arr[0].ID])].join('\n'));
-        changed=true;
-      }
-      if (data[arr[0].ID].gut==undefined) data[arr[0].ID].gut=(arr[0].Qualitaet?arr[0].Qualitaet<4:undefined);
-      if (parseInt(arr[0].gelesenBis) > data[arr[0].ID].gelesenbis)
-      {
-        //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
-        GM_log(["Weitergelesen:",arr[0].ID,$xs("//a[contains(@href,'"+arr[0].ID+"')]").textContent,parseInt(arr[0].gelesenBis),arr[0].pid,data[arr[0].ID].gelesenbis,data[arr[0].ID].pid].join('\n'));
-        data[arr[0].ID].gelesenbis=parseInt(arr[0].gelesenBis);
-        data[arr[0].ID].pid=arr[0].pid;
-        changed=true;
-      } else if (parseInt(arr[0].gelesenBis) < data[arr[0].ID].gelesenbis) {
-        GM_log(["Server out of gelesen:",arr[0].ID,$xs("//a[contains(@href,'"+arr[0].ID+"')]").textContent,parseInt(arr[0].gelesenBis),arr[0].pid,data[arr[0].ID].gelesenbis,data[arr[0].ID].pid].join('\n'));
-      }
-      serialize('data',data);
-      //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
-      if (changed) window.setTimeout(function () { location.reload(); }, 4*1000);
-    });
-    var data=deserialize("data",{});
-    if (data[ID])
+    if ($("wimpVerkaufButtons"))
     {
-      //alert([Link, ID, uneval(data), data[ID].gut, data[ID].gut!=undefined, data[ID].gelesen].join("<br>"));
-      var ThreadEintraege=row.cells[4].firstChild.innerHTML.replace(/[^0-9]/g,"")*1+1;
-      var ColorGut=data[ID].gelesenbis >= ThreadEintraege-2 ? "lightgreen" : "green";
-      if (data[ID].gut!=undefined) row.cells[2].style.backgroundColor=data[ID].gut?ColorGut:"#FAA"; else row.cells[2].style.backgroundColor="darkgray";
-      row.cells[2].setAttribute("onmouseout","this.style.background='"+row.cells[2].style.backgroundColor+"'");
-      //if (data[ID].gut!=undefined) row.className=data[ID].gut?"gut":"schlecht"; else row.className="unbekannt";
-      if (data[ID].gelesenbis) row.cells[4].firstChild.innerHTML=data[ID].gelesenbis+" / "+ThreadEintraege;
-      row.cells[2].appendChild(createElement("div",{ style:"font-size:xx-small", innerHTML:"Gelesen:&nbsp;"+data[ID].gelesen }));
-      $xs(".//a",row.cells[2]).href=Link+"&showpage="+((Math.floor((data[ID].gelesenbis-1)/20)+1))+(data[ID].pid?'#'+data[ID].pid:'');
+      $("wimpVerkaufNo").style.display="none";
+      GM_log([location.href,$("wimpVerkaufProducts").innerHTML].join('\n'));
+      createElement('input', {
+        type:'button',
+        value:'SUM',
+        className:'msg_input link',
+        id:'woemsSum',
+        onClick:function (e) {
+          $('woemsSum').style.display='none';
+          var Einkaufsdaten=deserialize('Einkaufsdaten',{});
+          $x("id('wimpVerkaufProducts')/div[@class='rot']")
+              .map(function (e) { return e.textContent.split(' x '); })
+              .forEach(function (e) { Einkaufsdaten[e[1]]=(Einkaufsdaten[e[1]]||0)+(e[0]*1); })
+          serialize('Einkaufsdaten',Einkaufsdaten);
+          GM_log(uneval(Einkaufsdaten));
+          window.setTimeout(function () { $('woemsSum').style.display=''; },1000);          
+        }
+      }, $xs("id('wimpVerkaufButtons')/div"));
     }
-    //row.appendChild(createElement("td",{ style:"font-size:xx-small", innerHTML:(!data[ID])?"-":"Gelesen:&nbsp;"+!!data[ID].gelesen }));
-  });
-  onKey(function (key, code, e) {
-    switch(code.KEY)
-    {
-      // Backspace
-      case 8: location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
-      // Cursor Left
-      case 37: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff")]/font/a').href; } catch(e) { alert("Keine weitere Seite"); } break;
-      // Cursor Right
-      case 39: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').href; } catch(e) { location.href=$xs('//a[text()="»"] | //font/font/following::a[1]').href; } break;
-      //default: alert([key, uneval(code), e].join("\n")); break;
-    }
-  });
-} // End: function board()
-
-function thread() {
-  var ID=getParam("threadid");
-  var data=deserialize("data",{});
-  var Eintraege=$x("//table[@class='bordered']/tbody/tr[td/table]");
-  gelesen(ID);
-  var Anfang=(getParam("showpage", 1)*1-1)*20;
-  var Ende=Anfang+Eintraege.length;
-  if (gelesenbis(ID, Ende)) lastpid(ID,$x("//a[contains(@name,'pid')]").pop().name);
-  JSONkat(ID,$x("//a[contains(@name,'pid')]").pop().name,Ende);
-  //alert([getParam("showpage", 1), Anfang, Ende, ID, uneval(deserialize("data",{})[ID])].join("\n"));
-  //alert(uneval(deserialize("data",{})[ID]));
-  showmsg({
-    id:"quali",
-    //text:["Qualität:  "+HTML.selectbox(1,'WQuali',['Unbekannt','Gut','Schlecht']),''].join("<br>"),
-    //text:"<div style='margin:auto;text-align:left; width:200px'>"+
-    //     [HTML.checkbox("gut",(data[ID]||{}).gut)+" Gut"].join("<br>")+
-    //     "</div>",
-    text:"Gut?",
-    fixed:true,
-    color:(!data[ID] || data[ID].gut==undefined)?"lightgray":(data[ID].gut)?"green":"red",
-    OK:"Ja",
-    Cancel:"Nein",
-    onOK:function () { gut(ID); JSONquali(ID,2); },
-    onCancel:function () { schlecht(ID); JSONquali(ID,5); },
-    Timeout:(!data[ID] || data[ID].gut==undefined)?120:10,
-    onTimeout:function () { },
-    //Cancel:"Abbrechen",
-    //onOK:function (data) { setData(ID,"gut",data.box.elements.namedItem("gut").checked); },
-    //onCancel:function (data) { },
-  });
-  onKey(function (key, code, e) {
-    if (["INPUT"].indexOf(document.activeElement.tagName)==-1)
-    switch(code.KEY)
-    {
-      // Backspace
-      case 8: location.href=$xs("//td[@class='head']/font/a[last()]").href; break; //location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
-      // Cursor Left
-      case 37: try { location.href=$xs('//b/font/preceding-sibling::a[1]').href; } catch(e) { alert("Keine weitere Seite"); } break;
-      // Cursor Right
-      case 39: try { location.href=$xs('//b/font/following-sibling::a[1]').href; } catch(e) { /*alert("Keine weitere Seite");*/ location.href=$xs("//td[@class='head']/font/a[last()]").href; } break;
-      //default: alert([key, uneval(code), e].join("\n")); break;
-    }
-  });
-} // End: function thread()
+}
