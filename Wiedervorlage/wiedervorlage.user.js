@@ -403,7 +403,7 @@ function wvNow() {
       //var r=deserialize('waittime',{})['timer']||5;
       var r=20;
       showmsg({
-          id:'WV_oeffnen', // _{rand}
+          id:'WV_oeffnen_{rand}', // _{rand}
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
           fixed: true,
           url: wv.url,
