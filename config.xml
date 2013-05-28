@@ -233,7 +233,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://s*.wurzelimperium.de*</Include>
   </Script>
-  <Script basedir="wurzelimperium_-_time_2_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt im Titel, wann es wieder was zu tun gibt." enabled="false" filename="wurzelimperium_-_time_2_.user.js" name="Wurzelimperium - Time 2 Title" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="wurzelimperium_-_time_2_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt im Titel, wann es wieder was zu tun gibt." enabled="true" filename="wurzelimperium_-_time_2_.user.js" name="Wurzelimperium - Time 2 Title" namespace="Woems" runAt="document-end" version="">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -1054,7 +1054,7 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Include>*</Include>
   </Script>
-  <Script basedir="Schinken" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Schinken.user.js" name="Schinken" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Schinken/Schinken.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Schinken/Schinken.user.js">
+  <Script basedir="Wurzelimperium_-_Einkaufshilfe" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Wurzelimperium_-_Einkaufshilfe.user.js" name="Wurzelimperium - Einkaufshilfe" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Wurzelimperium_-_Einkaufshilfe/Wurzelimperium_-_Einkaufshilfe.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Wurzelimperium_-_Einkaufshilfe/Wurzelimperium_-_Einkaufshilfe.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -1063,17 +1063,6 @@
     <Grant>GM_setValue</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
-    <Include>*</Include>
-  </Script>
-  <Script basedir="Hacker.org" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Hacker.org.user.js" name="Hacker.org" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Hacker.org/Hacker.org.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Hacker.org/Hacker.org.user.js">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
-    <Grant>GM_setValue</Grant>
-    <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
-    <Include>http://www.hacker.org*</Include>
+    <Include>http://*.wurzelimperium.de*</Include>
   </Script>
 </UserScriptConfig>
