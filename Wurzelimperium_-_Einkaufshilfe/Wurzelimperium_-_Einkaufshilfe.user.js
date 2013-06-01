@@ -254,11 +254,13 @@ function Einkaufsliste_summieren()
               .map(function (e) { return e.textContent.split(' x '); })
               .forEach(function (e) { Einkaufsdaten[e[1]]=(Einkaufsdaten[e[1]]||0)+(e[0]*1); })
           serialize('Einkaufsdaten',Einkaufsdaten);
-          GM_log(uneval(Einkaufsdaten));
+          //GM_log(uneval(Einkaufsdaten));
           window.setTimeout(function () { $('woemsSum').style.display=''; },1000);
+          delete Einkaufsdaten['Time'];
           showmsg({
             id: "wGemuese",
             text: Obj2String(Einkaufsdaten,"<br>"),
+            fixed: true,
             color: "lightgray",
             onOK: function (data) {},
           });
