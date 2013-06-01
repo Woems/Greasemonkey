@@ -233,7 +233,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://s*.wurzelimperium.de*</Include>
   </Script>
-  <Script basedir="wurzelimperium_-_time_2_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt im Titel, wann es wieder was zu tun gibt." enabled="true" filename="wurzelimperium_-_time_2_.user.js" name="Wurzelimperium - Time 2 Title" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="wurzelimperium_-_time_2_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt im Titel, wann es wieder was zu tun gibt." enabled="false" filename="wurzelimperium_-_time_2_.user.js" name="Wurzelimperium - Time 2 Title" namespace="Woems" runAt="document-end" version="">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
