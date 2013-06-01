@@ -2,6 +2,7 @@
 // @name        SCR1
 // @namespace   Woems
 // @include     http://www.scr1.de*
+// @include     *
 // @version     1
 // ==/UserScript==
 
@@ -234,14 +235,88 @@ function createHover(elem,text)
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
 
-switch(location.pathname)
+if (location.host=="www.scr1.de")
 {
-  case '/wochenplan.php': FindeToxicon(); break;
-  default: alert(location.pathname); break;
+  switch(location.pathname)
+  {
+    case '/wochenplan.php': Toxicon(); break;
+    default: alert(location.pathname); break;
+  }
+} else {
+  Reminder();
 }
 
-function FindeToxicon() {
-  var Tox=$x("//*[@class='SCR1' or @class='SCR2' or @class='SCR3']");
-  Tox.forEach(function (e) { if (e.innerHTML.indexOf('Toxikon')!=-1) { e.style.backgroundColor="blue"; e.style.color='white'; } })
+// 1= Mo 
+// 4= Do
+// 5= Fr
+
+// 6= Sa
+
+function sucheSendung(Suchwort) {
+  var Sendungen=$x("//*[@class='SCR1' or @class='SCR2' or @class='SCR3']");
+  return Sendungen.filter(function (e,i) { return e.innerHTML.indexOf(Suchwort)!=-1; }).map(function (e,i) {
+    var Data=e.innerHTML.split("<br>").map(function (e) { return e.replace(/^[\n ]+|[\n ]+$/g,""); });
+    
+    var TextDatum=e.textContent.match(/([0-9]{2}):([0-9]{2})-([0-9]{2}):([0-9]{2})/)
+    var Now=new Date();
+    var Datum=new Date(Now.getTime()+(e.parentNode.cellIndex-Now.getDay())*24*60*60*1000);
+    Datum.setHours(TextDatum[1]*1);
+    Datum.setMinutes(TextDatum[2]*1);
+    var Start=Datum.getTime();
+    Datum.setHours(TextDatum[3]*1);
+    Datum.setMinutes(TextDatum[4]*1);
+    var Ende=Datum.getTime();
+    //alert([Now.getTime(), Now.getDay(), e.parentNode.cellIndex, uneval(TextDatum), Start, Ende ].join("\n")); 
+    
+    return {
+      Element:e,
+      //Text:e.textContent,
+      //HTML:e.innerHTML,
+      Day:["Mo","Di","Mi","Do","Fr","Sa","So"][e.parentNode.cellIndex-1],
+      SCR:e.className,
+      //Time:e.textContent.match(/([0-9]{2}:[0-9]{2})-([0-9]{2}:[0-9]{2})/),
+      Time:Data[0],
+      Start:Start,
+      Ende:Ende,
+      Interpret:Data[1],
+      Titel:Data[2],
+    };
+  });
 }
+
+function Toxicon() {
+  var Tox=sucheSendung("Toxikon");
+  serialize("Reminder",Tox);
+  Tox.forEach(function (e) { e.Element.style.backgroundColor="blue"; e.Element.style.color='white'; });
+  Tox.forEach(function (e) { var Now=new Date().getTime(); if (e.Start<Now && Now<e.Ende) alert(["Toxicon läuft",uneval(e)].join("\n")); });
+  alert(uneval(Tox));
+}
+
+function Reminder() {
+  deserialize("Reminder",{}).forEach(function (e) {
+    var Now=new Date().getTime();
+    if (e.Start-60*60*100<Now && Now<e.Ende)
+      showmsg({
+        id:'default_msg_{rand}',
+        text:[e.Interpret+" läuft auf "+e.SCR+ " mit '"+e.Titel+"'",uneval(e)].join("<br>"),
+        color:e.Start<Now?'lightblue':'lightgray',
+        Timeout:60,
+        onOKTimeout:function (e) {},
+      });
+    if (Now<e.Start-60*60*100)
+    {
+      //GM_log(["Timer gesetzt",uneval(e)].join("\n"));
+      window.setTimeout(function () { 
+        showmsg({
+          id:'default_msg_{rand}',
+          text:[e.Interpret+" läuft auf "+e.SCR+ " mit '"+e.Titel+"'",uneval(e)].join("<br>"),
+          color:'lightgray',
+          Timeout:60,
+          onOKTimeout:function (e) {},
+        });
+      }, e.Start-60*60*100-Now);
+    }
+  });
+}
+
 
