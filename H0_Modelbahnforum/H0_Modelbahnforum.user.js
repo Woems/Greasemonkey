@@ -310,7 +310,7 @@ function board() {
       }
       serialize('data',data);
       //GM_log(["JSON: "+id,uneval(arr),arr[0].ID,, ,"","DATA:",uneval(data[arr[0].ID])].join('\n'));
-      if (changed) window.setTimeout(function () { location.reload(); }, 4*1000);
+      if (changed) window.setTimeout(function () { location.reload(); }, 1000);
     });
     var data=deserialize("data",{});
     if (data[ID])
