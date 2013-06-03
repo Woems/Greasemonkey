@@ -284,8 +284,16 @@ function sucheSendung(Suchwort) {
   });
 }
 
+function KalenderWoche() {
+  var Time=new Date();
+  var Year=new Date(Time.getFullYear(),0,1);
+  var day=(Year.getDay()+6)%6;
+  return Math.ceil((Time.getTime()-Year)/604800000+day/7);		
+}
+
 function Toxicon() {
   var Tox=sucheSendung("Toxikon");
+  aset("Data","ReminderKalenderwoche",KalenderWoche());
   serialize("Reminder",Tox);
   Tox.forEach(function (e) { e.Element.style.backgroundColor="blue"; e.Element.style.color='white'; });
   Tox.forEach(function (e) { var Now=new Date().getTime(); if (e.Start<Now && Now<e.Ende) alert(["Toxicon läuft",uneval(e)].join("\n")); });
@@ -317,6 +325,7 @@ function Reminder() {
       }, e.Start-60*60*100-Now);
     }
   });
+  if (aget("Data","ReminderKalenderwoche",0)!=KalenderWoche()) GM_openInTab("http://www.scr1.de/wochenplan.php");
 }
 
 
