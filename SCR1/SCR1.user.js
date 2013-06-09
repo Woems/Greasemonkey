@@ -111,6 +111,8 @@ function post(url, data, cb) { GM_xmlhttpRequest({ method: "POST", url: url, hea
 function text2div(text) { var div=document.createElement("div"); div.innerHTML=text; return div; }
 // ** Date **
 Date.prototype.format = function(format) { var returnStr = ''; var replace = Date.replaceChars; for (var i = 0; i < format.length; i++) { var curChar = format.charAt(i); if (i - 1 >= 0 && format.charAt(i - 1) == "\\") { returnStr += curChar; } else if (replace[curChar]) { returnStr += replace[curChar].call(this); } else if (curChar != "\\"){ returnStr += curChar; } } return returnStr; }; Date.replaceChars = { shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], longMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], longDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], d: function() { return (this.getDate() < 10 ? '0' : '') + this.getDate(); }, D: function() { return Date.replaceChars.shortDays[this.getDay()]; }, j: function() { return this.getDate(); }, l: function() { return Date.replaceChars.longDays[this.getDay()]; }, N: function() { return this.getDay() + 1; }, S: function() { return (this.getDate() % 10 == 1 && this.getDate() != 11 ? 'st' : (this.getDate() % 10 == 2 && this.getDate() != 12 ? 'nd' : (this.getDate() % 10 == 3 && this.getDate() != 13 ? 'rd' : 'th'))); }, w: function() { return this.getDay(); }, z: function() { var d = new Date(this.getFullYear(),0,1); return Math.ceil((this - d) / 86400000); }, W: function() { var d = new Date(this.getFullYear(), 0, 1); return Math.ceil((((this - d) / 86400000) + d.getDay() + 1) / 7); }, F: function() { return Date.replaceChars.longMonths[this.getMonth()]; }, m: function() { return (this.getMonth() < 9 ? '0' : '') + (this.getMonth() + 1); }, M: function() { return Date.replaceChars.shortMonths[this.getMonth()]; }, n: function() { return this.getMonth() + 1; }, t: function() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 0).getDate() }, L: function() { var year = this.getFullYear(); return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)); }, o: function() { var d  = new Date(this.valueOf());  d.setDate(d.getDate() - ((this.getDay() + 6) % 7) + 3); return d.getFullYear();}, Y: function() { return this.getFullYear(); }, y: function() { return ('' + this.getFullYear()).substr(2); }, a: function() { return this.getHours() < 12 ? 'am' : 'pm'; }, A: function() { return this.getHours() < 12 ? 'AM' : 'PM'; }, B: function() { return Math.floor((((this.getUTCHours() + 1) % 24) + this.getUTCMinutes() / 60 + this.getUTCSeconds() / 3600) * 1000 / 24); }, g: function() { return this.getHours() % 12 || 12; }, G: function() { return this.getHours(); }, h: function() { return ((this.getHours() % 12 || 12) < 10 ? '0' : '') + (this.getHours() % 12 || 12); }, H: function() { return (this.getHours() < 10 ? '0' : '') + this.getHours(); }, i: function() { return (this.getMinutes() < 10 ? '0' : '') + this.getMinutes(); }, s: function() { return (this.getSeconds() < 10 ? '0' : '') + this.getSeconds(); },    u: function() { var m = this.getMilliseconds(); return (m < 10 ? '00' : (m < 100 ? '0' : '')) + m; }, e: function() { return "Not Yet Supported"; }, I: function() { return "Not Yet Supported"; }, O: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + '00'; }, P: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + ':00'; }, T: function() { var m = this.getMonth(); this.setMonth(0); var result = this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/, '$1'); this.setMonth(m); return result;}, Z: function() { return -this.getTimezoneOffset() * 60; }, c: function() { return this.format("Y-m-d\\TH:i:sP"); }, r: function() { return this.toString(); }, U: function() { return this.getTime() / 1000; } };
+Date.prototype.formatAll = function() { return this.format(ObjKeys(Date.replaceChars).map(function (e) { return '\\'+e+'='+e; }).join(", ")); }
+//"shortMonths, longMonths, shortDays, longDays, d, D, j, l, N, S, w, z, W, F, m, M, n, t, L, o, Y, y, a, A, B, g, G, h, H, i, s, u, e, I, O, P, T, Z, c, r, U"
 Date.prototype.getDayString = function() { return ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"][this.getDay()]; }
 Date.prototype.getMonthString = function() { return ["Januar","Februar","März","April","May","Juni","Juli","August","September","Oktober","November","Dezember"][this.getMonth()]; }
 Date.prototype.getShortDate = function() { return this.getDate().pad(2)+"."+["Jan","Feb","Mär","Apr","May","Jun","Jul","Aug","Sep","Okt","Nov","Dez"][this.getMonth()]+"."+this.getFullYear()+" "+this.getHours().pad(2)+":"+this.getMinutes().pad(2)+"."+this.getSeconds().pad(2); }
@@ -259,9 +261,10 @@ function sucheSendung(Suchwort) {
     
     var TextDatum=e.textContent.match(/([0-9]{2}):([0-9]{2})-([0-9]{2}):([0-9]{2})/)
     var Now=new Date();
-    var Datum=new Date(Now.getTime()+(e.parentNode.cellIndex-Now.getDay())*24*60*60*1000);
+    var Datum=new Date(Now.getTime()+(e.parentNode.cellIndex-(Now.getDay()+6)%7-1)*24*60*60*1000);
     Datum.setHours(TextDatum[1]*1);
     Datum.setMinutes(TextDatum[2]*1);
+    Datum.setSeconds(0);
     var Start=Datum.getTime();
     Datum.setHours(TextDatum[3]*1);
     Datum.setMinutes(TextDatum[4]*1);
@@ -284,10 +287,11 @@ function sucheSendung(Suchwort) {
   });
 }
 
+
 function KalenderWoche() {
   var Time=new Date();
   var Year=new Date(Time.getFullYear(),0,1);
-  var day=(Year.getDay()+6)%6;
+  var day=(Year.getDay()+5)%6;
   return Math.ceil((Time.getTime()-Year)/604800000+day/7);		
 }
 
@@ -300,32 +304,43 @@ function Toxicon() {
   alert(uneval(Tox));
 }
 
+function msg(e, color) {
+  showmsg({
+        id:'default_msg_{rand}',
+        text:[e.Interpret+" läuft auf "+e.SCR+ " mit '"+e.Titel+"'",new Date(e.Start).format('\\K\\WW D, d.m.y H:i:s')+'-'+new Date(e.Ende).format('H:i:s')].join("<br>"), //,uneval(e)
+        fixed:true,
+        color:color||'lightgray',
+        Timeout:120,
+        onOKTimeout:function (e) {},
+      });
+
+      //GM_log(uneval(Date));
+}
+
 function Reminder() {
   deserialize("Reminder",{}).forEach(function (e) {
     var Now=new Date().getTime();
-    if (e.Start-60*60*100<Now && Now<e.Ende)
-      showmsg({
-        id:'default_msg_{rand}',
-        text:[e.Interpret+" läuft auf "+e.SCR+ " mit '"+e.Titel+"'",uneval(e)].join("<br>"),
-        color:e.Start<Now?'lightblue':'lightgray',
-        Timeout:60,
-        onOKTimeout:function (e) {},
-      });
-    if (Now<e.Start-60*60*100)
+    if (Now < e.Start-24*60*60*100)
     {
-      //GM_log(["Timer gesetzt",uneval(e)].join("\n"));
-      window.setTimeout(function () { 
-        showmsg({
-          id:'default_msg_{rand}',
-          text:[e.Interpret+" läuft auf "+e.SCR+ " mit '"+e.Titel+"'",uneval(e)].join("<br>"),
-          color:'lightgray',
-          Timeout:60,
-          onOKTimeout:function (e) {},
-        });
-      }, e.Start-60*60*100-Now);
+    
+    }
+    if (Now < e.Start-60*60*100)
+    {
+      msg(e,"lightgray");
+      window.setTimeout(function () { msg(e,"gray"); }, e.Start-60*60*100-Now);
+    }
+    else if (Now < e.Start)
+    {
+      msg(e,"gray");
+      window.setTimeout(function () { msg(e,"green"); }, e.Start-Now);
+    }
+    else if (Now < e.Ende)
+    {
+      msg(e,"green");
     }
   });
   if (aget("Data","ReminderKalenderwoche",0)!=KalenderWoche()) GM_openInTab("http://www.scr1.de/wochenplan.php");
+  //GM_log("KW: "+KalenderWoche());
 }
 
 
