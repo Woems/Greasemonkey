@@ -304,13 +304,13 @@ function Toxicon() {
   //alert(uneval(Tox));
 }
 
-function msg(e, color) {
+function msg(e, color, timeout) {
   showmsg({
         id:'default_msg_{rand}',
         text:[e.Interpret+" läuft auf "+e.SCR+ " mit '"+e.Titel+"'",new Date(e.Start).format('\\K\\WW D, d.m.y H:i:s')+'-'+new Date(e.Ende).format('H:i:s')].join("<br>"), //,uneval(e)
         fixed:true,
         color:color||'lightgray',
-        Timeout:120,
+        Timeout:timeout||120,
         onOKTimeout:function (e) {},
         Cancel:'Webseite',
         onCancel:function (e) { GM_openInTab("http://www.scr1.de/wochenplan.php"); },
@@ -322,23 +322,24 @@ function msg(e, color) {
 function Reminder() {
   deserialize("Reminder",{}).forEach(function (e) {
     var Now=new Date().getTime();
+    //alert((e.Start-Now)/60/60/1000)
     if (Now < e.Start-24*60*60*1000)
     {
     
     }
-    if (Now < e.Start-60*60*1000)
+    else if (Now < e.Start-60*60*1000)
     {
-      msg(e,"lightgray");
+      msg(e,"lightgray",10);
       window.setTimeout(function () { msg(e,"gray"); }, e.Start-60*60*1000-Now);
     }
     else if (Now < e.Start)
     {
-      msg(e,"gray");
+      msg(e,"gray",30);
       window.setTimeout(function () { msg(e,"green"); }, e.Start-Now);
     }
     else if (Now < e.Ende)
     {
-      msg(e,"green");
+      msg(e,"green",120);
     }
   });
   if (aget("Data","ReminderKalenderwoche",0)!=KalenderWoche()) GM_openInTab("http://www.scr1.de/wochenplan.php");
