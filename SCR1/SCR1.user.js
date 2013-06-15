@@ -300,8 +300,8 @@ function Toxicon() {
   aset("Data","ReminderKalenderwoche",KalenderWoche());
   serialize("Reminder",Tox);
   Tox.forEach(function (e) { e.Element.style.backgroundColor="blue"; e.Element.style.color='white'; });
-  Tox.forEach(function (e) { var Now=new Date().getTime(); if (e.Start<Now && Now<e.Ende) alert(["Toxicon läuft",uneval(e)].join("\n")); });
-  alert(uneval(Tox));
+  //Tox.forEach(function (e) { var Now=new Date().getTime(); if (e.Start<Now && Now<e.Ende) alert(["Toxicon läuft",uneval(e)].join("\n")); });
+  //alert(uneval(Tox));
 }
 
 function msg(e, color) {
@@ -312,6 +312,8 @@ function msg(e, color) {
         color:color||'lightgray',
         Timeout:120,
         onOKTimeout:function (e) {},
+        Cancel:'Webseite',
+        onCancel:function (e) { GM_openInTab("http://www.scr1.de/wochenplan.php"); },
       });
 
       //GM_log(uneval(Date));
@@ -320,14 +322,14 @@ function msg(e, color) {
 function Reminder() {
   deserialize("Reminder",{}).forEach(function (e) {
     var Now=new Date().getTime();
-    if (Now < e.Start-24*60*60*100)
+    if (Now < e.Start-24*60*60*1000)
     {
     
     }
-    if (Now < e.Start-60*60*100)
+    if (Now < e.Start-60*60*1000)
     {
       msg(e,"lightgray");
-      window.setTimeout(function () { msg(e,"gray"); }, e.Start-60*60*100-Now);
+      window.setTimeout(function () { msg(e,"gray"); }, e.Start-60*60*1000-Now);
     }
     else if (Now < e.Start)
     {
