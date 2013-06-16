@@ -2,6 +2,7 @@
 // @name        SCR1
 // @namespace   Woems
 // @include     http://www.scr1.de*
+// @include     *
 // @version     1
 // ==/UserScript==
 
@@ -98,7 +99,7 @@ function alleXTage(tage, key) { key=key||"alleXTage"; if (GM_getValue(key,0) == 
 function deserialize(name, def) { return eval(GM_getValue(name, (def || '({})'))); }
 function serialize(name, val) { GM_setValue(name, uneval(val)); }
 function aset(name, key, val) { var tmp=deserialize(name); tmp[key]=val; serialize(name,tmp);}
-function aget(name, key) { return deserialize(name)[key]; }
+function aget(name, key, def) { return deserialize(name)[key]||def; }
          // GM_deleteValue("pwd");
 // ** XHTML **
 function get(url, cb) { GM_xmlhttpRequest({ method: "GET", url: url, onload: function(xhr) { cb(xhr.finalUrl, xhr.responseText, xhr.responseHeaders, xhr); } });}
@@ -110,6 +111,8 @@ function post(url, data, cb) { GM_xmlhttpRequest({ method: "POST", url: url, hea
 function text2div(text) { var div=document.createElement("div"); div.innerHTML=text; return div; }
 // ** Date **
 Date.prototype.format = function(format) { var returnStr = ''; var replace = Date.replaceChars; for (var i = 0; i < format.length; i++) { var curChar = format.charAt(i); if (i - 1 >= 0 && format.charAt(i - 1) == "\\") { returnStr += curChar; } else if (replace[curChar]) { returnStr += replace[curChar].call(this); } else if (curChar != "\\"){ returnStr += curChar; } } return returnStr; }; Date.replaceChars = { shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], longMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], longDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], d: function() { return (this.getDate() < 10 ? '0' : '') + this.getDate(); }, D: function() { return Date.replaceChars.shortDays[this.getDay()]; }, j: function() { return this.getDate(); }, l: function() { return Date.replaceChars.longDays[this.getDay()]; }, N: function() { return this.getDay() + 1; }, S: function() { return (this.getDate() % 10 == 1 && this.getDate() != 11 ? 'st' : (this.getDate() % 10 == 2 && this.getDate() != 12 ? 'nd' : (this.getDate() % 10 == 3 && this.getDate() != 13 ? 'rd' : 'th'))); }, w: function() { return this.getDay(); }, z: function() { var d = new Date(this.getFullYear(),0,1); return Math.ceil((this - d) / 86400000); }, W: function() { var d = new Date(this.getFullYear(), 0, 1); return Math.ceil((((this - d) / 86400000) + d.getDay() + 1) / 7); }, F: function() { return Date.replaceChars.longMonths[this.getMonth()]; }, m: function() { return (this.getMonth() < 9 ? '0' : '') + (this.getMonth() + 1); }, M: function() { return Date.replaceChars.shortMonths[this.getMonth()]; }, n: function() { return this.getMonth() + 1; }, t: function() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 0).getDate() }, L: function() { var year = this.getFullYear(); return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)); }, o: function() { var d  = new Date(this.valueOf());  d.setDate(d.getDate() - ((this.getDay() + 6) % 7) + 3); return d.getFullYear();}, Y: function() { return this.getFullYear(); }, y: function() { return ('' + this.getFullYear()).substr(2); }, a: function() { return this.getHours() < 12 ? 'am' : 'pm'; }, A: function() { return this.getHours() < 12 ? 'AM' : 'PM'; }, B: function() { return Math.floor((((this.getUTCHours() + 1) % 24) + this.getUTCMinutes() / 60 + this.getUTCSeconds() / 3600) * 1000 / 24); }, g: function() { return this.getHours() % 12 || 12; }, G: function() { return this.getHours(); }, h: function() { return ((this.getHours() % 12 || 12) < 10 ? '0' : '') + (this.getHours() % 12 || 12); }, H: function() { return (this.getHours() < 10 ? '0' : '') + this.getHours(); }, i: function() { return (this.getMinutes() < 10 ? '0' : '') + this.getMinutes(); }, s: function() { return (this.getSeconds() < 10 ? '0' : '') + this.getSeconds(); },    u: function() { var m = this.getMilliseconds(); return (m < 10 ? '00' : (m < 100 ? '0' : '')) + m; }, e: function() { return "Not Yet Supported"; }, I: function() { return "Not Yet Supported"; }, O: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + '00'; }, P: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + ':00'; }, T: function() { var m = this.getMonth(); this.setMonth(0); var result = this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/, '$1'); this.setMonth(m); return result;}, Z: function() { return -this.getTimezoneOffset() * 60; }, c: function() { return this.format("Y-m-d\\TH:i:sP"); }, r: function() { return this.toString(); }, U: function() { return this.getTime() / 1000; } };
+Date.prototype.formatAll = function() { return this.format(ObjKeys(Date.replaceChars).map(function (e) { return '\\'+e+'='+e; }).join(", ")); }
+//"shortMonths, longMonths, shortDays, longDays, d, D, j, l, N, S, w, z, W, F, m, M, n, t, L, o, Y, y, a, A, B, g, G, h, H, i, s, u, e, I, O, P, T, Z, c, r, U"
 Date.prototype.getDayString = function() { return ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"][this.getDay()]; }
 Date.prototype.getMonthString = function() { return ["Januar","Februar","März","April","May","Juni","Juli","August","September","Oktober","November","Dezember"][this.getMonth()]; }
 Date.prototype.getShortDate = function() { return this.getDate().pad(2)+"."+["Jan","Feb","Mär","Apr","May","Jun","Jul","Aug","Sep","Okt","Nov","Dez"][this.getMonth()]+"."+this.getFullYear()+" "+this.getHours().pad(2)+":"+this.getMinutes().pad(2)+"."+this.getSeconds().pad(2); }
@@ -234,14 +237,121 @@ function createHover(elem,text)
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
 
-switch(location.pathname)
+if (location.host=="www.scr1.de")
 {
-  case '/wochenplan.php': FindeToxicon(); break;
-  default: alert(location.pathname); break;
+  switch(location.pathname)
+  {
+    case '/wochenplan.php': Toxicon(); break;
+    default: alert(location.pathname); break;
+  }
+} else {
+  Reminder();
 }
 
-function FindeToxicon() {
-  var Tox=$x("//*[@class='SCR1' or @class='SCR2' or @class='SCR3']");
-  Tox.forEach(function (e) { if (e.innerHTML.indexOf('Toxikon')!=-1) { e.style.backgroundColor="blue"; e.style.color='white'; } })
+// 1= Mo 
+// 4= Do
+// 5= Fr
+
+// 6= Sa
+
+function sucheSendung(Suchwort) {
+  var Sendungen=$x("//*[@class='SCR1' or @class='SCR2' or @class='SCR3']");
+  return Sendungen.filter(function (e,i) { return e.innerHTML.indexOf(Suchwort)!=-1; }).map(function (e,i) {
+    var Data=e.innerHTML.split("<br>").map(function (e) { return e.replace(/^[\n ]+|[\n ]+$/g,""); });
+    
+    var TextDatum=e.textContent.match(/([0-9]{2}):([0-9]{2})-([0-9]{2}):([0-9]{2})/)
+    var Now=new Date();
+    var Datum=new Date(Now.getTime()+(e.parentNode.cellIndex-(Now.getDay()+6)%7-1)*24*60*60*1000);
+    Datum.setHours(TextDatum[1]*1);
+    Datum.setMinutes(TextDatum[2]*1);
+    Datum.setSeconds(0);
+    var Start=Datum.getTime();
+    Datum.setHours(TextDatum[3]*1);
+    Datum.setMinutes(TextDatum[4]*1);
+    var Ende=Datum.getTime();
+    //alert([Now.getTime(), Now.getDay(), e.parentNode.cellIndex, uneval(TextDatum), Start, Ende ].join("\n")); 
+    
+    return {
+      Element:e,
+      //Text:e.textContent,
+      //HTML:e.innerHTML,
+      Day:["Mo","Di","Mi","Do","Fr","Sa","So"][e.parentNode.cellIndex-1],
+      SCR:e.className,
+      //Time:e.textContent.match(/([0-9]{2}:[0-9]{2})-([0-9]{2}:[0-9]{2})/),
+      Time:Data[0],
+      Start:Start,
+      Ende:Ende,
+      Interpret:Data[1],
+      Titel:Data[2],
+    };
+  });
 }
+
+
+function KalenderWoche() {
+  var Time=new Date();
+  var Year=new Date(Time.getFullYear(),0,1);
+  var day=(Year.getDay()+5)%6;
+  return Math.ceil((Time.getTime()-Year)/604800000+day/7);		
+}
+
+function Toxicon() {
+  var Tox=sucheSendung("Toxikon");
+  aset("Data","ReminderKalenderwoche",KalenderWoche());
+  serialize("Reminder",Tox);
+  Tox.forEach(function (e) { e.Element.style.backgroundColor="blue"; e.Element.style.color='white'; });
+  //Tox.forEach(function (e) { var Now=new Date().getTime(); if (e.Start<Now && Now<e.Ende) alert(["Toxicon läuft",uneval(e)].join("\n")); });
+  //alert(uneval(Tox));
+}
+
+function msg(e, color, timeout) {
+  showmsg({
+        id:'default_msg_{rand}',
+        text:[e.Interpret+" läuft auf "+e.SCR+ " mit '"+e.Titel+"'",new Date(e.Start).format('\\K\\WW D, d.m.y H:i:s')+'-'+new Date(e.Ende).format('H:i:s')].join("<br>"), //,uneval(e)
+        fixed:true,
+        color:color||'lightgray',
+        onOK:function (e) { aset("Data","TimeOut",new Date()); },
+        Timeout:timeout||120,
+        onTimeout:function (e) {},
+        Cancel:'Webseite',
+        onCancel:function (e) { GM_openInTab("http://www.scr1.de/wochenplan.php"); },
+      });
+
+      //GM_log(uneval(Date));
+}
+
+function Reminder() {
+  deserialize("Reminder",{}).forEach(function (e) {
+    var Now=new Date().getTime();
+    var StartIn=e.Start-Now;
+    var EndeIn=e.Ende-Now;
+    //alert([StartIn, StartIn-60*60*1000, StartIn-48*60*60*1000, EndeIn, aget("Data","TimeOut",0), Now, aget("Data","TimeOut",0)-Now, aget("Data","TimeOut",0)-Now+10*60*60*1000].join("\n"));
+    if (StartIn-60*60*1000 > 0) window.setTimeout(function () { msg(e,"lightgray",10); }, Math.max(StartIn-24*60*60*1000, aget("Data","TimeOut",0)-Now+10*60*60*1000));
+    if (StartIn > 0) window.setTimeout(function () { msg(e,"gray",30); }, Math.max(StartIn-60*60*1000, aget("Data","TimeOut",0)-Now+10*60*60*1000));
+    if (EndeIn > 0) window.setTimeout(function () { msg(e,"green",120); }, Math.max(StartIn, aget("Data","TimeOut",0)-Now+10*60*60*1000));
+    /*/
+    if (Now < e.Start-24*60*60*1000)
+    {
+    
+    }
+    else if (Now < e.Start-60*60*1000)
+    {
+      msg(e,"lightgray",10);
+      window.setTimeout(function () { msg(e,"gray"); }, e.Start-60*60*1000-Now);
+    }
+    else if (Now < e.Start)
+    {
+      msg(e,"gray",30);
+      window.setTimeout(function () { msg(e,"green"); }, e.Start-Now);
+    }
+    else if (Now < e.Ende)
+    {
+      msg(e,"green",120);
+    }
+    /**/
+  });
+  if (aget("Data","ReminderKalenderwoche",0)!=KalenderWoche()) GM_openInTab("http://www.scr1.de/wochenplan.php");
+  //GM_log("KW: "+KalenderWoche());
+}
+
 
