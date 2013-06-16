@@ -249,7 +249,8 @@ function Einkaufsliste_summieren()
         onClick:function (e) {
           $('woemsSum').style.display='none';
           var Einkaufsdaten=deserialize('Einkaufsdaten',{});
-          if (!Einkaufsdaten.Time || new Date().getTime()-Einkaufsdaten.Time.getTime() > 60*1000) Einkaufsdaten={ Time:new Date() };
+          if (!Einkaufsdaten.Time || new Date().getTime()-Einkaufsdaten.Time.getTime() > 30*1000) Einkaufsdaten={};
+          Einkaufsdaten.Time=new Date();
           $x("id('wimpVerkaufProducts')/div[@class='rot']")
               .map(function (e) { return e.textContent.split(' x '); })
               .forEach(function (e) { Einkaufsdaten[e[1]]=(Einkaufsdaten[e[1]]||0)+(e[0]*1); })
