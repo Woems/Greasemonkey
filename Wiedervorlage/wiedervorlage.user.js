@@ -401,7 +401,9 @@ function wvNow() {
       //var urls=wv.url.split(","); firsturl=urls.shift(); urls.push(firsturl); wv.url=urls.join(",");
       //GM_delete('rand');
       //var r=deserialize('waittime',{})['timer']||5;
-      var r=20;
+      var r=aget("data","Aufschieben",20);
+      if (r>20) r-=5;
+      if (r<20) r+=5;      
       showmsg({
           id:'WV_oeffnen_{rand}', // _{rand}
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
@@ -418,7 +420,9 @@ function wvNow() {
             //  waittime={ day:now.getDate(), timer:5 };
             //waittime['timer']=waittime['timer']+5;
             //serialize('waittime',waittime);
-            wvAufschieben(e.url, prompt("Wartezeit in min:",e.sec)); },
+            var WaitTime=prompt("Wartezeit in min:",aget("data","Aufschieben",20)); //e.sec
+            aset("data","Aufschieben",WaitTime)
+            wvAufschieben(e.url, WaitTime); },
           Timeout:2*60,
           onTimeout:function (e) { },
           //onTimeout:function (e) { wvCheck(e.url); wvUrlRotate(e.url); GM_openInTab(e.url.split(",")[0]); },
