@@ -401,9 +401,7 @@ function wvNow() {
       //var urls=wv.url.split(","); firsturl=urls.shift(); urls.push(firsturl); wv.url=urls.join(",");
       //GM_delete('rand');
       //var r=deserialize('waittime',{})['timer']||5;
-      var r=aget("data","Aufschieben",20);
-      if (r>20) r-=5;
-      if (r<20) r+=5;      
+      //var r=aget("data","Aufschieben",20);
       showmsg({
           id:'WV_oeffnen_{rand}', // _{rand}
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
@@ -413,14 +411,15 @@ function wvNow() {
           color:'red',
           OK:'OK',
           onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
-          Cancel:'Aufschieben um '+r+'min',
+          Cancel:'Aufschieben', // um '+r+'min
           onCancel:function (e) { 
             //var waittime=deserialize('waittime',{});
             //if (!waittime['day'] || waittime['day']!=now.getDate())
             //  waittime={ day:now.getDate(), timer:5 };
             //waittime['timer']=waittime['timer']+5;
             //serialize('waittime',waittime);
-            var WaitTime=prompt("Wartezeit in min:",aget("data","Aufschieben",20)); //e.sec
+            var WaitTime=aget("data","Aufschieben",20);
+            WaitTime=prompt("Wartezeit in min:",WaitTime>20?WaitTime-5:WaitTime<20?WaitTime+5:WaitTime); //e.sec
             aset("data","Aufschieben",WaitTime)
             wvAufschieben(e.url, WaitTime); },
           Timeout:2*60,
