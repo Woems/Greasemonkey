@@ -407,7 +407,7 @@ function wvNow() {
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
           fixed: true,
           url: wv.url,
-          sec:r, 
+          //sec:r, 
           color:'red',
           OK:'OK',
           onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
