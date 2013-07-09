@@ -235,22 +235,28 @@ if (FrameBuster())
 } else {
   if (location.href.indexOf("GalerieAutoHide=true")!=-1)
   {
+    /*
     //GM_log(location.href);
-    unsafeWindow.onYouTubePlayerReady = function (playerID)
+    unsafeWindow.onYouTubePlayerReady = function (player)
     {
-      alert(playerID);
-      var player=document.getElementById("movie_player").wrappedJSObject;
-      //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
-      var intervalID=window.setInterval(function () {
-        //GM_log("interval");
-        if (player.getPlayerState()==0)
-        {
-          //GM_log("Ende");
-          //NextVideo();
-          window.clearInterval(intervalID);
-        }
-      },1000);  
+      if (typeof player == 'object')
+      {
+        //GM_log(["Player:",uneval(player), typeof player, player.getPlayerState()].join('\n'));
+        GM_log(["PlayerState:",player.getPlayerState()].join('\n'));
+        //var player=document.getElementById("movie_player").wrappedJSObject;
+        //player.addEventListener("onStateChange", function (e) { alert("State Changed: "+e); });
+        var intervalID=window.setInterval(function () {
+          GM_log("interval"+player.getPlayerState());
+          if (player.getPlayerState()==0)
+          {
+            GM_log("Ende");
+            //NextVideo();
+            window.clearInterval(intervalID);
+          }
+        },10000);  
+      }
     }
+    */
   }
 }
 
