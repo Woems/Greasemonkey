@@ -413,14 +413,15 @@ function wvNow() {
           onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
           Cancel:'Aufschieben', // um '+r+'min
           onCancel:function (e) { 
-            //var waittime=deserialize('waittime',{});
-            //if (!waittime['day'] || waittime['day']!=now.getDate())
-            //  waittime={ day:now.getDate(), timer:5 };
-            //waittime['timer']=waittime['timer']+5;
-            //serialize('waittime',waittime);
+            /**/
+            var WaitTime=aget('waittime',e.url)||30;
+            WaitTime=prompt("Wartezeit in min:",WaitTime); //e.sec
+            aset('waittime',WaitTime);
+            /*/
             var WaitTime=aget("data","Aufschieben",20);
             WaitTime=prompt("Wartezeit in min:",WaitTime>20?WaitTime-5:WaitTime<20?WaitTime+5:WaitTime); //e.sec
             aset("data","Aufschieben",WaitTime)
+            /**/
             wvAufschieben(e.url, WaitTime); },
           Timeout:2*60,
           onTimeout:function (e) { },
