@@ -361,9 +361,29 @@ function Rand(min, max) { return Math.floor(min+Math.random()*(max-min)); }
 
 function wvAufschieben(Url,sec) {
   var WV=deserialize('WV',[]);
-  WV=WV.map(function (f) { if (f.url==Url) f.aufschieben=new Date(new Date().getTime()+(sec||30)*60*1000); return f; });
+  WV=WV.map(function (f) { if (f.url==Url) { f.aufschieben=new Date(new Date().getTime()+(sec||30)*60*1000); f.wait=sec; } return f; });
   serialize('WV',WV);
 } // End: function wvOpen()
+
+function dump2(obj, deep) {
+  if (typeof obj=="object")
+    if (obj instanceof Array)
+    {
+      var tmp=[];
+      for (j in obj) if (obj.hasOwnProperty(j))
+        tmp.push(dump2(obj[j], deep));
+        return "[ "+tmp.join(", ")+" ]";
+    } else if (obj instanceof Date) {
+      return obj.toLocaleString();
+    } else {
+      var tmp=[]; deep=(deep||'')+'   ';
+      for (j in obj) if (obj.hasOwnProperty(j))
+        tmp.push(deep+j+" = "+dump2(obj[j], deep));
+      return "{\n"+tmp.join(",\n")+"\n"+deep+"}";
+    }
+  return (typeof obj=="string")?"'"+obj+"'":obj;
+}
+
 
 function wvNow() {
   var Z={ minute: 60*1000, hour:60*60*1000, day: 20*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
@@ -407,6 +427,7 @@ function wvNow() {
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
           fixed: true,
           url: wv.url,
+          wait: wv.wait,
           //sec:r, 
           color:'red',
           OK:'OK',
@@ -414,15 +435,22 @@ function wvNow() {
           Cancel:'Aufschieben', // um '+r+'min
           onCancel:function (e) { 
             /**/
+            e.wait=prompt("Wartezeit in min:",e.wait||10);
+            wvAufschieben(e.url, e.wait);
+            //alert(dump2(deserialize('WV')));
+            /*/
+            if (typeof deserialize('waittime')!="object") serialize('waittime',{});
             var WaitTime=aget('waittime',e.url)||30;
             WaitTime=prompt("Wartezeit in min:",WaitTime); //e.sec
-            aset('waittime',WaitTime);
-            /*/
+            aset('waittime',e.url,WaitTime);
+            
             var WaitTime=aget("data","Aufschieben",20);
             WaitTime=prompt("Wartezeit in min:",WaitTime>20?WaitTime-5:WaitTime<20?WaitTime+5:WaitTime); //e.sec
             aset("data","Aufschieben",WaitTime)
+            
+            wvAufschieben(e.url, WaitTime);
             /**/
-            wvAufschieben(e.url, WaitTime); },
+            },
           Timeout:2*60,
           onTimeout:function (e) { },
           //onTimeout:function (e) { wvCheck(e.url); wvUrlRotate(e.url); GM_openInTab(e.url.split(",")[0]); },
