@@ -235,18 +235,29 @@ function createHover(elem,text)
 
 switch(getParam('action'))
 {
-  case 'userhistory2': autoreload(); datumberechnen(); break;
+  case 'userhistory2': datumberechnen(); break;
   default:  break;
 }
 
-function autoreload() {
-  window.setTimeout(function () { location.reload(); }, 1*60*1000);
-}
-
 function datumberechnen() {
-  $x("id('content')/table/tbody/tr/td[5]").forEach(function (e) {
-    if (e.textContent=='Datum') return;
-    Datum=e.textContent.match(/(([0-9]+)\.([0-9]+)\.([0-9]+)).*(([0-9]+):([0-9]+):([0-9]+))/);
-    GM_log([Datum, Datum[1]+" "+Datum[5], new Date(Datum[1])].join("\n"));
+  var Captchas=$x("id('content')/table/tbody/tr").filter(function (tr) { return tr.innerHTML.indexOf("<b>")==-1; }).map(function (tr) {
+    var tmp={};
+    var Datum=tr.cells[4].textContent.match(/(([0-9]+)\.([0-9]+)\.([0-9]+))[, ]*(([0-9]+):([0-9]+):([0-9]+))/)
+    if (Datum) tmp["Datum"]=new Date(Datum[4],Datum[3]-1,Datum[2],Datum[6],Datum[7],Datum[8]);
+    tmp["Status"]=trim(tr.cells[3].textContent);
+    tmp["Key"]=(tr.cells[2].textContent.match(/\(([\+\-0-9]*)\)/)||["",""])[1]*1;
+    return tmp;
   });
+  //var DateDiff=Captchas[1]['Datum'].getTime()-Captchas[0]['Datum'].getTime();
+  //var WaitTill=Captchas[0]['Datum'].getTime()+DateDiff;
+  //var Wait=WaitTill-new Date().getTime();
+  //if (Wait>0) window.setTimeout(function () { location.reload(); }, Wait);
+  
+  var Wait=new Date().getTime()-Captchas[0]['Datum'].getTime()-10*1000;
+  Wait=Wait-20*1000;
+  //if (Wait<=10000) Wait=10000;
+  window.setTimeout(function () { location.reload(); }, Wait);
+  
+  //var LastCapture=Captchas.reduce(function (prev, curr, i, a) { return curr["Datum"]>prev?curr["Datum"]:prev; },new Date(new Date().getTime()-24*60*60*1000))
+  //GM_log([uneval(Captchas), Captchas[0]['Datum'], new Date(), Captchas[0]['Datum'].getTime(), new Date().getTime()].join("\n"));
 }
