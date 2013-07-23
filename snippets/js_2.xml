@@ -16,10 +16,7 @@
     <description>createElement2</description>
   </snippet>
   <snippet>
-    <text><![CDATA[filter(function (e) {
-  $0
-  return e=="";
-});]]></text>
+    <text><![CDATA[filter(function (e) { return ${0:e==""}; })]]></text>
     <tag>filter</tag>
     <description>filter</description>
   </snippet>
