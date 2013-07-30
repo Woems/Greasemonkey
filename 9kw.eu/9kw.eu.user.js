@@ -253,9 +253,10 @@ function datumberechnen() {
   //var Wait=WaitTill-new Date().getTime();
   //if (Wait>0) window.setTimeout(function () { location.reload(); }, Wait);
   
-  var Wait=new Date().getTime()-Captchas[0]['Datum'].getTime()-10*1000;
-  Wait=Wait-20*1000;
-  //if (Wait<=10000) Wait=10000;
+  var Wait=new Date().getTime()-Captchas[0]['Datum'].getTime();
+  Wait=Wait/2;
+  document.title="Warte "+Wait+" sec";
+  if (Wait<=5000) Wait=5000;
   window.setTimeout(function () { location.reload(); }, Wait);
   
   //var LastCapture=Captchas.reduce(function (prev, curr, i, a) { return curr["Datum"]>prev?curr["Datum"]:prev; },new Date(new Date().getTime()-24*60*60*1000))
