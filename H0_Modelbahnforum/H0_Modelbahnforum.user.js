@@ -11,7 +11,7 @@ function $(ID) { return (typeof ID === 'string' ? document.getElementById(ID) : 
 // ** XPath **
 function $xs(xpath, rootdir) {return document.evaluate(xpath, rootdir || document, null, 9, null).singleNodeValue;}
 function $x(p, context) {
-  p=p.replace(/([^.])\.(\w+)/g,'$1[@class="$2"]').replace(/#(\w+)/g,'[@id="$1"]').replace(/\/\[/g,'/*[');  // '//.class' '//#id' '//[...]'
+  //p=p.replace(/([^.])\.(\w+)/g,'$1[@class="$2"]').replace(/#(\w+)/g,'[@id="$1"]').replace(/\/\[/g,'/*[');  // '//.class' '//#id' '//[...]'
   var i, arr = [], xpr = document.evaluate(p, context || document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
   for (i = 0; item = xpr.snapshotItem(i); i++) arr.push(item);
   return arr;
@@ -332,10 +332,10 @@ function board() {
     {
       // Backspace
       case 8: location.href="http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=54887";  break;
-      // Cursor Left
-      case 37: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff")]/font/a').href; } catch(e) { alert("Keine weitere Seite"); } break;
       // Cursor Right
-      case 39: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').href; } catch(e) { location.href=$xs('//a[text()="»"] | //font/font/following::a[1]').href; } break;
+      case 39: try { location.href=$x('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').pop().href; } catch(e) { alert("Keine weitere Seite"+e); } break;
+      // Cursor Left
+      case 37: try { location.href=$xs('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').href; } catch(e) { location.href=$xs('//a[text()="»"] | //font/font/following::a[1]').href; } break;
       //default: alert([key, uneval(code), e].join("\n")); break;
     }
   });
