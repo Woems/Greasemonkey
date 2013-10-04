@@ -326,7 +326,7 @@ function Reminder() {
     var StartIn=e.Start-Now;
     var EndeIn=e.Ende-Now;
     //alert([StartIn, StartIn-60*60*1000, StartIn-48*60*60*1000, EndeIn, aget("Data","TimeOut",0), Now, aget("Data","TimeOut",0)-Now, aget("Data","TimeOut",0)-Now+10*60*60*1000].join("\n"));
-    if (StartIn-60*60*1000 > 0) window.setTimeout(function () { msg(e,"lightgray",10); }, Math.max(StartIn-24*60*60*1000, aget("Data","TimeOut",0)-Now+10*60*60*1000));
+    if (StartIn-15*1000 > 0) window.setTimeout(function () { msg(e,"lightgray",10); }, Math.max(StartIn-24*60*60*1000, aget("Data","TimeOut",0)-Now+10*60*60*1000));
     if (StartIn > 0) window.setTimeout(function () { msg(e,"gray",30); }, Math.max(StartIn-60*60*1000, aget("Data","TimeOut",0)-Now+10*60*60*1000));
     if (EndeIn > 0) window.setTimeout(function () { msg(e,"green",120); }, Math.max(StartIn, aget("Data","TimeOut",0)-Now+10*60*60*1000));
     /*/
