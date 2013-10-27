@@ -339,6 +339,8 @@ function board() {
       //default: alert([key, uneval(code), e].join("\n")); break;
     }
   });
+  //$x('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').pop().parentNode.parentNode.scrollIntoView(false);
+  window.scrollTo( 0, PosX($x('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').pop()) - ( window.innerHeight / 2 ));
 } // End: function board()
 
 function thread() {
