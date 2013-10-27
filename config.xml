@@ -1050,7 +1050,7 @@
     <Include>http://www.scr1.de*</Include>
     <Include>*</Include>
   </Script>
-  <Script basedir="Greased_Lightbox" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhances browsing on websites that link to images such as Google Image Search, Flickr, Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs. Use left and right arrow keys to cycle through images on page." enabled="true" filename="greasedlightbox.user.js" name="Greased Lightbox" namespace="http://shiftingpixel.com" runAt="document-end" version="" installurl="http://shiftingpixel.com/downloads/greasedlightbox.user.js" updateurl="http://shiftingpixel.com/downloads/greasedlightbox.user.js">
+  <Script basedir="Greased_Lightbox" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhances browsing on websites that link to images such as Google Image Search, Flickr, Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs. Use left and right arrow keys to cycle through images on page." enabled="false" filename="greasedlightbox.user.js" name="Greased Lightbox" namespace="http://shiftingpixel.com" runAt="document-end" version="" installurl="http://shiftingpixel.com/downloads/greasedlightbox.user.js" updateurl="http://shiftingpixel.com/downloads/greasedlightbox.user.js">
     <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
