@@ -316,42 +316,29 @@ function msg(e, color, timeout) {
         Cancel:'Webseite',
         onCancel:function (e) { GM_openInTab("http://www.scr1.de/wochenplan.php"); },
       });
-
-      //GM_log(uneval(Date));
 }
 
 function Reminder() {
   deserialize("Reminder",{}).forEach(function (e) {
     var Now=new Date().getTime();
+    var Minuten=60*1000;
     var StartIn=e.Start-Now;
     var EndeIn=e.Ende-Now;
-    //alert([StartIn, StartIn-60*60*1000, StartIn-48*60*60*1000, EndeIn, aget("Data","TimeOut",0), Now, aget("Data","TimeOut",0)-Now, aget("Data","TimeOut",0)-Now+10*60*60*1000].join("\n"));
-    if (StartIn-15*1000 > 0) window.setTimeout(function () { msg(e,"lightgray",10); }, Math.max(StartIn-24*60*60*1000, aget("Data","TimeOut",0)-Now+10*60*60*1000));
-    if (StartIn > 0) window.setTimeout(function () { msg(e,"gray",30); }, Math.max(StartIn-60*60*1000, aget("Data","TimeOut",0)-Now+10*60*60*1000));
-    if (EndeIn > 0) window.setTimeout(function () { msg(e,"green",120); }, Math.max(StartIn, aget("Data","TimeOut",0)-Now+10*60*60*1000));
-    /*/
-    if (Now < e.Start-24*60*60*1000)
-    {
+    var Reminder1=StartIn-10*Minuten;
+    var Reminder2=StartIn-60*Minuten;
+    var TimeOut=aget("Data","TimeOut",0)-Now;
     
-    }
-    else if (Now < e.Start-60*60*1000)
-    {
-      msg(e,"lightgray",10);
-      window.setTimeout(function () { msg(e,"gray"); }, e.Start-60*60*1000-Now);
-    }
-    else if (Now < e.Start)
-    {
-      msg(e,"gray",30);
-      window.setTimeout(function () { msg(e,"green"); }, e.Start-Now);
-    }
-    else if (Now < e.Ende)
-    {
-      msg(e,"green",120);
-    }
-    /**/
+    //var Out=[ "Reminder2: "+Reminder2, "Reminder1: "+Reminder1, "Start: "+StartIn, "Ende: "+EndeIn, "Timeout: "+Math.round(TimeOut/Minuten*-1)];
+    //showmsg({ text:Out.join("<br>"), onOKTimeout:function (e) {} });
+    
+    if (Reminder1 > 0) window.setTimeout(function () { msg(e,"lightgray",60); }, Math.max(Reminder2, TimeOut+20*Minuten));
+    if (StartIn > 0) window.setTimeout(function () { msg(e,"gray",600); }, Math.max(Reminder1, TimeOut+2*Minuten));
+    if (EndeIn > 0) window.setTimeout(function () { msg(e,"green",120); }, Math.max(StartIn, TimeOut+30*Minuten));
   });
+
   if (aget("Data","ReminderKalenderwoche",0)!=KalenderWoche()) GM_openInTab("http://www.scr1.de/wochenplan.php");
   //GM_log("KW: "+KalenderWoche());
 }
+
 
 
