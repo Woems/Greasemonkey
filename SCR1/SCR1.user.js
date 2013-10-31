@@ -324,8 +324,8 @@ function Reminder() {
     var Minuten=60*1000;
     var StartIn=e.Start-Now;
     var EndeIn=e.Ende-Now;
-    var Reminder1=StartIn-10*Minuten;
-    var Reminder2=StartIn-60*Minuten;
+    var Reminder1=StartIn-20*Minuten;
+    var Reminder2=StartIn-120*Minuten;
     var TimeOut=aget("Data","TimeOut",0)-Now;
     
     //var Out=[ "Reminder2: "+Reminder2, "Reminder1: "+Reminder1, "Start: "+StartIn, "Ende: "+EndeIn, "Timeout: "+Math.round(TimeOut/Minuten*-1)];
