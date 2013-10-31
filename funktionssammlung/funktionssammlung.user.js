@@ -96,6 +96,7 @@ function css(code) { GM_addStyle(code); }
 function PosX(element) { var e=element; var i=0; while(e) { i+=e.offsetLeft; e=e.offsetParent; } return i; }
 function PosY(element) { var e=element; var i=0; while(e) { i+=e.offsetTop; e=e.offsetParent; } return i; }
 function PosXY(obj) { var p = { x:0, y:0 }; do { p.x += obj.offsetLeft; p.y += obj.offsetTop; } while (obj = obj.offsetParent); return p; }
+function WindowCenter(Obj) { window.scrollTo( 0, PosY(Obj) - ( window.innerHeight / 2 )); }
 // ** Timer **
 function Interval(func, interval) { func(); window.setInterval(func,interval); }
 function Timeout(func, interval) { window.setTimeout(func,interval); }  // Timeout(function () {},1000);
