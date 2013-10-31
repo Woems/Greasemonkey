@@ -339,9 +339,15 @@ function board() {
       //default: alert([key, uneval(code), e].join("\n")); break;
     }
   });
-  //$x('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').pop().parentNode.parentNode.scrollIntoView(false);
-  window.scrollTo( 0, PosX($x('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').pop()) - ( window.innerHeight / 2 ));
+  $x('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').pop().parentNode.parentNode.scrollIntoView(false);
+  //var Pos=PosY($x('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').pop());
+  //var ScrollTo=Pos - ( window.innerHeight / 2 );
+  //alert(Pos+"\n"+ScrollTo);
+  //window.scrollTo( 0, ScrollTo);
+  WindowCenter($x('//td[contains(@onmouseout,"#ffffff") or contains(@style," green")]/font/a | //td[contains(@style,"darkgray")]/font/a').pop());
 } // End: function board()
+
+function WindowCenter(Obj) { window.scrollTo( 0, PosY(Obj) - ( window.innerHeight / 2 )); }
 
 function thread() {
   var ID=getParam("threadid");
