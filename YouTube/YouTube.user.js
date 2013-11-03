@@ -622,6 +622,9 @@ function JSONseen(id,func) {
     get(JSONdir()+'?action=seen&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 
+/********************************************************/
+/*****          EXPORT 2 WEB                     ********/
+/********************************************************/
 window.setTimeout(Export2Web,Rand(1,10000));
 window.setTimeout(Export2Web,Rand(10000,20000));
 
@@ -657,6 +660,9 @@ for (ID in Video) if (!Video[ID].exported || Video[ID].exported<2 )
   break;
 }
 }
+/********************************************************/
+/*****   ENDE   EXPORT 2 WEB                     ********/
+/********************************************************/
 
 function Video(VideoID)
 {
