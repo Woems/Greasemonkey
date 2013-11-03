@@ -319,7 +319,7 @@ function msg(e, color, timeout) {
 }
 
 function Reminder() {
-  deserialize("Reminder",{}).forEach(function (e) {
+  deserialize("Reminder",[]).forEach(function (e) {
     var Now=new Date().getTime();
     var Minuten=60*1000;
     var StartIn=e.Start-Now;
