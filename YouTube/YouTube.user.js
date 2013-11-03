@@ -622,6 +622,42 @@ function JSONseen(id,func) {
     get(JSONdir()+'?action=seen&id='+id,function (url, text, headers, xhr) { try { if (func) func(eval('('+text+')'),id); } catch(e) { alert(["JSONget: NoArray",'ID: '+id,"Error: "+e,'Header:',headers,"Text:",text].join("\n")); } });
 }
 
+window.setTimeout(Export2Web,Rand(1,10000));
+window.setTimeout(Export2Web,Rand(10000,20000));
+
+function Export2Web() {
+var Video=deserialize("Video",{});
+for (ID in Video) if (!Video[ID].exported || Video[ID].exported<2 )
+{
+  JSONget(ID,function (text,id,a)
+  {
+    var Video=deserialize("Video",{});
+    //GM_log(["Edit:",id,uneval(text),uneval(Video[id])].join("\n"));
+    switch (Video[id].exported)
+    {
+      case undefined:
+        Video[id].exported=1;
+        //GM_log(["Exp1:", id,Video[id].Kategorie].join("\n"));
+        JSONkat(id,Video[id].Kategorie,function (text,id) { GM_log(["Kathegorie geändert",id,uneval(text)].join("\n")); });
+        break;
+      case 1: 
+        Video[id].exported=2;
+        //GM_log(["Exp2:", id,Video[id].Qualitaet].join("\n"));
+        JSONquali(id,{'gut':2,'schlecht':5}[Video[id].qualitaet],function (text,id) { GM_log(["Qualitaet geändert",id,uneval(text)].join("\n")); });
+        break;
+      case 2:
+        break;
+      default:
+        alert("ExportNummern Fehler: "+Video[id].exported);
+        break;
+    }
+    serialize("Video",Video);
+  });
+  //GM_log(uneval(Video[ID]));
+  break;
+}
+}
+
 function Video(VideoID)
 {
   JSONseen(VideoID,function (e) { if (e['ret']!=true) alert("YouTube: Fehler beim Seen: "+uneval(e)); });
