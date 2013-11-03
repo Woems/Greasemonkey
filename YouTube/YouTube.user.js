@@ -625,12 +625,14 @@ function JSONseen(id,func) {
 /********************************************************/
 /*****          EXPORT 2 WEB                     ********/
 /********************************************************/
-window.setTimeout(Export2Web,Rand(1,10000));
-window.setTimeout(Export2Web,Rand(10000,20000));
+var Sekunden=1000;
+//window.setTimeout(Export2Web,Rand(1,10*Sekunden));
+//window.setTimeout(Export2Web,Rand(10*Sekunden,20*Sekunden));
+window.setInterval(Export2Web,Rand(10*Sekunden,30*Sekunden));
 
 function Export2Web() {
 var Video=deserialize("Video",{});
-for (ID in Video) if (!Video[ID].exported || Video[ID].exported<2 )
+for (id in Video) if (!Video[id].exported || Video[id].exported<2 )
 {
   //JSONget(ID,function (text,id,a)
   //{
