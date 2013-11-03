@@ -794,7 +794,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*ogame.*/*</Include>
   </Script>
-  <Script basedir="Wiedervorlage" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
+  <Script basedir="Wiedervorlage" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" runAt="document-end" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -817,7 +817,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://german-bash.org/*</Include>
   </Script>
-  <Script basedir="YouTube" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" name="YouTube" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="YouTube" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" name="YouTube" namespace="Woems" runAt="document-end" version="null">
     <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
     <Grant>GM_deleteValue</Grant>
@@ -1077,16 +1077,5 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>http://www.hacker.org*</Include>
-  </Script>
-  <Script basedir="boerse.bz" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="boerse.bz.user.js" name="boerse.bz" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/boerse.bz/boerse.bz.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/boerse.bz/boerse.bz.user.js">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
-    <Grant>GM_setValue</Grant>
-    <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
-    <Include>http://www.boerse.bz*</Include>
   </Script>
 </UserScriptConfig>
