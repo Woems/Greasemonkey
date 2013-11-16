@@ -238,7 +238,7 @@ function createHover(elem,text)
 switch (location.pathname)
 {
   case '/boerse/audioboerse/hoerbuecher-und-hoerspiele/': Board(); break;
-  default: alert(location.pathname); break;
+  //default: alert(location.pathname); break;
 }
 
 function Board()
