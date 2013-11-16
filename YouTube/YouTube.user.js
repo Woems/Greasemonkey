@@ -628,39 +628,51 @@ function JSONseen(id,func) {
 var Sekunden=1000;
 //window.setTimeout(Export2Web,Rand(1,10*Sekunden));
 //window.setTimeout(Export2Web,Rand(10*Sekunden,20*Sekunden));
-window.setInterval(Export2Web,Rand(10*Sekunden,30*Sekunden));
+window.setInterval(Export2Web,Rand(10*Sekunden,20*Sekunden));
+
+/*
+var Video=deserialize("Video",{});
+var count=0;
+var count2=0;
+for (id in Video)
+{
+  if (!Video[id].exported || Video[id].exported<4 ) count+=1;
+  if (!Video[id].exported || Video[id].exported<2 ) count2+=1;
+}  
+alert("Noch: "+count+" ("+count2+")");
+*/
 
 function Export2Web() {
-var Video=deserialize("Video",{});
-for (id in Video) if (!Video[id].exported || Video[id].exported<2 )
-{
-  //JSONget(ID,function (text,id,a)
-  //{
-    var Video=deserialize("Video",{});
-    //GM_log(["Edit:",id,uneval(text),uneval(Video[id])].join("\n"));
-    switch (Video[id].exported)
-    {
-      case undefined:
-        Video[id].exported=1;
-        //GM_log(["Exp1:", id,Video[id].Kategorie].join("\n"));
-        JSONkat(id,Video[id].Kategorie||'-',function (text,id) { GM_log(["Kathegorie geändert",id,uneval(text)].join("\n")); });
-        break;
-      case 1: 
-        Video[id].exported=2;
-        //GM_log(["Exp2:", id,Video[id].Qualitaet].join("\n"));
-        if (Video[id].Qualitaet) JSONquali(id,{'gut':2,'schlecht':5}[Video[id].qualitaet],function (text,id) { GM_log(["Qualitaet geändert",id,uneval(text)].join("\n")); });
-        break;
-      case 2:
-        break;
-      default:
-        alert("ExportNummern Fehler: "+Video[id].exported);
-        break;
-    }
-    serialize("Video",Video);
-  //});
-  //GM_log(uneval(Video[ID]));
-  break;
-}
+  var Video=deserialize("Video",{});
+  for (id in Video) if (!Video[id].exported || Video[id].exported<4 )
+  {
+    //JSONget(ID,function (text,id,a)
+    //{
+      //var Video=deserialize("Video",{});
+      GM_log(["Edit:",id,uneval(text),uneval(Video[id])].join("\n"));
+      switch (Video[id].exported)
+      {
+        case undefined:
+          Video[id].exported=1;
+          //GM_log(["Exp1:", id,Video[id].Kategorie].join("\n"));
+          JSONkat(id,Video[id].Kategorie||'-',function (txt,id) { GM_log(["Kategorie geändert",id,uneval(txt)].join("\n")); });
+          break;
+        case 1:
+        case 2: 
+        case 3: 
+          Video[id].exported=4;
+          //GM_log(["Exp2:", id,Video[id].Qualitaet].join("\n"));
+          if (Video[id].qualitaet) JSONquali(id,{'gut':2,'schlecht':5}[Video[id].qualitaet],function (txt,id) { GM_log(["3 Qualitaet geändert",id,uneval(txt)].join("\n")); });
+          break;
+        default:
+          alert("ExportNummern Fehler: "+Video[id].exported);
+          break;
+      }
+      serialize("Video",Video);
+    //});
+    //GM_log(uneval(Video[ID]));
+    break;
+  }
 }
 /********************************************************/
 /*****   ENDE   EXPORT 2 WEB                     ********/
