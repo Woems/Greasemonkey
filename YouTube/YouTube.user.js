@@ -630,7 +630,6 @@ var Sekunden=1000;
 //window.setTimeout(Export2Web,Rand(10*Sekunden,20*Sekunden));
 window.setInterval(Export2Web,Rand(10*Sekunden,20*Sekunden));
 
-/*
 var Video=deserialize("Video",{});
 var count=0;
 var count2=0;
@@ -639,8 +638,7 @@ for (id in Video)
   if (!Video[id].exported || Video[id].exported<4 ) count+=1;
   if (!Video[id].exported || Video[id].exported<2 ) count2+=1;
 }  
-alert("Noch: "+count+" ("+count2+")");
-*/
+showmsg({ text:"Noch: "+count+" ("+count2+")", onOKTimeout:function (e) {} });
 
 function Export2Web() {
   var Video=deserialize("Video",{});
