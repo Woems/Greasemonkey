@@ -628,7 +628,7 @@ function JSONseen(id,func) {
 var Sekunden=1000;
 //window.setTimeout(Export2Web,Rand(1,10*Sekunden));
 //window.setTimeout(Export2Web,Rand(10*Sekunden,20*Sekunden));
-window.setInterval(Export2Web,Rand(10*Sekunden,20*Sekunden));
+window.setInterval(Export2Web,Rand(5*Sekunden,10*Sekunden));
 
 var Video=deserialize("Video",{});
 var count=0;
@@ -638,16 +638,17 @@ for (id in Video)
   if (!Video[id].exported || Video[id].exported<4 ) count+=1;
   if (!Video[id].exported || Video[id].exported<2 ) count2+=1;
 }  
-showmsg({ text:"Noch: "+count+" ("+count2+")", onOKTimeout:function (e) {} });
+showmsg({ text:"Noch: "+count+" ("+count2+")", Timeout:10, onOKTimeout:function (e) {} });
 
 function Export2Web() {
+  //GM_log=function (e) { showmsg({ text:e.split("\n").join("<br>"), onOKTimeout:function (e) {} });  };
   var Video=deserialize("Video",{});
   for (id in Video) if (!Video[id].exported || Video[id].exported<4 )
   {
     //JSONget(ID,function (text,id,a)
     //{
       //var Video=deserialize("Video",{});
-      GM_log(["Edit:",id,uneval(text),uneval(Video[id])].join("\n"));
+      GM_log(["Edit:",id,uneval(Video[id]),"Kategorie: "+(Video[id].Kategorie||'-'),"Qualität: "+{undefined:0,'gut':2,'schlecht':5}[Video[id].qualitaet]].join("\n"));
       switch (Video[id].exported)
       {
         case undefined:
@@ -659,8 +660,8 @@ function Export2Web() {
         case 2: 
         case 3: 
           Video[id].exported=4;
-          //GM_log(["Exp2:", id,Video[id].Qualitaet].join("\n"));
-          if (Video[id].qualitaet) JSONquali(id,{'gut':2,'schlecht':5}[Video[id].qualitaet],function (txt,id) { GM_log(["3 Qualitaet geändert",id,uneval(txt)].join("\n")); });
+          //GM_log(["Exp2:", id,Video[id].qualitaet].join("\n"));
+          if (Video[id].qualitaet) JSONquali(id,{undefined:0,'gut':2,'schlecht':5}[Video[id].qualitaet],function (txt,id) { GM_log(["3 Qualitaet geändert",id,uneval(txt)].join("\n")); });
           break;
         default:
           alert("ExportNummern Fehler: "+Video[id].exported);
