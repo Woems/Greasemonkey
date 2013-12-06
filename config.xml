@@ -634,6 +634,7 @@
     <Include>http://213.168.82.190*</Include>
     <Include>http://mail.google.com*</Include>
     <Include>https://mail.google.com*</Include>
+    <UserInclude>http://www.kinopolis.de/bn/showtimes/week/0.php</UserInclude>
   </Script>
   <Script basedir="userstylesorg_enhancer" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancement suite for the Userstyles.org site" enabled="true" filename="userstylesorg_enhancer.user.js" name="Userstyles.org Enhancer" namespace="1nfected" runAt="document-end" version="1.4.5">
     <Grant>GM_addStyle</Grant>
@@ -724,6 +725,7 @@
     <Grant>GM_setValue</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
     <Include>http://www.kinopolis.de/bn/programm_wochenansicht*</Include>
+    <Include>http://www.kinopolis.de/bn/showtimes/week/*.php</Include>
   </Script>
   <Script basedir="boardgamegeek" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="boardgamegeek.user.js" name="BoardGameGeek" namespace="Woems" runAt="document-end" version="">
     <Grant>GM_addStyle</Grant>
