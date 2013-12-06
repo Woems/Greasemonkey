@@ -2,6 +2,7 @@
 // @name           Kinopolis - uebersichtlicher
 // @namespace      Woems
 // @include        http://www.kinopolis.de/bn/programm_wochenansicht*
+// @include        http://www.kinopolis.de/bn/showtimes/week/*.php
 // ==/UserScript==
 
 
@@ -103,7 +104,7 @@ var AktuelleFilme=$x("id('contentRegionInner')//div[@class='movieResultItem']").
     Titel:$xs('div/h3/a',item).textContent.replace('"',"'"),
     Link:$xs('div/h3/a',item).href,
     StartDate:( $xs('.//dd/dl[dt[@class="date"]]/dd',item) || { textContent: DatePrint(new Date()) } ).textContent,
-    Img:$xs("div[@class='preSellingMovieListItemHeadline']/a[@class='filmPosterWeekview']/img",item),
+    Img:$xs("div[@class='preSellingMovieListItemHeadline']/a[@class='filmPosterWeekview']/img | div[@class='preSellingMovieListItemHeadline']/ul/li/a/img",item),
     TimeTable:$xs(".//table[@class='movieSchedule']",item),
     Item:item,
     Nr:i,
@@ -113,7 +114,7 @@ var AktuelleFilme=$x("id('contentRegionInner')//div[@class='movieResultItem']").
   var f = deserialize("Filme",{});
   item.Status = f[item.Titel] || {};
   item.DayDiff = Math.floor((new Date()-new Date(item.StartDate.replace(/(..)\.(..)\.(....)/,"$2 $1, $3 0:00")))/1000/60/60/24);
-  item.Img.parentNode.name="img_"+item.Nr;
+  if (item.Img) item.Img.parentNode.name="img_"+item.Nr;
   item.Today = ((new Date().getDay()+3)%7);
   //item.TimeTableInner=item.TimeTable.innerHTML.replace(/[\n\t]+/g,"");
   item.Time = $x(".//tr[2]/td["+(item.Today+1)+"]/div",item.TimeTable).map(function (e) { return e.textContent.replace(/[^0-9:]/g,""); });
@@ -146,7 +147,7 @@ FilmeNachZeit.sort(function (a,b) { return (a.Tag!=b.Tag) ? a.Tag-b.Tag : a.Zeit
 
 function data2html(data)
 {
-  return "<div class=wThumb del='"+data.Status['del']+"' cool='"+data.Status['cool']+"' seen='"+data.Status['seen']+"' alter="+Math.floor(data.DayDiff/7/2+1)+' title="'+data.Titel+'">'+data.DayDiff+' Tage<br>'+Math.floor(data.DayDiff/7+1)+' Wochen<a name=thump_'+data.Nr+" target=_blank href="+ data.Link /* #img_"+data.Nr+"*/ +"><img src="+data.Img.src+"></a><br><wbutton class='seen'>gesehen</wbutton><wbutton class='del'>löschen</wbutton><wbutton class='cool'>cool</wbutton></div>";
+  return "<div class=wThumb del='"+data.Status['del']+"' cool='"+data.Status['cool']+"' seen='"+data.Status['seen']+"' alter="+Math.floor(data.DayDiff/7/2+1)+' title="'+data.Titel+'">'+data.DayDiff+' Tage<br>'+Math.floor(data.DayDiff/7+1)+' Wochen<a name=thump_'+data.Nr+" target=_blank href="+ data.Link /* #img_"+data.Nr+"*/ +"><img src="+(data.Img?data.Img.src:'')+"></a><br><wbutton class='seen'>gesehen</wbutton><wbutton class='del'>löschen</wbutton><wbutton class='cool'>cool</wbutton></div>";
 }
 
 //GM_log(uneval(images.map(data)));
