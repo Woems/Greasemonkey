@@ -19,7 +19,7 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 
 $( document ).ready(function(){
   $("a").fadeOut( 1500,function() {
-    $( this ).append(" <==").fadeIn( 750 , function () {
+    $( this ).css({color:'red'}).append(" <==").fadeIn( 750 , function () {
       noty({ text: this.href, type:this.href.indexOf("selfhtml")==-1?"error":"success", timeout:5000 });
     });
   });
