@@ -1079,7 +1079,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.hacker.org*</Include>
   </Script>
-  <Script basedir="Test" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Test.user.js" name="Test" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
+  <Script basedir="Test" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="Test.user.js" name="Test" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
     <Grant>none</Grant>
     <Include>http://de.selfhtml.org*</Include>
   </Script>
