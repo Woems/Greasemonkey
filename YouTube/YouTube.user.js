@@ -635,10 +635,11 @@ var count=0;
 var count2=0;
 for (id in Video)
 {
-  if (!Video[id].exported || Video[id].exported<4 ) count+=1;
+  if (!Video[id].exported || Video[id].exported<5 ) count+=1;
   if (!Video[id].exported || Video[id].exported<2 ) count2+=1;
 }  
-showmsg({ text:"Noch: "+count+" ("+count2+")", Timeout:10, onOKTimeout:function (e) {} });
+if (count > 0 && count2 > 0)
+  showmsg({ text:"Noch: "+count+" ("+count2+")", Timeout:10, onOKTimeout:function (e) {} });
 
 function Export2Web() {
   //GM_log=function (e) { showmsg({ text:e.split("\n").join("<br>"), onOKTimeout:function (e) {} });  };
