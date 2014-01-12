@@ -19,9 +19,22 @@ function loop(xpath, func, rootdir) {
 	while(--I>=0) func(xpath.snapshotItem(I));
 }
 // Edit Nodes
+/*
 function createElement(type, attributes, append){
   var node = document.createElement(type);
   for (var attr in attributes) if (attributes.hasOwnProperty(attr)) try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
+  if (append) append.appendChild(node);
+  return node;
+} // Example usage: var styles = createElement('link', {rel: 'stylesheet', type: 'text/css', href: basedir + 'style.css'});
+*/
+function createElement(type, attributes, append){
+  var node = document.createElement(type);
+  if (attributes) for (var attr in attributes) if (attributes.hasOwnProperty(attr))
+    if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
+    if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
+    if (attr=="append") node.appendChild(attributes[attr]); else
+    if (attr=="childs") { for (var child in attributes[attr]) if (attributes[attr].hasOwnProperty(child)) node.appendChild(attributes[attr][child]); } else
+    try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
   if (append) append.appendChild(node);
   return node;
 } // Example usage: var styles = createElement('link', {rel: 'stylesheet', type: 'text/css', href: basedir + 'style.css'});
@@ -56,8 +69,8 @@ css=GM_addStyle;
 /********************************/
 
 Werbung();
-
-var Type=location.pathname.match(/\/([^\/]*)\//)[1]
+var Type=location.pathname.split("/")[1]
+if (location.host=="boardgamegeek.com")
 switch(Type) {
   case 'files':
     VoteTheDownload();
@@ -69,6 +82,9 @@ switch(Type) {
     FilesInNewWindow();
     break;
   case 'image':
+    break;
+  case 'boardgame':
+    GameVote();
     break;
   default:
     GM_log('Typ nicht gefunden: '+Type);
@@ -191,3 +207,16 @@ function Werbung() {
   ElementList+=" | id('dfp-medrect') | id('results_5')/table/tbody/tr/td[2]"; // Spieleseite (Typ: boardgame)
   for (var i=1; i<=10; i++) window.setTimeout(function () { $x(ElementList).forEach(hide); }, i*1000);
 } // End Werbung
+
+/**
+	@name Werbung
+	@function
+	@description Blendet die Werbung aus
+*/
+function GameVote() {
+  var Table=$xs('id("module_2")/table/tbody/tr/td[2]/table/tbody')
+  if (!Table) return;
+  var Head=createElement('td',{ innerHTML:"<b>Vote</b>", width:"150", valign:"top" });
+  var Content=createElement('td',{ innerHTML:"VOTE HIER FÜR DIESE WEBSEITE!!!! MIT WOEMS VOTE SCRIPT" });
+  createElement('tr',{ childs:[Head, Content] }, Table);
+} // End GameVote
