@@ -717,7 +717,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>*</Include>
   </Script>
-  <Script basedir="kinopolis_-_uebersichtli" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_uebersichtli.user.js" name="Kinopolis - uebersichtlicher" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="kinopolis_-_uebersichtli" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_uebersichtli.user.js" name="Kinopolis - uebersichtlicher" namespace="Woems" runAt="document-end" version="null">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_getValue</Grant>
     <Grant>GM_log</Grant>
@@ -795,7 +795,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*ogame.*/*</Include>
   </Script>
-  <Script basedir="Wiedervorlage" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
+  <Script basedir="Wiedervorlage" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" runAt="document-end" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -818,7 +818,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://german-bash.org/*</Include>
   </Script>
-  <Script basedir="YouTube" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" name="YouTube" namespace="Woems" runAt="document-end" version="">
+  <Script basedir="YouTube" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" name="YouTube" namespace="Woems" runAt="document-end" version="null">
     <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
     <Grant>GM_deleteValue</Grant>
@@ -1057,7 +1057,7 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Include>*</Include>
   </Script>
-  <Script basedir="Schinken" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="Schinken.user.js" name="Schinken" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Schinken/Schinken.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Schinken/Schinken.user.js">
+  <Script basedir="Schinken" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Schinken.user.js" name="Schinken" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Schinken/Schinken.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Schinken/Schinken.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -1082,5 +1082,12 @@
   <Script basedir="Test" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="Test.user.js" name="Test" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
     <Grant>none</Grant>
     <Include>http://de.selfhtml.org*</Include>
+  </Script>
+  <Script basedir="WeeWar_-_Reminder" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="WeeWar_-_Reminder.user.js" name="WeeWar - Reminder" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js">
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Include>*</Include>
   </Script>
 </UserScriptConfig>
