@@ -1098,4 +1098,10 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*weewar.com/game*</Include>
   </Script>
+  <Script basedir="Weewar_Resize" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="This script resizes the map to use the full space of your screen" enabled="true" filename="62262.user.js" name="Weewar Resize" namespace="weewar-resize" runAt="document-end" version="null" installurl="https://userscripts.org/scripts/source/62262.user.js" updateurl="https://userscripts.org/scripts/source/62262.user.js">
+    <Exclude>http://*weewar.com/game/new</Exclude>
+    <Grant>none</Grant>
+    <Include>http://*weewar.com/game*</Include>
+    <Include>http://*weewar.com/maps/edit/*</Include>
+  </Script>
 </UserScriptConfig>
