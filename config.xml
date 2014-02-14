@@ -1088,6 +1088,7 @@
     <Grant>GM_setValue</Grant>
     <Grant>GM_log</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>GM_openInTab</Grant>
     <Include>*</Include>
   </Script>
   <Script basedir="Weewar_Stats" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Shows the # of each type of unit on the map for each player in the game as well as each player's relative army strength (based on unit costs). Click the word STATS on the left of the table to expand the table and show all unit counts." enabled="true" filename="47008.user.js" name="Weewar Stats" namespace="http://userscripts.org/" runAt="document-end" version="1.9.1" installurl="https://userscripts.org/scripts/source/47008.user.js" updateurl="https://userscripts.org/scripts/source/47008.user.js">
