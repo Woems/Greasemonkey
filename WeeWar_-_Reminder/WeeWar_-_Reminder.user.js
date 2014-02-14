@@ -7,6 +7,7 @@
 // @grant       GM_setValue
 // @grant       GM_log
 // @grant       GM_xmlhttpRequest
+// @grant       GM_openInTab
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -247,12 +248,13 @@ function headquarters(username, passwd, cb) {
     password: passwd,
     url: "http://weewar.com/api1/headquarters",
     onload: function(xhr) {
-      //var parser = new DOMParser();
-      //var xmlDoc = parser.parseFromString(xhr.responseText, "application/xml");
+      var xmlDoc = new DOMParser().parseFromString(xhr.responseText, "application/xml");
       
       // var doc = document.implementation.createHTMLDocument("");
       // doc.documentElement.innerHTML = xhr.responseText;
-      cb(text2div(xhr.responseText), xhr.finalUrl, xhr.responseText, xhr.responseHeaders, xhr);
+      
+      //var xmlDoc = text2div(xhr.responseText)
+      cb(xmlDoc, xhr.finalUrl, xhr.responseText, xhr.responseHeaders, xhr);
     },
   });
 }
@@ -270,7 +272,27 @@ if (!config["LastUpdate"] || config["LastUpdate"] < +new Date()-60*60*1000)
   aset('config', "LastUpdate", +new Date());
   //alert([+new Date(), config["LastUpdate"],+new Date()-60*1000].join("\n"));
   headquarters(config["Name"], config["ApiKey"], function (xml, url,text,head,xhr) {
-    alert(text);
+    var inNeedOfAttention=+xml.getElementsByTagName("inNeedOfAttention")[0].textContent;
+    //if (inNeedOfAttention > 0) GM_openInTab("http://www.weewar.com/headquarters/games");
+    var Games=xml.getElementsByTagName("game");
+    var GameList=[];
+    for (i=0; i<Games.length; i++)
+    {
+      if (Games[i].getAttribute("inNeedOfAttention"))
+        GM_openInTab(Games[i].getElementsByTagName("link")[0].textContent);
+      /*GameList.push({
+        Name: Games[i].getElementsByTagName("name")[0].textContent,
+        State: Games[i].getElementsByTagName("state")[0].textContent,
+        factionState: Games[i].getElementsByTagName("factionState")[0].textContent,
+        Link: Games[i].getElementsByTagName("link")[0].textContent,
+        Since: Games[i].getElementsByTagName("since")[0].textContent,
+      });*/
+    }
+    function GameOut(Game)
+    {
+      return Game.Name+"\n  ( "+Game.State+" / "+Game.factionState+" / "+Game.Since+" )";
+    }
+    //alert([inNeedOfAttention, GameList.map(GameOut).join("\n"), text].join("\n---------------------------------\n"));
     /*$x("/games/game",xml).forEach(function (e) {
       var Name=$xs("name",e).textContent;
       alert([Name,e.innerHTML].join("\n"));
