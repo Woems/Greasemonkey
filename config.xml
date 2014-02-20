@@ -1083,4 +1083,13 @@
     <Grant>none</Grant>
     <Include>http://de.selfhtml.org*</Include>
   </Script>
+  <Script basedir="f-droid" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="f-droid.user.js" name="f-droid" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/f-droid/f-droid.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/f-droid/f-droid.user.js">
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>GM_log</Grant>
+    <Include>https://f-droid.org*</Include>
+  </Script>
 </UserScriptConfig>
