@@ -241,11 +241,14 @@ function createHover(elem,text)
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
 /********************************/
 
+if (!inFrame())
+{
 globaleTasten();
 //window.setTimeout(function () { wvNow(); }, 60*1000);
 window.setInterval(function () { wvNow(); },1*60*1000);
 wvNow();
 //wvShow();
+}
 
 function globaleTasten () {
   Key('STRG+ALT+y',function (e) { // Taste zum aktivieren

@@ -237,17 +237,19 @@ function createHover(elem,text)
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
 
-if (location.host=="www.scr1.de")
+if (!inFrame())
 {
-  switch(location.pathname)
+  if (location.host=="www.scr1.de")
   {
-    case '/wochenplan.php': Toxicon(); break;
-    default: alert(location.pathname); break;
+    switch(location.pathname)
+    {
+      case '/wochenplan.php': Toxicon(); break;
+      default: alert(location.pathname); break;
+    }
+  } else {
+    Reminder();
   }
-} else {
-  Reminder();
 }
-
 // 1= Mo 
 // 4= Do
 // 5= Fr
