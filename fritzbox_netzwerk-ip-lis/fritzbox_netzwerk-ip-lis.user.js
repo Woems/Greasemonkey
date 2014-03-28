@@ -56,36 +56,48 @@ function getHost() { return location.host; } // hash, host, hostname, href, path
 //GM_log=function (){}
 /********************************/
 
-//GM_log(location.href);
-//GM_log(uneval(getParam()));
-switch(getParam("var%3Apagename"))
+switch(location.pathname)
 {
-  case "net": page_net(); break;
-  default: GM_log(uneval(getParam("var%3Apagename"))); break; 
+  case "/net/network_user_devices.lua": page_net(); break;
 }
 
 function page_net()
 {
-  alert("Sort");
-  $('tLan').rows;
-  //var Lines=$x("id('tLan')/tbody/tr");
-  GM_log($('tLan').rows[1].innerHTML);
-  GM_log($('tLan').rows[2].innerHTML);
-  $('tLan').appendChild($('tLan').rows[1]);
-  for (var j=0; j<$('tLan').rows.length-1; j++)
-  for (var i=j; i<$('tLan').rows.length-1; i++)
+  //alert("Sort");
+  Table=$xs("id('uiViewDevTable')/tbody/tr[3]/td/table/tbody");
+  Zeilen=$x("id('uiViewDevTable')/tbody/tr[3]/td/table/tbody/tr").map(function (tr) { 
+    var tmp={};
+    tmp.elem=tr;
+    tmp.iprow=tr.cells[2]||{};
+    tmp.ip=tmp.iprow.innerHTML||"",
+    tmp.ipsort=+tmp.ip.replace(/[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)/,"$1")||0;
+    tmp.ipsort2=tmp.ip.split(".").reverse().join("");
+    return tmp;
+  });
+  
+  Zeilen.sort(function (a,b) { return a.ipsort-b.ipsort; });
+  //alert(uneval(Zeilen));
+  Zeilen.forEach(function (e) { Table.appendChild(e.elem); });
+  
+  /*
+  for (var j=0; j<Zeilen.length-1; j++)
+  for (var i=j; i<Zeilen.length-1; i++)
   {
+     if (Zeilen[j].ipsort+ > Zeilen[i].ipsort+)
+       insertAfter(Zeilen[j].elem, Zeilen[i].elem);
      GM_log($('tLan').rows[i].cells[2].innerHTML.replace(/[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)/,"$1")+" > "+$('tLan').rows[i+1].cells[2].innerHTML.replace(/[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)/,"$1"));
      if ($('tLan').rows[i].cells[2].innerHTML.replace(/[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)/,"$1")*1>$('tLan').rows[i+1].cells[2].innerHTML.replace(/[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)/,"$1")*1)
        insertAfter($('tLan').rows[i], $('tLan').rows[i+1]);
-  }
+  }*/
   //insertAfter($('tLan').rows[1], $('tLan').rows[3])
   //htmlswap($('tLan').rows[1],$('tLan').rows[2]);
 }
 
+
 function htmlswap(a,b)
 {
-  var tmp=a;
   a.appendChild(b);
+  var tmp=a;
+  a=b;
   b=tmp;
 }
