@@ -631,15 +631,20 @@ var Sekunden=1000;
 window.setInterval(Export2Web,Rand(5*Sekunden,10*Sekunden));
 
 var Video=deserialize("Video",{});
+var tmp={};
 var count=0;
-var count2=0;
+//var count2=0;
 for (id in Video)
 {
-  if (!Video[id].exported || Video[id].exported<5 ) count+=1;
-  if (!Video[id].exported || Video[id].exported<2 ) count2+=1;
+  tmp[Video[id].exported]=(tmp[Video[id].exported]||0)+1;
+  if (!Video[id].exported || Video[id].exported<4 ) count+=1;
+  //if (!Video[id].exported || Video[id].exported<2 ) count2+=1;
 }  
-if (count > 0 && count2 > 0)
-  showmsg({ text:"Noch: "+count+" ("+count2+")", Timeout:10, onOKTimeout:function (e) {} });
+if (count > 0)
+{
+  showmsg({ text:uneval(tmp), Timeout:10, onOKTimeout:function (e) {} });
+  //showmsg({ text:"Noch: "+count+" noch nicht komplett ("+count2+" noch nicht angefangen)", Timeout:10, onOKTimeout:function (e) {} });
+}
 
 function Export2Web() {
   //GM_log=function (e) { showmsg({ text:e.split("\n").join("<br>"), onOKTimeout:function (e) {} });  };
