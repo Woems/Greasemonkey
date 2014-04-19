@@ -242,7 +242,7 @@ function createHover(elem,text)
 /********************************/
 if ($xs("id('overview-top')/h1/span[@class='itemprop']"))
 {
-  var Titel=$xs("id('overview-top')/h1/span[@class='itemprop']").textContent;
+  var Titel=$xs("id('overview-top')/h1/span[@class='itemprop']").textContent.replace(/( *: *)/," - ");
   var pathname=location.pathname.split("/");
   prompt("Titel:", Titel+" ["+pathname[2]+"]");
 }
