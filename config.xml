@@ -1114,4 +1114,8 @@
     <Include>http://*weewar.com/game*</Include>
     <Include>http://*weewar.com/maps/edit/*</Include>
   </Script>
+  <Script basedir="IMDB" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="IMDB.user.js" name="IMDB" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/IMDB/IMDB.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/IMDB/IMDB.user.js">
+    <Grant>none</Grant>
+    <Include>http://www.imdb.com*</Include>
+  </Script>
 </UserScriptConfig>
