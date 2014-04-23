@@ -244,8 +244,7 @@ function createHover(elem,text)
 if (!inFrame())
 {
 globaleTasten();
-//window.setTimeout(function () { wvNow(); }, 60*1000);
-window.setInterval(function () { wvNow(); },1*60*1000);
+window.setInterval(function () { wvNow(); },20*1000);
 wvNow();
 //wvShow();
 }
@@ -392,9 +391,8 @@ function wvNow() {
   var Z={ minute: 60*1000, hour:60*60*1000, day: 20*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
   var F={ minutly: 'getMinutes', hourly:'getHours', daily:'getDate', monthly:'getMonth', yearly:'getFullYear' }
   var WV=deserialize('WV',[]);
-  WV=WV.map(function (wv) {
+  WVaktiv=WV.filter(function (wv) {
     var now=new Date();
-    //GM_log([uneval(wv), "Aufschieben: "+(wv.aufschieben-now.getTime()), "Wiederhohlung: "+wv.wh].join("\n"));
     if ((!wv.aufschieben || wv.aufschieben < now.getTime()) &&
        (!wv.last
        || (Z[wv.wh] && wv.last.getTime()+Z[wv.wh] < now.getTime())
@@ -408,23 +406,17 @@ function wvNow() {
        || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
        ))
     {
-      //translate={ minutly:"minute", hourly:"hour", daily:"day", monthly:"month", yearly: "year" }
-      //var r=Math.round((new Date().getTime() - wv.last.getTime() - (Z[wv.wh]||Z[translate[wv.wh]]||0) )/60000);
-      /*
-      var r=Rand(2,12)*10;
-      var rand=deserialize('rand',{});
-      var v=1;
-      if (!rand["v"] && rand["v"]!=v) rand={ 10:0, 20:0, 30:0, 40:0, 50:0, 60:0, 70:0, 80:0, 90:0, 100:0, 110:0, 120:0, v:v };
-      rand[r]=(rand[r]||0)+1;
-      serialize('rand',rand);
-      GM_log("Random Verteilung: "+uneval(rand));
-      */
-      //var r=Rand(10,60);
-      //alert("URL: "+uneval(wv.url.split(","))+"\nLength:"+wv.url.split(",").length);
-      //var urls=wv.url.split(","); firsturl=urls.shift(); urls.push(firsturl); wv.url=urls.join(",");
-      //GM_delete('rand');
-      //var r=deserialize('waittime',{})['timer']||5;
-      //var r=aget("data","Aufschieben",20);
+      return true;
+    } else {
+      return false;
+    }
+  });
+  var wv=WVaktiv[Rand(0,WVaktiv.length-1)];
+  ShowWV(wv);
+} // End: function wvNow()
+
+function ShowWV(wv)
+{
       showmsg({
           id:'WV_oeffnen_{rand}', // _{rand}
           text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
@@ -454,16 +446,11 @@ function wvNow() {
             wvAufschieben(e.url, WaitTime);
             /**/
             },
-          Timeout:1*60,
+          Timeout:20,
           onTimeout:function (e) { },
           //onTimeout:function (e) { wvCheck(e.url); wvUrlRotate(e.url); GM_openInTab(e.url.split(",")[0]); },
       });
-      //wv.last=new Date(); window.setTimeout(function () { GM_openInTab(wv.url); }, 10*1000);
-    }
-    return wv;
-  });
-  serialize('WV',WV);  
-} // End: function wvNow()
+}
 
 function markdiff(out, orig)
 {
