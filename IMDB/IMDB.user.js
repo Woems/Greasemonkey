@@ -242,7 +242,9 @@ function createHover(elem,text)
 /********************************/
 if ($xs("id('overview-top')/h1/span[@class='itemprop']"))
 {
-  var Titel=$xs("id('overview-top')/h1/span[@class='itemprop']").textContent.replace(/( *: *)/," - ");
+  var Titel=$xs("id('overview-top')/h1/span[@class='itemprop']").textContent.replace(/( *: *)/," - ").replace(/\?/,"");
+  //var Jahr=$xs("id('overview-top')//a[contains(@href,'year')]").textContent;
+  var Jahr=$xs("id('overview-top')//span[@class='nobr']").textContent.replace(/[^0-9]/g,"");
   var pathname=location.pathname.split("/");
-  prompt("Titel:", Titel+" ["+pathname[2]+"]");
+  prompt("Titel:", Titel+" ("+Jahr+") ["+pathname[2]+"]");
 }
