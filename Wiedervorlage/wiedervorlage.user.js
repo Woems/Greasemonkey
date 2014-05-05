@@ -313,16 +313,16 @@ function wvAdd(Url, Titel, Wiederhohlung)
 
 function wvChange(Url)
 {
-  deserialize('WV',[]).forEach(function (wv) {
-    if (wv.url==Url)
+  deserialize('WV',[]).forEach(function (cwv) {
+    if (cwv.url==Url)
     {
       showmsg({
         url: Url,
         id: "default_msg_{rand}",
-        text: ["Url: "+HTML.input("text","wUrl",wv.url,"",80)+"<br>"+wv.url.split(",").join("<br>"),
-               "Titel: "+HTML.input("text","wTitel",wv.t),
-               "Wiederhohlung: "+HTML.input("text","wWh",wv.wh),
-               "Last: "+wv.last, ""].join("<br>"),
+        text: ["Url: "+HTML.input("text","wUrl",cwv.url,"",80)+"<br>"+cwv.url.split(",").join("<br>"),
+               "Titel: "+HTML.input("text","wTitel",cwv.t),
+               "Wiederhohlung: "+HTML.input("text","wWh",cwv.wh),
+               "Last: "+cwv.last, ""].join("<br>"),
         color: "lightgray",
         OK: "Ok",
         Cancel: "Cancel",
@@ -391,19 +391,19 @@ function wvNow() {
   var Z={ minute: 60*1000, hour:60*60*1000, day: 20*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
   var F={ minutly: 'getMinutes', hourly:'getHours', daily:'getDate', monthly:'getMonth', yearly:'getFullYear' }
   var WV=deserialize('WV',[]);
-  WVaktiv=WV.filter(function (wv) {
+  WVaktiv=WV.filter(function (ewv) {
     var now=new Date();
-    if ((!wv.aufschieben || wv.aufschieben < now.getTime()) &&
-       (!wv.last
-       || (Z[wv.wh] && wv.last.getTime()+Z[wv.wh] < now.getTime())
-       || (F[wv.wh] && wv.last[F[wv.wh]]() != now[F[wv.wh]]())
-       //|| (wv.wh=='minutly' && wv.last.getMinutes() != now.getMinutes())
-       //|| (wv.wh=='hourly' && wv.last.getHours() != now.getHours())
-       //|| (wv.wh=='daily' && wv.last.getDate() != now.getDate())
-       //|| (wv.wh=='monthly' && wv.last.getMonth() != now.getMonth())
-       //|| (wv.wh=='yearly' && wv.last.getFullYear() != now.getFullYear())
-       || (wv.wh.split(";")[0]=='weekly' && wv.last.getTime()+(((wv.wh.split(";")[1]||0)+6-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (6 - Wochentag) = Montag
-       || (wv.wh=='weekly on do' && wv.last.getTime()+((10-wv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
+    if ((!ewv.aufschieben || ewv.aufschieben < now.getTime()) &&
+       (!ewv.last
+       || (Z[ewv.wh] && ewv.last.getTime()+Z[ewv.wh] < now.getTime())
+       || (F[ewv.wh] && ewv.last[F[ewv.wh]]() != now[F[ewv.wh]]())
+       //|| (ewv.wh=='minutly' && ewv.last.getMinutes() != now.getMinutes())
+       //|| (ewv.wh=='hourly' && ewv.last.getHours() != now.getHours())
+       //|| (ewv.wh=='daily' && ewv.last.getDate() != now.getDate())
+       //|| (ewv.wh=='monthly' && ewv.last.getMonth() != now.getMonth())
+       //|| (ewv.wh=='yearly' && ewv.last.getFullYear() != now.getFullYear())
+       || (ewv.wh.split(";")[0]=='weekly' && ewv.last.getTime()+(((ewv.wh.split(";")[1]||0)+6-ewv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (6 - Wochentag) = Montag
+       || (ewv.wh=='weekly on do' && ewv.last.getTime()+((10-ewv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
        ))
     {
       return true;
@@ -411,40 +411,40 @@ function wvNow() {
       return false;
     }
   });
-  var wv=WVaktiv[Rand(0,WVaktiv.length-1)];
-  ShowWV(wv);
+  if (WVaktiv.length>0)
+  { 
+    ShowWV(WVaktiv[Rand(0,WVaktiv.length-1)]);
+  }
 } // End: function wvNow()
 
-function ShowWV(wv)
+function ShowWV(wvo)
 {
       showmsg({
           id:'WV_oeffnen_{rand}', // _{rand}
-          text:'<p><a target="_blank" title="'+wv.wh+' / '+wv.last+'" href="'+wv.url.split(",")[0]+'">'+wv.t+'</a> öffnen?</p>',
+          text:'<p><a target="_blank" title="'+wvo.wh+' / '+wvo.last+'" href="'+wvo.url.split(",")[0]+'">'+wvo.t+'</a> öffnen?</p>',
           fixed: true,
-          url: wv.url,
-          wait: wv.wait,
+          url: wvo.url,
+          wait: wvo.wait,
           //sec:r, 
           color:'red',
           OK:'OK',
           onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
           Cancel:'Aufschieben', // um '+r+'min
           onCancel:function (e) { 
-            /**/
             e.wait=prompt("Wartezeit in min:",e.wait||10);
             wvAufschieben(e.url, e.wait);
-            //alert(dump2(deserialize('WV')));
-            /*/
-            if (typeof deserialize('waittime')!="object") serialize('waittime',{});
-            var WaitTime=aget('waittime',e.url)||30;
-            WaitTime=prompt("Wartezeit in min:",WaitTime); //e.sec
-            aset('waittime',e.url,WaitTime);
             
-            var WaitTime=aget("data","Aufschieben",20);
-            WaitTime=prompt("Wartezeit in min:",WaitTime>20?WaitTime-5:WaitTime<20?WaitTime+5:WaitTime); //e.sec
-            aset("data","Aufschieben",WaitTime)
+            //if (typeof deserialize('waittime')!="object") serialize('waittime',{});
+            //var WaitTime=aget('waittime',e.url)||30;
+            //WaitTime=prompt("Wartezeit in min:",WaitTime); //e.sec
+            //aset('waittime',e.url,WaitTime);
             
-            wvAufschieben(e.url, WaitTime);
-            /**/
+            //var WaitTime=aget("data","Aufschieben",20);
+            //WaitTime=prompt("Wartezeit in min:",WaitTime>20?WaitTime-5:WaitTime<20?WaitTime+5:WaitTime); //e.sec
+            //aset("data","Aufschieben",WaitTime)
+            
+            //wvAufschieben(e.url, WaitTime);
+            
             },
           Timeout:20,
           onTimeout:function (e) { },
@@ -474,19 +474,19 @@ function markdiff(out, orig)
 function wvShow()
 {
   var WV=deserialize('WV',[]);
-  WV.sort(function (a,b) { return a.last-b.last; }).forEach(function (wv) {
+  WV.sort(function (a,b) { return a.last-b.last; }).forEach(function (swv) {
     var now=new Date();
-    var laststr=wv.last.toLocaleDateString()+' '+wv.last.toLocaleTimeString();
+    var laststr=swv.last.toLocaleDateString()+' '+swv.last.toLocaleTimeString();
     var nowstr=now.toLocaleDateString()+' '+now.toLocaleTimeString();
-    aufs=Math.round((wv.aufschieben-new Date().getTime())/1000/60);
+    aufs=Math.round((swv.aufschieben-new Date().getTime())/1000/60);
     showmsg({
       id:'WV_anzeigen_{rand}',
-      text:'<a href="'+wv.url+'">'+wv.t+'</a>: <b>'+wv.wh+'</b> / '+markdiff(laststr,nowstr)+(aufs>0?' / <b><u>noch '+aufs+' min</u></b>':''),
+      text:'<a href="'+swv.url+'">'+swv.t+'</a>: <b>'+swv.wh+'</b> / '+markdiff(laststr,nowstr)+(aufs>0?' / <b><u>noch '+aufs+' min</u></b>':''),
       color:'lightgray',
       OK: 'Bearbeiten',
-      onOK:function (e) { wvChange(wv.url); },
+      onOK:function (e) { wvChange(swv.url); },
       Cancel: 'löschen',
-      onCancel:function (e) { wvDel(wv.url); },
+      onCancel:function (e) { wvDel(swv.url); },
       Timeout:30,
       onTimeout:function (e) {},
     });
