@@ -236,7 +236,20 @@ function createHover(elem,text)
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/ 
 
-function SiteManagement()
+function ForumManagement(data)
 {
-  
+  this.foren=data;
+  this.find = function ()
+  {
+    for (i in this.foren)
+    {
+      if (location.host == this.foren[i].host)
+        this.forum=this.foren[i];
+    }
+  }
 }
+
+
+var Foren=[];
+Foren.push({ host:"www.h0-modellbahnforum.de" });
+var f=new ForumManagement(Foren);
