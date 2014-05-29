@@ -711,8 +711,8 @@ function Video(VideoID)
     fixed:true,
     OK: "Gut",
     Cancel: "Schlecht",
-    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; serialize("Video",Video); JSONquali(getParam("v",""),2); },
-    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video); JSONquali(getParam("v",""),5); },
+    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; Video[getParam("v","")].exported=1; serialize("Video",Video); JSONquali(getParam("v",""),2); },
+    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; Video[getParam("v","")].exported=1; serialize("Video",Video); JSONquali(getParam("v",""),5); },
   });
   // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
   var i=Kategorien.indexOf(Video[VideoID].Kategorie);
