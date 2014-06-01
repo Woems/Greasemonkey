@@ -238,7 +238,7 @@ function createHover(elem,text)
 
 function ForumManagement(data)
 {
-  this.foren=data;
+  this.forum=data;
   this.find = function ()
   {
     for (i in this.foren)
@@ -250,6 +250,7 @@ function ForumManagement(data)
 }
 
 
-var Foren=[];
-Foren.push({ host:"www.h0-modellbahnforum.de" });
-var f=new ForumManagement(Foren);
+var Foren={}
+Foren["www.h0-modellbahnforum.de"]={};
+var f=new ForumManagement(Foren[location.host]);
+
