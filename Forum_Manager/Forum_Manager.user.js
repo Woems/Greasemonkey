@@ -239,18 +239,26 @@ function createHover(elem,text)
 function ForumManagement(data)
 {
   this.forum=data;
-  this.find = function ()
+  this.load = function ()
   {
-    for (i in this.foren)
-    {
-      if (location.host == this.foren[i].host)
-        this.forum=this.foren[i];
-    }
+    $x(this.forum.base);
   }
+  this.alert = function ()
+  {
+    alert(uneval(this.forum));
+  }
+  this.alert();
 }
 
 
 var Foren={}
-Foren["www.h0-modellbahnforum.de"]={};
+Foren["www.h0-modellbahnforum.de"]={
+  forumparser: {
+    base: "//table/tbody/tr[td[2]/a/strong]",
+    titel: ".//td[2]/a/strong",
+  },
+  treadparser: {
+  }
+};
 var f=new ForumManagement(Foren[location.host]);
 
