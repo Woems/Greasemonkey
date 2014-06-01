@@ -235,7 +235,7 @@ if (!Category[location.host.split(".")[0]])
     tmp=tmp[url[i]];
   }
   //GM_log('2: '+uneval(gesehen));
-  if (tmp['seen']) { showmsg({text:'seen'}); $('gmi-ResourcePageDisplayPane').style.backgroundColor='lightgray'; };
+  if (tmp['seen']) { showmsg({text:'seen'}); if ($('gmi-ResourcePageDisplayPane')) $('gmi-ResourcePageDisplayPane').style.backgroundColor='lightgray'; };
   tmp['seen']=true;
   //GM_log('3: '+uneval(gesehen));
   serialize('data',gesehen);
@@ -247,11 +247,14 @@ if (!Category[location.host.split(".")[0]])
 
 // Links in neuem Tab öffnen
 //$x("//a[contains(@class,'thumb')][img]").forEach(function (a) { a.target="_blank"; });
-$x("//a[contains(@class,'thumb')][img] | //a[div[@class='tinythumb scaledown']]").forEach(function (a) { a.addEventListener("click",function(event){
-  GM_openInTab($xs("ancestor::a",event.target).href);
-  event.stopPropagation();
-  event.preventDefault();
-}, true); });
+$x("//a[contains(@class,'thumb')][img] | //a[div[@class='tinythumb scaledown']]").forEach(function (a) {
+  a.addEventListener("click",function(event){
+    GM_openInTab($xs("ancestor::a",event.target).href);
+    event.stopPropagation();
+    event.preventDefault();
+  }, true);
+  a.style.border="5px solid green";
+});
 
 // Ausblenden
 $x("id('print-button') | id('gmi-ResourceViewShare') | id('mlt-button') | id('gmi-ResourceViewPrintButton') | id('download-button') | id('gmi-ResourceViewFaveButton')").forEach(function (e) { e.style.display="none"; });
