@@ -1,8 +1,14 @@
 // ==UserScript==
-// @name           Wiedervorlage
-// @namespace      Woems
-// @description    Seite auf wiedervorlage legen
-// @include        *
+// @name        IMDB
+// @namespace   Woems
+// @include     http://www.imdb.com*
+// @version     1
+// @grant          GM_getValue
+// @grant          GM_setValue
+// @grant          GM_deleteValue
+// @grant          GM_addStyle
+// @grant          GM_xmlhttpRequest
+// @grant          GM_log
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -89,6 +95,7 @@ function css(code) { GM_addStyle(code); }
 function PosX(element) { var e=element; var i=0; while(e) { i+=e.offsetLeft; e=e.offsetParent; } return i; }
 function PosY(element) { var e=element; var i=0; while(e) { i+=e.offsetTop; e=e.offsetParent; } return i; }
 function PosXY(obj) { var p = { x:0, y:0 }; do { p.x += obj.offsetLeft; p.y += obj.offsetTop; } while (obj = obj.offsetParent); return p; }
+function WindowCenter(Obj) { window.scrollTo( 0, PosY(Obj) - ( window.innerHeight / 2 )); }
 // ** Timer **
 function Interval(func, interval) { func(); window.setInterval(func,interval); }
 function Timeout(func, interval) { window.setTimeout(func,interval); }  // Timeout(function () {},1000);
@@ -130,6 +137,8 @@ function trim(text) { return text.replace(/(^\s*|\s*$)/g,""); }
 function pad(text,anz,chr) { return text.replace(/(^\s*|\s*$)/g,""); }
 function fill(text,fillchar,anz) { var f=""; for (; anz>text.toString().length; anz--) f+=fillchar; return f+text; }
 // ** Array **
+function isArray(obj) { return typeof obj == "object" && obj instanceof Array; }
+function isObject(obj) { return typeof obj == "object" && !obj instanceof Array; }
 function uniq(array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
 function Object2HTMLTable(obj) { var rows=""; for (var i in obj) rows+="<tr><td><b>"+i+":</b></td><td>"+obj[i]+"</td></tr>"; return "<table>"+rows+"</table>"; }
 function arrayTrim(a) { return a.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
@@ -152,18 +161,6 @@ function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
 // ** HTML-Code
-function createHTMLCode(elem, attributes,content)
-{
-  var param="";
-  if (attributes) for (var attr in attributes) if (attributes.hasOwnProperty(attr))
-    //  if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
-    // if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
-    // if (attr=="append") node.appendChild(attributes[attr]); else
-    if (attr=="childs") { for (var child in attributes[attr]) if (attributes[attr].hasOwnProperty(child)) node.appendChild(attributes[attr][child]); } else
-    if (typeof attributes[attr]=="string") param+=" "+attr+"='"+attributes[attr]+"'"; else param+=" "+attr+"="+attributes[attr];
-  if (append) append.appendChild(node);  
-  return "<"+elem+param+">"+(content||"")+"</"+elem+">";
-}
 var HTML={
   div: function (text) { return '<div>'+text+'</div>'; },
   row: function (cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; },
@@ -172,18 +169,19 @@ var HTML={
   br: function () { return '<br>'; },
   divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
   form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
-  input: function (type,name,value,content,size) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'" size="'+(size||20)+'">'+(content||"")+'</input>'; },
+  input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
   button: function (name,value) { return this.input("button",name,value); },
   submitbutton: function (name,value) { return this.input("submit",name,value); },
   resetbutton:function (name,value) { return this.input("reset",name,value); },
   textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
   selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
+  selectboxplus:function (height,name,lines, def) { var l=""; for (var i in lines) { l+="<option value='"+i+"'"+(def==i?" selected":"")+">"+lines[i]+"</option>" }; return '<select size="'+height+'" name="'+name+'">'+l+'</select>';},
   dropdownbox:function (name,lines) { return this.selectbox(1,name,lines); },
   link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
   checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
   radio: function (name,checked) { return '<input type="radio" name="'+(name||'')+'"'+(checked?" checked":"")+'">'; },
 };
-// ** REST **
+// ** REST ** 
 function inFrame() { return self!=top; }
 function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
@@ -202,10 +200,10 @@ function showmsg(data)
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
   data.box=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
-  $x(".//*[@name]",data.box).forEach(function (e) { if (!data[e.name]) data[e.name]=e; });
+    $x(".//*[@name]",data.box).forEach(function (e) { if (!data[e.name]) data[e.name]=e; });
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
-  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { data.onTimeout(data); remove($(data.id));  } },(data.Timeout||60)*1000);
+  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { data.onTimeout(data); remove($(data.id)); } },(data.Timeout||60)*1000);
   return data;
 } // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
 //data.box.elements.namedItem('').value;
@@ -239,267 +237,14 @@ function createHover(elem,text)
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
+// ** Infos **
+// location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
-
-if (!inFrame())
+if ($xs("id('overview-top')/h1/span[@class='itemprop']"))
 {
-globaleTasten();
-window.setInterval(function () { wvNow(); },20*1000);
-wvNow();
-//wvShow();
-}
-
-function globaleTasten () {
-  Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
-    wvShow();
-  });
-  /*
-  Key('STRG+ALT+x',function (e) { // Taste zum aktivieren
-    wvAdd('http://www.kinopolis.de/bn/programm_wochenansicht', 'Kinopolis', 'weekly on do');
-
-    wvAdd('http://www.google.com/calendar/render', 'Google Kalender', 'weekly');
-
-    wvAdd('http://www.google.com/reader/view/', 'Google Reader', 'daily');
-    wvAdd('http://vs-bn.de/', 'VideoStore Bonn', 'daily');
-    wvAdd('http://www.elwis.de/gewaesserkunde/Wasserstaende/wasserstaendeUebersichtGrafik.html.php?pegelId=b45359df-c020-4314-adb1-d1921db642da', 'Elwis', 'daily');
-    
-    wvAdd('http://www.nexusboard.net/forumdisplay.php?siteid=2408&forumid=40122', 'H0-Modellbahnforum - Anlagenbau', 'hourly');
-  });
-  */
-/*  Key('STRG+ALT+y',function (e) { // Taste zum aktivieren
-    var webseiten=deserialize('webseiten',[]);
-    webseiten.push({ url: location.href, host: location.host, titel:document.title });
-    alert("'"+document.title+"'\nzur Wiedervorlage hinzugefügt...\nSTRG+ALT+x zum abrufen der "+webseiten.length+" Seiten.");
-    serialize('webseiten',webseiten);
-  });
-  Key('STRG+ALT+x',function (e) { // Taste zum aktivieren
-    var webseiten=deserialize('webseiten',[]);
-    if (webseiten.length==0) alert("Keine Seiten mehr gespeichert");
-    var w=webseiten.pop();
-    location.href=w.url;
-    serialize('webseiten',webseiten);
-  });
-  $x("//a[@href]").forEach(function (a) { a.addEventListener("mousedown",function(event){
-    var e=event.target;
-    while (!e || !e.href) e=e.parentNode;
-    //GM_log("Target: "+e+"\nEvent: "+event+"\nCTRL: "+event.ctrlKey+"\nALT: "+event.altKey);
-    if (event.ctrlKey && event.altKey)
-    {
-      var webseiten=deserialize('webseiten',[]);
-      webseiten.push({ url: event.target.href, host: "", titel:event.target.textContent });
-      alert("'"+event.target.textContent+"'\nzur Wiedervorlage hinzugefügt...\nSTRG+ALT+x zum abrufen der "+webseiten.length+" Seiten.");
-      serialize('webseiten',webseiten);    
-      event.stopPropagation(); event.preventDefault();
-    }
-  }, true); });*/
-} // End globaleTasten
-
-
-function wvAdd(Url, Titel, Wiederhohlung)
-{
-  Url=prompt("URL:",Url);
-  if (!Url) return;
-  var exist=deserialize('WV',[]).filter(function (e) { return e.url==Url; });
-  Titel=prompt("Titel:",Titel||(exist.length > 0?exist[0].t:''));
-  if (!Titel) return;
-  Wiederhohlung=prompt("minut(e|ly), hour(ly), da(y|ily), week(ly) (on do|;4), month(ly), year(ly):",Wiederhohlung||(exist.length > 0?exist[0].wh:''));
-  if (!Wiederhohlung) return;
-  wvDel(Url)
-  var WV=deserialize('WV',[]);
-  WV.push({ url:Url, t:Titel, wh:Wiederhohlung, last:new Date() });
-  serialize('WV',WV);
-  //wvShow();
-} // End: function wvAdd()
-
-function wvChange(Url)
-{
-  deserialize('WV',[]).forEach(function (cwv) {
-    if (cwv.url==Url)
-    {
-      showmsg({
-        url: Url,
-        id: "default_msg_{rand}",
-        text: ["Url: "+HTML.input("text","wUrl",cwv.url,"",80)+"<br>"+cwv.url.split(",").join("<br>"),
-               "Titel: "+HTML.input("text","wTitel",cwv.t),
-               "Wiederhohlung: "+HTML.input("text","wWh",cwv.wh),
-               "Last: "+cwv.last, ""].join("<br>"),
-        color: "lightgray",
-        OK: "Ok",
-        Cancel: "Cancel",
-        onOK: function (data) {
-          var WV=deserialize('WV',[]);
-          WV=WV.map(function (f) { if (f.url==data.url) { f.url=data.wUrl.value; f.t=data.wTitel.value; f.wh=data.wWh.value; }; return f; });
-          serialize('WV',WV);
-          //alert([data.url,data.wUrl.value,data.wTitel.value,data.wWh.value].join("\n\n"));
-        },
-        onCancel: function (data) {},
-      });
-    }
-  });
-}
-
-function wvDel(Url)
-{
-  var WV=deserialize('WV',[]);
-  WV=WV.filter(function (e) { return e.url!=Url; });
-  serialize('WV',WV);
-  //wvShow();
-} // End: function wvDel()
-
-function wvCheck(Url) {
-  var WV=deserialize('WV',[]);
-  WV=WV.map(function (f) { if (f.url==Url) f.last=new Date(); return f; });
-  serialize('WV',WV);
-} // End: function wvOpen()
-
-function wvUrlRotate(Url) {
-  var WV=deserialize('WV',[]);
-  WV=WV.map(function (f) { if (f.url==Url) { var u=f.url.split(","); var fu=u.shift(); u.push(fu); /*alert("-> "+f.url+"\n-> "+u.join(","));*/ f.url=u.join(","); } return f; });
-  serialize('WV',WV);
-  
-} // End: function wvUrlRotate()
-
-function Rand(min, max) { return Math.floor(min+Math.random()*(max-min)); }
-
-function wvAufschieben(Url,sec) {
-  var WV=deserialize('WV',[]);
-  WV=WV.map(function (f) { if (f.url==Url) { f.aufschieben=new Date(new Date().getTime()+(sec||30)*60*1000); f.wait=sec; } return f; });
-  serialize('WV',WV);
-} // End: function wvOpen()
-
-function dump2(obj, deep) {
-  if (typeof obj=="object")
-    if (obj instanceof Array)
-    {
-      var tmp=[];
-      for (j in obj) if (obj.hasOwnProperty(j))
-        tmp.push(dump2(obj[j], deep));
-        return "[ "+tmp.join(", ")+" ]";
-    } else if (obj instanceof Date) {
-      return obj.toLocaleString();
-    } else {
-      var tmp=[]; deep=(deep||'')+'   ';
-      for (j in obj) if (obj.hasOwnProperty(j))
-        tmp.push(deep+j+" = "+dump2(obj[j], deep));
-      return "{\n"+tmp.join(",\n")+"\n"+deep+"}";
-    }
-  return (typeof obj=="string")?"'"+obj+"'":obj;
-}
-
-
-function wvNow() {
-  var Z={ minute: 60*1000, hour:60*60*1000, day: 20*60*60*1000, week: 7*24*60*60*1000, month:30*24*60*60*1000, year:365*24*60*60*1000 };
-  var F={ minutly: 'getMinutes', hourly:'getHours', daily:'getDate', monthly:'getMonth', yearly:'getFullYear' }
-  var WV=deserialize('WV',[]);
-  WVaktiv=WV.filter(function (ewv) {
-    var now=new Date();
-    if ((!ewv.aufschieben || ewv.aufschieben < now.getTime()) &&
-       (!ewv.last
-       || (Z[ewv.wh] && ewv.last.getTime()+Z[ewv.wh] < now.getTime())
-       || (F[ewv.wh] && ewv.last[F[ewv.wh]]() != now[F[ewv.wh]]())
-       //|| (ewv.wh=='minutly' && ewv.last.getMinutes() != now.getMinutes())
-       //|| (ewv.wh=='hourly' && ewv.last.getHours() != now.getHours())
-       //|| (ewv.wh=='daily' && ewv.last.getDate() != now.getDate())
-       //|| (ewv.wh=='monthly' && ewv.last.getMonth() != now.getMonth())
-       //|| (ewv.wh=='yearly' && ewv.last.getFullYear() != now.getFullYear())
-       || (ewv.wh.split(";")[0]=='weekly' && ewv.last.getTime()+(((ewv.wh.split(";")[1]||0)+6-ewv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (6 - Wochentag) = Montag
-       || (ewv.wh=='weekly on do' && ewv.last.getTime()+((10-ewv.last.getDay())%7+1)*24*60*60*1000 < now.getTime()) // Tag + (4+6 - Wochentag) = Donnerstag
-       ))
-    {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  if (WVaktiv.length>0)
-  { 
-    ShowWV(WVaktiv[Rand(0,WVaktiv.length-1)]);
-  }
-} // End: function wvNow()
-
-function ShowWV(wvo)
-{
-      showmsg({
-          id:'WV_oeffnen_{rand}', // _{rand}
-          text:'<p><a target="_blank" title="'+wvo.wh+' / '+wvo.last+'" href="'+wvo.url.split(",")[0]+'">'+wvo.t+'</a> öffnen?</p>',
-          fixed: true,
-          url: wvo.url,
-          wait: wvo.wait,
-          //sec:r, 
-          color:'red',
-          OK:'OK',
-          onOK:function (e) { wvCheck(e.url); wvUrlRotate(e.url); $xs(".//a",e.box).click(); },//GM_openInTab(e.url); },
-          Cancel:'Aufschieben', // um '+r+'min
-          onCancel:function (e) { 
-            e.wait=prompt("Wartezeit in min:",e.wait||10);
-            wvAufschieben(e.url, e.wait);
-            
-            //if (typeof deserialize('waittime')!="object") serialize('waittime',{});
-            //var WaitTime=aget('waittime',e.url)||30;
-            //WaitTime=prompt("Wartezeit in min:",WaitTime); //e.sec
-            //aset('waittime',e.url,WaitTime);
-            
-            //var WaitTime=aget("data","Aufschieben",20);
-            //WaitTime=prompt("Wartezeit in min:",WaitTime>20?WaitTime-5:WaitTime<20?WaitTime+5:WaitTime); //e.sec
-            //aset("data","Aufschieben",WaitTime)
-            
-            //wvAufschieben(e.url, WaitTime);
-            
-            },
-          Timeout:20,
-          onTimeout:function (e) { },
-          //onTimeout:function (e) { wvCheck(e.url); wvUrlRotate(e.url); GM_openInTab(e.url.split(",")[0]); },
-      });
-}
-
-function markdiff(out, orig)
-{
-  var tmp=['','',''];
-  for (var i=0; i<out.length; i++)
-  {
-    if ('0123456789'.indexOf(out[i])!=-1)
-    {
-      tmp[1]+=out[i];
-      tmp[2]+=orig[i];
-    } else {
-      tmp[0]+=(tmp[1]==tmp[2] ? tmp[1] : '<b>'+tmp[1]+'</b>')+out[i];
-      tmp[1]='';
-      tmp[2]='';
-    }
-  }
-  tmp[0]+=(tmp[1]==tmp[2] ? tmp[1] : '<b>'+tmp[1]+'</b>');
-  return tmp[0].replace(/<\/b><b>/g,'');
-}
-
-function wvShow()
-{
-  var WV=deserialize('WV',[]);
-  WV.sort(function (a,b) { return a.last-b.last; }).forEach(function (swv) {
-    var now=new Date();
-    var laststr=swv.last.toLocaleDateString()+' '+swv.last.toLocaleTimeString();
-    var nowstr=now.toLocaleDateString()+' '+now.toLocaleTimeString();
-    aufs=Math.round((swv.aufschieben-new Date().getTime())/1000/60);
-    showmsg({
-      id:'WV_anzeigen_{rand}',
-      text:'<a href="'+swv.url+'">'+swv.t+'</a>: <b>'+swv.wh+'</b> / '+markdiff(laststr,nowstr)+(aufs>0?' / <b><u>noch '+aufs+' min</u></b>':''),
-      color:'lightgray',
-      OK: 'Bearbeiten',
-      onOK:function (e) { wvChange(swv.url); },
-      Cancel: 'löschen',
-      onCancel:function (e) { wvDel(swv.url); },
-      Timeout:30,
-      onTimeout:function (e) {},
-    });
-  });
-    showmsg({
-      id:'WV_anzeigen',
-      text:'Neuen Eintrag hinzufügen?',
-      color:'lightgray',
-      OK: 'Ja',
-      onOK:function (e) { wvAdd(); },
-      Cancel: 'Nein',
-      onCancel:function (e) {},
-      Timeout:30,
-      onTimeout:function (e) {},
-    });
+  var Titel=$xs("id('overview-top')/h1/span[@class='itemprop']").textContent.replace(/( *: *)/," - ").replace(/\?/,"");
+  //var Jahr=$xs("id('overview-top')//a[contains(@href,'year')]").textContent;
+  var Jahr=$xs("id('overview-top')//span[@class='nobr']").textContent.replace(/[^0-9]/g,"");
+  var pathname=location.pathname.split("/");
+  prompt("Titel:", Titel+" ("+Jahr+") ["+pathname[2]+"]");
 }

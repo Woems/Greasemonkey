@@ -168,7 +168,7 @@ function showmsg(data)
   data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999;";
+  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999999999;";
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
   data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
@@ -631,15 +631,20 @@ var Sekunden=1000;
 window.setInterval(Export2Web,Rand(5*Sekunden,10*Sekunden));
 
 var Video=deserialize("Video",{});
+var tmp={};
 var count=0;
-var count2=0;
+//var count2=0;
 for (id in Video)
 {
-  if (!Video[id].exported || Video[id].exported<5 ) count+=1;
-  if (!Video[id].exported || Video[id].exported<2 ) count2+=1;
+  tmp[Video[id].exported]=(tmp[Video[id].exported]||0)+1;
+  if (!Video[id].exported || Video[id].exported<4 ) count+=1;
+  //if (!Video[id].exported || Video[id].exported<2 ) count2+=1;
 }  
-if (count > 0 && count2 > 0)
-  showmsg({ text:"Noch: "+count+" ("+count2+")", Timeout:10, onOKTimeout:function (e) {} });
+if (count > 0)
+{
+  showmsg({ text:uneval(tmp), Timeout:10, onOKTimeout:function (e) {} });
+  //showmsg({ text:"Noch: "+count+" noch nicht komplett ("+count2+" noch nicht angefangen)", Timeout:10, onOKTimeout:function (e) {} });
+}
 
 function Export2Web() {
   //GM_log=function (e) { showmsg({ text:e.split("\n").join("<br>"), onOKTimeout:function (e) {} });  };
@@ -706,8 +711,8 @@ function Video(VideoID)
     fixed:true,
     OK: "Gut",
     Cancel: "Schlecht",
-    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; serialize("Video",Video); JSONquali(getParam("v",""),2); },
-    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; serialize("Video",Video); JSONquali(getParam("v",""),5); },
+    onOK:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="gut"; Video[getParam("v","")].exported=1; serialize("Video",Video); JSONquali(getParam("v",""),2); },
+    onCancel:function () { var Video=deserialize("Video",{}); Video[getParam("v","")].qualitaet="schlecht"; Video[getParam("v","")].exported=1; serialize("Video",Video); JSONquali(getParam("v",""),5); },
   });
   // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
   var i=Kategorien.indexOf(Video[VideoID].Kategorie);
