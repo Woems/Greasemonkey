@@ -236,29 +236,714 @@ function createHover(elem,text)
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/ 
 
-function ForumManagement(data)
+// Font: doh (Sehr GroÃŸ) http://www.network-science.de/ascii/
+// Font: roman (Mittel FETT) http://www.network-science.de/ascii/
+// Font: big (GroÃŸ) http://www.network-science.de/ascii/
+// Font: standard (Mittel) http://www.network-science.de/ascii/ -> BereichsÃ¼berschriften
+// Font: rectangles (Klein) http://www.network-science.de/ascii/ -> FunktionsÃ¼berschriften
+
+// =================================================================================================================== //
+//  _  ___                          
+// | |/ / |                         
+// | ' /| | __ _ ___ ___  ___ _ __  
+// |  < | |/ _` / __/ __|/ _ \ '_ \ 
+// | . \| | (_| \__ \__ \  __/ | | |
+// |_|\_\_|\__,_|___/___/\___|_| |_|
+//                                                                                                           
+// =================================================================================================================== //
+
+//  _____         _     _           
+// |   __|___ ___|_|___| |_ ___ ___ 
+// |__   | . | -_| |  _|   | -_|  _|
+// |_____|  _|___|_|___|_|_|___|_|  
+//       |_|                        
+function Speicher(Name)
 {
-  this.forum=data;
-  this.load = function ()
+  this.Name=Name;
+  this.data={};
+  this.time=0;
+  this.a=false;
+  this.auto = function (aktiv)
   {
-    $x(this.forum.base);
+    this.a=aktiv;
+    return this;
+  }
+  this.load = function (force)
+  {
+    if (force || this.time < +new Date()-2000)
+    {
+      this.time=+new Date();
+      this.data=eval(GM_getValue(this.Name, '({})'));
+    }
+    return this;
+  }
+  //this.load();
+  this.save = function ()
+  {
+    GM_setValue(this.Name, uneval(this.data));
+    return this;
+  }
+  // Standard-Funktionen
+  this.get = function (key, def)
+  {
+    if (this.a) this.load();
+    return this.data[key]||def;
+  }
+  this.set = function (key, val)
+  {
+    if (this.a) this.load(true);
+    this.data[key]=val;
+    if (this.a) this.save();
+    return this;
+  }
+  this.type = function (key)
+  {
+    if (this.a) this.load();
+    if (typeof this.data[key] == "object" && this.data[key] instanceof Array)
+    {
+      return 'array';
+    } else {
+      return typeof this.data[key];
+    }
+  }
+  this.del = function (key)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[key] != "undefined") delete this.data[key];
+    if (this.a) this.save();
+    return this;
+  }
+  // Array-Funktionen
+  this.last = function (key, def)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[key] == "undefined") this.data[key]=[];
+    if (typeof this.data[key] != "object" || ! this.data[key] instanceof Array) this.data[key]=[ this.data[key] ];
+    var out=this.data[key].pop() || def;
+    if (this.a) his.save();
+    return out;
+  }
+  this.first = function (key, def)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[key] == "undefined") this.data[key]=[];
+    if (typeof this.data[key] != "object" || ! this.data[key] instanceof Array) this.data[key]=[ this.data[key] ];
+    var out=this.data[key].shift() || def;
+    if (this.a) this.save();
+    return out;
+  }
+  this.insert = function (key, val)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[key] == "undefined") this.data[key]=[];
+    if (typeof this.data[key] != "object" || ! this.data[key] instanceof Array) this.data[key]=[ tmp[key] ];
+    this.data[key].unshift(val);
+    if (this.a) this.save();
+    return this;
+  }
+  this.add = function (key, val)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[key] == "undefined") this.data[key]=[];
+    if (typeof this.data[key] != "object" || ! this.data[key] instanceof Array) this.data[key]=[ this.data[key] ];
+    this.data[key].push(val);
+    if (this.a) this.save();
+    return this;
+  }
+  // Object-Funktionen
+  this.setkey = function (key, k, v)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[key] == "undefined") this.data[key]={};
+    if (typeof this.data[key] != "object" || this.data[key] instanceof Array) this.data[key]={ old:this.data[key] };
+    this.data[key][k]=v;
+    if (this.a) this.save();
+    return this;
+  }
+  this.getkey = function (key, k, d)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[key] == "undefined") { this.data[key]={}; }
+    if (typeof this.data[key] != "object" || this.data[key] instanceof Array) { this.data[key]={ old:this.data[key] }; }
+    return this.data[key][k]||d;
+  }
+  // Debug-Funktionen
+  this.out = function (sep)
+  {
+    var ret="Speicher:"+(sep||"\n");
+    if (this.a) this.load();
+    for (t in this.data)
+      if (typeof this.data[t] == "object" && this.data[t] instanceof Date)
+        ret+=t+"("+typeof this.data[t]+"): "+this.data[t]+(sep||"\n");
+      else
+        ret+=t+"("+typeof this.data[t]+"): "+uneval(this.data[t])+(sep||"\n");
+    return ret;
   }
   this.alert = function ()
   {
-    alert(uneval(this.forum));
+    alert(uneval(this.data));
+    return this;
   }
-  this.alert();
+}
+
+//  _____         _     _           _____ _     _ 
+// |   __|___ ___|_|___| |_ ___ ___|     | |_  |_|
+// |__   | . | -_| |  _|   | -_|  _|  |  | . | | |
+// |_____|  _|___|_|___|_|_|___|_| |_____|___|_| |
+//       |_|                                 |___|
+function SpeicherObj(Name, Key)
+{
+  this.Name=Name;
+  this.Key=Key;
+  this.data={};
+  this.time=0;
+  this.a=false;
+  this.auto = function (aktiv)
+  {
+    this.a=aktiv;
+    return this;
+  }
+  this.load = function (force)
+  {
+    if (force || this.time < +new Date()-2000)
+    {
+      this.time=+new Date();
+      this.data=eval(GM_getValue(this.Name, '({})'));
+    }
+    return this;
+  }
+  //this.load();
+  this.save = function ()
+  {
+    GM_setValue(this.Name, uneval(this.data));
+    return this;
+  }
+  this.getAll = function ()
+  {
+    if (this.a) this.load();
+    return this.data[this.Key];
+  }
+  this.setAll = function (val)
+  {
+    if (this.a) this.load(true);
+    var old=this.data[this.Key];
+    this.data[this.Key]=val;
+    if (this.a) this.save();
+    return old;
+  }
+  this.delAll = function ()
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[this.Key] != "undefined") delete this.data[this.Key];
+    if (this.a) this.save();
+    return this;
+  }
+
+  this.id = function (k)
+  {
+    this.Key=k;
+    return this;
+  }
+  this.obj = this.id;
+  this.key = this.id;
+  this.set = function (k, v)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[this.Key] == "undefined") this.data[this.Key]={};
+    if (typeof this.data[this.Key] != "object" || this.data[this.Key] instanceof Array) this.data[this.Key]={ old:this.data[this.Key] };
+    this.data[this.Key][k]=v;
+    if (this.a) this.save();
+    return this;
+  }
+  this.get = function (k, d)
+  {
+    if (this.a) this.load(true);
+    if (typeof this.data[this.Key] == "undefined") { this.data[this.Key]={}; }
+    if (typeof this.data[this.Key] != "object" || this.data[this.Key] instanceof Array) { this.data[this.Key]={ old:this.data[this.Key] };}
+    return this.data[this.Key][k]||d;
+  }
+
+  this.out = function (sep)
+  {
+    var ret="Speicher:"+(sep||"\n");
+    this.load();
+    for (t in this.data)
+      if (typeof this.data[t] == "object" && this.data[t] instanceof Date)
+        ret+=t+"("+typeof this.data[t]+"): "+this.data[t]+(sep||"\n");
+      else
+        ret+=t+"("+typeof this.data[t]+"): "+uneval(this.data[t])+(sep||"\n");
+    return ret;
+  }
+  this.alert = function ()
+  {
+    alert(uneval(this.data));
+    return this;
+  }
 }
 
 
-var Foren={}
-Foren["www.h0-modellbahnforum.de"]={
-  forumparser: {
-    base: "//table/tbody/tr[td[2]/a/strong]",
-    titel: ".//td[2]/a/strong",
+//  _____         _ _           _____             
+// |_   _|___ ___| | |_ ___ ___| __  |___ ___ ___ 
+//   | | | . | . | | . | .'|  _| __ -| .'|_ -| -_|
+//   |_| |___|___|_|___|__,|_| |_____|__,|___|___|
+// 
+function ToolbarBase()
+{
+  /*if ( arguments.callee.instance )
+    return arguments.callee.instance;
+  arguments.callee.instance = this;*/
+
+  this.initialize = function ()
+  {
+    this.items=$x(this.base).map(this.basemap);
+    this.sel=0;
+  }
+  this.find = function (Name)
+  {
+    var len=this.items.length;
+    for (var i=0; i<len; i++)
+      if (this.items[i].textContent.indexOf(Name)!=-1)
+        this.sel=i;
+    return this;
+  }
+  this.last=function ()
+  {
+    this.sel=this.items.length-1;
+    return this;
+  }
+  this.first=function ()
+  {
+    this.sel=0;
+    return this;
+  }
+  this.plus=function (anz)
+  {
+    this.sel=Math.min(this.sel+anz,this.items.length-1);
+    return this;
+  }
+  this.minus=function (anz)
+  {
+    this.sel=Math.max(this.sel-anz,0);
+    return this;
+  }
+  this.hide=function (anz)
+  {
+    this.items[this.sel].elem.style.display="none";
+    return this;
+  }
+  this.show=function (anz)
+  {
+    this.items[this.sel].elem.style.display="";
+    return this;
+  }
+  this.after=function (data) // textContent, href/onClick
+  {
+    var n=this.create(data);
+    insertAfter(n.elem, this.items[this.sel].elem);
+    if (this.filler) insertAfter(this.filler(), this.items[this.sel].elem);
+    this.sel=this.sel+1;
+    this.items.splice(this.sel,0,n);
+    return this;
+  }
+  this.before=function (data) // textContent, href/onClick
+  {
+    var n=this.create(data);
+    insertBefore(n.elem, this.items[this.sel].elem);
+    if (this.filler) insertBefore(this.filler(), this.items[this.sel].elem);
+    this.items.splice(this.sel,0,n);
+    return this;
+  }
+  this.elem = function ()
+  {
+    return this.items[this.sel];
+  }
+  this.debug = function ()
+  {
+    alert([
+      this.sel,
+      uneval(this.elem()),
+      this.items.map(function (e,n) { return n+": "+uneval(e); }).join("\n")
+    ].join("\n\n"));
+    return this;
+  }
+  return this;
+}
+
+
+//  _____ _     _       _   _____             
+// |_   _|_|___| |_ ___| |_|     |___ ___ _ _ 
+//   | | | |  _| '_| -_|  _| | | | -_|   | | |
+//   |_| |_|___|_,_|___|_| |_|_|_|___|_|_|___|
+// 
+/*
+function TicketMenu()
+{
+  if ( arguments.callee.instance )
+    return arguments.callee.instance;
+  arguments.callee.instance = this;
+
+  this.ToolbarBase=ToolbarBase;
+  this.ToolbarBase();
+
+  this.base="/html/body/table/tbody/tr/td/a[@class='menuitem']";
+  this.basemap=function (e) {
+    var tmp={};
+    tmp.elem=e;
+    tmp.textContent=e.textContent||"";
+    tmp.href=e.href||"";
+    return tmp;
+  };
+  this.create=function (data)
+  {
+    var Button={};
+    data.href=data.href||"#";
+    data.className="menuitem";
+    Button.elem=createElement('a', data);
+    return Button;
+  }
+  this.filler=function () { return document.createTextNode(' - '); }
+  this.change = function (data)
+  {
+    var i=this.items[this.sel];
+    if (data.href) i.elem.href=data.href;
+    if (data.textContent) i.elem.textContent=data.textContent;
+    if (data.title) i.elem.title=data.title;
+    if (data.target) i.elem.target=data.target;    
+    if (data.onClick) i.elem.addEventListener('click', function (e) { data.onClick(e); e.stopPropagation(); e.preventDefault(); }, true);  
+  }
+  this.initialize();
+}
+*/
+
+//  _____ _         _     _____                                   _   
+// |  _  | |_ _ ___|_|___|     |___ ___ ___ ___ ___ _____ ___ ___| |_ 
+// |   __| | | | . | |   | | | | .'|   | .'| . | -_|     | -_|   |  _|
+// |__|  |_|___|_  |_|_|_|_|_|_|__,|_|_|__,|_  |___|_|_|_|___|_|_|_|  
+//             |___|                       |___|                      
+function PluginManagement()
+{
+  this.plugins={};
+  this.runs = [ { funcName: "Initialize" } ];
+  this.add = function (obj)
+  {
+    if (!obj.Aktiv) return;
+    if (!obj.Name) { alert("Keinen Namen angegeben\n\n"+uneval(obj)); return; }
+    if (!obj.Description) { alert(obj.Name+": Keinen Beschreibung angegeben"); return; }
+    obj.Plugins=this;
+    //obj.Name=obj.Name||String(Math.random());
+    this.plugins[obj.Name]=obj;
+    if (!this[obj.Name]) this[obj.Name]=obj;
+    for (r in this.runs) if (this.runs.hasOwnProperty(r))
+      if (typeof this.runs[r].funcName == 'function')
+        this.runs[r].funcName(obj);
+      else if (typeof obj[this.runs[r].funcName] == 'function')
+        obj[this.runs[r].funcName](this,this.runs[r].param);
+    return this;
+  }
+  this.get = function (Name)
+  {
+    return this.plugins[Name];
+  }
+  this.run = function (funcName, data)
+  {
+     if (!funcName) funcName="All";
+     if (typeof funcName!='object') funcName=[funcName];
+     for (f in funcName) if (funcName.hasOwnProperty(f))
+       if (typeof funcName[f]=="string" || typeof funcName[f]=="function")
+         this.runs.push({ funcName:funcName[f], param:data });
+     for (p in this.plugins)  
+       for (f in funcName) if (funcName.hasOwnProperty(f))
+         if (typeof funcName[f] == 'function')
+           funcName[f](this.plugins[p]);
+         else if (typeof this.plugins[p][funcName[f]] == 'function')
+           this.plugins[p][funcName[f]](this, data);
+    return this;
+  }
+  this.recive = function (funcName, data)
+  {
+     var tmp={};
+     if (!funcName) funcName="All";
+     if (typeof funcName=='string') funcName=[funcName];
+     for (p in this.plugins)
+       for (f in funcName)
+         if (typeof this.plugins[p][funcName[f]] == 'function')
+           tmp[this.plugins[p].Name]=tmp[this.plugins[p].Name+"_"+funcName[f]]=this.plugins[p][funcName[f]](this, data);
+    return tmp;
+  }
+}
+
+//  _____     _   _     _ _       
+// |  _  |___| |_|_|_ _|_| |_ _ _ 
+// |     |  _|  _| | | | |  _| | |
+// |__|__|___|_| |_|\_/|_|_| |_  |
+//                           |___|
+//new Activity().timer(1000).add(function () { alert("activity"); });
+function Activity()
+{
+  this.slowdown = 10000;
+  this.lastrun = 0;
+  this.afunc=[];
+  this.timer = function (val)
+  {
+    this.slowdown=val;
+    return this;
+  }
+  this.add = function (func)
+  {
+    this.afunc.push(func);
+    return this;
+  }
+  this.run = function ()
+  {
+    if (this.lastrun < +new Date() - this.slowdown)
+    {
+      this.lastrun=+new Date();
+      for (i in this.afunc)
+        if (this.afunc.hasOwnProperty(i))
+          this.afunc[i]();
+    }
+    return this;
+  }
+  that=this;
+  //on(['mousemove','keypress'],window,function (e) { that.run(); }); 
+  window.addEventListener('mousemove', function () { that.run(); }, false);
+  window.addEventListener('keypress', function () { that.run(); }, false);
+}
+
+//  _____ ___     
+// |     |  _|___ 
+// |   --|  _| . |
+// |_____|_| |_  |
+//           |___|
+function Cfg(Name, Default)
+{
+  this._Name=Name;
+  this._Exclude=["_Name","_Default","_Exclude","_Config", "_Data","_Temp","get","set","_load","_save","_firstsync","sync","alert"];
+  this._Default=Default;
+  this._Temp={};
+  this._load=function ()
+  {
+    this._Config=eval(GM_getValue('Config', '({})'));
+    this._Data=this._Config[this._Name]||{};
+    return this;
+  }
+  this._save=function ()
+  {
+    if (uneval(this._Data)=="({})")
+      delete this._Config[this._Name];
+    else
+      this._Config[this._Name]=this._Data;
+    GM_setValue('Config', uneval(this._Config));
+    return this;
+  }
+  this._firstsync=function ()
+  {
+    this._load();
+    for (i in this._Default)
+        if (typeof this._Data[i]=="undefined")
+          this._Temp[i]=this[i]=this._Default[i];
+        else
+          this[i]=this._Temp[i]=this._Data[i];
+    for (i in this._Data)
+      if (typeof this._Default[i]=="undefined")
+      {
+        delete this[i];
+        delete this._Data[i];
+        delete this._Temp[i];
+      } else if (this._Data[i] == this._Default[i])
+      {
+        delete this._Data[i];
+      }          
+    //this.alert();
+    this._save();
+    return this;
+  }
+  this.sync=function ()
+  {
+    this._load();
+    //this.alert();
+    for (i in this)
+      if (this._Exclude.indexOf(i)==-1)
+        if (this[i] != (typeof this._Data[i]=="undefined"?this._Default[i]:this._Data[i]) )
+          if (this[i] != this._Temp[i])
+            if (this[i] == this._Default[i])
+            { delete this._Data[i]; this._Temp[i] = this[i]; }
+            else
+            { this._Data[i] = this._Temp[i] = this[i]; }
+          else
+            this[i] = this._Temp[i] = (typeof this._Data[i]=="undefined"?this._Default[i]:this._Data[i]);
+    for (i in this._Data)
+      if (this[i] != (typeof this._Data[i]=="undefined"?this._Default[i]:this._Data[i]))
+        if (this[i] != this._Temp[i])
+          if (this[i] == this._Default[i])
+          { delete this._Data[i]; this._Temp[i] = this[i]; }
+          else
+          { this._Data[i] = this._Temp[i] = this[i]; }
+        else
+          this[i] = this._Temp[i] = (typeof this._Data[i]=="undefined"?this._Default[i]:this._Data[i]);
+    //this.alert();
+    this._save();
+    return this;
+  }
+  this.set=function (key, val)
+  {
+    this[key]=val;
+    return this;
+  }
+  this.get=function (key)
+  {
+    return this[key];
+  }
+  this.alert=function ()
+  {
+    this._load();
+    var tmp={};
+    for (i in this)
+      if (this._Exclude.indexOf(i)==-1)
+        tmp[i]=this[i];
+    alert("Default: "+uneval(this._Default)+"\n\nData: "+uneval(this._Data)+"\n\nTemp: "+uneval(this._Temp)+"\n\nNow: "+uneval(tmp));
+    return this;
+  }
+  this._firstsync();
+}
+
+
+// =================================================================================================================== //
+//  _____  _             _           
+// |  __ \| |           (_)          
+// | |__) | |_   _  __ _ _ _ __  ___ 
+// |  ___/| | | | |/ _` | | '_ \/ __|
+// | |    | | |_| | (_| | | | | \__ \
+// |_|    |_|\__,_|\__, |_|_| |_|___/
+//                  __/ |            
+//                 |___/             
+// =================================================================================================================== //
+
+var Plugin=new PluginManagement()
+
+
+
+/*
+
+ function myObject(val){
+  var value = val;
+  this.__defineGetter__("value", function(){
+    return value;
+  });
+  this.__defineSetter__("value", function(val){
+    value = val;
+  });
+} 
+
+*/
+
+Plugin.Foren={};
+Plugin.Foren["www.Beispiel.de"]={
+  Debug: true,
+  Forum: {
+    Debug: true,
+    ifTitelRegEx:'.* - Forum',
+    ifURLRegEx:'/forum/.*.html',
+    ifElem:'id("forum")',
   },
-  treadparser: {
+  Thread: {
+    Debug: true,
+    ifTitelRegEx:'.* - Thread',
+    ifURLRegEx:'/thread/.*.html',
+    ifElem:'id("thread")',
+    Base: 'id("messagewrap")/div',
+    Name: './/a[@name]',
+    Content: './/div[@class="content"]',
   }
 };
-var f=new ForumManagement(Foren[location.host]);
+Plugin.Foren["www.h0-modellbahnforum.de"]={
+  Forum: {
+    Debug: true,
+    ifURLRegEx:'/\(f[0-9]+\)',
+    Base: "//table/tbody/tr[td[2]/a/strong]",
+    Titel: ".//td[2]/a/strong",
+  },
+  Thread: {
+    Debug: true,
+    ifURLRegEx:'/\(t[0-9]+\)f[0-9]+',
+    Base: 'id("messagewrap")/div',
+    LastName: 'id("messagewrap")/div[last()]//a[@name]',
+    Name: './/a[@name]',
+    Content: './/div[@class="mtext"]/div[1]/p',
+    Seite: '//span[@class="crtp"]',
+  }
+};
+Plugin.F=Plugin.Foren[location.host];
+Plugin.D=new Speicher(location.host);
+
+Plugin.add(new Management());
+function Management()
+{
+  this.Aktiv = true;
+  this.Name = "Management";
+  this.Description = "Daten des Forums auswährten und für die anderen Plugins bereitstellen";
+
+  this.Initialize = function (Plugin)
+  {
+    if (Plugin.F.Debug)
+      GM_log([
+        "Forum? "+this.TestIt(Plugin.F.Forum),
+        "Thread? "+this.TestIt(Plugin.F.Thread),
+        "Titel: "+document.title,
+        "Url: "+location.pathname+location.hash].join("\n"));
+    if (this.TestIt(Plugin.F.Forum))
+      Plugin.run('Forum', Plugin.F.Forum);
+    if (this.TestIt(Plugin.F.Thread))
+      Plugin.run('Thread', Plugin.F.Thread);
+  }
+  this.TestIt = function (Data)
+  {
+    if (Data.ifTitelRegEx && !new RegExp(Data.ifTitelRegEx).test(document.title))
+      return false;
+    if (Data.ifURLRegEx && !new RegExp(Data.ifURLRegEx).test(location.pathname))
+      return false;
+    if (Data.ifElem && !$xs(data.ifElem))
+      return false;
+    return true;
+  }
+}
+
+Plugin.add(new ReadStatus());
+function ReadStatus()
+{
+  this.Aktiv = true;
+  this.Name = "ReadStatus";
+  this.Description = "Hält fest ob der Tread schon gelesen wurde und bis zu welchen Artikel.";
+  this.Forum = function (Plugin, Data)
+  {
+
+  }  
+  this.Thread = function (Plugin, Data)
+  {
+    var ID=(location.pathname).match(new RegExp(Data.ifURLRegEx))[1];
+    var SiteURL=location.pathname;
+    var LastName=$xs(Data.LastName).name;
+    Plugin.D.load().set(ID,{
+      Url:location.pathname+"#"+$xs(Data.LastName).name,
+    }).save();
+    if (Data.Debug) alert(LastName+" "+SiteURL+" "+ID);
+  }  
+}
+
+
+Plugin.add(new Test());
+function Test()
+{
+  this.Aktiv = true;
+  this.Name = "Test";
+  this.Description = "Test";
+  this.Forum = function (Plugin, Data)
+  {
+    if (Data.Debug) alert("Forum\n\n\n"+uneval(Data));
+  }  
+  this.Thread = function (Plugin, Data)
+  {
+    if (Data.Debug) alert("Thread\n\n\n"+uneval(Data));
+  }  
+}
 
