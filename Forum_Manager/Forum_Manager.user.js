@@ -79,6 +79,7 @@ function onKey(func) { on('keydown',window,function (e) {
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
   var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
+// onKey(function (key, code, e) { alert([key, code, e]); });
 function Key(key,func) { document.addEventListener('keypress', function (e) { k=e.keyCode||e.which; k=(e.metaKey?'META+':'')+(e.ctrlKey?'STRG+':'')+(e.altKey?'ALT+':'')+(String.fromCharCode(k)||k); if (key==k) func(); }, true);  }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
@@ -860,7 +861,9 @@ Plugin.Foren["www.h0-modellbahnforum.de"]={
   Forum: {
     Debug: true,
     ifURLRegEx:'/\(f[0-9]+\)',
+    LinkRegEx:'/\(t[0-9]+\)f[0-9]+',
     Base: "//table/tbody/tr[td[2]/a/strong]",
+    Link: ".//td[2]/a",
     Titel: ".//td[2]/a/strong",
   },
   Thread: {
@@ -871,6 +874,9 @@ Plugin.Foren["www.h0-modellbahnforum.de"]={
     Name: './/a[@name]',
     Content: './/div[@class="mtext"]/div[1]/p',
     Seite: '//span[@class="crtp"]',
+    Next: '//*[text()="Seite »"]',
+    Prev: '//*[text()="« Seite"]',
+    toForum: 'id("breadcrumbs")/a[starts-with(@href,"f")]',
   }
 };
 Plugin.F=Plugin.Foren[location.host];
@@ -916,34 +922,58 @@ function ReadStatus()
   this.Description = "Hält fest ob der Tread schon gelesen wurde und bis zu welchen Artikel.";
   this.Forum = function (Plugin, Data)
   {
-
+    Plugin.D.load();
+    $x(Data.Base).forEach(function (e) {
+      var Link=$xs(Data.Link,e);
+      var ID=(Link.href).match(new RegExp(Data.LinkRegEx))[1];
+      var IDData=Plugin.D.get(ID);
+      if (IDData)
+      {
+        Link.href=IDData.Url;
+        Link.style.color='lightgray';
+        GM_log(ID+": "+uneval(IDData));
+      }
+    });
   }  
   this.Thread = function (Plugin, Data)
   {
+    Plugin.D.load();
     var ID=(location.pathname).match(new RegExp(Data.ifURLRegEx))[1];
-    var SiteURL=location.pathname;
+    var Seite=($xs(Data.Seite)||{textContent:1}).textContent*1;
     var LastName=$xs(Data.LastName).name;
-    Plugin.D.load().set(ID,{
-      Url:location.pathname+"#"+$xs(Data.LastName).name,
-    }).save();
-    if (Data.Debug) alert(LastName+" "+SiteURL+" "+ID);
+    if (Seite >= Plugin.D.getkey(ID, "Seite", 0))
+    {
+      Plugin.D.setkey(ID, "Seite", Seite)
+              .setkey(ID, "Url", location.pathname+"#"+$xs(Data.LastName).name)
+              .save();
+      //if (Data.Debug) alert(LastName+" "+Seite+" "+ID);
+    }
   }  
 }
 
 
-Plugin.add(new Test());
-function Test()
+Plugin.add(new Tastatur());
+function Tastatur()
 {
   this.Aktiv = true;
-  this.Name = "Test";
-  this.Description = "Test";
+  this.Name = "Tastatur";
+  this.Description = "Bedinung der Seite per Tastatur";
   this.Forum = function (Plugin, Data)
   {
-    if (Data.Debug) alert("Forum\n\n\n"+uneval(Data));
+    //if (Data.Debug) alert("Forum\n\n\n"+uneval(Data));
   }  
   this.Thread = function (Plugin, Data)
   {
-    if (Data.Debug) alert("Thread\n\n\n"+uneval(Data));
+    onKey(function (key, code, e) {
+      switch(key)
+      {
+        case "'": location.href=($xs(Data.Next)||{}).href||$xs(Data.toForum).href; break;
+        case "%": location.href=($xs(Data.Prev)||{}).href||$xs(Data.toForum).href; break;
+        //case "":  break;
+        //default: alert([key, uneval(code), uneval(e)].join("\n")); break;
+      }
+    });
+    //if (Data.Debug) alert("Thread\n\n\n"+uneval(Data));
   }  
 }
 
