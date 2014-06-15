@@ -931,7 +931,6 @@ function ReadStatus()
       {
         Link.href=IDData.Url;
         Link.style.color='lightgray';
-        GM_log(ID+": "+uneval(IDData));
       }
     });
   }  
