@@ -65,4 +65,9 @@
     <tag>f</tag>
     <description>Function</description>
   </snippet>
+  <snippet>
+    <text><![CDATA[alert([uneval($0)].join("\n"));]]></text>
+    <tag>au</tag>
+    <description>AlertUeval</description>
+  </snippet>
 </snippets>
