@@ -896,9 +896,11 @@ function Menu()
   this.Initialize = function (Plugin)
   {
     css(
-      "#BilderGalerie_Menu { position: fixed; right:0px; bottom:0px; background-color:gray; border: 1px solid black; margin:1px; padding:0px; }"+
-      "#BilderGalerie_Menu h1 { font-size:medium; color:black; text-decoration:none; padding:6px; margin:4px }"+
-      "#BilderGalerie_Menu a { font-size:small; display:block; border: 1px solid white; background-color:lightgray; color:black; text-decoration:none; padding:6px; margin:4px }"
+      "#BilderGalerie_Menu { border-radius: 5px; position: fixed; right:0px; bottom:0px; background-color:gray; border: 2px solid black; margin:1px; padding:0px; }"+
+      "#BilderGalerie_Menu h1 { font-size:medium; color:black; text-decoration:none; padding:10px; margin:4px }"+
+      "#BilderGalerie_Menu a { display:none; border-radius: 10px; box-shadow: 5px 5px 0px 0px rgba(255, 255, 255, 0.15); font-size:small; border: 4px solid lightgray; background-color:lightgray; color:black; text-decoration:none; padding:4px; margin:6px }"+
+      "#BilderGalerie_Menu a:hover { background-color:white }"+
+      "#BilderGalerie_Menu:hover a { display:block; }"
     );
   }
   this.Porn = function (Plugin, Site)
@@ -914,7 +916,7 @@ function Menu()
   this.ShowMenu = function ()
   {
     if (!this.Menu)
-      this.Menu=createElement('div',{ id:'BilderGalerie_Menu', innerHTML: "<h1>PornMenü (STRG+ALT+UMSCH+T)</h1>" }, document.body);
+      this.Menu=createElement('div',{ id:'BilderGalerie_Menu', innerHTML: "<h1>PornMen&uuml; (STRG+ALT+UMSCH+T)</h1>" }, document.body);
     this.Menu.style.display='block';
     Plugin.run("CreateButton", this);
   }
