@@ -873,6 +873,8 @@ function Management()
     {
       Plugin.run("Porn", s);
       window.addEventListener("load",function () { Plugin.run("PornReady", s); }, true);
+    } else {
+      Plugin.run("Unbekannt", s);
     }
     // Tastenkombi
     Key('STRG+ALT+T',function (e) { // Taste zum aktivieren
@@ -923,17 +925,31 @@ function HideTitle()
   this.Description = "HideTitle";
   this.Button="Test";
   this.TitleList = ["Google", "Maps", "Wiki", "..."]
+  this.LernedTitle = new Speicher('Title');
   this.Inititalize = function (Plugin)
   {
     this.Title=document.title;
   }
   this.Porn = function (Plugin, Site)
   {
-    document.title="+"+arrayRand(this.TitleList);
+    this.TitleList = ObjKeys(this.LernedTitle.load().del(document.title).save().data);
+    this.Title=document.title;
+    rand=0;
+    for (var i=0; i<Math.min(this.Title.length, 8); i++)
+      rand+=this.Title.charCodeAt(i);
+    //alert([document.title[0], document.title.charCodeAt(0), rand%this.TitleList.length].join("\n")); 
+    //document.title=arrayRand(this.TitleList);
+    document.title=this.TitleList[rand%this.TitleList.length];
   }
   this.NoPorn = function (Plugin, Site)
   {
     document.title=this.Title;
+  }
+  this.Unbekannt = function (Plugin, Site)
+  {
+    this.LernedTitle.set(document.title, this.LernedTitle.load().get(document.title,0)+1 ).save();
+    //alert(uneval(this.LernedTitle.data));
+    //alert([uneval(ObjKeys(this.LernedTitle.data))].join("\n"));
   }
 }
 
@@ -951,73 +967,51 @@ function AutoScroll()
   this.ScrollToPicture = function ()
   {
     var img=$x("//img");
+    var PictureResized=false;
     for (i in img) if (img[i].width*img[i].height > 800*200)
     {
       img[i].scrollIntoView();
+      PictureResized=true;
+      //document.title="."+document.title;
       break;
     }
+    //if (!PictureResized) document.title="# "+document.title;
+    var sortedimg=img.filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
+    //GM_log(sortedimg.map(function (e) { return [e.width, e.height, e.width*e.height, e.src].join(" "); }).join("\n"));
+
+    //GM_log(["ScrollToPicture",sortedimg[0].width, sortedimg[0].height, sortedimg[0].width*sortedimg[0].height].join("\n"));
+    //if (sortedimg[0].width*sortedimg[0].height > 640*480) sortedimg[0].scrollIntoView();
+  }
+}
+
+Plugin.add(new ImageResize());
+function ImageResize()
+{
+  this.Aktiv = true;
+  this.Name = "ImageResize";
+  this.Description = "Verkleinert Große Bilder auf Fenstergröße";
+  this.Porn = this.PornReady = function (Plugin, Site)
+  {
+    $x('//img').forEach(function (img) {
+      var teilerH=1;
+      var teilerH=Math.min(img.height,window.innerHeight) / img.height;
+      var teilerW=Math.min(img.width,window.innerWidth) / img.width;
+      var teilerH=(img.height||1) / window.innerHeight;
+      var teilerW=(img.width||1) / window.innerWidth;
+      teiler=Math.max(teilerH,teilerW);
+      //alert([window.innerHeight, window.innerWidth, '--', img.height, img.width, '--', teilerH, teilerW, teiler, '--', img.height/teiler, img.width/teiler].join("\n"));
+      if (teiler > 1 ) {
+        img.style.height=img.height/teiler+'px';
+        img.style.width=img.width/teiler+'px';
+        //img.height=img.height*Math.min(teilerH,teilerW);
+        img.scrollIntoView();
+      }
+    });
   }
 }
 
 
-window.setTimeout(function () {
-  $x('//img').forEach(function (img) {
-    var teilerH=1; //Math.min(img.height,window.innerHeight*2) / img.height;
-    var teilerW=Math.min(img.width,window.innerWidth) / img.width;
-    if (Math.min(teilerH,teilerW) < 1 ) {
-      img.style.height='';
-      img.style.width=img.width*Math.min(teilerH,teilerW)+'px';
-      //img.height=img.height*Math.min(teilerH,teilerW);
-      img.scrollIntoView();
-    }
-  });
-},2000);
 
-globaleTasten();
-var galerie=deserialize('galerie',{});
-if (galerie[location.host]) window.setTimeout(galerieAnzeigen,1000);
-
-//serialize('galerie',galerie);
-
-var STP=deserialize('ScrollToPicture',{});
-if (!inFrame() && STP[location.host]) window.setTimeout(ScrollToPicture,1000);
-
-function ScrollToPicture()
-{
-  var img=$x("//img");
-  for (i in img)
-    if (img[i].width*img[i].height > 800*200)
-    { img[i].scrollIntoView(); break; }
-    
-  var sortedimg=img.filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
-  //GM_log(sortedimg.map(function (e) { return [e.width, e.height, e.width*e.height, e.src].join(" "); }).join("\n"));
-
-  //GM_log(["ScrollToPicture",sortedimg[0].width, sortedimg[0].height, sortedimg[0].width*sortedimg[0].height].join("\n"));
-  //if (sortedimg[0].width*sortedimg[0].height > 640*480) sortedimg[0].scrollIntoView();
-}
-
-/**
-	@name globaleTasten
-	@function
-	@description Tasten zum aktivieren der Galeriefunktion
-*/
-function globaleTasten () {
-  Key('STRG+ALT+Z',function (e) { // Taste zum aktivieren
-    var galerie=deserialize('galerie',{});
-    if (galerie[location.host]) 
-      delete galerie[location.host];
-    else
-      galerie[location.host]={ pathname:"", bilder:"//img", next:"", preview:"", minheight:200, minwidth:200 };
-    alert("Galerie "+(galerie[location.host]?'':'de')+"aktiviert. Bitte die Seite neu laden...");
-    serialize('galerie',galerie);
-  });
-  Key('STRG+ALT+U',function (e) { // Taste zum aktivieren
-    var STP=deserialize('ScrollToPicture',{});
-    STP[location.host]=!STP[location.host];
-    alert("ScrollToPicture "+(STP[location.host]?'':'de')+"aktiviert. Bitte die Seite neu laden...");
-    serialize('ScrollToPicture',STP);
-  });
-} // End globaleTasten
 
 /**
 	@name galerieAnzeigen
