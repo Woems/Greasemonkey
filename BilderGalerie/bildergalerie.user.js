@@ -893,6 +893,14 @@ function Menu()
   this.Aktiv = true;
   this.Name = "Menu";
   this.Description = "Menu";
+  this.Initialize = function (Plugin)
+  {
+    css(
+      "#BilderGalerie_Menu { position: fixed; right:0px; bottom:0px; background-color:gray; border: 1px solid black; margin:1px; padding:0px; }"+
+      "#BilderGalerie_Menu h1 { font-size:medium; color:black; text-decoration:none; padding:6px; margin:4px }"+
+      "#BilderGalerie_Menu a { font-size:small; display:block; border: 1px solid white; background-color:lightgray; color:black; text-decoration:none; padding:6px; margin:4px }"
+    );
+  }
   this.Porn = function (Plugin, Site)
   {
     this.ShowMenu();
@@ -906,9 +914,14 @@ function Menu()
   this.ShowMenu = function ()
   {
     if (!this.Menu)
-      this.Menu=createElement('div',{ id:'BilderGalerie_Menu', style:'position: fixed; right:0px; bottom:0px; background-color:lightgray; border: 1px solid gray', innerHTML:"TEST" }, document.body);
+      this.Menu=createElement('div',{ id:'BilderGalerie_Menu', innerHTML: "<h1>PornMenü (STRG+ALT+UMSCH+T)</h1>" }, document.body);
     this.Menu.style.display='block';
     Plugin.run("CreateButton", this);
+  }
+  this.Add = function (Text, Func)
+  {
+    if (!this.Menu) return;
+    createElement('a',{ innerHTML:Text, href:'#', onClick:function (e) { Func();  e.stopPropagation(); e.preventDefault(); } }, this.Menu);
   }
   this.HideMenu = function ()
   {
@@ -922,7 +935,7 @@ function HideTitle()
 {
   this.Aktiv = true;
   this.Name = "HideTitle";
-  this.Description = "HideTitle";
+  this.Description = "Versteckt den Titel unter Titeln die er wärend der Benutzung des Browsers lernt.";
   this.Button="Test";
   this.TitleList = ["Google", "Maps", "Wiki", "..."]
   this.LernedTitle = new Speicher('Title');
@@ -950,6 +963,14 @@ function HideTitle()
     this.LernedTitle.set(document.title, this.LernedTitle.load().get(document.title,0)+1 ).save();
     //alert(uneval(this.LernedTitle.data));
     //alert([uneval(ObjKeys(this.LernedTitle.data))].join("\n"));
+  }
+  this.CreateButton = function (Plugin, Menu)
+  {
+    that=this;
+    Menu.Add('Titel löschen',function () {
+      that.LernedTitle.load().del(document.title).save();
+      alert("Titel gelöscht");
+    });
   }
 }
 
