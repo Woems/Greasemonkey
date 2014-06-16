@@ -982,28 +982,23 @@ function AutoScroll()
   this.Aktiv = true;
   this.Name = "AutoScroll";
   this.Description = "AutoScroll";
-  this.Porn = this.PornReady = function (Plugin, Site)
+  //this.Porn = 
+  this.PornReady = function (Plugin, Site)
   {
     //window.addEventListener("load",this.ScrollToPicture, true);
     this.ScrollToPicture();
   }
   this.ScrollToPicture = function ()
   {
-    var img=$x("//img");
-    var PictureResized=false;
-    for (i in img) if (img[i].width*img[i].height > 800*200)
+    var sortedimg=$x("//img").filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
+    var size0=sortedimg[0].width*sortedimg[0].height;
+    var size1=sortedimg[1].width*sortedimg[1].height;
+    var percent=size1*100/size0;
+    if (percent < 80) // das zweitgrößte Bild ist weniger als 80 prozent von ersten Bild
     {
-      img[i].scrollIntoView();
-      PictureResized=true;
-      //document.title="."+document.title;
-      break;
+      sortedimg[0].scrollIntoView();
+      //alert([sortedimg[0].width, sortedimg[0].height, "---", sortedimg[1].width, sortedimg[1].height, "---", size0, size1, percent].join("\n"));
     }
-    //if (!PictureResized) document.title="# "+document.title;
-    var sortedimg=img.filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
-    //GM_log(sortedimg.map(function (e) { return [e.width, e.height, e.width*e.height, e.src].join(" "); }).join("\n"));
-
-    //GM_log(["ScrollToPicture",sortedimg[0].width, sortedimg[0].height, sortedimg[0].width*sortedimg[0].height].join("\n"));
-    //if (sortedimg[0].width*sortedimg[0].height > 640*480) sortedimg[0].scrollIntoView();
   }
 }
 
@@ -1013,7 +1008,8 @@ function ImageResize()
   this.Aktiv = true;
   this.Name = "ImageResize";
   this.Description = "Verkleinert Große Bilder auf Fenstergröße";
-  this.Porn = this.PornReady = function (Plugin, Site)
+  //this.Porn =
+  this.PornReady = function (Plugin, Site)
   {
     $x('//img').forEach(function (img) {
       var teilerH=1;
@@ -1027,7 +1023,6 @@ function ImageResize()
         img.style.height=img.height/teiler+'px';
         img.style.width=img.width/teiler+'px';
         //img.height=img.height*Math.min(teilerH,teilerW);
-        img.scrollIntoView();
       }
     });
   }
