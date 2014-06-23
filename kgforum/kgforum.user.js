@@ -331,7 +331,7 @@ function display(ForumsID, Bereich, Thread, MaxArtikel, Artikel) // Einzelner Tr
   $xs("id('wContent')/table/tbody/tr/td/table[2]").id='wThread';
 
   var Titel=$xs("//font[img[@src='http://www2.forennet.org/images/theme1/folder-3.gif']]").lastChild.textContent;
-  document.title="KG-Forum - "+Titel.replace(/^\s*|\s*$/g,"");
+  document.title="Forum - "+Titel.replace(/^\s*|\s*$/g,"");
 
   if (location.hash=="") $("wContent").scrollIntoView()
   $x("id('wThread')/tbody/tr/td[@rowspan=3]").forEach(function (ZelleAutor,i) {
