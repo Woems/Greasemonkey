@@ -237,8 +237,6 @@ function createHover(elem,text)
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/ 
 
-<<<<<<< HEAD
-=======
 // Font: doh (Sehr GroÃŸ) http://www.network-science.de/ascii/
 // Font: roman (Mittel FETT) http://www.network-science.de/ascii/
 // Font: big (GroÃŸ) http://www.network-science.de/ascii/
@@ -255,7 +253,6 @@ function createHover(elem,text)
 //                                                                                                           
 // =================================================================================================================== //
 
->>>>>>> 4c0212c1b04aad5170aa2a22b5c80609cff535f6
 //  _____         _     _           
 // |   __|___ ___|_|___| |_ ___ ___ 
 // |__   | . | -_| |  _|   | -_|  _|
@@ -268,7 +265,6 @@ function Speicher(Name)
   this.time=0;
   this.a=false;
   this.auto = function (aktiv)
-<<<<<<< HEAD
   {
     this.a=aktiv;
     return this;
@@ -348,87 +344,6 @@ function Speicher(Name)
   }
   this.add = function (key, val)
   {
-=======
-  {
-    this.a=aktiv;
-    return this;
-  }
-  this.load = function (force)
-  {
-    if (force || this.time < +new Date()-2000)
-    {
-      this.time=+new Date();
-      this.data=eval(GM_getValue(this.Name, '({})'));
-    }
-    return this;
-  }
-  //this.load();
-  this.save = function ()
-  {
-    GM_setValue(this.Name, uneval(this.data));
-    return this;
-  }
-  // Standard-Funktionen
-  this.get = function (key, def)
-  {
-    if (this.a) this.load();
-    return this.data[key]||def;
-  }
-  this.set = function (key, val)
-  {
-    if (this.a) this.load(true);
-    this.data[key]=val;
-    if (this.a) this.save();
-    return this;
-  }
-  this.type = function (key)
-  {
-    if (this.a) this.load();
-    if (typeof this.data[key] == "object" && this.data[key] instanceof Array)
-    {
-      return 'array';
-    } else {
-      return typeof this.data[key];
-    }
-  }
-  this.del = function (key)
-  {
-    if (this.a) this.load(true);
-    if (typeof this.data[key] != "undefined") delete this.data[key];
-    if (this.a) this.save();
-    return this;
-  }
-  // Array-Funktionen
-  this.last = function (key, def)
-  {
-    if (this.a) this.load(true);
-    if (typeof this.data[key] == "undefined") this.data[key]=[];
-    if (typeof this.data[key] != "object" || ! this.data[key] instanceof Array) this.data[key]=[ this.data[key] ];
-    var out=this.data[key].pop() || def;
-    if (this.a) his.save();
-    return out;
-  }
-  this.first = function (key, def)
-  {
-    if (this.a) this.load(true);
-    if (typeof this.data[key] == "undefined") this.data[key]=[];
-    if (typeof this.data[key] != "object" || ! this.data[key] instanceof Array) this.data[key]=[ this.data[key] ];
-    var out=this.data[key].shift() || def;
-    if (this.a) this.save();
-    return out;
-  }
-  this.insert = function (key, val)
-  {
-    if (this.a) this.load(true);
-    if (typeof this.data[key] == "undefined") this.data[key]=[];
-    if (typeof this.data[key] != "object" || ! this.data[key] instanceof Array) this.data[key]=[ tmp[key] ];
-    this.data[key].unshift(val);
-    if (this.a) this.save();
-    return this;
-  }
-  this.add = function (key, val)
-  {
->>>>>>> 4c0212c1b04aad5170aa2a22b5c80609cff535f6
     if (this.a) this.load(true);
     if (typeof this.data[key] == "undefined") this.data[key]=[];
     if (typeof this.data[key] != "object" || ! this.data[key] instanceof Array) this.data[key]=[ this.data[key] ];
@@ -464,419 +379,11 @@ function Speicher(Name)
       else
         ret+=t+"("+typeof this.data[t]+"): "+uneval(this.data[t])+(sep||"\n");
     return ret;
-<<<<<<< HEAD
   }
   this.alert = function ()
   {
     alert(uneval(this.data));
     return this;
-  }
-}
-
-//  _____         _     _           _____ _     _ 
-// |   __|___ ___|_|___| |_ ___ ___|     | |_  |_|
-// |__   | . | -_| |  _|   | -_|  _|  |  | . | | |
-// |_____|  _|___|_|___|_|_|___|_| |_____|___|_| |
-//       |_|                                 |___|
-function SpeicherObj(Name, Key)
-{
-  this.Name=Name;
-  this.Key=Key;
-  this.data={};
-  this.time=0;
-  this.a=false;
-  this.auto = function (aktiv)
-  {
-    this.a=aktiv;
-    return this;
-  }
-  this.load = function (force)
-  {
-    if (force || this.time < +new Date()-2000)
-    {
-      this.time=+new Date();
-      this.data=eval(GM_getValue(this.Name, '({})'));
-    }
-    return this;
-  }
-  //this.load();
-  this.save = function ()
-  {
-    GM_setValue(this.Name, uneval(this.data));
-    return this;
-  }
-  this.getAll = function ()
-  {
-    if (this.a) this.load();
-    return this.data[this.Key];
-  }
-  this.setAll = function (val)
-  {
-    if (this.a) this.load(true);
-    var old=this.data[this.Key];
-    this.data[this.Key]=val;
-    if (this.a) this.save();
-    return old;
-  }
-  this.delAll = function ()
-  {
-    if (this.a) this.load(true);
-    if (typeof this.data[this.Key] != "undefined") delete this.data[this.Key];
-    if (this.a) this.save();
-    return this;
-  }
-
-  this.id = function (k)
-  {
-    this.Key=k;
-    return this;
-  }
-  this.obj = this.id;
-  this.key = this.id;
-  this.set = function (k, v)
-  {
-    if (this.a) this.load(true);
-    if (typeof this.data[this.Key] == "undefined") this.data[this.Key]={};
-    if (typeof this.data[this.Key] != "object" || this.data[this.Key] instanceof Array) this.data[this.Key]={ old:this.data[this.Key] };
-    this.data[this.Key][k]=v;
-    if (this.a) this.save();
-    return this;
-  }
-  this.get = function (k, d)
-  {
-    if (this.a) this.load(true);
-    if (typeof this.data[this.Key] == "undefined") { this.data[this.Key]={}; }
-    if (typeof this.data[this.Key] != "object" || this.data[this.Key] instanceof Array) { this.data[this.Key]={ old:this.data[this.Key] };}
-    return this.data[this.Key][k]||d;
-  }
-
-  this.out = function (sep)
-  {
-    var ret="Speicher:"+(sep||"\n");
-    this.load();
-    for (t in this.data)
-      if (typeof this.data[t] == "object" && this.data[t] instanceof Date)
-        ret+=t+"("+typeof this.data[t]+"): "+this.data[t]+(sep||"\n");
-      else
-        ret+=t+"("+typeof this.data[t]+"): "+uneval(this.data[t])+(sep||"\n");
-    return ret;
-=======
->>>>>>> 4c0212c1b04aad5170aa2a22b5c80609cff535f6
-  }
-  this.alert = function ()
-  {
-    alert(uneval(this.data));
-    return this;
-<<<<<<< HEAD
-  }
-}
-
-//  _____         _ _           _____             
-// |_   _|___ ___| | |_ ___ ___| __  |___ ___ ___ 
-//   | | | . | . | | . | .'|  _| __ -| .'|_ -| -_|
-//   |_| |___|___|_|___|__,|_| |_____|__,|___|___|
-// 
-function ToolbarBase()
-{
-  /*if ( arguments.callee.instance )
-    return arguments.callee.instance;
-  arguments.callee.instance = this;*/
-
-  this.initialize = function ()
-  {
-    this.items=$x(this.base).map(this.basemap);
-    this.sel=0;
-  }
-  this.find = function (Name)
-  {
-    var len=this.items.length;
-    for (var i=0; i<len; i++)
-      if (this.items[i].textContent.indexOf(Name)!=-1)
-        this.sel=i;
-    return this;
-  }
-  this.last=function ()
-  {
-    this.sel=this.items.length-1;
-    return this;
-  }
-  this.first=function ()
-  {
-    this.sel=0;
-    return this;
-  }
-  this.plus=function (anz)
-  {
-    this.sel=Math.min(this.sel+anz,this.items.length-1);
-    return this;
-  }
-  this.minus=function (anz)
-  {
-    this.sel=Math.max(this.sel-anz,0);
-    return this;
-  }
-  this.hide=function (anz)
-  {
-    this.items[this.sel].elem.style.display="none";
-    return this;
-  }
-  this.show=function (anz)
-  {
-    this.items[this.sel].elem.style.display="";
-    return this;
-  }
-  this.after=function (data) // textContent, href/onClick
-  {
-    var n=this.create(data);
-    insertAfter(n.elem, this.items[this.sel].elem);
-    if (this.filler) insertAfter(this.filler(), this.items[this.sel].elem);
-    this.sel=this.sel+1;
-    this.items.splice(this.sel,0,n);
-    return this;
-  }
-  this.before=function (data) // textContent, href/onClick
-  {
-    var n=this.create(data);
-    insertBefore(n.elem, this.items[this.sel].elem);
-    if (this.filler) insertBefore(this.filler(), this.items[this.sel].elem);
-    this.items.splice(this.sel,0,n);
-    return this;
-  }
-  this.elem = function ()
-  {
-    return this.items[this.sel];
-  }
-  this.debug = function ()
-  {
-    alert([
-      this.sel,
-      uneval(this.elem()),
-      this.items.map(function (e,n) { return n+": "+uneval(e); }).join("\n")
-    ].join("\n\n"));
-    return this;
-  }
-  return this;
-}
-
-
-//  _____ _     _       _   _____             
-// |_   _|_|___| |_ ___| |_|     |___ ___ _ _ 
-//   | | | |  _| '_| -_|  _| | | | -_|   | | |
-//   |_| |_|___|_,_|___|_| |_|_|_|___|_|_|___|
-// 
-function TicketMenu()
-{
-  if ( arguments.callee.instance )
-    return arguments.callee.instance;
-  arguments.callee.instance = this;
-
-  this.ToolbarBase=ToolbarBase;
-  this.ToolbarBase();
-
-  this.base="/html/body/table/tbody/tr/td/a[@class='menuitem']";
-  this.basemap=function (e) {
-    var tmp={};
-    tmp.elem=e;
-    tmp.textContent=e.textContent||"";
-    tmp.href=e.href||"";
-    return tmp;
-  };
-  this.create=function (data)
-  {
-    var Button={};
-    data.href=data.href||"#";
-    data.className="menuitem";
-    Button.elem=createElement('a', data);
-    return Button;
-  }
-  this.filler=function () { return document.createTextNode(' - '); }
-  this.change = function (data)
-  {
-    var i=this.items[this.sel];
-    if (data.href) i.elem.href=data.href;
-    if (data.textContent) i.elem.textContent=data.textContent;
-    if (data.title) i.elem.title=data.title;
-    if (data.target) i.elem.target=data.target;    
-    if (data.onClick) i.elem.addEventListener('click', function (e) { data.onClick(e); e.stopPropagation(); e.preventDefault(); }, true);  
-  }
-  this.initialize();
-}
-
-//  _____         _ _           
-// |_   _|___ ___| | |_ ___ ___ 
-//   | | | . | . | | . | .'|  _|
-//   |_| |___|___|_|___|__,|_|  
-//                              
-//var a=new Toolbar().after({ textContent:"Test", href:"lol", src:"Exit" }).last().after({ textContent:"Test2", href:"lol", src:"Exit" }).minus(3).after({ textContent:"Test3", href:"lol", src:"Exit" });
-function Toolbar()
-{
-  if ( arguments.callee.instance )
-    return arguments.callee.instance;
-  arguments.callee.instance = this;
-
-  this.ToolbarBase=ToolbarBase;
-  this.ToolbarBase();
-
-  this.base="/html/body/table/tbody/tr/td[@class='nav']/table/tbody/tr/td";
-  this.basemap=function (e) {
-    var tmp={};
-    tmp.elem=e;
-    tmp.td=e;
-    tmp.div=$xs(".//div",e)||'';
-    tmp.a=$xs(".//a",e)||'';
-    tmp.img=$xs(".//img",e)||'';
-    //tmp.adiv=tmp.div.nodeName; tmp.aname=tmp.a.nodeName; tmp.imgname=tmp.img.nodeName;
-    tmp.titel=tmp.div.title||"";
-    tmp.textContent=tmp.a.textContent||"";
-    tmp.src=tmp.img.src||"";
-    return tmp;
-  };
-  this.BildListe={
-      'Mail':'/it-service-web/images/Standard/mail_new.png',
-      'Exit':'/it-service-web/images/Standard/exit.png',
-      'Queue':'/it-service-web/images/Standard/queue.png',
-      'New':'/it-service-web/images/Standard/new.png',
-      'Search':'/it-service-web/images/Standard/search.png',
-      'Einstellungen':'/it-service-web/images/Standard/prefer.png',
-      'Help':'/it-service-web/images/Standard/help.png',
-      'Person':'/it-service-web/images/Standard/personal.png',
-    }
-  this.create=function (data)
-  {
-    var Button={};
-    Button.img=createElement('img', { border:0, alt:Text, src:this.BildListe[data.src]||data.src });
-    Button.br=createElement('br');
-    Button.text=document.createTextNode(data.textContent);
-    Button.a=createElement('a', { className:'navitem', href:(data.href||'#'), target:data.target||"", childs:[ Button.img, Button.br, Button.text ] });
-    if (data.onClick) Button.a.addEventListener('click', function (e) { data.onClick(e); e.stopPropagation(); e.preventDefault(); }, true);
-    Button.div=createElement('div', { title:data.textContent, childs:[Button.a] });
-    Button.td=createElement('td', { align:"center", vAlign:"top", className:"nav", childs:[Button.div] });
-    Button.elem=Button.td;
-    return Button;
-  }
-  this.change = function (data)
-  {
-    var i=this.items[this.sel];
-    if (data.src) i.img.src=data.src;
-    //if (data.textContent) i.text.textContent=data.textContent;
-    if (data.title) i.div.title=data.title;
-    if (data.href) i.a.href=data.href;    
-    if (data.target) i.a.target=data.target;    
-    if (data.onClick) i.a.addEventListener('click', function (e) { data.onClick(e); e.stopPropagation(); e.preventDefault(); }, true);  
-  }
-  this.initialize();
-}
-
-/*
-
- function myObject(val){
-  var value = val;
-  this.__defineGetter__("value", function(){
-    return value;
-  });
-  this.__defineSetter__("value", function(val){
-    value = val;
-  });
-} 
-
-*/
-
-//  _____ _         _     _____                                   _   
-// |  _  | |_ _ ___|_|___|     |___ ___ ___ ___ ___ _____ ___ ___| |_ 
-// |   __| | | | . | |   | | | | .'|   | .'| . | -_|     | -_|   |  _|
-// |__|  |_|___|_  |_|_|_|_|_|_|__,|_|_|__,|_  |___|_|_|_|___|_|_|_|  
-//             |___|                       |___|                      
-function PluginManagement()
-{
-  this.plugins={};
-  this.runs = [ { funcName: "Initialize" } ];
-  this.add = function (obj)
-  {
-    if (!obj.Aktiv) return;
-    if (!obj.Name) { alert("Keinen Namen angegeben\n\n"+uneval(obj)); return; }
-    if (!obj.Description) { alert(obj.Name+": Keinen Beschreibung angegeben"); return; }
-    obj.Plugins=this;
-    //obj.Name=obj.Name||String(Math.random());
-    this.plugins[obj.Name]=obj;
-    if (!this[obj.Name]) this[obj.Name]=obj;
-    for (r in this.runs) if (this.runs.hasOwnProperty(r))
-      if (typeof this.runs[r].funcName == 'function')
-        this.runs[r].funcName(obj);
-      else if (typeof obj[this.runs[r].funcName] == 'function')
-        obj[this.runs[r].funcName](this,this.runs[r].param);
-    return this;
-  }
-  this.get = function (Name)
-  {
-    return this.plugins[Name];
-  }
-  this.run = function (funcName, data)
-  {
-     if (!funcName) funcName="All";
-     if (typeof funcName!='object') funcName=[funcName];
-     for (f in funcName) if (funcName.hasOwnProperty(f))
-       if (typeof funcName[f]=="string" || typeof funcName[f]=="function")
-         this.runs.push({ funcName:funcName[f], param:data });
-     for (p in this.plugins)  
-       for (f in funcName) if (funcName.hasOwnProperty(f))
-         if (typeof funcName[f] == 'function')
-           funcName[f](this.plugins[p]);
-         else if (typeof this.plugins[p][funcName[f]] == 'function')
-           this.plugins[p][funcName[f]](this, data);
-    return this;
-  }
-  this.recive = function (funcName, data)
-  {
-     var tmp={};
-     if (!funcName) funcName="All";
-     if (typeof funcName=='string') funcName=[funcName];
-     for (p in this.plugins)
-       for (f in funcName)
-         if (typeof this.plugins[p][funcName[f]] == 'function')
-           tmp[this.plugins[p].Name]=tmp[this.plugins[p].Name+"_"+funcName[f]]=this.plugins[p][funcName[f]](this, data);
-    return tmp;
-  }
-}
-
-//  _____     _   _     _ _       
-// |  _  |___| |_|_|_ _|_| |_ _ _ 
-// |     |  _|  _| | | | |  _| | |
-// |__|__|___|_| |_|\_/|_|_| |_  |
-//                           |___|
-//new Activity().timer(1000).add(function () { alert("activity"); });
-function Activity()
-{
-  this.slowdown = 10000;
-  this.lastrun = 0;
-  this.afunc=[];
-  this.timer = function (val)
-  {
-    this.slowdown=val;
-    return this;
-  }
-  this.add = function (func)
-  {
-    this.afunc.push(func);
-    return this;
-  }
-  this.run = function ()
-  {
-    if (this.lastrun < +new Date() - this.slowdown)
-    {
-      this.lastrun=+new Date();
-      for (i in this.afunc)
-        if (this.afunc.hasOwnProperty(i))
-          this.afunc[i]();
-    }
-    return this;
-  }
-  that=this;
-  //on(['mousemove','keypress'],window,function (e) { that.run(); }); 
-  window.addEventListener('mousemove', function () { that.run(); }, false);
-  window.addEventListener('keypress', function () { that.run(); }, false);
-}
-
-=======
   }
 }
 
@@ -1204,7 +711,6 @@ function Activity()
   window.addEventListener('keypress', function () { that.run(); }, false);
 }
 
->>>>>>> 4c0212c1b04aad5170aa2a22b5c80609cff535f6
 //  _____ ___     
 // |     |  _|___ 
 // |   --|  _| . |
@@ -1316,18 +822,6 @@ function Cfg(Name, Default)
 
 var Plugin=new PluginManagement()
 
-<<<<<<< HEAD
-Plugin.ForenData={
-  "www.h0-modellbahnforum.de": {
-    forumparser: {
-      base: "//table/tbody/tr[td[2]/a/strong]",
-      titel: ".//td[2]/a/strong",
-    },
-    treadparser: {
-    }
-  }
-};
-=======
 
 
 /*
@@ -1481,23 +975,5 @@ function Tastatur()
     //if (Data.Debug) alert("Thread\n\n\n"+uneval(Data));
   }  
 }
->>>>>>> 4c0212c1b04aad5170aa2a22b5c80609cff535f6
 
-Plugin.add(new SiteFinder());
-function SiteFinder()
-{
-  this.Aktiv = true;
-  this.Name = "SiteFinder";
-  this.Description = "Initialisiert alle Plugin";
-  this.Initialize = function (Plugins)
-  {
-    Plugins.run(this.getSiteType());
-  }
-  this.getSiteType = function ()
-  {
-    var Forum=this.Plugins.ForenData[location.host];
-    if (!Forum) return "Error";
-    alert(uneval(Forum));
-    return [];
-  }
-}
+
