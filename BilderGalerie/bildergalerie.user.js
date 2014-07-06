@@ -969,9 +969,10 @@ function HideTitle()
   this.CreateButton = function (Plugin, Menu)
   {
     that=this;
-    Menu.Add('Titel löschen',function () {
+    Menu.Add('Titel löschen',function (e) {
       that.LernedTitle.load().del(document.title).save();
-      alert("Titel gelöscht");
+      alert("Titel '"+document.title+"' gelöscht");
+      e.stopPropagation(); e.preventDefault(); 
     });
   }
 }
