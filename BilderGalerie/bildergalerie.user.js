@@ -860,13 +860,18 @@ function Management()
     // Lade Daten der Seite
     var s=Plugin.Sites.load().get(Plugin.Host, {});
     // Default?
-    if (Plugin.Sites.load().getkey("Default", "Porn") && !s.Porn)
-      if (confirm("Ist diese Seite Porn?"))
+    if (Plugin.Sites.load().getkey("Default", "Porn") != s.Porn)
+      if (!s.Porn)
       {
-        Plugin.Sites.setkey(Plugin.Host, "Porn", true).save();
-        s.Porn=true
+        if (confirm("Ist diese Seite Porn?"))
+        {
+          Plugin.Sites.setkey(Plugin.Host, "Porn", true).save();
+          s.Porn=true
+        } else {
+          Plugin.Sites.setkey("Default", "Porn", false).save();
+        }
       } else {
-        Plugin.Sites.setkey("Default", "Porn", false).save();
+          Plugin.Sites.setkey("Default", "Porn", true).save();      
       }
     // Ueberpruefe ob Porn
     if (s.Porn)
@@ -1003,7 +1008,7 @@ function AutoScroll()
   }
 }
 
-Plugin.add(new ImageResize());
+//Plugin.add(new ImageResize());
 function ImageResize()
 {
   this.Aktiv = true;
