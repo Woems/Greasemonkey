@@ -860,7 +860,7 @@ function Management()
     // Lade Daten der Seite
     var s=Plugin.Sites.load().get(Plugin.Host, {});
     // Default?
-    if (Plugin.Sites.load().getkey("Default", "Porn") != s.Porn)
+    if (!Plugin.Sites.load().getkey("Default", "Porn") != !s.Porn)
       if (!s.Porn)
       {
         if (confirm("Ist diese Seite Porn?"))
