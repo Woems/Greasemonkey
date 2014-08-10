@@ -1118,4 +1118,16 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.h0-modellbahnforum.de*</Include>
   </Script>
+  <Script basedir="Skip" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Skip.user.js" name="Skip" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Skip/Skip.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Skip/Skip.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>http://www.allanalpass.com*</Include>
+    <Include>http://www.linkbabes.com*</Include>
+  </Script>
 </UserScriptConfig>
