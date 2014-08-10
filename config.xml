@@ -1129,5 +1129,9 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.allanalpass.com*</Include>
     <Include>http://www.linkbabes.com*</Include>
+    <Include>http://www.freean.us*</Include>
+    <Include>http://www.galleries.bz*</Include>
+    <Include>http://www.rqq.co*</Include>
+    <Include>http://www.picbucks.com*</Include>
   </Script>
 </UserScriptConfig>
