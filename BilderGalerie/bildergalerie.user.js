@@ -859,20 +859,26 @@ function Management()
     if (inFrame()) return;
     // Lade Daten der Seite
     var s=Plugin.Sites.load().get(Plugin.Host, {});
-    // Default?
-    if (!Plugin.Sites.load().getkey("Default", "Porn") != !s.Porn)
-      if (!s.Porn)
+    var def=Plugin.Sites.load().getkey("Default", "Porn");
+    // Follow Porn?
+    if (typeof s.Porn == "undefined")
+    {
+      if (def)
       {
         if (confirm("Ist diese Seite Porn?"))
         {
-          Plugin.Sites.setkey(Plugin.Host, "Porn", true).save();
-          s.Porn=true
+          Plugin.Sites.setkey(Plugin.Host, "Porn", true).setkey("Default", "Porn", true).save();
+          s.Porn=true;
         } else {
-          Plugin.Sites.setkey("Default", "Porn", false).save();
+          Plugin.Sites.setkey(Plugin.Host, "Porn", false).setkey("Default", "Porn", false).save();
+          s.Porn=false;
         }
-      } else {
-          Plugin.Sites.setkey("Default", "Porn", true).save();      
       }
+    }
+    else
+    {
+      Plugin.Sites.setkey("Default", "Porn", s.Porn).save();
+    }
     // Ueberpruefe ob Porn
     if (s.Porn)
     {
@@ -1062,3 +1068,36 @@ function galerieAnzeigen () {
   //serialize('galerie',galerie);
   
 } // End galerieAnzeigen
+
+
+
+//Plugin.add(new ImageResize());
+function SkipSites()
+{
+  this.Aktiv = true;
+  this.Name = "SkipSites";
+  this.Description = "Überspring Eingangsseiten";
+  //this.Porn =
+  this.PornReady = function (Plugin, Site)
+  {
+    var that=this;
+    window.setTimeout(function () { that.skip(); }, 1000);  
+  }
+  function skip()
+  {
+    if ($("skip_disabled"))
+    {
+      if ($("skip_disabled").style.display=="none" && $("skiplink"))
+      {
+         GM_log("Skiplink")
+         $("skiplink").click();
+      } else {
+        GM_log("Timeout")
+        var that=this;
+        window.setTimeout(function () { that.skip(); }, 1000);  
+      }
+    }
+  }
+
+}
+
