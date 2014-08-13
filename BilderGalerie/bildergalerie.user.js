@@ -1003,8 +1003,8 @@ function AutoScroll()
   this.ScrollToPicture = function ()
   {
     var sortedimg=$x("//img").filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
-    var size0=sortedimg[0].width*sortedimg[0].height;
-    var size1=sortedimg[1].width*sortedimg[1].height;
+    var size0=sortedimg[0]?sortedimg[0].width*sortedimg[0].height:0;
+    var size1=sortedimg[1]?sortedimg[1].width*sortedimg[1].height:0;
     var percent=size1*100/size0;
     if (percent < 80) // das zweitgrößte Bild ist weniger als 80 prozent von ersten Bild
     {
@@ -1071,7 +1071,7 @@ function galerieAnzeigen () {
 
 
 
-//Plugin.add(new ImageResize());
+Plugin.add(new SkipSites());
 function SkipSites()
 {
   this.Aktiv = true;
@@ -1083,16 +1083,14 @@ function SkipSites()
     var that=this;
     window.setTimeout(function () { that.skip(); }, 1000);  
   }
-  function skip()
+  this.skip = function ()
   {
     if ($("skip_disabled"))
     {
       if ($("skip_disabled").style.display=="none" && $("skiplink"))
       {
-         GM_log("Skiplink")
          $("skiplink").click();
       } else {
-        GM_log("Timeout")
         var that=this;
         window.setTimeout(function () { that.skip(); }, 1000);  
       }
