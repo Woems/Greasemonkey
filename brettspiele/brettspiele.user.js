@@ -214,9 +214,21 @@ GM_log(dump({ hash:location.hash,
 /**/
 switch(location.host)
 {
-  case 'www.brettspiele-report.de': setGlobalKey(); brettspielereport(); break;
-  case 'www.spieletest.at': setGlobalKey(); Timeout(function (e) { spieletest(); },1000); break;
+  case 'www.brettspiele-report.de': css(); setGlobalKey(); brettspielereport(); break;
+  case 'www.spieletest.at': css(); setGlobalKey(); Timeout(function (e) { spieletest(); },1000); break;
   //default: alert(location.host); break;
+}
+
+function css()
+{
+css("#SpieleVote { border:2px solid black; margin:2px; padding: 2px; }");
+css("#SpieleVote.Aktuell a { text-decoration:blink; }");
+css("#SpieleVote.Aktuell1 .Opt1 { color:green; }");
+css("#SpieleVote.Aktuell2 .Opt2 { color:green; }");
+css("#SpieleVote.Aktuell3 .Opt3 { color:blue; }");
+css("#SpieleVote.Aktuell4 .Opt4 { color:blue; }");
+css("#SpieleVote.Aktuell5 .Opt5 { color:red; }");
+css("#SpieleVote.Aktuell6 .Opt6 { color:red; }");
 }
 
 function setGlobalKey()
@@ -405,13 +417,5 @@ function Spiel(Link)
   }
 }
 
-css("#SpieleVote { border:2px solid black; margin:2px; padding: 2px; }");
-css("#SpieleVote.Aktuell a { text-decoration:blink; }");
-css("#SpieleVote.Aktuell1 .Opt1 { color:green; }");
-css("#SpieleVote.Aktuell2 .Opt2 { color:green; }");
-css("#SpieleVote.Aktuell3 .Opt3 { color:blue; }");
-css("#SpieleVote.Aktuell4 .Opt4 { color:blue; }");
-css("#SpieleVote.Aktuell5 .Opt5 { color:red; }");
-css("#SpieleVote.Aktuell6 .Opt6 { color:red; }");
 
 

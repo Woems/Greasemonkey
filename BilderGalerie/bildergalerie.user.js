@@ -859,15 +859,26 @@ function Management()
     if (inFrame()) return;
     // Lade Daten der Seite
     var s=Plugin.Sites.load().get(Plugin.Host, {});
-    // Default?
-    if (Plugin.Sites.load().getkey("Default", "Porn") && !s.Porn)
-      if (confirm("Ist diese Seite Porn?"))
+    var def=Plugin.Sites.load().getkey("Default", "Porn");
+    // Follow Porn?
+    if (typeof s.Porn == "undefined")
+    {
+      if (def)
       {
-        Plugin.Sites.setkey(Plugin.Host, "Porn", true).save();
-        s.Porn=true
-      } else {
-        Plugin.Sites.setkey("Default", "Porn", false).save();
+        if (confirm("Ist diese Seite Porn?"))
+        {
+          Plugin.Sites.setkey(Plugin.Host, "Porn", true).setkey("Default", "Porn", true).save();
+          s.Porn=true;
+        } else {
+          Plugin.Sites.setkey(Plugin.Host, "Porn", false).setkey("Default", "Porn", false).save();
+          s.Porn=false;
+        }
       }
+    }
+    else
+    {
+      Plugin.Sites.setkey("Default", "Porn", s.Porn).save();
+    }
     // Ueberpruefe ob Porn
     if (s.Porn)
     {
@@ -992,8 +1003,8 @@ function AutoScroll()
   this.ScrollToPicture = function ()
   {
     var sortedimg=$x("//img").filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
-    var size0=sortedimg[0].width*sortedimg[0].height;
-    var size1=sortedimg[1].width*sortedimg[1].height;
+    var size0=sortedimg[0]?sortedimg[0].width*sortedimg[0].height:0;
+    var size1=sortedimg[1]?sortedimg[1].width*sortedimg[1].height:0;
     var percent=size1*100/size0;
     if (percent < 80) // das zweitgrößte Bild ist weniger als 80 prozent von ersten Bild
     {
@@ -1003,7 +1014,7 @@ function AutoScroll()
   }
 }
 
-Plugin.add(new ImageResize());
+//Plugin.add(new ImageResize());
 function ImageResize()
 {
   this.Aktiv = true;
@@ -1057,3 +1068,34 @@ function galerieAnzeigen () {
   //serialize('galerie',galerie);
   
 } // End galerieAnzeigen
+
+
+
+Plugin.add(new SkipSites());
+function SkipSites()
+{
+  this.Aktiv = true;
+  this.Name = "SkipSites";
+  this.Description = "Überspring Eingangsseiten";
+  //this.Porn =
+  this.PornReady = function (Plugin, Site)
+  {
+    var that=this;
+    window.setTimeout(function () { that.skip(); }, 1000);  
+  }
+  this.skip = function ()
+  {
+    if ($("skip_disabled"))
+    {
+      if ($("skip_disabled").style.display=="none" && $("skiplink"))
+      {
+         $("skiplink").click();
+      } else {
+        var that=this;
+        window.setTimeout(function () { that.skip(); }, 1000);  
+      }
+    }
+  }
+
+}
+
