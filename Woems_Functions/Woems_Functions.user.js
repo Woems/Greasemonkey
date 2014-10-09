@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Woems Functions
 // @namespace   Woems
-// @include     https://github.com/Woems/Greasemonkey
+// @include     *
 // @version     1
 // @grant       none
 // ==/UserScript==

@@ -1,13 +1,16 @@
 // ==UserScript==
-// @name           BilderGalerie
+// @name           Funktionssammlung
 // @namespace      Woems
-// @description    Nach drücken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert.
 // @include        *
+// @decription     Erweiterungen für die Greasmonkey Funktionen
+// @version        0.1
 // @grant          GM_getValue
 // @grant          GM_setValue
+// @grant          GM_deleteValue
 // @grant          GM_addStyle
+// @grant          GM_xmlhttpRequest
+// @grant          GM_log
 // ==/UserScript==
-
 
 /******** BASE FUNCTIONS ********/
 function $(ID) { return (typeof ID === 'string' ? document.getElementById(ID) : ID) }
@@ -370,16 +373,6 @@ function Speicher(Name)
     if (typeof this.data[key] != "object" || this.data[key] instanceof Array) { this.data[key]={ old:this.data[key] }; }
     return this.data[key][k]||d;
   }
-  this.togglekey = function (key, k)
-  {
-    if (this.a) this.load(true);
-    if (typeof this.data[key] == "undefined") { this.data[key]={}; }
-    if (typeof this.data[key] != "object" || this.data[key] instanceof Array) { this.data[key]={ old:this.data[key] }; }
-    this.data[key][k]=!this.data[key][k];
-    //return this.data[key][k];
-    return this;
-  }
-  
   // Debug-Funktionen
   this.out = function (sep)
   {
@@ -764,8 +757,6 @@ function Cfg(Name, Default)
   this._firstsync();
 }
 
-
-
 //  _____ _         _     _____                                   _   
 // |  _  | |_ _ ___|_|___|     |___ ___ ___ ___ ___ _____ ___ ___| |_ 
 // |   __| | | | . | |   | | | | .'|   | .'| . | -_|     | -_|   |  _|
@@ -778,6 +769,7 @@ function Cfg(Name, Default)
 //  this.Aktiv = true;
 //  this.Name = "Management";
 //  this.Description = "Daten des Forums auswährten und für die anderen Plugins bereitstellen";
+//  this.Initialize = function (Plugin) { }
 //}
 function PluginManagement()
 {
@@ -824,11 +816,9 @@ function PluginManagement()
      if (!funcName) funcName="All";
      if (typeof funcName=='string') funcName=[funcName];
      for (p in this.plugins)
-       for (f in funcName) if (funcName.hasOwnProperty(f) && this.plugins[p][funcName[f]])
+       for (f in funcName)
          if (typeof this.plugins[p][funcName[f]] == 'function')
            tmp[this.plugins[p].Name]=tmp[this.plugins[p].Name+"_"+funcName[f]]=this.plugins[p][funcName[f]](this, data);
-         else
-           tmp[this.plugins[p].Name]=tmp[this.plugins[p].Name+"_"+funcName[f]]=this.plugins[p][funcName[f]];
     return tmp;
   }
 }
@@ -845,260 +835,801 @@ function PluginManagement()
 // =================================================================================================================== //
 
 
-var Plugin=new PluginManagement()
 
-Plugin.Sites=new Speicher('Sites');
-Plugin.Host=location.host.replace(/(^www\.|(\.d)e$|(\.c)om|(\.o)rg$)/g,'$2$3$4');
-Plugin.Site=function () { return this.Sites.load().get(this.Host, {}); }
 
-Plugin.add(new Management());
-function Management()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function iframe(url,className,w,h,noframetext)
 {
-  this.Aktiv = true;
-  this.Name = "Management";
-  this.Description = "Daten des Forums auswährten und für die anderen Plugins bereitstellen";
-  this.Initialize = function (Plugin)
-  {
-    if (inFrame()) return;
-    // Lade Daten der Seite
-    var s=Plugin.Sites.load().get(Plugin.Host, {});
-    var def=Plugin.Sites.load().getkey("Default", "Porn");
-    // Follow Porn?
-    if (typeof s.Porn == "undefined")
-    {
-      if (def)
-      {
-        if (confirm("Ist diese Seite Porn?"))
-        {
-          Plugin.Sites.setkey(Plugin.Host, "Porn", true).setkey("Default", "Porn", true).save();
-          s.Porn=true;
-        } else {
-          Plugin.Sites.setkey(Plugin.Host, "Porn", false).setkey("Default", "Porn", false).save();
-          s.Porn=false;
-        }
-      }
-    }
-    else
-    {
-      Plugin.Sites.setkey("Default", "Porn", s.Porn).save();
-    }
-    // Ueberpruefe ob Porn
-    if (s.Porn)
-    {
-      Plugin.run("Porn", s);
-      window.addEventListener("load",function () { Plugin.run("PornReady", s); }, true);
-    } else {
-      Plugin.run("Unbekannt", s);
-    }
-    // Tastenkombi
-    Key('STRG+ALT+T',function (e) { // Taste zum aktivieren
-      var s=Plugin.Sites.load().togglekey("Default", "Porn").togglekey(Plugin.Host, "Porn").save().get(Plugin.Host, {});
-      if (s.Porn)
-        Plugin.run("Porn", s);
-      else
-        Plugin.run("NoPorn", s);
-    });
-  }
+  var iframe=document.createElement("iframe");
+  iframe.src=url;
+  iframe.className=className||"test";
+  iframe.width=w||100;
+  iframe.height=h||100;
+  iframe.innerHTML=noframetext||"";
+  return iframe;
 }
 
-Plugin.add(new Menu());
-function Menu()
-{
-  this.Aktiv = true;
-  this.Name = "Menu";
-  this.Description = "Menu";
-  this.Initialize = function (Plugin)
-  {
-    css(
-      "#BilderGalerie_Menu { border-radius: 5px; position: fixed; right:0px; bottom:0px; background-color:gray; border: 2px solid black; margin:1px; padding:0px; }"+
-      "#BilderGalerie_Menu h1 { font-size:medium; color:black; text-decoration:none; padding:10px; margin:4px }"+
-      "#BilderGalerie_Menu a { display:none; border-radius: 10px; box-shadow: 5px 5px 0px 0px rgba(255, 255, 255, 0.15); font-size:small; border: 4px solid lightgray; background-color:lightgray; color:black; text-decoration:none; padding:4px; margin:6px }"+
-      "#BilderGalerie_Menu a:hover { background-color:white }"+
-      "#BilderGalerie_Menu:hover a { display:block; }"
-    );
-  }
-  this.Porn = function (Plugin, Site)
-  {
-    this.ShowMenu();
-    //alert([uneval(Plugin.recive("Button"))].join("\n"));  
-  }
-  this.NoPorn = function (Plugin, Site)
-  {
-    this.HideMenu();
-  }
-  
-  this.ShowMenu = function ()
-  {
-    if (!this.Menu)
-      this.Menu=createElement('div',{ id:'BilderGalerie_Menu', innerHTML: "<h1>PornMen&uuml; (STRG+ALT+UMSCH+T)</h1>" }, document.body);
-    this.Menu.style.display='block';
-    Plugin.run("CreateButton", this);
-  }
-  this.Add = function (Text, Func)
-  {
-    if (!this.Menu) return;
-    createElement('a',{ innerHTML:Text, href:'#', onClick:function (e) { Func();  e.stopPropagation(); e.preventDefault(); } }, this.Menu);
-  }
-  this.HideMenu = function ()
-  {
-    if (this.Menu) remove(this.Menu);
-    this.Menu=false;
-  }
-}
+// ZEIGT DEN ACCESSKEY AN
+//css("*[accesskey]:after { content:' ['attr(accesskey)']'; }");
 
-Plugin.add(new HideTitle());
-function HideTitle()
-{
-  this.Aktiv = true;
-  this.Name = "HideTitle";
-  this.Description = "Versteckt den Titel unter Titeln die er wärend der Benutzung des Browsers lernt.";
-  this.Button="Test";
-  this.TitleList = ["Google", "Maps", "Wiki", "..."]
-  this.LernedTitle = new Speicher('Title');
-  this.Inititalize = function (Plugin)
-  {
-    this.Title=document.title;
-  }
-  this.Porn = function (Plugin, Site)
-  {
-    this.TitleList = ObjKeys(this.LernedTitle.load().del(document.title).save().data);
-    this.Title=document.title;
-    rand=0;
-    for (var i=0; i<Math.min(this.Title.length, 8); i++)
-      rand+=this.Title.charCodeAt(i);
-    //alert([document.title[0], document.title.charCodeAt(0), rand%this.TitleList.length].join("\n")); 
-    //document.title=arrayRand(this.TitleList);
-    document.title=this.TitleList[rand%this.TitleList.length];
-  }
-  this.NoPorn = function (Plugin, Site)
-  {
-    document.title=this.Title;
-  }
-  this.Unbekannt = function (Plugin, Site)
-  {
-    this.LernedTitle.set(document.title, this.LernedTitle.load().get(document.title,0)+1 ).save();
-    //alert(uneval(this.LernedTitle.data));
-    //alert([uneval(ObjKeys(this.LernedTitle.data))].join("\n"));
-  }
-  this.CreateButton = function (Plugin, Menu)
-  {
-    that=this;
-    Menu.Add('Titel löschen',function (e) {
-      that.LernedTitle.load().del(document.title).save();
-      alert("Titel '"+document.title+"' gelöscht");
-      e.stopPropagation(); e.preventDefault(); 
-    });
-  }
-}
-
-Plugin.add(new AutoScroll());
-function AutoScroll()
-{
-  this.Aktiv = true;
-  this.Name = "AutoScroll";
-  this.Description = "AutoScroll";
-  //this.Porn = 
-  this.PornReady = function (Plugin, Site)
-  {
-    //window.addEventListener("load",this.ScrollToPicture, true);
-    this.ScrollToPicture();
-  }
-  this.ScrollToPicture = function ()
-  {
-    var sortedimg=$x("//img").filter(function (e) { return e.width*e.height > 100*100; }).sort(function (a,b) { return b.width*b.height-a.width*a.height; });
-    var size0=sortedimg[0]?sortedimg[0].width*sortedimg[0].height:0;
-    var size1=sortedimg[1]?sortedimg[1].width*sortedimg[1].height:0;
-    var percent=size1*100/size0;
-    if (percent < 80) // das zweitgrößte Bild ist weniger als 80 prozent von ersten Bild
-    {
-      sortedimg[0].scrollIntoView();
-      //alert([sortedimg[0].width, sortedimg[0].height, "---", sortedimg[1].width, sortedimg[1].height, "---", size0, size1, percent].join("\n"));
-    }
-  }
-}
-
-//Plugin.add(new ImageResize());
-function ImageResize()
-{
-  this.Aktiv = true;
-  this.Name = "ImageResize";
-  this.Description = "Verkleinert Große Bilder auf Fenstergröße";
-  //this.Porn =
-  this.PornReady = function (Plugin, Site)
-  {
-    $x('//img').forEach(function (img) {
-      var teilerH=1;
-      var teilerH=Math.min(img.height,window.innerHeight) / img.height;
-      var teilerW=Math.min(img.width,window.innerWidth) / img.width;
-      var teilerH=(img.height||1) / window.innerHeight;
-      var teilerW=(img.width||1) / window.innerWidth;
-      teiler=Math.max(teilerH,teilerW);
-      //alert([window.innerHeight, window.innerWidth, '--', img.height, img.width, '--', teilerH, teilerW, teiler, '--', img.height/teiler, img.width/teiler].join("\n"));
-      if (teiler > 1 ) {
-        img.style.height=img.height/teiler+'px';
-        img.style.width=img.width/teiler+'px';
-        //img.height=img.height*Math.min(teilerH,teilerW);
-      }
-    });
-  }
-}
-
-
-
-
-/**
-	@name galerieAnzeigen
-	@function
-	@description Zeigt die Galerie an
+/*
+var a1=["test",6,'',7]
+a1=a1.clean();
+for (i in a1)
+  GM_log(i+": "+a1[i]);
 */
-function galerieAnzeigen () {
-  var data=deserialize('galerie',{})[location.host];
-  if ($x(data.bilder) && $x(data.bilder).filter(function (img) { return img.width>data.minwidth && img.height>data.minheight; }).length>0)
-  {
-    var imgurls=$x(data.bilder).filter(function (img) { return img.width>data.minwidth && img.height>data.minheight; }).map(function (img) { return '<img src="'+img.src+'">'; });
-    createElement("div",{
-      id:'wBilderGalerie',
-      style:'text-align:center; position:fixed; top:20px; left:20px; height:'+(window.innerHeight-60)+'px; width:'+(window.innerWidth-80)+'px; background-color:white; border:2px solid gray; padding:10px; overflow:scroll;',
-      innerHTML:imgurls.join(''),
-      onClick:function (t,e) { $('wBilderGalerie').style.display='none'; },
-    }, document.body);
-    window.addEventListener("resize",function(event){
-      $('wBilderGalerie').style.width=(window.innerWidth-80)+'px';
-      $('wBilderGalerie').style.height=(window.innerHeight-60)+'px';
-    }, true);
-    //$('wBilderGalerie').innerHTML=imgurls.join('');
-  }
-  //serialize('galerie',galerie);
-  
-} // End galerieAnzeigen
 
-
-
-Plugin.add(new SkipSites());
-function SkipSites()
+function Woems(obj, base)
 {
-  this.Aktiv = true;
-  this.Name = "SkipSites";
-  this.Description = "Überspring Eingangsseiten";
-  //this.Porn =
-  this.PornReady = function (Plugin, Site)
+  switch (typeof obj)
   {
-    var that=this;
-    window.setTimeout(function () { that.skip(); }, 1000);  
+    case "string": 
+      var i, arr = [], xpr = document.evaluate(obj, base || document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+      for (i = 0; item = xpr.snapshotItem(i); i++) arr.push(item);
+      this.obj=arr;
+      break;
+    default:
+      this.obj=[ obj ];
+      break;
   }
-  this.skip = function ()
-  {
-    if ($("skip_disabled"))
-    {
-      if ($("skip_disabled").style.display=="none" && $("skiplink"))
-      {
-         $("skiplink").click();
-      } else {
-        var that=this;
-        window.setTimeout(function () { that.skip(); }, 1000);  
-      }
-    }
+  this.style=function (Name,Value) {
+    this.obj.forEach(function (f) { f.style[Name]=Value; });
+    return this;
   }
 
 }
+
+
+function CopyToClipboard(Text)
+{
+  try {
+    var tc = Text.replace(/\n\n/g, '\n');
+    unsafeWindow.netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+    const clipboardHelper = Components.classes
+        ["@mozilla.org/widget/clipboardhelper;1"].
+        getService(Components.interfaces.nsIClipboardHelper);
+    clipboardHelper.copyString(tc);
+  } catch (e) { alert([e,"",
+                       'Bitte in der user.js oder prefs.js im Profilverzeichniss eintragen:',
+                       '  user_pref("signed.applets.codebase_principal_support", true);',
+                       '  user_pref("capability.principal.greasemonkey1.id", "<url>");',
+                       '  user_pref("capability.principal.greasemonkey1.granted", "UniversalXPConnect");'].join('\n')); }
+}
+
+
+
+Date.prototype.after = function() {  }
+Date.prototype.before = function() {  }
+Date.prototype.compereTo = function() {  }  // Compares two Dates for ordering.
+Date.prototype.equals = function() {  }  // Compares two dates for equality.
+/*Date.prototype.format = function(str) {
+  var ersetz={ y:'FullYear', m:'Month', d:'Date', h:'Hours', m:'Minutes', s:'Seconds' };
+  var padding={ m:2 };
+  var tmp='';
+  for (i in str)
+    if (ersetz[str[i]])
+{
+ GM_log("tmp: "+tmp+" - "+str);
+ GM_log("this: "+this);
+ GM_log("str[i]: "+str[i]);
+ GM_log("ersetz[str[i]]: "+ersetz[str[i]]);
+ GM_log("this['get'+ersetz[str[i]]]: "+this["get"+ersetz[str[i]]]);
+      tmp+=(this["get"+ersetz[str[i]]])().pad(padding[str[i]]||0);
+ }   else
+      tmp+=str[i];
+  GM_log("OK: "+tmp);
+  return tmp;
+}*/
+
+
+
+// ********* from http://jacwright.com/projects/javascript/date_format/ *********
+/*/
+Date.prototype.format = function(format) {
+    var returnStr = '';
+    var replace = Date.replaceChars;
+    for (var i = 0; i < format.length; i++) {       var curChar = format.charAt(i);         if (i - 1 >= 0 && format.charAt(i - 1) == "\\") {
+            returnStr += curChar;
+        }
+        else if (replace[curChar]) {
+            returnStr += replace[curChar].call(this);
+        } else if (curChar != "\\"){
+            returnStr += curChar;
+        }
+    }
+    return returnStr;
+};
+Date.replaceChars = {
+    shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    longMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    longDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+
+    // Day
+    d: function() { return (this.getDate() < 10 ? '0' : '') + this.getDate(); },
+    D: function() { return Date.replaceChars.shortDays[this.getDay()]; },
+    j: function() { return this.getDate(); },
+    l: function() { return Date.replaceChars.longDays[this.getDay()]; },
+    N: function() { return this.getDay() + 1; },
+    S: function() { return (this.getDate() % 10 == 1 && this.getDate() != 11 ? 'st' : (this.getDate() % 10 == 2 && this.getDate() != 12 ? 'nd' : (this.getDate() % 10 == 3 && this.getDate() != 13 ? 'rd' : 'th'))); },
+    w: function() { return this.getDay(); },
+    z: function() { var d = new Date(this.getFullYear(),0,1); return Math.ceil((this - d) / 86400000); }, // Fixed now
+    // Week
+    W: function() { var d = new Date(this.getFullYear(), 0, 1); return Math.ceil((((this - d) / 86400000) + d.getDay() + 1) / 7); }, // Fixed now
+    // Month
+    F: function() { return Date.replaceChars.longMonths[this.getMonth()]; },
+    m: function() { return (this.getMonth() < 9 ? '0' : '') + (this.getMonth() + 1); },
+    M: function() { return Date.replaceChars.shortMonths[this.getMonth()]; },
+    n: function() { return this.getMonth() + 1; },
+    t: function() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 0).getDate() }, // Fixed now, gets #days of date
+    // Year
+    L: function() { var year = this.getFullYear(); return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)); },   // Fixed now
+    o: function() { var d  = new Date(this.valueOf());  d.setDate(d.getDate() - ((this.getDay() + 6) % 7) + 3); return d.getFullYear();}, //Fixed now
+    Y: function() { return this.getFullYear(); },
+    y: function() { return ('' + this.getFullYear()).substr(2); },
+    // Time
+    a: function() { return this.getHours() < 12 ? 'am' : 'pm'; },
+    A: function() { return this.getHours() < 12 ? 'AM' : 'PM'; },
+    B: function() { return Math.floor((((this.getUTCHours() + 1) % 24) + this.getUTCMinutes() / 60 + this.getUTCSeconds() / 3600) * 1000 / 24); }, // Fixed now
+    g: function() { return this.getHours() % 12 || 12; },
+    G: function() { return this.getHours(); },
+    h: function() { return ((this.getHours() % 12 || 12) < 10 ? '0' : '') + (this.getHours() % 12 || 12); },
+    H: function() { return (this.getHours() < 10 ? '0' : '') + this.getHours(); },
+    i: function() { return (this.getMinutes() < 10 ? '0' : '') + this.getMinutes(); },
+    s: function() { return (this.getSeconds() < 10 ? '0' : '') + this.getSeconds(); },
+    u: function() { var m = this.getMilliseconds(); return (m < 10 ? '00' : (m < 100 ? '0' : '')) + m; },
+    // Timezone
+    e: function() { return "Not Yet Supported"; },
+    I: function() { return "Not Yet Supported"; },
+    O: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + '00'; },
+    P: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + ':00'; }, // Fixed now
+    T: function() { var m = this.getMonth(); this.setMonth(0); var result = this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/, '$1'); this.setMonth(m); return result;},
+    Z: function() { return -this.getTimezoneOffset() * 60; },
+    // Full Date/Time
+    c: function() { return this.format("Y-m-d\\TH:i:sP"); }, // Fixed now
+    r: function() { return this.toString(); },
+    U: function() { return this.getTime() / 1000; }
+};
+/**/
+
+// var z=window.setInterval(function (){ window.clearInterval(z); },1000);
+
+
+/*
+Method	IE	Mozilla	Notes
+
+every	*	FF 1.5	Calls a function for every element of the array until false is returned.
+some	*	FF 1.5	Passes each element through the supplied function until true is returned.
+filter	*	FF 1.5	Creates an array with each element which evaluates true in the function provided.
+forEach	*	FF 1.5	Executes a specified function on each element of an Array
+map	*	FF 1.5	Creates a new array with the result of calling the specified function on each element of the Array.
+reduce	?	?	?
+
+concat	4.0	4.0	Joins multiple Arrays
+join	3.0	3.0	Joins all the Array elements together into a string.
+
+pop	5.5	4.0	Returns the last item in the Array and removes it from the Array.
+push	5.5	4.0	Adds the item to the end of the Array.
+shift	5.5	4.0	Returns the first item in the Array and removes it from the Array.
+unshift	5.5	4.0	Inserts the item(s) to the beginning of the Array.
+slice	4.0	4.0	Returns a new array from the specified index and length.
+splice	5.5	4.0	Deletes the specified index(es) from the Array.
+
+reverse	3.0	3.0	Reverses the Array so the last item becomes the first and vice-versa.
+sort	3.0	3.0	Sorts the array alphabetically or by the supplied function.
+
+indexOf	*	FF 1.5	Searches the Array for specific elements.
+lastIndexOf	*	FF 1.5	Returns the last item in the Array which matches the search critera.
+toSource	---	FF 1.5	Returns the source code of the array.
+toString	3.0	3.0	Returns the Array as a string.
+valueOf	3.0	3.0	Like toString, returns the Array as a string.
+*/
+
+/*
+    * indexOf() - returns the index of the given item's first occurrence.
+    * lastIndexOf() - returns the index of the given item's last occurrence.
+    * filter() - runs a function on every item in the array and returns an array of all items for which the function returns true.
+    * forEach() - runs a function on every item in the array.
+    * map() - runs a function on every item in the array and returns the results in an array.
+    - every() - runs a function on every item in the array and returns true if the function returns true for every item.
+    - some() - runs a function on every item in the array and returns true if the function returns true for any one item.
+    - reduce() - ???
+*/
+
+/*/
+GM_log("Hash: "+document.location.hash+"\n"+
+      "Host: "+document.location.host+"\n"+
+      "hostname: "+document.location.hostname+"\n"+
+      "href: "+document.location.href+"\n"+
+      "pathname: "+document.location.pathname+"\n"+
+      "port: "+document.location.port+"\n"+
+      "protokol: "+document.location.protokol+"\n"+
+      "search: "+document.location.search+"\n"
+       );
+GM_log(dump({ hash:location.hash,
+              host:location.host,
+              hostname: location.hostname,
+              href: location.href,
+              pathname: location.pathname,
+              port:location.port,
+              protokol:location.protokol,
+              search:location.search }));
+/**/
+
+/*/
+  var img=new Image();    
+  img.addEventListener('error',function (a) { alert("error"); },true);
+  img.addEventListener('load',function (a) { alert("load"); },true);
+  img.addEventListener('abort',function (a) { alert("abort"); },true);
+  img.src="test.jpg";
+/**/
+
+
+//GM_log($xs('//div[@id="multipage_1_2"][1]'));
+//GM_log($xs('//div[@id="multipage_1_2"][1]').innerHTML);
+//$('multipage_1_2').wrappedJSObject.watch('class',function (id, oldVal, newVal){ alert(id+": "+oldVal+"->"+newVal); return newVal; });
+
+/**/
+    function printIt(type,event)
+    {
+      var data="\nType: "+type;
+      if (event) {
+      if (event.attrName) data+="\nattrName: "+event.attrName;
+      if (event.attrChange) data+="\nattrChange: "+event.attrChange;
+      if (event.prevValue) data+="\nprevValue: "+event.prevValue;
+      if (event.newValue) data+="\nnewValue: "+event.newValue;
+      if (event.relatedNode) data+="\nrelatedNode: "+event.relatedNode;
+      }
+      GM_log(data);
+      //if (event) GM_log("\nType: "+type+"\nAttrName: "+event.attrName+"\nattrChange: "+event.attrChange+"\nprevValue: "+event.prevValue+"\nnewValue: "+event.newValue+"\nrelatedNode: "+event.relatedNode);
+    }
+/*/
+$xs('//div[@id="multipage_1_2"][1]').addEventListener("DOMSubtreeModified",function(event){ printIt("SubtreeModified"); }, true);
+$xs('//div[@id="multipage_1_2"][1]').addEventListener("DOMNodeInserted",function(event){ printIt("NodeInserted",event); }, true);
+$xs('//div[@id="multipage_1_2"][1]').addEventListener("DOMNodeRemoved",function(event){ printIt("NodeRemoved",event); }, true);
+$xs('//div[@id="multipage_1_2"][1]').addEventListener("DOMNodeRemovedFromDocument",function(event){ printIt("NodeRemovedFromDocument",event); }, true);
+$xs('//div[@id="multipage_1_2"][1]').addEventListener("DOMNodeInsertedIntoDocument",function(event){ printIt("NodeInsertedIntoDocument",event); }, true);
+$xs('//div[@id="multipage_1_2"][1]').addEventListener("DOMAttrModified",function(event){ printIt("AttrModified",event); }, true);
+$xs('//div[@id="multipage_1_2"][1]').addEventListener("DOMCharacterDataModified",function(event){ printIt("CharacterDataModified",event); }, true);
+/**/
+
+
+function createEl(elObj, parent) {
+  var el;
+  if (typeof elObj == 'string') {
+     el = document.createTextNode(elObj);
+  }
+  else {
+     el = document.createElement(elObj.n);
+     if (elObj.a) {
+        attributes = elObj.a;
+        for (var key in attributes) if (attributes.hasOwnProperty(key)) {
+           if (key.charAt(0) == '@')
+              el.setAttribute(key.substring(1), attributes[key]);
+           else 
+              el[key] = attributes[key];
+        }
+     }
+     if (elObj.evl) {
+        el.addEventListener(elObj.evl.type, elObj.evl.f, elObj.evl.bubble);
+     }
+     if (elObj.c) {
+        elObj.c.forEach(function (v, i, a) { createEl(v, el); });
+     }
+  }
+  if (parent)
+     parent.appendChild(el);
+  return el;
+}
+
+
+//Example usage:
+/*
+   createEl({n: 'ol', a: {'@class': 'some_list', '@id': 'my_list'}, c: [
+   {n: 'li', a: {textContent: 'first point'}, evl: {type: 'click', f: function() {alert('first point');}, bubble: true}},
+   {n: 'li', a: {textContent: 'second point'}},
+   {n: 'li', a: {textContent: 'third point'}}
+   ]}, document.body);
+
+<ol id="my_list" class="some_list">
+  <li onClick="alert('first point');">first point</li>
+  <li>second point</li>
+  <li>third point</li>
+</ol>
+*/
+
+/*/
+var a=["test","loL", GM_log];
+var b={n: 'ol', a: {'@class': 'some_list', '@id': 'my_list'}, c: [
+   {n: 'li', a: {textContent: 'first point'}, evl: {type: 'click', f: function() {alert('first point');}, bubble: true}},
+   {n: 'li', a: {textContent: 'second point'}},
+   {n: 'li', a: {textContent: 'third point'}}
+   ]};
+var c=["A","B","C",1,["lol"],{ "test": function (a) {alert(a)}}]
+var x = [i+1 for each (i in c)];
+var z={a:a,b:b,c:c};
+//GM_log("\n"+dump(x));
+//GM_log("\n"+dump(["A","B","C"])+"\n"+dump(["A",["B","C"],"D"])+"\n"+dump({a:"1", b:"2" })+"\n"+dump({a:"1", b:["A",["B","C"],"D"] })+"\n"+dump({a:"1", b:{c:"2", d:"3" } }));
+//GM_log("\n"+dump({a:["A","B","C"],b:"ABC",c:12434,d:true}));
+//GM_log("\n"+dump(z));
+/**/
+
+function dump(obj, deep)
+{
+  if (typeof obj=="object")
+    if (obj instanceof Array)
+    {
+      var tmp=[];
+      for (j in obj) if (obj.hasOwnProperty(j))
+        tmp.push(dump(obj[j], deep));
+      return "["+tmp.join(", ")+"]";
+    } else {
+      var tmp=[];
+      deep=(deep||'')+'   ';
+      for (j in obj) if (obj.hasOwnProperty(j))
+        tmp.push(deep+j+" = "+dump(obj[j], deep));
+      return "{\n"+tmp.join(",\n")+"\n"+deep.substr(3)+"}";
+    }
+  if (typeof obj=="function") obj=obj.toString().replace(/[\n ]+/g," ").replace(/(function \([^\)]*\) {.{100}).*()}/,"$1 ... $2");
+  return (typeof obj=="string")?"'"+obj+"'":obj; 
+}
+
+
+//GM_log("test".fontcolor("red"));
+
+/*/ // ** Getter und Setter und Watch **
+var o = {a: 7, get b() {return this.a + 1;}, get c() { return this.a*2; }, set c(x) {this.a = x / 2}}; 
+o.watch("a",function (id, oldVal, newVal){ GM_log(id+": "+oldVal+"->"+newVal); return newVal; });
+GM_log("a: "+o.a+" / b: "+o.b+" / c: "+o.c);
+o.c=50;
+GM_log("a: "+o.a+" / b: "+o.b+" / c: "+o.c);
+/**/3
+
+/*
+function htmlsort(HTMLObj,sortvalue)
+{
+  var list=[];
+  for (var i=0; node=HTMLObj.childNodes[i]; i++)
+  {
+    list.push({ sv: (sortvalue=="text")?node.textContent:node.getAttribute(sortvalue), obj:node });
+  }
+  list.sort(function (a,b) { return a.sv>b.sv?1:a.sv<b.sv?-1:0; })
+  list.forEach(function (e) { HTMLObj.appendChild(e.obj); });
+}
+function selectsort(obj)
+{
+  var list=[];
+  for (var i=0; node=obj.options[i]; i++)
+    list.push(node);
+  list.sort(function (a,b) { return a.textContent>b.textContent?1:a.textContent<b.textContent?-1:0; })
+  list.forEach(function (e) { obj.appendChild(e); });
+}
+function selectmove(quelle,ziel)
+{
+  for (var i=0; node=quelle.options[i]; i++)
+    if (node.selected)
+      ziel.appendChild(node);
+}
+function selectcheck(sobj,value,check)
+{
+  for (var i=0; node=sobj.options[i]; i++)
+    if (node.value==value)
+      node.selected=check;
+}
+function selectfunc(sel,func)
+{
+  for (var i=sel.options.length-1; node=sel.options[i]; i--)
+    func(node);
+}
+*/
+
+/*
+
+|- ancestor
+   |- ancestor/parent
+      |- preceding
+      |- SELF
+      |  |- child/descendant
+      |     |- descendant
+      |- following
+
+AxisName  	Result
+ancestor 	Selects all ancestors (parent, grandparent, etc.) of the current node
+ancestor-or-self 	Selects all ancestors (parent, grandparent, etc.) of the current node and the current node itself
+attribute 	Selects all attributes of the current node
+child 	Selects all children of the current node
+descendant 	Selects all descendants (children, grandchildren, etc.) of the current node
+descendant-or-self 	Selects all descendants (children, grandchildren, etc.) of the current node and the current node itself
+following 	Selects everything in the document after the closing tag of the current node
+following-sibling 	Selects all siblings after the current node
+namespace 	Selects all namespace nodes of the current node
+parent 	Selects the parent of the current node
+preceding 	Selects everything in the document that is before the start tag of the current node
+preceding-sibling 	Selects all siblings before the current node
+self 	Selects the current node
+*/
+
+function Woems(obj, base)
+{
+  switch (typeof obj)
+  {
+    case "string": 
+      var i, arr = [], xpr = document.evaluate(obj, base || document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+      for (i = 0; item = xpr.snapshotItem(i); i++) arr.push(item);
+      this.obj=arr;
+      break;
+    default:
+      this.obj=[ obj ];
+      break;
+  }
+  this.style=function (Name,Value) {
+    this.obj.forEach(function (f) { f.style[Name]=Value; });
+    return this;
+  }
+  this.color=function (c) {
+    //this.obj.forEach(function (f) { GM_log(f+"|"+f.style.color); f.style.color=c });
+    this.style("color",c);
+    return this;
+  }
+  this.bgcolor=function (c) {
+    //this.obj.forEach(function (f) { GM_log(f+"|"+f.style.color); f.style.color=c });
+    this.style("backgroundColor",c);
+    return this;
+  }
+  this.html=function (trenner) {
+    return this.obj.map(function (f) { return f.innerHTML }).join(trenner||" ");
+  }
+  this.text=function (trenner) {
+    return this.obj.map(function (f) { return f.textContent }).join(trenner||" ");
+  }
+  this.value=function (trenner) {
+    return this.obj.map(function (f) { return f.value }).join(trenner||" ");
+  }
+  this.click=function (func) {
+    this.obj.forEach(function (f) {
+      f.addEventListener("click",function(event){
+        if (!func(event.target,event)) {
+          event.stopPropagation();
+          event.preventDefault();
+        }
+      }, true);
+    });
+    return this;
+  }
+  this.if=function (key,value)
+  {
+    this.obj=this.obj.filter(function (e) { return e[key]==value; });
+    return this;
+  }
+  this.filter=function (f)
+  {
+    this.obj=this.obj.filter(f);
+    return this;
+  }
+  this.log=function ()
+  {
+    GM_log("\nAnzahl Objekte: "+this.obj.length+"\n"+this.obj.map(function (f,i) { return i+". "+f.textContent }).join("\n"));
+    return this;
+  }
+  this.parent=function ()
+  {
+    this.obj=this.obj.map(function (f) { return f.parentNode; });
+    return this;
+  }
+}
+
+function $1(obj)
+{
+  return new Woems(obj);
+}
+
+//GM_log("Test1: "+$1("//a"));
+//GM_log("Test2: "+uneval($1("//a")));
+//GM_log("Test3: "+$1("//a").css("test"));
+//$1("//a").style("backgroundColor","green")
+//GM_log("Test4: "+$1("//a").color("red").bgcolor("blue").html("\n"));
+function green(e)
+{
+  if (e.parentNode.style.backgroundColor=="black" || e.style.backgroundColor=="black")
+    $1(e).bgcolor("").parent().bgcolor("");
+  else
+    $1(e).bgcolor("black").parent().bgcolor("");
+  return false; 
+}
+//$1("//a").click(green).bgcolor("black");
+
+
+
+
+
+
+if (!$("wWindows")) createElement("div",{ id:"wWindows" },document.body); // Beinhaltet alle Fenster
+css(".wOuterWindow { border:        3px solid black; background-color:#EEEEEE; z-index:999; }");
+css(".wTitelWindow { border-bottom: 3px solid black; padding:2px; text-align:center; background-color:lightgray; cursor:move; }");
+css(".wInnerWindow { padding:6px; }");
+
+function simpleWindow(t,l,w,h,titel,text,onClose,fixed)
+{
+  var outerWindow=createElement("div",{ className:"wOuterWindow", style:"position:"+(fixed?"fixed":"absolute")+"; top:"+t+"px; left:"+l+"px; min-width:"+w+"px; min-height:"+h+"px;" },$("wWindows")); //
+  on('DOMNodeInserted',outerWindow,function (e) { 
+    $x("//input[@type='button']",e.relatedNode).forEach(function (g){
+      on('click',g,function (h) { if (onClose(h.target.name, outerWindow, innerWindow, h)) outerWindow.style.display='none'; });
+    });
+  });
+  var titel=createElement("div",{ className:"wTitelWindow", textContent:titel },outerWindow);
+  var innerWindow=createElement("form",{ className:"wInnerWindow", innerHTML:text },outerWindow);
+  on("submit",innerWindow,function (e) { /*outerWindow.style.display="none";*/ onClose(e.type, outerWindow, innerWindow, e); e.stopPropagation(); e.preventDefault(); });
+  return outerWindow;
+}
+var text=
+        //form("https://it-service.intra.aa/it-service/index.pl?","testform",
+        "<table border=1>"+
+        HTML.row(['IT-Service',HTML.link('https://it-service.intra.aa')])+
+        HTML.row(['Webmin',HTML.link('https://www.intra.aa:10000')])+
+        HTML.row(['Nagios',HTML.link('https://mgmt09.intra.aa/cms/index.php?id=91&no_cache=1')])+
+        //HTML.row(["Inputfeld:",input("password","pwd","Test")])+
+        HTML.row(["TicketID:",HTML.input("text","TicketID","268216")])+
+        HTML.row(["Ort:",HTML.dropdownbox("Action",["AgentZoom","AgentQueueView"])])+
+        "</table>"+HTML.divright(HTML.button("ok","OK")+" "+HTML.button("cancel","abbrechen")+" "+HTML.button("save","Anwenden"));
+
+//var w1=simpleWindow(100,50,500,100,"Test2",text,function (button, outW, inW, e) { if (button=='cancel') return true; alert(button+"\n"+outW+"\n"+inW+"\n"+e.target+"\n"+e.type+"\n"+e.currentTarget+"\n"+e.eventPhase+"\n"+e.bubbles+"\n"+e.cancelable+"\n"+e.timeStamp); if (button=='ok') return true; },true);
+//GM_log("aaaa: "+document.forms.testform);
+//on("submit",document.forms.testform,function (e) { alert(e.target); });
+
+
+//document.body.innerHTML="<table border=1>"+row(["Test",123])+row([123,"Test2"])+"</table>"+div("Test");
+
+
+
+/*  https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array
+filter -  Creates a new array with all of the elements of this array for which the provided filtering function returns true.
+forEach - Calls a function for each element in the array.
+every - Returns true if every element in this array satisfies the provided testing function.
+map - Creates a new array with the results of calling a provided function on every element in this array.
+some - Returns true if at least one element in this array satisfies the provided testing function.
+reduce - Apply a function simultaneously against two values of the array (from left-to-right) as to reduce it to a single value.
+reduceRight - Apply a function simultaneously against two values of the array (from right-to-left) as to reduce it to a single value. 
+*/
+
+function typeOf(value) {
+    var s = typeof value;
+    if (s === 'object') {
+        if (value) {
+            if (typeof value.length === 'number' &&
+                    !(value.propertyIsEnumerable('length')) &&
+                    typeof value.splice === 'function') {
+                s = 'array';
+            }
+        } else {
+            s = 'null';
+        }
+    }
+    return s;
+}
+
+
+function isEmpty(o) {
+    var i, v;
+    if (typeOf(o) === 'object') {
+        for (i in o) {
+            v = o[i];
+            if (v !== undefined && typeOf(v) !== 'function') {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+String.prototype.entityify = function () {
+    return this.replace(/&/g, "&amp;").replace(/</g,
+        "&lt;").replace(/>/g, "&gt;");
+};
+
+String.prototype.quote = function () {
+    var c, i, l = this.length, o = '"';
+    for (i = 0; i < l; i += 1) {
+        c = this.charAt(i);
+        if (c >= ' ') {
+            if (c === '\\' || c === '"') {
+                o += '\\';
+            }
+            o += c;
+        } else {
+            switch (c) {
+            case '\b':
+                o += '\\b';
+                break;
+            case '\f':
+                o += '\\f';
+                break;
+            case '\n':
+                o += '\\n';
+                break;
+            case '\r':
+                o += '\\r';
+                break;
+            case '\t':
+                o += '\\t';
+                break;
+            default:
+                c = c.charCodeAt();
+                o += '\\u00' + Math.floor(c / 16).toString(16) +
+                    (c % 16).toString(16);
+            }
+        }
+    }
+    return o + '"';
+};
+
+String.prototype.supplant = function (o) {
+    return this.replace(/{([^{}]*)}/g,
+        function (a, b) {
+            var r = o[b];
+            return typeof r === 'string' || typeof r === 'number' ? r : a;
+        }
+    );
+};
+
+String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g, "");
+}; 
+
+//alert("lol{test}1233{{a}}".supplant({ a:"test" }).supplant({test:" " }).trim()+"++");
+
+
+/*/
+GM_log("hash: "+location.hash); // (Ankername innerhalb eines URI)                // 
+GM_log("host: "+location.host); // (Domain-Name innerhalb eines URI)              // www.onlinetvrecorder.com
+GM_log("hostname: "+location.hostname); // (Domain-Name innerhalb eines URI)      // www.onlinetvrecorder.com
+GM_log("href: "+location.href); // (URI / Verweis zu URI)                         // http://www.onlinetvrecorder.com/index.php?aktion=newepgschedule
+GM_log("pathname: "+location.pathname); // (Pfadname innerhalb eines URI)         // /index.php
+GM_log("port: "+location.port); // (Portangabe innerhalb eines URI)               //
+GM_log("protocol: "+location.protocol); // (Protokollangabe innerhalb eines URI)  // http:
+GM_log("search: "+location.search); // (Parameter innerhalb eines URI)            // ?aktion=newepgschedule
+/**/
+
+
+function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) {
+  // Load current value into variable
+  window[key] = GM_getValue(key, defaultValue);
+  // Add menu toggle
+  GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() {
+    GM_setValue(key, !window[key]);
+    location.reload();
+  });
+}
+
+function createEl(elObj, parent) {
+  var el;
+  if (typeof elObj == 'string') {
+     el = document.createTextNode(elObj);
+  }
+  else {
+     el = document.createElement(elObj.n);
+     if (elObj.a) {
+        attributes = elObj.a;
+        for (var key in attributes) if (attributes.hasOwnProperty(key)) {
+           if (key.charAt(0) == '@')
+              el.setAttribute(key.substring(1), attributes[key]);
+           else 
+              el[key] = attributes[key];
+        }
+     }
+     if (elObj.evl) {
+        el.addEventListener(elObj.evl.type, elObj.evl.f, elObj.evl.bubble);
+     }
+     if (elObj.c) {
+        elObj.c.forEach(function (v, i, a) { createEl(v, el); });
+     }
+  }
+  if (parent)
+     parent.appendChild(el);
+  return el;
+}
+
+
+//Example usage:
+/*
+   createEl({n: 'ol', a: {'@class': 'some_list', '@id': 'my_list'}, c: [
+   {n: 'li', a: {textContent: 'first point'}, evl: {type: 'click', f: function() {alert('first point');}, bubble: true}},
+   {n: 'li', a: {textContent: 'second point'}},
+   {n: 'li', a: {textContent: 'third point'}}
+   ]}, document.body);
+
+<ol id="my_list" class="some_list">
+  <li onClick="alert('first point');">first point</li>
+  <li>second point</li>
+  <li>third point</li>
+</ol>
+*/
+
+function dump(obj)
+{
+  var variablen="";
+  var objekte="";
+  var functionen="";
+  if (typeof obj!="object") return obj;
+  for (i in obj)
+    switch (typeof obj[i])
+    {
+      case "function":
+        functionen+=""+obj[i]+"\n\n";
+        break;
+      case "object":
+        var tmp="";
+        try {
+        for (j in obj[i])
+          switch (typeof obj[i][j])
+          {
+           case "object":
+              tmp+=j+": { ... },\n";
+              break;
+           case "function":
+              tmp+=j+": function () { ... },\n";
+              break;
+           case "string":
+              tmp+=j+": '"+obj[i][j]+"',\n";
+              break;
+           case "number":
+           case "boolean":
+              tmp+=j+": "+obj[i][j]+",\n";
+              break;
+           default: tmp+=j+": ...,\n";
+          }
+        } catch(e) { tmp="..."; };
+        objekte+="var "+i+" = { "+tmp+" }\n\n";
+        break;
+      case "string":
+        variablen+="var "+i+" = '"+obj[i]+"'\n\n";
+        break;
+      case "number":
+      case "boolean":
+        variablen+="var "+i+" = "+obj[i]+"\n\n";
+        break;
+      default:
+        try {
+          GM_log("Error: " +typeof obj[i]+" - "+obj[i]);
+        } catch(e) {}
+        break;
+    }
+  return variablen+objekte+functionen;
+}
+
+function copyToClipboard(text) { location.assign( "javascript:try { netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect'); } catch(e) { if (e.message.indexOf('UniversalXPConnect')) alert('Clipboard access not permitted, sorry. You will have to set signed.applet.codebase_principal_support to true in about:config'); else throw e; } const clipboardHelper = Components.classes['@mozilla.org/widget/clipboardhelper;1'].getService(Components.interfaces.nsIClipboardHelper);    clipboardHelper.copyString('"+text.replace("'",'"')+"'); void(0)" ); }
+
+/*
+unsafeWindow.pasteFromClipboard = function() {
+  try {
+    this.netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+    const clipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].getService(Components.interfaces.nsIClipboardHelper);
+    settings = clipboardHelper.getData();
+    return settings;
+  } catch(e) {
+    alert('Clipboard access not permitted, sorry. You will have to set signed.applet.codebase_principal_support to true in about:config');
+  }
+}
+*/
+//copyToClipboard("2345");
+
 
