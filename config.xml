@@ -1118,4 +1118,23 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.h0-modellbahnforum.de*</Include>
   </Script>
+  <Script basedir="YouTube_Link_Title" checkRemoteUpdates="1" dependhash="204b370489069707f5cf045b0f63f6086ad631f7" description="Adds video titles, shows previews and embeds on click. Also supported: Vimeo, LiveLeak, Dailymotion, WorldStarHipHop, Vine, Coub" enabled="true" filename="YouTube_Link_Title.user.js" name="YouTube Link Title" namespace="http://w9p.co/userscripts/" runAt="document-end" version="2014.10.19" installurl="https://greasyfork.org/scripts/413-youtube-link-title/code/YouTube%20Link%20Title.user.js" updateurl="https://greasyfork.org/scripts/413-youtube-link-title/code/YouTube%20Link%20Title.user.js" icon="large.png">
+    <Exclude>http*//*.google.*/*</Exclude>
+    <Exclude>*//*.googleapis.com/*</Exclude>
+    <Exclude>*//*.youtube.com/*</Exclude>
+    <Exclude>*//vimeo.com/*</Exclude>
+    <Exclude>*//*.vimeo.com/*</Exclude>
+    <Exclude>*//*.liveleak.com/*</Exclude>
+    <Exclude>*//*.worldstarhiphop.com/*</Exclude>
+    <Exclude>*//vine.co/*</Exclude>
+    <Exclude>*//*.dailymotion.com/*</Exclude>
+    <Exclude>*//coub.com/*</Exclude>
+    <Exclude>*//*.reddit.com/toolbar/*</Exclude>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Include>http*</Include>
+  </Script>
 </UserScriptConfig>
