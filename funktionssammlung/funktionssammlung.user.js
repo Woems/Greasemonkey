@@ -1362,12 +1362,12 @@ function green(e)
 
 
 
-
+/*
 if (!$("wWindows")) createElement("div",{ id:"wWindows" },document.body); // Beinhaltet alle Fenster
 css(".wOuterWindow { border:        3px solid black; background-color:#EEEEEE; z-index:999; }");
 css(".wTitelWindow { border-bottom: 3px solid black; padding:2px; text-align:center; background-color:lightgray; cursor:move; }");
 css(".wInnerWindow { padding:6px; }");
-
+*/
 function simpleWindow(t,l,w,h,titel,text,onClose,fixed)
 {
   var outerWindow=createElement("div",{ className:"wOuterWindow", style:"position:"+(fixed?"fixed":"absolute")+"; top:"+t+"px; left:"+l+"px; min-width:"+w+"px; min-height:"+h+"px;" },$("wWindows")); //
@@ -1381,6 +1381,7 @@ function simpleWindow(t,l,w,h,titel,text,onClose,fixed)
   on("submit",innerWindow,function (e) { /*outerWindow.style.display="none";*/ onClose(e.type, outerWindow, innerWindow, e); e.stopPropagation(); e.preventDefault(); });
   return outerWindow;
 }
+/*
 var text=
         //form("https://it-service.intra.aa/it-service/index.pl?","testform",
         "<table border=1>"+
@@ -1391,7 +1392,7 @@ var text=
         HTML.row(["TicketID:",HTML.input("text","TicketID","268216")])+
         HTML.row(["Ort:",HTML.dropdownbox("Action",["AgentZoom","AgentQueueView"])])+
         "</table>"+HTML.divright(HTML.button("ok","OK")+" "+HTML.button("cancel","abbrechen")+" "+HTML.button("save","Anwenden"));
-
+*/
 //var w1=simpleWindow(100,50,500,100,"Test2",text,function (button, outW, inW, e) { if (button=='cancel') return true; alert(button+"\n"+outW+"\n"+inW+"\n"+e.target+"\n"+e.type+"\n"+e.currentTarget+"\n"+e.eventPhase+"\n"+e.bubbles+"\n"+e.cancelable+"\n"+e.timeStamp); if (button=='ok') return true; },true);
 //GM_log("aaaa: "+document.forms.testform);
 //on("submit",document.forms.testform,function (e) { alert(e.target); });
