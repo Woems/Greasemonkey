@@ -1137,4 +1137,8 @@
     <Grant>GM_registerMenuCommand</Grant>
     <Include>http*</Include>
   </Script>
+  <Script basedir="Woems_Youtube_Refresh" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Woems_Youtube_Refresh.user.js" name="Woems Youtube Refresh" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Woems_Youtube_Refresh/Woems_Youtube_Refresh.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Woems_Youtube_Refresh/Woems_Youtube_Refresh.user.js">
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Include>*</Include>
+  </Script>
 </UserScriptConfig>
