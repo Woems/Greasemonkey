@@ -246,5 +246,19 @@ function createHover(elem,text)
 //alert(location.search);
 //alert(location.pathname);
 //alert(location.href);
-LinkZurAktuallenSeite=$xs("//a[@href='"+location.href+"']");
+var LinkZurAktuallenSeite=$xs("//a[@href='"+location.href+"']");
 LinkZurAktuallenSeite.style.color="red";
+
+//var allLinks=$xs("id('sidebar')//a");
+
+var Next=$xs("//a[@href='"+location.href+"']/following::a[1]");
+var Previous=$xs("//a[@href='"+location.href+"']/preceding::a[1]");
+var div=createElement('div',{ style:"position:fixed; padding: 5px; bottom:5px; right:5px; background-color:lightgray; border: 1px solid black" }, document.body);
+div.appendChild(Text("Previous: "));
+createElement('a',{ href:Previous.href, innerHTML:Previous.innerHTML }, div);
+createElement('br',{  }, div);
+div.appendChild(Text("Next: "));
+createElement('a',{ href:Next.href, innerHTML:Next.innerHTML }, div);
+
+
+
