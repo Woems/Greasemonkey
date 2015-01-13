@@ -1145,4 +1145,16 @@
     <Grant>GM_log</Grant>
     <Include>http://www.modellbahn-links.de*</Include>
   </Script>
+  <Script basedir="Selfhost" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Selfhost.user.js" name="Selfhost" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Selfhost/Selfhost.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Selfhost/Selfhost.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_deleteValue</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_log</Grant>
+    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_xmlhttpRequest</Grant>
+    <Grant>unsafeWindow</Grant>
+    <Include>https://secure.selfhost.de*</Include>
+    <Include>http://www.selfhost.de*</Include>
+  </Script>
 </UserScriptConfig>
