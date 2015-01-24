@@ -1157,4 +1157,8 @@
     <Include>https://secure.selfhost.de*</Include>
     <Include>http://www.selfhost.de*</Include>
   </Script>
+  <Script basedir="serienjunkies.org" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="serienjunkies.org.user.js" name="serienjunkies.org" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/serienjunkies.org/serienjunkies.org.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/serienjunkies.org/serienjunkies.org.user.js">
+    <Grant>none</Grant>
+    <Include>http://serienjunkies.org*</Include>
+  </Script>
 </UserScriptConfig>
