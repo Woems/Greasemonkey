@@ -1067,9 +1067,11 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.hacker.org*</Include>
   </Script>
-  <Script basedir="Test" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="Test.user.js" name="Test" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
-    <Grant>none</Grant>
-    <Include>http://de.selfhtml.org*</Include>
+  <Script basedir="Test" checkRemoteUpdates="1" dependhash="ee67048c16114b59bde1dd75ccd5f3ddf05b60da" description="" enabled="true" filename="Test.user.js" name="Test" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Include>*</Include>
+    <Require filename="jquery.min.js"/>
+    <Require filename="jquery-ui.min.js"/>
   </Script>
   <Script basedir="WeeWar_-_Reminder" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="WeeWar_-_Reminder.user.js" name="WeeWar - Reminder" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js">
     <Grant>GM_getValue</Grant>
