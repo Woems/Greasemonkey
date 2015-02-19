@@ -242,6 +242,20 @@ function createHover(elem,text)
 var Sekunden=1000;
 function msg(txt) { noty({ timeout: 10*Sekunden, layout: "bottomRight", type:"alert",text: txt}); }
 function err(txt) { noty({ timeout: 60*Sekunden, layout: "bottomRight", type:"error",text: txt}); }
+function cfm(txt, success, fail)
+{
+  noty({ timeout: 10*Sekunden, layout: "bottomRight", text: txt, buttons: [
+    {addClass: 'btn btn-primary', text: 'Erneut abrufen', onClick: function($noty) { if (success) success(this, $noty); $noty.close(); } },
+		{addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) { if (fail) fail(this, $noty); $noty.close(); }	}
+	] });
+}
+function errcfm(txt, success, fail)
+{
+  noty({ timeout: 60*Sekunden, layout: "bottomRight", type:"error", text: txt, buttons: [
+    {addClass: 'btn btn-primary', text: 'Erneut abrufen', onClick: function($noty) { if (success) success(this, $noty); $noty.close(); } },
+		{addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) { if (fail) fail(this, $noty); $noty.close(); }	}
+	] });
+}
 
 function obj2text(obj,transl)
 {
@@ -270,8 +284,8 @@ get("https://www.9kw.eu/grafik/servercheck.txt", function (url, text, header, xh
 //for (i in servercheck) msg("<h1>"+i+"</h1>"+obj2text(servercheck[i],{ sep:"<br>" }));
 //msg(obj2text(servercheck["last"],{ sep:"<br>" }));
 
-
-if (alleXTage(1/4) || ( GM_getValue("Guthaben",0)<1500 && alleXTage(1/24/60) ))
+function guthaben9kw()
+{
   get("https://www.9kw.eu/index.cgi?action=usercaptchaguthaben&apikey=ZZSTCTXB830XF44YQC", function (url, text, header, xhr)
   {
     //var div=text2div(text);
@@ -281,10 +295,14 @@ if (alleXTage(1/4) || ( GM_getValue("Guthaben",0)<1500 && alleXTage(1/24/60) ))
     //if (guthaben < 1000) err("9kw Guthaben ist nur noch "+guthaben);
       //alert("9kw Guthaben ist nur noch "+guthaben);
   });
+}
+
+if (alleXTage(1/4) || ( GM_getValue("Guthaben",0)<1000 && alleXTage(1/24/60) )) guthaben9kw();
   
 var guthaben=GM_getValue("Guthaben",0);
 if (guthaben<1000)
-  err("9kw Guthaben ist nur noch "+guthaben);
+  errcfm("9kw Guthaben ist nur noch "+guthaben, guthaben9kw);
 else if (guthaben<1500)
-  msg("9kw Guthaben ist noch "+guthaben);
+  cfm("9kw Guthaben ist noch "+guthaben, guthaben9kw);
+  //msg("9kw Guthaben ist noch "+guthaben);
 
