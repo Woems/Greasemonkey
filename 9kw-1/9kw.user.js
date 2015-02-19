@@ -3,7 +3,12 @@
 // @namespace   Woems
 // @include     *
 // @version     1
+// @require     https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js
+// @require     https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js
+// @require     https://raw.githubusercontent.com/needim/noty/master/js/noty/packaged/jquery.noty.packaged.min.js
 // ==/UserScript==
+
+this.$ = this.jQuery = jQuery.noConflict(true);
 
 /******** BASE FUNCTIONS ********/
 function $(ID) { return (typeof ID === 'string' ? document.getElementById(ID) : ID) }
@@ -234,15 +239,52 @@ function createHover(elem,text)
 // ** Infos **
 // location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/ 
+var Sekunden=1000;
+function msg(txt) { noty({ timeout: 10*Sekunden, layout: "bottomRight", type:"alert",text: txt}); }
+function err(txt) { noty({ timeout: 60*Sekunden, layout: "bottomRight", type:"error",text: txt}); }
+
+function obj2text(obj,transl)
+{
+  var out=[];
+  for (i in obj)
+  {
+    out.push( (transl[i]||i) + ": "+ obj[i] );
+  }
+  return out.join(transl["sep"]||"\n");
+}
+
+/*/
+get("https://www.9kw.eu/grafik/servercheck.txt", function (url, text, header, xhr) {
+  var sp=text.split("|").reduce(function (obj,n) { var s=n.split("="); obj[s[0]]=s[1]; return obj; }, {});
+  //if (typeof servercheck["last"]=="object" && servercheck["last"]
+  var servercheck=deserialize('servercheck',{});
+  servercheck["last"]=jQuery.extend({},sp);  
+  servercheck[+new Date()]=jQuery.extend({},sp);
+  serialize('servercheck',servercheck);
+    msg(obj2text(servercheck["last"],{ sep:"<br>" }));
+});
+/*/
+
+//var servercheck=deserialize('servercheck',{});
+//msg(uneval(servercheck));
+//for (i in servercheck) msg("<h1>"+i+"</h1>"+obj2text(servercheck[i],{ sep:"<br>" }));
+//msg(obj2text(servercheck["last"],{ sep:"<br>" }));
 
 
-if (alleXTage(1) || ( GM_getValue("Guthaben",1000)<1000 && alleXTage(1/24/60) ))
+if (alleXTage(1/4) || ( GM_getValue("Guthaben",0)<1500 && alleXTage(1/24/60) ))
   get("https://www.9kw.eu/index.cgi?action=usercaptchaguthaben&apikey=ZZSTCTXB830XF44YQC", function (url, text, header, xhr)
   {
     //var div=text2div(text);
     var guthaben=+text;
     GM_setValue("Guthaben",guthaben);
-    if (guthaben < 1000)
-      alert("9kw Guthaben ist nur noch "+guthaben);
+    msg("9kw Guthaben: "+guthaben);
+    //if (guthaben < 1000) err("9kw Guthaben ist nur noch "+guthaben);
+      //alert("9kw Guthaben ist nur noch "+guthaben);
   });
+  
+var guthaben=GM_getValue("Guthaben",0);
+if (guthaben<1000)
+  err("9kw Guthaben ist nur noch "+guthaben);
+else if (guthaben<1500)
+  msg("9kw Guthaben ist noch "+guthaben);
 
