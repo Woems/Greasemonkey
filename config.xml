@@ -1184,7 +1184,7 @@
     <Grant>none</Grant>
     <Include>http://dokujunkies.org*</Include>
   </Script>
-  <Script basedir="9kw-1" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="9kw.user.js" name="9kw" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/9kw-1/9kw.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/9kw-1/9kw.user.js">
+  <Script basedir="9kw-1" checkRemoteUpdates="1" dependhash="7f8bd11000a03c44f5df23d10a95acecb1ee3799" description="" enabled="true" filename="9kw.user.js" name="9kw" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/9kw-1/9kw.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/9kw-1/9kw.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -1194,5 +1194,8 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>*</Include>
+    <Require filename="jquery.min.js"/>
+    <Require filename="jquery-ui.min.js"/>
+    <Require filename="jquery.noty.packaged.min.js"/>
   </Script>
 </UserScriptConfig>
