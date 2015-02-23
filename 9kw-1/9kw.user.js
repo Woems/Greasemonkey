@@ -297,7 +297,7 @@ function guthaben9kw()
   });
 }
 
-if (alleXTage(1/4) || ( GM_getValue("Guthaben",0)<1000 && alleXTage(1/24/60) )) guthaben9kw();
+if (alleXTage(0.5) || ( GM_getValue("Guthaben",0)<1000 && alleXTage(1/24/60) )) guthaben9kw();
   
 var guthaben=GM_getValue("Guthaben",0);
 if (guthaben<1000)
