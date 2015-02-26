@@ -779,16 +779,14 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Include>http://fritz.box*</Include>
   </Script>
-  <Script basedir="kgforum" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen" enabled="true" filename="kgforum.user.js" name="kgforum" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
+  <Script basedir="kgforum" checkRemoteUpdates="NaN" dependhash="7f8bd11000a03c44f5df23d10a95acecb1ee3799" description="Verbesserungen" enabled="true" filename="kgforum.user.js" name="kgforum" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js">
     <Grant>GM_log</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
-    <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
     <Include>http://www.kgforum.org*</Include>
+    <Require filename="jquery.min.js"/>
+    <Require filename="jquery-ui.min.js"/>
+    <Require filename="jquery.noty.packaged.min.js"/>
   </Script>
   <Script basedir="ogame_fast_login" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="with this script the login form will show up after ogame loaded. this will let your browser fill the login data (if login data is saved)." enabled="true" filename="ogame_fast_login.user.js" name="ogame fast login" namespace="ogamefl" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js">
     <Exclude>http://*ogame.*/game/*</Exclude>
@@ -1076,11 +1074,12 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.hacker.org*</Include>
   </Script>
-  <Script basedir="Test" checkRemoteUpdates="NaN" dependhash="ee67048c16114b59bde1dd75ccd5f3ddf05b60da" description="" enabled="false" filename="Test.user.js" name="Test" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
+  <Script basedir="Test" checkRemoteUpdates="NaN" dependhash="7f8bd11000a03c44f5df23d10a95acecb1ee3799" description="" enabled="true" filename="Test.user.js" name="Test" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
     <Grant>GM_addStyle</Grant>
     <Include>*</Include>
     <Require filename="jquery.min.js"/>
     <Require filename="jquery-ui.min.js"/>
+    <Require filename="jquery.noty.packaged.min.js"/>
   </Script>
   <Script basedir="WeeWar_-_Reminder" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="WeeWar_-_Reminder.user.js" name="WeeWar - Reminder" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js">
     <Grant>GM_addStyle</Grant>
