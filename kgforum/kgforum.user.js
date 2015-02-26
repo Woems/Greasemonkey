@@ -3,12 +3,13 @@
 // @namespace      Woems
 // @description    Verbesserungen
 // @include        http://www.kgforum.org*
-// ==/UserScript==
-
-// ==UserScript==
-// @name           Funktionssammlung
-// @namespace      Woems
-// @include        *
+// @version        1
+// @grant          GM_log
+// @grant          GM_getValue
+// @grant          GM_setValue
+// @require        https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js
+// @require        https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js
+// @require        https://raw.githubusercontent.com/needim/noty/master/js/noty/packaged/jquery.noty.packaged.min.js
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -423,4 +424,50 @@ function display(ForumsID, Bereich, Thread, MaxArtikel, Artikel) // Einzelner Tr
     /**/
 } // display()
 
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+
+function Forum()
+{
+  var param=location.pathname.substr(1).split('.')[0].split("_");
+
+  this.display = function (type, forum, subforum, thema, maxa, articel)
+  {
+    //au(forum,subforum,thema,maxa, articel);
+    noty({ text: "lol", type:"confirm", layout:"bottomRight", timeout:60000, buttons: [
+		{addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
+				$noty.close();
+				noty({text: 'You clicked "Ok" button', type: 'success', layout:"bottomRight"});
+			}
+		},
+		{addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {
+				$noty.close();
+				noty({text: 'You clicked "Cancel" button', type: 'error', layout:"bottomRight"});
+			}
+		}
+	] });
+  }
+  this.threads = function (type, forum, subforum)
+  {
+    au(forum,subforum);
+  }
+  if (this[param[0]])
+    this[param[0]].apply(this,param);
+  else
+    au(param);
+}
+
+function au() { var t=[]; for (var i=0; i<arguments.length; i++) t.push(uneval(arguments[i])); alert(t.join("\n\n")); }
+
+new Forum();
 
