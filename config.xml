@@ -1,5 +1,5 @@
 <UserScriptConfig>
-	<Script basedir="kinopolis_-_more_info" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_more_info.user.js" installTime="1404226426648" modified="1342432504000" name="Kinopolis - More info" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ec09e002-cb00-4e5e-8ad2-26048537d27b" version="null" installurl="null" updateurl="null">
+	<Script basedir="kinopolis_-_more_info" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="kinopolis_-_more_info.user.js" installTime="1404226426648" modified="1342432504000" name="Kinopolis - More info" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ec09e002-cb00-4e5e-8ad2-26048537d27b" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -11,11 +11,11 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.kinopolis.de/filme/filminfo.dhtml?filmoid=*</Include>
 	</Script>
-	<Script basedir="notpron_sound" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="notpron_sound.user.js" installTime="1404226426874" modified="1335185551000" name="notpron sound" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="b673c7ec-173f-452c-8077-db9cab035161" version="null" installurl="null" updateurl="null">
+	<Script basedir="notpron_sound" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="notpron_sound.user.js" installTime="1404226426874" modified="1335185551000" name="notpron sound" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="b673c7ec-173f-452c-8077-db9cab035161" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://deathball.net/notpron/*</Include>
 	</Script>
-	<Script basedir="studivz_status_der_grupp" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt den Status der Gruppenbenachrichtigung in der Übersicht an" enabled="true" filename="studivz_status_der_grupp.user.js" installTime="1404226426917" modified="1335185551000" name="StudiVZ Status der Gruppenbenachrichtigung in der Übersicht" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="8d44c1f7-a8f0-45a5-8f01-02f912b1e8f2" version="null" installurl="null" updateurl="null">
+	<Script basedir="studivz_status_der_grupp" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt den Status der Gruppenbenachrichtigung in der Übersicht an" enabled="true" noframes="false" filename="studivz_status_der_grupp.user.js" installTime="1404226426917" modified="1335185551000" name="StudiVZ Status der Gruppenbenachrichtigung in der Übersicht" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="8d44c1f7-a8f0-45a5-8f01-02f912b1e8f2" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_openInTab</Grant>
@@ -23,7 +23,7 @@
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://www.studivz.net/groups.php*</Include>
 	</Script>
-	<Script basedir="rapidshare_downloadmanag" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="rapidshare_downloadmanag.user.js" installTime="1404226426964" modified="1335185551000" name="Rapidshare Downloadmanager" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="cb674616-a444-431b-b728-0e6e63745fef" version="null" installurl="null" updateurl="null">
+	<Script basedir="rapidshare_downloadmanag" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="rapidshare_downloadmanag.user.js" installTime="1404226426964" modified="1335185551000" name="Rapidshare Downloadmanager" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="cb674616-a444-431b-b728-0e6e63745fef" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_openInTab</Grant>
@@ -32,11 +32,11 @@
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="google_search_compact_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Compact and two-column Google results with managed ads and some cherry" enabled="false" filename="google_search_compact_.user.js" installTime="1404226427018" modified="1335185551000" name="Google Search Compact ✪✪✪" namespace="random_1" runAt="document-end" updateMetaStatus="unknown" uuid="b1e91c43-b352-4c9d-9501-0394ccdab0d7" version="0.2.1b" installurl="null" updateurl="null">
+	<Script basedir="google_search_compact_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Compact and two-column Google results with managed ads and some cherry" enabled="false" noframes="false" filename="google_search_compact_.user.js" installTime="1404226427018" modified="1335185551000" name="Google Search Compact ✪✪✪" namespace="random_1" runAt="document-end" updateMetaStatus="unknown" uuid="b1e91c43-b352-4c9d-9501-0394ccdab0d7" version="0.2.1b" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://www.google.*/search*</Include>
 	</Script>
-	<Script basedir="google_fx" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nice Look&amp;Feel + Sites ThumbShots + Global Google Suggest (multi-lang) + Full AutoPage Results + Easy Access to Advance Filters + Relink Images &amp; FullSize preview + Search in Other Searchers + Static Menus &amp; ToolBars + Multi-Language Feature + Full User's Settings... and more. [Op &amp; FF]" enabled="false" filename="google_fx.user.js" installTime="1404226427173" modified="1335185551000" name="Google Fx" namespace="http://userscripts.org/scripts/show/31950" runAt="document-end" updateMetaStatus="fail" uuid="cf378825-baba-48c3-8183-f601a1e1be48" version="2.1.5" installurl="null" updateurl="http://userscripts.org.nyud.net/scripts/source/31950.meta.js">
+	<Script basedir="google_fx" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nice Look&amp;Feel + Sites ThumbShots + Global Google Suggest (multi-lang) + Full AutoPage Results + Easy Access to Advance Filters + Relink Images &amp; FullSize preview + Search in Other Searchers + Static Menus &amp; ToolBars + Multi-Language Feature + Full User's Settings... and more. [Op &amp; FF]" enabled="false" noframes="false" filename="google_fx.user.js" installTime="1404226427173" modified="1335185551000" name="Google Fx" namespace="http://userscripts.org/scripts/show/31950" runAt="document-end" updateMetaStatus="fail" uuid="cf378825-baba-48c3-8183-f601a1e1be48" version="2.1.5" installurl="null" updateurl="http://userscripts.org.nyud.net/scripts/source/31950.meta.js">
 		<Exclude>http://*.google.*/complete/*</Exclude>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -51,34 +51,34 @@
 		<Include>http://74.125.*.*/*</Include>
 		<Include>http://216.239.*.*/*</Include>
 	</Script>
-	<Script basedir="kinopolis_-_keine_werbun" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Blendet die Werbung beim Drucken aus" enabled="true" filename="kinopolis_-_keine_werbun.user.js" installTime="1404226427235" modified="1335185551000" name="Kinopolis - keine Werbung" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="8d273dfe-32a9-4fff-ab2b-03e80585cfaa" version="null" installurl="null" updateurl="null">
+	<Script basedir="kinopolis_-_keine_werbun" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Blendet die Werbung beim Drucken aus" enabled="true" noframes="false" filename="kinopolis_-_keine_werbun.user.js" installTime="1404226427235" modified="1335185551000" name="Kinopolis - keine Werbung" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="8d273dfe-32a9-4fff-ab2b-03e80585cfaa" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://213.168.82.190/Reservation.ASP?WCI=PrintAtHome&amp;Nr=*&amp;IsPrintPreview=1</Include>
 	</Script>
-	<Script basedir="werbeblocker_-_ascaron" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="werbeblocker_-_ascaron.user.js" installTime="1404226427300" modified="1335185551000" name="Werbeblocker - ascaron" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="fccde98c-1446-4438-a531-6f5dfd480d4a" version="null" installurl="null" updateurl="null">
+	<Script basedir="werbeblocker_-_ascaron" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="werbeblocker_-_ascaron.user.js" installTime="1404226427300" modified="1335185551000" name="Werbeblocker - ascaron" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="fccde98c-1446-4438-a531-6f5dfd480d4a" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://ascaron.alien.to/*</Include>
 		<Include>http://sothys1987.so.funpic.de/*</Include>
 	</Script>
-	<Script basedir="wurzelzeit" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt neben den Dekupunkten an, wenn wieder was im Wurzelimperium zu tun ist." enabled="false" filename="wurzelzeit.user.js" installTime="1404226427373" modified="1335185551000" name="Wurzelzeit" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="13274e23-748f-4a16-b23f-11df3b9de279" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelzeit" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt neben den Dekupunkten an, wenn wieder was im Wurzelimperium zu tun ist." enabled="false" noframes="false" filename="wurzelzeit.user.js" installTime="1404226427373" modified="1335185551000" name="Wurzelzeit" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="13274e23-748f-4a16-b23f-11df3b9de279" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://s*.wurzelimperium.de/main.php?page=garden</Include>
 		<Include>http://s*.wurzelimperium.de/menu.php</Include>
 	</Script>
-	<Script basedir="wurzelimperium" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="wurzelimperium.user.js" installTime="1404226427474" modified="1335185551000" name="Wurzelimperium" namespace="www.wurzelimperium.de" runAt="document-end" updateMetaStatus="unknown" uuid="7f7eb62e-cbb9-412a-85cb-029480bc5ff6" version="updatet-1.0" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="wurzelimperium.user.js" installTime="1404226427474" modified="1335185551000" name="Wurzelimperium" namespace="www.wurzelimperium.de" runAt="document-end" updateMetaStatus="unknown" uuid="7f7eb62e-cbb9-412a-85cb-029480bc5ff6" version="updatet-1.0" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://s*.wurzelimperium.de/*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_autolog" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_autolog.user.js" installTime="1404226427544" modified="1335185551000" name="Wurzelimperium - Autologin" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="a58aeaa2-9744-46c5-b065-d34c283b9966" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_autolog" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="wurzelimperium_-_autolog.user.js" installTime="1404226427544" modified="1335185551000" name="Wurzelimperium - Autologin" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="a58aeaa2-9744-46c5-b065-d34c283b9966" version="null" installurl="null" updateurl="null">
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.wurzelimperium.de/*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="false" filename="wurzelimperium_-_giescri.user.js" installTime="1404226427640" modified="1365406533000" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="27e0f3ae-c079-41f4-a2ad-538c527ca8f9" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_giescri" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatisches setzen, giessen und ernten der Pflanzen" enabled="false" noframes="false" filename="wurzelimperium_-_giescri.user.js" installTime="1404226427640" modified="1365406533000" name="Wurzelimperium - Giessscript" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="27e0f3ae-c079-41f4-a2ad-538c527ca8f9" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -89,7 +89,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_wimp-prei" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Vergleicht die gebotenen Preise der Wimps mit dem NPC- oder Markt-Preis" enabled="true" filename="wurzelimperium_wimp-prei.user.js" installTime="1404226427721" modified="1335185551000" name="Wurzelimperium Wimp-Preischeck" namespace="http://userscripts.org/scripts/source/40956.user.js" runAt="document-end" updateMetaStatus="unknown" uuid="de88b757-7665-4df5-858f-0b2e0fd5d3f2" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_wimp-prei" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Vergleicht die gebotenen Preise der Wimps mit dem NPC- oder Markt-Preis" enabled="true" noframes="false" filename="wurzelimperium_wimp-prei.user.js" installTime="1404226427721" modified="1335185551000" name="Wurzelimperium Wimp-Preischeck" namespace="http://userscripts.org/scripts/source/40956.user.js" runAt="document-end" updateMetaStatus="unknown" uuid="de88b757-7665-4df5-858f-0b2e0fd5d3f2" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
@@ -98,32 +98,32 @@
 		<Include>http://s*.sadowajaimperija.ru/*</Include>
 		<Include>http://s*.molehillempire.*.php*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_punkte_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_punkte_.user.js" installTime="1404226427779" modified="1335185551000" name="Wurzelimperium - Punkte als Bargraph" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="33bc10da-fb23-4605-87f0-5aee7234da40" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_punkte_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="wurzelimperium_-_punkte_.user.js" installTime="1404226427779" modified="1335185551000" name="Wurzelimperium - Punkte als Bargraph" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="33bc10da-fb23-4605-87f0-5aee7234da40" version="null" installurl="null" updateurl="null">
 		<Grant>GM_log</Grant>
 		<Include>http://s*.wurzelimperium.de/*</Include>
 	</Script>
-	<Script basedir="the_west_fullscreen_skin" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Fullscreen skin for the west" enabled="false" filename="the_west_fullscreen_skin.user.js" installTime="1404226427837" modified="1335185551000" name="The West Fullscreen skin" namespace="www.the-west.sk" runAt="document-end" updateMetaStatus="unknown" uuid="a0801969-58ea-4cbf-b693-2ac56cedec3f" version="null" installurl="null" updateurl="null">
+	<Script basedir="the_west_fullscreen_skin" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Fullscreen skin for the west" enabled="false" noframes="false" filename="the_west_fullscreen_skin.user.js" installTime="1404226427837" modified="1335185551000" name="The West Fullscreen skin" namespace="www.the-west.sk" runAt="document-end" updateMetaStatus="unknown" uuid="a0801969-58ea-4cbf-b693-2ac56cedec3f" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*.the-west.*/game.php*</Include>
 		<Include>http://zz1w1.tw.innogames.net/game.php*</Include>
 	</Script>
-	<Script basedir="the_west_jobs" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Arbeiten Wahlhilfe für &quot;The West&quot;" enabled="true" filename="the_west_jobs.user.js" installTime="1404226427926" modified="1335185551000" name="The West Jobs" namespace="dschachtler.dssr.ch" runAt="document-end" updateMetaStatus="unknown" uuid="0ebb1689-77d8-4de4-ad4f-bd6b74abc40d" version="null" installurl="null" updateurl="null">
+	<Script basedir="the_west_jobs" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Arbeiten Wahlhilfe für &quot;The West&quot;" enabled="true" noframes="false" filename="the_west_jobs.user.js" installTime="1404226427926" modified="1335185551000" name="The West Jobs" namespace="dschachtler.dssr.ch" runAt="document-end" updateMetaStatus="unknown" uuid="0ebb1689-77d8-4de4-ad4f-bd6b74abc40d" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://de*.the-west.de/game.php</Include>
 	</Script>
-	<Script basedir="myfreefarm_-_time_2_titl" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt in der Titelleiste, wann das naechste Mal etwas gemacht werden muss." enabled="false" filename="myfreefarm_-_time_2_titl.user.js" installTime="1404226427981" modified="1335185551000" name="myfreefarm - time 2 title" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="22db45b5-a59f-4234-86a9-777dcff23186" version="null" installurl="null" updateurl="null">
+	<Script basedir="myfreefarm_-_time_2_titl" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt in der Titelleiste, wann das naechste Mal etwas gemacht werden muss." enabled="false" noframes="false" filename="myfreefarm_-_time_2_titl.user.js" installTime="1404226427981" modified="1335185551000" name="myfreefarm - time 2 title" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="22db45b5-a59f-4234-86a9-777dcff23186" version="null" installurl="null" updateurl="null">
 		<Grant>GM_log</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://s*.myfreefarm.de*</Include>
 	</Script>
-	<Script basedir="userscriptsorg_menu_comm" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Adds some sexy drop-downs to your userscripts." enabled="true" filename="userscriptsorg_menu_comm.user.js" installTime="1404226428030" modified="1335185551000" name="Userscripts.org Menu Commander" namespace="#aVg" runAt="document-end" updateMetaStatus="unknown" uuid="26ef2ea2-baaa-4464-a597-2c75b6b5e873" version="0.1.1" installurl="null" updateurl="null">
+	<Script basedir="userscriptsorg_menu_comm" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Adds some sexy drop-downs to your userscripts." enabled="true" noframes="false" filename="userscriptsorg_menu_comm.user.js" installTime="1404226428030" modified="1335185551000" name="Userscripts.org Menu Commander" namespace="#aVg" runAt="document-end" updateMetaStatus="unknown" uuid="26ef2ea2-baaa-4464-a597-2c75b6b5e873" version="0.1.1" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Include>http://userscripts.org/*</Include>
 	</Script>
-	<Script basedir="google_account_multi-log" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Replaces &quot;Sign Out&quot; link on Google pages with a select box of accounts." enabled="false" filename="google_account_multi-log.user.js" installTime="1404226428106" modified="1335185551000" name="Google Account Multi-Login" namespace="http://www.crappytools.net" runAt="document-end" updateMetaStatus="unknown" uuid="90087389-a4c6-4ca6-b48e-491080219318" version="null" installurl="null" updateurl="null">
+	<Script basedir="google_account_multi-log" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Replaces &quot;Sign Out&quot; link on Google pages with a select box of accounts." enabled="false" noframes="false" filename="google_account_multi-log.user.js" installTime="1404226428106" modified="1335185551000" name="Google Account Multi-Login" namespace="http://www.crappytools.net" runAt="document-end" updateMetaStatus="unknown" uuid="90087389-a4c6-4ca6-b48e-491080219318" version="null" installurl="null" updateurl="null">
 		<Exclude>http*://mail.google.tld/*ui=1*</Exclude>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_openInTab</Grant>
@@ -136,7 +136,7 @@
 		<Include>http://google.tld/*</Include>
 		<Include>https://google.tld/*</Include>
 	</Script>
-	<Script basedir="the_west_bag_info" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Calculate inventory buy/sell price. Detailed statistic." enabled="true" filename="the_west_bag_info.user.js" installTime="1404226428217" modified="1335185551000" name="The West Bag Info" namespace="www.the-west.sk" runAt="document-end" updateMetaStatus="unknown" uuid="e9fabccf-133a-4bb9-a78e-e9b07c65d825" version="null" installurl="null" updateurl="null">
+	<Script basedir="the_west_bag_info" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Calculate inventory buy/sell price. Detailed statistic." enabled="true" noframes="false" filename="the_west_bag_info.user.js" installTime="1404226428217" modified="1335185551000" name="The West Bag Info" namespace="www.the-west.sk" runAt="document-end" updateMetaStatus="unknown" uuid="e9fabccf-133a-4bb9-a78e-e9b07c65d825" version="null" installurl="null" updateurl="null">
 		<Exclude>http://www.the-west.*</Exclude>
 		<Exclude>http://forum.the-west.*</Exclude>
 		<Grant>GM_getValue</Grant>
@@ -145,15 +145,15 @@
 		<Include>http://*.the-west.*</Include>
 		<Include>http://*.innogames.*</Include>
 	</Script>
-	<Script basedir="fgw_wardrobe" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="For all your wardrobe needs!" enabled="true" filename="fgw_wardrobe.user.js" installTime="1404226428355" modified="1335185551000" name="FGW Wardrobe" namespace="http://ptwestscript.blogspot.com/" runAt="document-end" updateMetaStatus="unknown" uuid="05c6d2ce-937c-4133-8cb2-00745439ffa7" version="null" installurl="null" updateurl="null">
+	<Script basedir="fgw_wardrobe" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="For all your wardrobe needs!" enabled="true" noframes="false" filename="fgw_wardrobe.user.js" installTime="1404226428355" modified="1335185551000" name="FGW Wardrobe" namespace="http://ptwestscript.blogspot.com/" runAt="document-end" updateMetaStatus="unknown" uuid="05c6d2ce-937c-4133-8cb2-00745439ffa7" version="null" installurl="null" updateurl="null">
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*.the-west.*/game.php*</Include>
 	</Script>
-	<Script basedir="twb_the_west_tools" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verschiedene Tools für das Browsergame The West." enabled="true" filename="twb_the_west_tools.user.js" installTime="1404226428413" modified="1335185551000" name="TWB The West Tools" namespace="http://tw.wusel.info" runAt="document-end" updateMetaStatus="unknown" uuid="0aba69bf-da7f-4bc9-b6f3-4bc1b3f65798" version="1.0.0" installurl="null" updateurl="null">
+	<Script basedir="twb_the_west_tools" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verschiedene Tools für das Browsergame The West." enabled="true" noframes="false" filename="twb_the_west_tools.user.js" installTime="1404226428413" modified="1335185551000" name="TWB The West Tools" namespace="http://tw.wusel.info" runAt="document-end" updateMetaStatus="unknown" uuid="0aba69bf-da7f-4bc9-b6f3-4bc1b3f65798" version="1.0.0" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://de*.the-west.de*</Include>
 	</Script>
-	<Script basedir="adds_a_link_to_download_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Adds a link to download video and a button to watch video for YouTube." enabled="false" filename="adds_a_link_to_download_.user.js" installTime="1404226428535" modified="1335185551000" name="Adds a link to download video for YouTube" namespace="http://userscripts.org/users/76078" runAt="document-end" updateMetaStatus="unknown" uuid="5670aa79-4725-48bf-a3dd-6e96ed51bc75" version="0.7.8" installurl="null" updateurl="null">
+	<Script basedir="adds_a_link_to_download_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Adds a link to download video and a button to watch video for YouTube." enabled="false" noframes="false" filename="adds_a_link_to_download_.user.js" installTime="1404226428535" modified="1335185551000" name="Adds a link to download video for YouTube" namespace="http://userscripts.org/users/76078" runAt="document-end" updateMetaStatus="unknown" uuid="5670aa79-4725-48bf-a3dd-6e96ed51bc75" version="0.7.8" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -167,25 +167,25 @@
 		<Include>http://youtube.com/*</Include>
 		<Include>http://*.youtube.com/*</Include>
 	</Script>
-	<Script basedir="autologin" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="autologin.user.js" installTime="1404226428589" modified="1335185551000" name="MyFreeFarm - Autologin" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="77900851-c4c5-4505-b1f7-c484050fd585" version="null" installurl="null" updateurl="null">
+	<Script basedir="autologin" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="autologin.user.js" installTime="1404226428589" modified="1335185551000" name="MyFreeFarm - Autologin" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="77900851-c4c5-4505-b1f7-c484050fd585" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*myfreefarm.de/*</Include>
 	</Script>
-	<Script basedir="the_west_-_test" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="the_west_-_test.user.js" installTime="1404226428658" modified="1335185551000" name="The West - Test" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="d453b610-cfcb-416e-97c9-917b63b580ea" version="null" installurl="null" updateurl="null">
+	<Script basedir="the_west_-_test" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="the_west_-_test.user.js" installTime="1404226428658" modified="1335185551000" name="The West - Test" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="d453b610-cfcb-416e-97c9-917b63b580ea" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://de*.the-west.de*</Include>
 	</Script>
-	<Script basedir="antigam_lang_de" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="AntiGame Übersetzung (Muss VOR dem AntiGame Script laufen) - 1.13.8" enabled="true" filename="antigam_lang_de.user.js" installTime="1404226428713" modified="1335185551000" name="AntiGam_lang_de" namespace="" runAt="document-end" updateMetaStatus="unknown" uuid="31905aee-4788-42ef-8321-fc1ce388bb44" version="null" installurl="null" updateurl="null">
+	<Script basedir="antigam_lang_de" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="AntiGame Übersetzung (Muss VOR dem AntiGame Script laufen) - 1.13.8" enabled="true" noframes="false" filename="antigam_lang_de.user.js" installTime="1404226428713" modified="1335185551000" name="AntiGam_lang_de" namespace="" runAt="document-end" updateMetaStatus="unknown" uuid="31905aee-4788-42ef-8321-fc1ce388bb44" version="null" installurl="null" updateurl="null">
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 	</Script>
-	<Script basedir="download_from_youtube" checkRemoteUpdates="1" dependhash="3f5ae4bc7a1d485b346ab51b6d94bd9f4c06948f" description="Adds FLV, MP4, 3GP, and 720p download links to YouTube." enabled="false" filename="download_from_youtube.user.js" installTime="1404226428764" modified="1335185551000" name="Download from YouTube" namespace="" runAt="document-end" updateMetaStatus="unknown" uuid="a36e48c9-75f2-4b4e-9c92-3465963e3701" version="1.1.4" installurl="null" updateurl="null">
+	<Script basedir="download_from_youtube" checkRemoteUpdates="1" dependhash="3f5ae4bc7a1d485b346ab51b6d94bd9f4c06948f" description="Adds FLV, MP4, 3GP, and 720p download links to YouTube." enabled="false" noframes="false" filename="download_from_youtube.user.js" installTime="1404226428764" modified="1335185551000" name="Download from YouTube" namespace="" runAt="document-end" updateMetaStatus="unknown" uuid="a36e48c9-75f2-4b4e-9c92-3465963e3701" version="1.1.4" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_openInTab</Grant>
 		<Grant>GM_setValue</Grant>
@@ -195,17 +195,17 @@
 		<Include>http://youtube.com/watch*v=*</Include>
 		<Require filename="index.php"/>
 	</Script>
-	<Script basedir="ogame_-_flash_startseite" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="ogame_-_flash_startseite.user.js" installTime="1404226428841" modified="1335185551000" name="OGame - Flash startseite ausblenden" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="108e132b-a7e9-4757-bcea-9b71ed573e45" version="null" installurl="null" updateurl="null">
+	<Script basedir="ogame_-_flash_startseite" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="ogame_-_flash_startseite.user.js" installTime="1404226428841" modified="1335185551000" name="OGame - Flash startseite ausblenden" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="108e132b-a7e9-4757-bcea-9b71ed573e45" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://*ogame.de*</Include>
 	</Script>
-	<Script basedir="ogame_redesign__autologi" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatically logs you in so you don't have to select the uni each and every freaking time XD This one should work with every ogame out there. Hopefully." enabled="false" filename="ogame_redesign__autologi.user.js" installTime="1404226428891" modified="1335185551000" name="OGame Redesign : Autologin" namespace="http://userscripts.org/scripts/show/60482" runAt="document-end" updateMetaStatus="unknown" uuid="3e3dda5f-ce60-4ebc-bd64-dfae362553c1" version="null" installurl="null" updateurl="null">
+	<Script basedir="ogame_redesign__autologi" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Automatically logs you in so you don't have to select the uni each and every freaking time XD This one should work with every ogame out there. Hopefully." enabled="false" noframes="false" filename="ogame_redesign__autologi.user.js" installTime="1404226428891" modified="1335185551000" name="OGame Redesign : Autologin" namespace="http://userscripts.org/scripts/show/60482" runAt="document-end" updateMetaStatus="unknown" uuid="3e3dda5f-ce60-4ebc-bd64-dfae362553c1" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://*ogame.*/</Include>
 		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 	</Script>
-	<Script basedir="ogame_resourcen_im_flug" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Summiert Resourcen die Unterwegs sind und zeigt diese unter dem Planeten Resourcen an." enabled="true" filename="ogame_resourcen_im_flug.user.js" installTime="1404226428946" modified="1335185551000" name="OGame: Resourcen im Flug" namespace="Gilly" runAt="document-end" updateMetaStatus="unknown" uuid="46b305e9-a6db-4996-a257-67ca0f6d22f9" version="null" installurl="null" updateurl="null">
+	<Script basedir="ogame_resourcen_im_flug" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Summiert Resourcen die Unterwegs sind und zeigt diese unter dem Planeten Resourcen an." enabled="true" noframes="false" filename="ogame_resourcen_im_flug.user.js" installTime="1404226428946" modified="1335185551000" name="OGame: Resourcen im Flug" namespace="Gilly" runAt="document-end" updateMetaStatus="unknown" uuid="46b305e9-a6db-4996-a257-67ca0f6d22f9" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://*.ogame.*/game/index.php?page=overview*</Include>
@@ -216,15 +216,15 @@
 		<Include>http://*.ogame.*/game/index.php?page=resources*</Include>
 		<Include>http://*.ogame.*/game/index.php?page=b_building*</Include>
 	</Script>
-	<Script basedir="ogame_commander" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nachbau des OGameCommander (Aufruf über Offizierskasino)" enabled="true" filename="ogame_commander.user.js" installTime="1404226429029" modified="1335185551000" name="OGame: Commander" namespace="Gilly" runAt="document-end" updateMetaStatus="unknown" uuid="fdba2e41-b2c7-472a-aa30-713d1ec4cf0d" version="null" installurl="null" updateurl="null">
+	<Script basedir="ogame_commander" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nachbau des OGameCommander (Aufruf über Offizierskasino)" enabled="true" noframes="false" filename="ogame_commander.user.js" installTime="1404226429029" modified="1335185551000" name="OGame: Commander" namespace="Gilly" runAt="document-end" updateMetaStatus="unknown" uuid="fdba2e41-b2c7-472a-aa30-713d1ec4cf0d" version="null" installurl="null" updateurl="null">
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://*.ogame.*/game/index.php?page=micropayment*</Include>
 	</Script>
-	<Script basedir="ogame_buildables" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt an wieviel Einheiten (Schiffe/Def) mit den vorhandenen Res möglich sind zu bauen." enabled="true" filename="ogame_buildables.user.js" installTime="1404226429082" modified="1335185551000" name="OGame: Buildables" namespace="Gilly" runAt="document-end" updateMetaStatus="unknown" uuid="e7bfed74-3e0c-42b0-9bc2-e81c7a41a347" version="null" installurl="null" updateurl="null">
+	<Script basedir="ogame_buildables" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt an wieviel Einheiten (Schiffe/Def) mit den vorhandenen Res möglich sind zu bauen." enabled="true" noframes="false" filename="ogame_buildables.user.js" installTime="1404226429082" modified="1335185551000" name="OGame: Buildables" namespace="Gilly" runAt="document-end" updateMetaStatus="unknown" uuid="e7bfed74-3e0c-42b0-9bc2-e81c7a41a347" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://uni*.ogame.de/game/index.php?page=buildings*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_sort" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Sortiert die Gl�ser" enabled="true" filename="wurzelimperium_-_sort.user.js" installTime="1404226429138" modified="1335185551000" name="Wurzelimperium - Sort" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="a5d1dac4-3154-4a57-ba1b-f2cd8ff0a244" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_sort" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Sortiert die Gl�ser" enabled="true" noframes="false" filename="wurzelimperium_-_sort.user.js" installTime="1404226429138" modified="1335185551000" name="Wurzelimperium - Sort" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="a5d1dac4-3154-4a57-ba1b-f2cd8ff0a244" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -232,7 +232,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_time_2_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt im Titel, wann es wieder was zu tun gibt." enabled="false" filename="wurzelimperium_-_time_2_.user.js" installTime="1404226429240" modified="1369321661000" name="Wurzelimperium - Time 2 Title" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ee865b60-e0ca-4283-871c-8a0352aa8fb9" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_time_2_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt im Titel, wann es wieder was zu tun gibt." enabled="false" noframes="false" filename="wurzelimperium_-_time_2_.user.js" installTime="1404226429240" modified="1369321661000" name="Wurzelimperium - Time 2 Title" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ee865b60-e0ca-4283-871c-8a0352aa8fb9" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -244,33 +244,33 @@
 		<Include>http://s*.wurzelimperium.de*</Include>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_mehr_zw-1" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_mehr_zw.user.js" installTime="1404226429312" modified="1335185551000" name="Wurzelimperium - Mehr Zwerge" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="3b55c7de-42b0-42ff-8174-d17792170d0e" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_mehr_zw-1" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="wurzelimperium_-_mehr_zw.user.js" installTime="1404226429312" modified="1335185551000" name="Wurzelimperium - Mehr Zwerge" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="3b55c7de-42b0-42ff-8174-d17792170d0e" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_feld_au" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="wurzelimperium_-_feld_au.user.js" installTime="1404226429370" modified="1335185551000" name="Wurzelimperium - Feld aufraeumen" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="d31a906d-c745-480b-9697-d70403b70429" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_feld_au" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="wurzelimperium_-_feld_au.user.js" installTime="1404226429370" modified="1335185551000" name="Wurzelimperium - Feld aufraeumen" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="d31a906d-c745-480b-9697-d70403b70429" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script basedir="the_west_-_motvation" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Individuelle Zusammenstellung von Arbeiten in einer eigenen Liste." enabled="true" filename="the_west_-_motvation.user.js" installTime="1404226429419" modified="1335185551000" name="The West - Motvation" namespace="http://joesmith.jo.funpic.de" runAt="document-end" updateMetaStatus="unknown" uuid="78aaa7a4-c4a4-4911-a455-6ac63a8de18b" version="null" installurl="null" updateurl="null">
+	<Script basedir="the_west_-_motvation" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Individuelle Zusammenstellung von Arbeiten in einer eigenen Liste." enabled="true" noframes="false" filename="the_west_-_motvation.user.js" installTime="1404226429419" modified="1335185551000" name="The West - Motvation" namespace="http://joesmith.jo.funpic.de" runAt="document-end" updateMetaStatus="unknown" uuid="78aaa7a4-c4a4-4911-a455-6ac63a8de18b" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://*.the-west.*</Include>
 	</Script>
-	<Script basedir="the_west_-_center_jobs" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Center every job in Task Queue on Map" enabled="false" filename="the_west_-_center_jobs.user.js" installTime="1404226429469" modified="1335185551000" name="The West - Center Jobs" namespace="http://joesmith.jo.funpic.de" runAt="document-end" updateMetaStatus="unknown" uuid="fe196b9c-b367-4f30-b9f3-55141a5a81bf" version="null" installurl="null" updateurl="null">
+	<Script basedir="the_west_-_center_jobs" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Center every job in Task Queue on Map" enabled="false" noframes="false" filename="the_west_-_center_jobs.user.js" installTime="1404226429469" modified="1335185551000" name="The West - Center Jobs" namespace="http://joesmith.jo.funpic.de" runAt="document-end" updateMetaStatus="unknown" uuid="fe196b9c-b367-4f30-b9f3-55141a5a81bf" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://*.the-west.*</Include>
 	</Script>
-	<Script basedir="the_west_-_quest_helper" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="the_west_-_quest_helper.user.js" installTime="1404226429510" modified="1335185551000" name="The West - Quest Helper" namespace="http://www.puli.sk" runAt="document-end" updateMetaStatus="unknown" uuid="7a4d9837-07b5-4aad-bcba-3a55973f0bff" version="null" installurl="null" updateurl="null">
+	<Script basedir="the_west_-_quest_helper" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="the_west_-_quest_helper.user.js" installTime="1404226429510" modified="1335185551000" name="The West - Quest Helper" namespace="http://www.puli.sk" runAt="document-end" updateMetaStatus="unknown" uuid="7a4d9837-07b5-4aad-bcba-3a55973f0bff" version="null" installurl="null" updateurl="null">
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*.the-west.*/game.php*</Include>
 	</Script>
-	<Script basedir="tw_buildings_shortcut_ic" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Buildings Shortcut Icons for The-West v 1.23 [Multilingual User Interface]" enabled="true" filename="tw_buildings_shortcut_ic.user.js" installTime="1404226429610" modified="1335185551000" name="TW Buildings Shortcut Icons (MUI)" namespace="www.the-west.ro" runAt="document-end" updateMetaStatus="unknown" uuid="75b00273-6107-453a-8f72-a5b1e9d8d8cc" version="null" installurl="null" updateurl="null">
+	<Script basedir="tw_buildings_shortcut_ic" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Buildings Shortcut Icons for The-West v 1.23 [Multilingual User Interface]" enabled="true" noframes="false" filename="tw_buildings_shortcut_ic.user.js" installTime="1404226429610" modified="1335185551000" name="TW Buildings Shortcut Icons (MUI)" namespace="www.the-west.ro" runAt="document-end" updateMetaStatus="unknown" uuid="75b00273-6107-453a-8f72-a5b1e9d8d8cc" version="null" installurl="null" updateurl="null">
 		<Exclude>http://www.the-west.*</Exclude>
 		<Exclude>http://forum.the-west.*</Exclude>
 		<Grant>GM_getValue</Grant>
@@ -279,14 +279,14 @@
 		<Include>http://*.the-west.*</Include>
 		<Include>http://zz1w1.tw.innogames.net/game.php*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_select_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_select_.user.js" installTime="1404226429684" modified="1335185551000" name="Wurzelimperium - Select Login Server (nach Zeit)" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="56d5b580-f369-429f-a38b-8daced40f8a2" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_select_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="wurzelimperium_-_select_.user.js" installTime="1404226429684" modified="1335185551000" name="Wurzelimperium - Select Login Server (nach Zeit)" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="56d5b580-f369-429f-a38b-8daced40f8a2" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*wurzelimperium.de/*</Include>
 	</Script>
-	<Script basedir="ogame_-_time2titel" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="ogame_-_time2titel.user.js" installTime="1404226429733" modified="1335185551000" name="OGame - Time2Titel" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="915329b5-a2e8-4e1a-adc6-d237e6526955" version="null" installurl="null" updateurl="null">
+	<Script basedir="ogame_-_time2titel" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="ogame_-_time2titel.user.js" installTime="1404226429733" modified="1335185551000" name="OGame - Time2Titel" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="915329b5-a2e8-4e1a-adc6-d237e6526955" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
@@ -294,18 +294,18 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*.ogame.de*</Include>
 	</Script>
-	<Script basedir="wurzelimperium_-_autoein" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wurzelimperium_-_autoein.user.js" installTime="1404226429786" modified="1335185551000" name="Wurzelimperium - AutoEinkauf" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="82bfbd51-82be-4353-8281-fc787514976d" version="null" installurl="null" updateurl="null">
+	<Script basedir="wurzelimperium_-_autoein" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="wurzelimperium_-_autoein.user.js" installTime="1404226429786" modified="1335185551000" name="Wurzelimperium - AutoEinkauf" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="82bfbd51-82be-4353-8281-fc787514976d" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://s*.wurzelimperium.de*</Include>
 	</Script>
-	<Script basedir="the_west_-_center_jobs-1" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Show every job in Task Queue on Map" enabled="true" filename="the_west_-_center_jobs.user.js" installTime="1404226429834" modified="1335185551000" name="The West - Center Jobs" namespace="http://userscripts.org/users/120392" runAt="document-end" updateMetaStatus="unknown" uuid="add52c40-e4ac-42e8-8bed-261267e7397f" version="null" installurl="null" updateurl="null">
+	<Script basedir="the_west_-_center_jobs-1" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Show every job in Task Queue on Map" enabled="true" noframes="false" filename="the_west_-_center_jobs.user.js" installTime="1404226429834" modified="1335185551000" name="The West - Center Jobs" namespace="http://userscripts.org/users/120392" runAt="document-end" updateMetaStatus="unknown" uuid="add52c40-e4ac-42e8-8bed-261267e7397f" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://*.the-west.*/game.php*</Include>
 	</Script>
-	<Script basedir="download_video" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Save video clips from YouTube, Google Video, Myspace, Metacafe, Break.com, Putfile, Dailymotion and Sevenload." enabled="false" filename="download_video.user.js" installTime="1404226429938" modified="1335185551000" name="Download Video" namespace="http://1024k.de/bookmarklets/video-bookmarklets.html" runAt="document-end" updateMetaStatus="unknown" uuid="dbdecbec-e9e9-49f4-b726-21ee4d8f9bdd" version="null" installurl="null" updateurl="null">
+	<Script basedir="download_video" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Save video clips from YouTube, Google Video, Myspace, Metacafe, Break.com, Putfile, Dailymotion and Sevenload." enabled="false" noframes="false" filename="download_video.user.js" installTime="1404226429938" modified="1335185551000" name="Download Video" namespace="http://1024k.de/bookmarklets/video-bookmarklets.html" runAt="document-end" updateMetaStatus="unknown" uuid="dbdecbec-e9e9-49f4-b726-21ee4d8f9bdd" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://*youtube.com/*</Include>
 		<Include>http://*video.google.*/*</Include>
@@ -318,39 +318,39 @@
 		<Include>http://*myvideo.de/*</Include>
 		<Include>http://*clipfish.de/*</Include>
 	</Script>
-	<Script basedir="bausim_-_autoplay" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="bausim_-_autoplay.user.js" installTime="1404226430000" modified="1335185551000" name="bausim - AutoPlay" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ce0a8df2-7144-4c33-8391-40ee59d21d20" version="null" installurl="null" updateurl="null">
+	<Script basedir="bausim_-_autoplay" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="bausim_-_autoplay.user.js" installTime="1404226430000" modified="1335185551000" name="bausim - AutoPlay" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ce0a8df2-7144-4c33-8391-40ee59d21d20" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*bausim.net*</Include>
 	</Script>
-	<Script basedir="elektro-skateboard_-_ad_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="elektro-skateboard_-_ad_.user.js" installTime="1404226430050" modified="1335185551000" name="elektro-skateboard - Ad Killer" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="0ed6aa33-70fc-45b1-9e4e-b883d4cea898" version="null" installurl="null" updateurl="null">
+	<Script basedir="elektro-skateboard_-_ad_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="elektro-skateboard_-_ad_.user.js" installTime="1404226430050" modified="1335185551000" name="elektro-skateboard - Ad Killer" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="0ed6aa33-70fc-45b1-9e4e-b883d4cea898" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://www.elektro-skateboard.de*</Include>
 	</Script>
-	<Script basedir="video2blogde" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="video2blogde.user.js" installTime="1404226430054" modified="1335185551000" name="video2blog.de" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="251253a3-688c-471a-8af6-5654a688e190" version="null" installurl="null" updateurl="null">
+	<Script basedir="video2blogde" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="video2blogde.user.js" installTime="1404226430054" modified="1335185551000" name="video2blog.de" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="251253a3-688c-471a-8af6-5654a688e190" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="crazy_outfits" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_outfits.user.js" installTime="1404226430099" modified="1335185551000" name="Crazy Outfits" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="e617b464-b6b4-483d-864c-c7e2d3dbc8a4" version="null" installurl="null" updateurl="null">
+	<Script basedir="crazy_outfits" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="crazy_outfits.user.js" installTime="1404226430099" modified="1335185551000" name="Crazy Outfits" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="e617b464-b6b4-483d-864c-c7e2d3dbc8a4" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://www.crazy-outfits.de/shop/*</Include>
 	</Script>
-	<Script basedir="klack" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="klack.user.js" installTime="1404226430142" modified="1335185551000" name="klack" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="bfb919cb-a7a7-497f-aabf-73f0e5c895cd" version="null" installurl="null" updateurl="null">
+	<Script basedir="klack" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="klack.user.js" installTime="1404226430142" modified="1335185551000" name="klack" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="bfb919cb-a7a7-497f-aabf-73f0e5c895cd" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://www.klack.de/*</Include>
 	</Script>
-	<Script basedir="facebook_fixer" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancements for Facebook: bigger profile pictures and photos, easier viewing of albums, links to download videos, showing people's age and sign, google calendar integration, keyboard shortcuts &amp; more. Compatible with new Facebook and fully customizable!" enabled="false" filename="facebook_fixer.user.js" installTime="1404226430296" modified="1335185551000" name="Facebook Fixer" namespace="http://userscripts.org/people/14536" runAt="document-end" updateMetaStatus="unknown" uuid="d700a69c-a056-4d9b-b7cf-420468978ef4" version="2.1.3" installurl="null" updateurl="null">
+	<Script basedir="facebook_fixer" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancements for Facebook: bigger profile pictures and photos, easier viewing of albums, links to download videos, showing people's age and sign, google calendar integration, keyboard shortcuts &amp; more. Compatible with new Facebook and fully customizable!" enabled="false" noframes="false" filename="facebook_fixer.user.js" installTime="1404226430296" modified="1335185551000" name="Facebook Fixer" namespace="http://userscripts.org/people/14536" runAt="document-end" updateMetaStatus="unknown" uuid="d700a69c-a056-4d9b-b7cf-420468978ef4" version="2.1.3" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -364,14 +364,14 @@
 		<Include>https://facebook.com/*</Include>
 		<Include>https://*.facebook.com/*</Include>
 	</Script>
-	<Script basedir="splitbrain_file_icons" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="splitbrain_file_icons.user.js" installTime="1404226430396" modified="1335185551000" name="Splitbrain File Icons" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="9c001fef-6541-4c03-86a0-e59eeaf9e8d7" version="null" installurl="null" updateurl="null">
+	<Script basedir="splitbrain_file_icons" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="splitbrain_file_icons.user.js" installTime="1404226430396" modified="1335185551000" name="Splitbrain File Icons" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="9c001fef-6541-4c03-86a0-e59eeaf9e8d7" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://www.splitbrain.org/projects/file_icons</Include>
 	</Script>
-	<Script basedir="german-bashorg_werbefrei" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Killt unten die Box mit der Überschrift &quot;Werbung&quot; samt Inhalt, den Rest übernimmt Adblock Plus..." enabled="true" filename="german-bashorg_werbefrei.user.js" installTime="1404226430462" modified="1337612346000" name="German-Bash.org Werbefrei 1.1 (16.06.2009)" namespace="http://gordon_vdlg.byethost16.com" runAt="document-end" updateMetaStatus="unknown" uuid="8da6fe38-fb4d-46fd-9753-d53183a44fa3" version="null" installurl="null" updateurl="null">
+	<Script basedir="german-bashorg_werbefrei" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Killt unten die Box mit der Überschrift &quot;Werbung&quot; samt Inhalt, den Rest übernimmt Adblock Plus..." enabled="true" noframes="false" filename="german-bashorg_werbefrei.user.js" installTime="1404226430462" modified="1337612346000" name="German-Bash.org Werbefrei 1.1 (16.06.2009)" namespace="http://gordon_vdlg.byethost16.com" runAt="document-end" updateMetaStatus="unknown" uuid="8da6fe38-fb4d-46fd-9753-d53183a44fa3" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
@@ -379,7 +379,7 @@
 		<Include>http://german-bash.org/*</Include>
 		<Include>http://www.german-bash.org/*</Include>
 	</Script>
-	<Script basedir="facebook_accept_all" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Facebook Accept all" enabled="true" filename="facebook_accept_all.user.js" installTime="1404226430548" modified="1335185551000" name="Facebook Accept all" namespace="Facebook Accept all" runAt="document-end" updateMetaStatus="unknown" uuid="e753c0e3-6758-448a-af20-595a33204a5d" version="1.0.0" installurl="null" updateurl="null">
+	<Script basedir="facebook_accept_all" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Facebook Accept all" enabled="true" noframes="false" filename="facebook_accept_all.user.js" installTime="1404226430548" modified="1335185551000" name="Facebook Accept all" namespace="Facebook Accept all" runAt="document-end" updateMetaStatus="unknown" uuid="e753c0e3-6758-448a-af20-595a33204a5d" version="1.0.0" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
@@ -390,7 +390,7 @@
 		<Include>http://www.facebook.com/reqs*</Include>
 		<Include>http://www.facebook.com/*/reqs.php</Include>
 	</Script>
-	<Script basedir="turn_off_the_lights" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enabling the lights out feature on YouTube on every video." enabled="false" filename="turn_off_the_lights.user.js" installTime="1404226430588" modified="1335185551000" name="Turn Off the Lights" namespace="tayfunsen.com" runAt="document-end" updateMetaStatus="unknown" uuid="fe9ad8c4-0339-481d-a044-42c5bdadf302" version="0.6" installurl="null" updateurl="null">
+	<Script basedir="turn_off_the_lights" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enabling the lights out feature on YouTube on every video." enabled="false" noframes="false" filename="turn_off_the_lights.user.js" installTime="1404226430588" modified="1335185551000" name="Turn Off the Lights" namespace="tayfunsen.com" runAt="document-end" updateMetaStatus="unknown" uuid="fe9ad8c4-0339-481d-a044-42c5bdadf302" version="0.6" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_registerMenuCommand</Grant>
 		<Grant>GM_setValue</Grant>
@@ -398,21 +398,21 @@
 		<Include>http://*.youtube.com/watch?*</Include>
 		<Include>http://youtube.com/watch?*</Include>
 	</Script>
-	<Script basedir="wepad_-_grosse_videos" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="wepad_-_grosse_videos.user.js" installTime="1404226430625" modified="1335185551000" name="WePad - Grosse Videos" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="598b3b11-f454-47da-96ac-78c22897f842" version="null" installurl="null" updateurl="null">
+	<Script basedir="wepad_-_grosse_videos" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="wepad_-_grosse_videos.user.js" installTime="1404226430625" modified="1335185551000" name="WePad - Grosse Videos" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="598b3b11-f454-47da-96ac-78c22897f842" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://wepad.mobi/galerie</Include>
 	</Script>
-	<Script basedir="ohmydollz" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="ohmydollz.user.js" installTime="1404226430671" modified="1335185551000" name="OhMyDollz" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="171788a0-f8b7-40de-8aa3-94ddb89c97c8" version="null" installurl="null" updateurl="null">
+	<Script basedir="ohmydollz" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="ohmydollz.user.js" installTime="1404226430671" modified="1335185551000" name="OhMyDollz" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="171788a0-f8b7-40de-8aa3-94ddb89c97c8" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://de.ohmydollz.com/*</Include>
 	</Script>
-	<Script basedir="myfreefarm" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Erweitert MyFreeFarm" enabled="true" filename="myfreefarm.user.js" installTime="1404226430764" modified="1335185551000" name="MyFreeFarm" namespace="http://userscripts.org/scripts/show/66964" runAt="document-end" updateMetaStatus="unknown" uuid="f04c6f7b-3e9a-4855-ae78-d623437070d9" version="null" installurl="null" updateurl="null">
+	<Script basedir="myfreefarm" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Erweitert MyFreeFarm" enabled="true" noframes="false" filename="myfreefarm.user.js" installTime="1404226430764" modified="1335185551000" name="MyFreeFarm" namespace="http://userscripts.org/scripts/show/66964" runAt="document-end" updateMetaStatus="unknown" uuid="f04c6f7b-3e9a-4855-ae78-d623437070d9" version="null" installurl="null" updateurl="null">
 		<Exclude>http://*board.myfreefarm.*</Exclude>
 		<Exclude>http://*forum.myfreefarm.*</Exclude>
 		<Exclude>http://*farmpedia.myfreefarm.*</Exclude>
@@ -434,14 +434,14 @@
 		<Include>http://*tr.myfreefarm.com*</Include>
 		<Include>http://*veselaferma.com*</Include>
 	</Script>
-	<Script basedir="better_amazon" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="A compilation of enhancements to Amazon.com with new features coming." enabled="true" filename="better_amazon.user.js" installTime="1404226430788" modified="1335185551000" name="Better Amazon" namespace="http://www.thumbedthrough.com/" runAt="document-end" updateMetaStatus="unknown" uuid="26dcc61b-c431-45c0-a5a5-6a4c468a1ef4" version="null" installurl="null" updateurl="null">
+	<Script basedir="better_amazon" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="A compilation of enhancements to Amazon.com with new features coming." enabled="true" noframes="false" filename="better_amazon.user.js" installTime="1404226430788" modified="1335185551000" name="Better Amazon" namespace="http://www.thumbedthrough.com/" runAt="document-end" updateMetaStatus="unknown" uuid="26dcc61b-c431-45c0-a5a5-6a4c468a1ef4" version="null" installurl="null" updateurl="null">
 		<Exclude>http://www.amazon.*/gp/cart/*</Exclude>
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://www.amazon.*/*</Include>
 	</Script>
-	<Script basedir="portable_freeware" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="portable_freeware.user.js" installTime="1404226430810" modified="1367140619000" name="Portable Freeware" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="0b84eb03-b963-4ff2-b220-13654fa57eb0" version="null" installurl="null" updateurl="null">
+	<Script basedir="portable_freeware" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="portable_freeware.user.js" installTime="1404226430810" modified="1367140619000" name="Portable Freeware" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="0b84eb03-b963-4ff2-b220-13654fa57eb0" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -452,7 +452,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.portablefreeware.com/*</Include>
 	</Script>
-	<Script basedir="crazy_heels_-_details" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt bei dem Titel die Heelgroeße mit an" enabled="true" filename="crazy_heels_-_details.user.js" installTime="1404226430823" modified="1335185551000" name="Crazy Heels - Details" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="60db0422-09e0-4209-9afc-4bf10c59cc32" version="null" installurl="null" updateurl="null">
+	<Script basedir="crazy_heels_-_details" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt bei dem Titel die Heelgroeße mit an" enabled="true" noframes="false" filename="crazy_heels_-_details.user.js" installTime="1404226430823" modified="1335185551000" name="Crazy Heels - Details" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="60db0422-09e0-4209-9afc-4bf10c59cc32" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
@@ -460,11 +460,11 @@
 		<Include>http://www.crazy-heels.de/shop/index.php*.html*</Include>
 		<Include>http://www.crazy-heels.de/shop/product_info.php/info/*.html</Include>
 	</Script>
-	<Script basedir="crazy_heels_-_popup" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_heels_-_popup.user.js" installTime="1404226430827" modified="1335185551000" name="Crazy Heels - Popup" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ac962b3f-e3e1-4049-8c1d-4ca05076c101" version="null" installurl="null" updateurl="null">
+	<Script basedir="crazy_heels_-_popup" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="crazy_heels_-_popup.user.js" installTime="1404226430827" modified="1335185551000" name="Crazy Heels - Popup" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ac962b3f-e3e1-4049-8c1d-4ca05076c101" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://www.crazy-heels.de/shop/popup_image.php*</Include>
 	</Script>
-	<Script basedir="crazy_heels_-_detail_ueb" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_heels_-_detail_ueb.user.js" installTime="1404226431022" modified="1335185551000" name="Crazy Heels - Detail Uebersicht" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="cb9366e6-0de5-47f2-a23b-cf8143bc3135" version="null" installurl="null" updateurl="null">
+	<Script basedir="crazy_heels_-_detail_ueb" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="crazy_heels_-_detail_ueb.user.js" installTime="1404226431022" modified="1335185551000" name="Crazy Heels - Detail Uebersicht" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="cb9366e6-0de5-47f2-a23b-cf8143bc3135" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_openInTab</Grant>
@@ -472,14 +472,14 @@
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://www.crazy-heels.de*</Include>
 	</Script>
-	<Script basedir="crazy_heels_-_product_sa" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_heels_-_product_sa.user.js" installTime="1404226431137" modified="1335185551000" name="Crazy Heels - Product Save" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5ebfdc14-0e82-495c-96d5-416504ed5aa2" version="null" installurl="null" updateurl="null">
+	<Script basedir="crazy_heels_-_product_sa" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="crazy_heels_-_product_sa.user.js" installTime="1404226431137" modified="1335185551000" name="Crazy Heels - Product Save" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5ebfdc14-0e82-495c-96d5-416504ed5aa2" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://www.crazy-heels.de/shop/product_info.php*</Include>
 	</Script>
-	<Script basedir="userscriptsorg_random_sc" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Views a random script on userscripts.org. Comes with customizable blacklist. Keyboard shortcut alt+shift+x" enabled="true" filename="userscriptsorg_random_sc.user.js" installTime="1404226431174" modified="1335185551000" name="Userscripts.org Random Script Viewer" namespace="http://userscripts.org/users/23652" runAt="document-end" updateMetaStatus="unknown" uuid="0754c7c9-dfd8-46ad-aebb-874727eb44fc" version="1.0.5" installurl="null" updateurl="null">
+	<Script basedir="userscriptsorg_random_sc" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Views a random script on userscripts.org. Comes with customizable blacklist. Keyboard shortcut alt+shift+x" enabled="true" noframes="false" filename="userscriptsorg_random_sc.user.js" installTime="1404226431174" modified="1335185551000" name="Userscripts.org Random Script Viewer" namespace="http://userscripts.org/users/23652" runAt="document-end" updateMetaStatus="unknown" uuid="0754c7c9-dfd8-46ad-aebb-874727eb44fc" version="1.0.5" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_openInTab</Grant>
 		<Grant>GM_registerMenuCommand</Grant>
@@ -488,7 +488,7 @@
 		<Include>http://userscripts.org/*</Include>
 		<Include>https://userscripts.org/*</Include>
 	</Script>
-	<Script basedir="youtube_auto_buffer__aut" checkRemoteUpdates="1" dependhash="a0286f19418d4db1c1e269dbacd98fedfa4a352e" description="Buffers the video without autoplaying, removes in-video ads, and puts it in hd if the option is on. For Firefox and Opera" enabled="false" filename="youtube_auto_buffer__aut.user.js" installTime="1404226431779" modified="1335185551000" name="YouTube Auto Buffer &amp; Auto HD &amp; Remove Ads" namespace="userscripts.org" runAt="document-end" updateMetaStatus="unknown" uuid="492df56b-1fef-4c5c-b775-b708463b1168" version="1.2.61" installurl="null" updateurl="null">
+	<Script basedir="youtube_auto_buffer__aut" checkRemoteUpdates="1" dependhash="a0286f19418d4db1c1e269dbacd98fedfa4a352e" description="Buffers the video without autoplaying, removes in-video ads, and puts it in hd if the option is on. For Firefox and Opera" enabled="false" noframes="false" filename="youtube_auto_buffer__aut.user.js" installTime="1404226431779" modified="1335185551000" name="YouTube Auto Buffer &amp; Auto HD &amp; Remove Ads" namespace="userscripts.org" runAt="document-end" updateMetaStatus="unknown" uuid="492df56b-1fef-4c5c-b775-b708463b1168" version="1.2.61" installurl="null" updateurl="null">
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -501,7 +501,7 @@
 		<Include>http://youtube.com/*</Include>
 		<Require filename="updater.php"/>
 	</Script>
-	<Script basedir="facebook_mass_accept_req" checkRemoteUpdates="1" dependhash="8417712803d219e7a240505273e3d7ca07dfb828" description="Adds checkboxes to each request and a big accept button allowing you to accept them all at once, and also send thank you gifts" enabled="false" filename="facebook_mass_accept_req.user.js" installTime="1404226431978" modified="1335185551000" name="Facebook Mass Accept Requests" namespace="http://userscripts.org/users/23652" runAt="document-end" updateMetaStatus="unknown" uuid="85dc10a7-a766-4715-a7f0-20a8a2b24765" version="1.1.13" installurl="null" updateurl="null">
+	<Script basedir="facebook_mass_accept_req" checkRemoteUpdates="1" dependhash="8417712803d219e7a240505273e3d7ca07dfb828" description="Adds checkboxes to each request and a big accept button allowing you to accept them all at once, and also send thank you gifts" enabled="false" noframes="false" filename="facebook_mass_accept_req.user.js" installTime="1404226431978" modified="1335185551000" name="Facebook Mass Accept Requests" namespace="http://userscripts.org/users/23652" runAt="document-end" updateMetaStatus="unknown" uuid="85dc10a7-a766-4715-a7f0-20a8a2b24765" version="1.1.13" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -519,26 +519,26 @@
 		<Require filename="29910user.js"/>
 		<Require filename="updater.php"/>
 	</Script>
-	<Script basedir="lazygirls_enlarge" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Shows the large picture when you hover over a thumbnail" enabled="true" filename="lazygirls_enlarge.user.js" installTime="1404226432550" modified="1335185551000" name="LazyGirls Enlarge" namespace="http://userscripts.org/users/23652" runAt="document-end" updateMetaStatus="unknown" uuid="880bcdf2-db19-4330-b6e4-15aec4e85c73" version="1.0.1" installurl="null" updateurl="null">
+	<Script basedir="lazygirls_enlarge" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Shows the large picture when you hover over a thumbnail" enabled="true" noframes="false" filename="lazygirls_enlarge.user.js" installTime="1404226432550" modified="1335185551000" name="LazyGirls Enlarge" namespace="http://userscripts.org/users/23652" runAt="document-end" updateMetaStatus="unknown" uuid="880bcdf2-db19-4330-b6e4-15aec4e85c73" version="1.0.1" installurl="null" updateurl="null">
 		<Grant>unsafeWindow</Grant>
 		<Include>http://lazygirls.info/*</Include>
 		<Include>http://*.lazygirls.info/*</Include>
 	</Script>
-	<Script basedir="titel_hide" checkRemoteUpdates="1" dependhash="db7966408a31beda6d774147df467931e3659340" description="" enabled="false" filename="titel_hide.user.js" installTime="1404226432579" modified="1335185551000" name="Titel Hide" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="d8c0ce19-1cc4-41d1-b775-b797ad0682d5" version="null" installurl="null" updateurl="null">
+	<Script basedir="titel_hide" checkRemoteUpdates="1" dependhash="db7966408a31beda6d774147df467931e3659340" description="" enabled="false" noframes="false" filename="titel_hide.user.js" installTime="1404226432579" modified="1335185551000" name="Titel Hide" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="d8c0ce19-1cc4-41d1-b775-b797ad0682d5" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="youtube_-_warteschlange_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="youtube_-_warteschlange_.user.js" installTime="1404226432598" modified="1335185551000" name="YouTube - Warteschlange aufraeumen" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="768d2b18-d6ce-46dc-b1c5-013c32561e03" version="null" installurl="null" updateurl="null">
+	<Script basedir="youtube_-_warteschlange_" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="youtube_-_warteschlange_.user.js" installTime="1404226432598" modified="1335185551000" name="YouTube - Warteschlange aufraeumen" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="768d2b18-d6ce-46dc-b1c5-013c32561e03" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://*youtube.com*</Include>
 	</Script>
-	<Script basedir="minecraft_-_serverlist" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="minecraft_-_serverlist.user.js" installTime="1404226432602" modified="1335185551000" name="MineCraft - Serverlist" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="9d697dc2-4c4b-414d-961e-daa012035593" version="null" installurl="null" updateurl="null">
+	<Script basedir="minecraft_-_serverlist" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="minecraft_-_serverlist.user.js" installTime="1404226432602" modified="1335185551000" name="MineCraft - Serverlist" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="9d697dc2-4c4b-414d-961e-daa012035593" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -546,11 +546,11 @@
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://minecraft.net/servers.jsp</Include>
 	</Script>
-	<Script basedir="smoothscroll" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="smoothscroll平滑滚动脚本版" enabled="false" filename="smoothscroll.user.js" installTime="1404226432613" modified="1335185551000" name="SmoothScroll" namespace="" runAt="document-end" updateMetaStatus="unknown" uuid="b9a48f87-3113-4318-8f9c-268caa34d9ba" version="0.9.4" installurl="null" updateurl="null">
+	<Script basedir="smoothscroll" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="smoothscroll平滑滚动脚本版" enabled="false" noframes="false" filename="smoothscroll.user.js" installTime="1404226432613" modified="1335185551000" name="SmoothScroll" namespace="" runAt="document-end" updateMetaStatus="unknown" uuid="b9a48f87-3113-4318-8f9c-268caa34d9ba" version="0.9.4" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="youtube_prewatch" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Spielt eine Vorschau des Videos nachdem man die Maus darüber bewegt." enabled="false" filename="youtube_prewatch.user.js" installTime="1404226432618" modified="1335185551000" name="Youtube prewatch" namespace="http://www.jautis.net/" runAt="document-end" updateMetaStatus="unknown" uuid="9c353401-e502-4f43-b231-27ec80189307" version="1.0b5" installurl="null" updateurl="null">
+	<Script basedir="youtube_prewatch" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Spielt eine Vorschau des Videos nachdem man die Maus darüber bewegt." enabled="false" noframes="false" filename="youtube_prewatch.user.js" installTime="1404226432618" modified="1335185551000" name="Youtube prewatch" namespace="http://www.jautis.net/" runAt="document-end" updateMetaStatus="unknown" uuid="9c353401-e502-4f43-b231-27ec80189307" version="1.0b5" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_registerMenuCommand</Grant>
@@ -559,11 +559,11 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.youtube.com/*</Include>
 	</Script>
-	<Script basedir="aa-surflan-refresh" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="aa-surflan-refresh.user.js" installTime="1404226432637" modified="1335185551000" name="aa-surflan-refresh" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="99d4d6a4-53e6-4cdf-ab75-08cc0f9eeb8d" version="null" installurl="null" updateurl="null">
+	<Script basedir="aa-surflan-refresh" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="aa-surflan-refresh.user.js" installTime="1404226432637" modified="1335185551000" name="aa-surflan-refresh" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="99d4d6a4-53e6-4cdf-ab75-08cc0f9eeb8d" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>https://vpn4:8001/index.php?redirurl=*</Include>
 	</Script>
-	<Script basedir="ffixer" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancements for Facebook: bigger profile pictures and photos, easier viewing of albums, links to download videos, showing people's age and sign, google calendar integration, keyboard shortcuts &amp; more. Compatible with new Facebook and fully customizable!" enabled="false" filename="ffixer.user.js" installTime="1404226432984" modified="1335185551000" name="FFixer" namespace="http://code-poet.net/" runAt="document-end" updateMetaStatus="unknown" uuid="271e274b-78c9-4203-8427-1e50eccab435" version="2.3.1" installurl="null" updateurl="null">
+	<Script basedir="ffixer" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancements for Facebook: bigger profile pictures and photos, easier viewing of albums, links to download videos, showing people's age and sign, google calendar integration, keyboard shortcuts &amp; more. Compatible with new Facebook and fully customizable!" enabled="false" noframes="false" filename="ffixer.user.js" installTime="1404226432984" modified="1335185551000" name="FFixer" namespace="http://code-poet.net/" runAt="document-end" updateMetaStatus="unknown" uuid="271e274b-78c9-4203-8427-1e50eccab435" version="2.3.1" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -577,7 +577,7 @@
 		<Include>https://facebook.com/*</Include>
 		<Include>https://*.facebook.com/*</Include>
 	</Script>
-	<Script basedir="franzisi_-_resize" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="franzisi_-_resize.user.js" installTime="1404226433049" modified="1335185551000" name="franzisi - Resize" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="aec7002b-1e48-43d3-af78-d15dcd22bfe5" version="null" installurl="null" updateurl="null">
+	<Script basedir="franzisi_-_resize" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="franzisi_-_resize.user.js" installTime="1404226433049" modified="1335185551000" name="franzisi - Resize" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="aec7002b-1e48-43d3-af78-d15dcd22bfe5" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
@@ -585,11 +585,11 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.franzisi.com/shop/popup_image.php?*</Include>
 	</Script>
-	<Script basedir="crazy_heels_-_popup_gro" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="crazy_heels_-_popup_gro.user.js" installTime="1404226433133" modified="1335185551000" name="Crazy Heels - Popup groß" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5405de0b-63b2-4a9f-b523-5155f0d8ef49" version="null" installurl="null" updateurl="null">
+	<Script basedir="crazy_heels_-_popup_gro" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="crazy_heels_-_popup_gro.user.js" installTime="1404226433133" modified="1335185551000" name="Crazy Heels - Popup groß" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5405de0b-63b2-4a9f-b523-5155f0d8ef49" version="null" installurl="null" updateurl="null">
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.crazy-heels.de/shop/product_info.php*</Include>
 	</Script>
-	<Script basedir="fritzbox_-_netadd" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Im DHCP eine neue feste IP vergeben" enabled="true" filename="fritzbox_-_netadd.user.js" installTime="1404226433207" modified="1354103719000" name="FritzBox - NetAdd" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="f1ec76dd-250c-41e5-b320-b65e22341165" version="null" installurl="null" updateurl="null">
+	<Script basedir="fritzbox_-_netadd" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Im DHCP eine neue feste IP vergeben" enabled="true" noframes="false" filename="fritzbox_-_netadd.user.js" installTime="1404226433207" modified="1354103719000" name="FritzBox - NetAdd" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="f1ec76dd-250c-41e5-b320-b65e22341165" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
@@ -597,7 +597,7 @@
 		<Include>https://*.dyndns.org/net/newdevice.lua*</Include>
 		<Include>https://*.dyndns-ip.com/net/newdevice.lua*</Include>
 	</Script>
-	<Script basedir="fritzbox_netzwerk-ip-lis" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="fritzbox_netzwerk-ip-lis.user.js" installTime="1404226433258" modified="1396029921000" name="FritzBox Netzwerk-IP-Liste sortieren" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="c62dde27-e60a-40fe-9a07-cb193b13b20d" version="null" installurl="null" updateurl="null">
+	<Script basedir="fritzbox_netzwerk-ip-lis" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="fritzbox_netzwerk-ip-lis.user.js" installTime="1404226433258" modified="1396029921000" name="FritzBox Netzwerk-IP-Liste sortieren" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="c62dde27-e60a-40fe-9a07-cb193b13b20d" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
@@ -606,7 +606,7 @@
 		<Include>https://*.dyndns-ip.com*</Include>
 		<Include>http://fritz.box</Include>
 	</Script>
-	<Script basedir="no_middle_man" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Rewrites URLs to remove redirection scripts" enabled="false" filename="no_middle_man.user.js" installTime="1404226433405" modified="1335185551000" name="No Middle Man" namespace="http://fivethreenine.blogspot.com/2006/03/no-middle-man.html" runAt="document-end" updateMetaStatus="unknown" uuid="8687be94-d03a-4834-bf97-80ccae582021" version="null" installurl="null" updateurl="null">
+	<Script basedir="no_middle_man" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Rewrites URLs to remove redirection scripts" enabled="false" noframes="false" filename="no_middle_man.user.js" installTime="1404226433405" modified="1335185551000" name="No Middle Man" namespace="http://fivethreenine.blogspot.com/2006/03/no-middle-man.html" runAt="document-end" updateMetaStatus="unknown" uuid="8687be94-d03a-4834-bf97-80ccae582021" version="null" installurl="null" updateurl="null">
 		<Exclude>http://del.icio.us/*</Exclude>
 		<Exclude>http://*bloglines.com/*</Exclude>
 		<Exclude>http://web.archive.org/*</Exclude>
@@ -615,14 +615,14 @@
 		<Grant>none</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="otr_-_suchwort_im_titel" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt das Suchwort im Titel" enabled="true" filename="otr_-_suchwort_im_titel.user.js" installTime="1404226433501" modified="1335185551000" name="OTR - Suchwort im Titel" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="d92f98cd-e758-4bcf-92a0-fcde512a459c" version="null" installurl="null" updateurl="null">
+	<Script basedir="otr_-_suchwort_im_titel" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zeigt das Suchwort im Titel" enabled="true" noframes="false" filename="otr_-_suchwort_im_titel.user.js" installTime="1404226433501" modified="1335185551000" name="OTR - Suchwort im Titel" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="d92f98cd-e758-4bcf-92a0-fcde512a459c" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://epg.onlinetvrecorder.com/broadcasts/search*</Include>
 	</Script>
-	<Script basedir="kinopolis_-_reservierung" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_reservierung.user.js" installTime="1404226433567" modified="1335185551000" name="Kinopolis - Reservierung Mailen" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5ce36385-4b08-40f0-b524-de187f59a0e0" version="null" installurl="null" updateurl="null">
+	<Script basedir="kinopolis_-_reservierung" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="kinopolis_-_reservierung.user.js" installTime="1404226433567" modified="1335185551000" name="Kinopolis - Reservierung Mailen" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5ce36385-4b08-40f0-b524-de187f59a0e0" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_openInTab</Grant>
@@ -634,7 +634,7 @@
 		<Include>http://mail.google.com*</Include>
 		<Include>https://mail.google.com*</Include>
 	</Script>
-	<Script basedir="userstylesorg_enhancer" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancement suite for the Userstyles.org site" enabled="true" filename="userstylesorg_enhancer.user.js" installTime="1404226433773" modified="1335185551000" name="Userstyles.org Enhancer" namespace="1nfected" runAt="document-end" updateMetaStatus="unknown" uuid="5c278d6d-8cd0-46d1-8952-3f1b7d86ebf3" version="1.4.5" installurl="null" updateurl="null">
+	<Script basedir="userstylesorg_enhancer" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancement suite for the Userstyles.org site" enabled="true" noframes="false" filename="userstylesorg_enhancer.user.js" installTime="1404226433773" modified="1335185551000" name="Userstyles.org Enhancer" namespace="1nfected" runAt="document-end" updateMetaStatus="unknown" uuid="5c278d6d-8cd0-46d1-8952-3f1b7d86ebf3" version="1.4.5" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -646,7 +646,7 @@
 		<Include>http://userstyles.org/styles/browse*</Include>
 		<Include>https://userstyles.org/styles/browse*</Include>
 	</Script>
-	<Script basedir="userscriptsorg_bullshit_" checkRemoteUpdates="1" dependhash="46b7d1741d0c3890dd00183d8a68859e625bd09a" description="Hides scripts for popular browser games and social networks as well as scripts that use &quot;foreign&quot; characters in description" enabled="true" filename="userscriptsorg_bullshit_.user.js" installTime="1404226433847" modified="1335185551000" name="userscripts.org Bullshit Filter" namespace="" runAt="document-end" updateMetaStatus="unknown" uuid="a4a209b7-1964-45b9-81b6-ba7cab2f33f5" version="2011.8.9" installurl="null" updateurl="https://userscripts.org/scripts/source/97145.meta.js">
+	<Script basedir="userscriptsorg_bullshit_" checkRemoteUpdates="1" dependhash="46b7d1741d0c3890dd00183d8a68859e625bd09a" description="Hides scripts for popular browser games and social networks as well as scripts that use &quot;foreign&quot; characters in description" enabled="true" noframes="false" filename="userscriptsorg_bullshit_.user.js" installTime="1404226433847" modified="1335185551000" name="userscripts.org Bullshit Filter" namespace="" runAt="document-end" updateMetaStatus="unknown" uuid="a4a209b7-1964-45b9-81b6-ba7cab2f33f5" version="2011.8.9" installurl="null" updateurl="https://userscripts.org/scripts/source/97145.meta.js">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://userscripts.org/</Include>
@@ -657,19 +657,19 @@
 		<Include>http://userscripts.org/users/*/favorites*</Include>
 		<Include>http://userscripts.org/scripts/search*</Include>
 	</Script>
-	<Script basedir="userscriptsorg_alternate" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancing userscripts.org" enabled="true" filename="userscriptsorg_alternate.user.js" installTime="1404226433894" modified="1335185551000" name="userscripts.org alternate CSS" namespace="http://userscripts.org/scripts/show/34698" runAt="document-end" updateMetaStatus="unknown" uuid="3f4309c3-baee-437b-83f8-2182d76e8729" version="1.051" installurl="null" updateurl="null">
+	<Script basedir="userscriptsorg_alternate" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhancing userscripts.org" enabled="true" noframes="false" filename="userscriptsorg_alternate.user.js" installTime="1404226433894" modified="1335185551000" name="userscripts.org alternate CSS" namespace="http://userscripts.org/scripts/show/34698" runAt="document-end" updateMetaStatus="unknown" uuid="3f4309c3-baee-437b-83f8-2182d76e8729" version="1.051" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>http://userscripts.org/*</Include>
 		<Include>https://userscripts.org/*</Include>
 	</Script>
-	<Script basedir="otr_-_search" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Highlight the Search" enabled="true" filename="otr_-_search.user.js" installTime="1404226433901" modified="1335185551000" name="OTR - Search" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="a4760519-b707-4502-8be8-308844049653" version="null" installurl="null" updateurl="null">
+	<Script basedir="otr_-_search" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Highlight the Search" enabled="true" noframes="false" filename="otr_-_search.user.js" installTime="1404226433901" modified="1335185551000" name="OTR - Search" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="a4760519-b707-4502-8be8-308844049653" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://epg.onlinetvrecorder.com/broadcasts/search?*</Include>
 	</Script>
-	<Script basedir="otr_-_weasel" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="otr_-_weasel.user.js" installTime="1404226433908" modified="1335185551000" name="OTR - Weasel" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="c9597f85-7967-47af-9b75-808eee45922e" version="null" installurl="null" updateurl="null">
+	<Script basedir="otr_-_weasel" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="otr_-_weasel.user.js" installTime="1404226433908" modified="1335185551000" name="OTR - Weasel" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="c9597f85-7967-47af-9b75-808eee45922e" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -685,7 +685,7 @@
 		<Include>http://www.onlinetvrecorder.com/</Include>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="onlinetvrecorder_-_direk" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="onlinetvrecorder_-_direk.user.js" installTime="1404226433916" modified="1335185551000" name="OnlineTVRecorder - Direkt Download Links" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5bb35a56-b9d3-418b-8827-41fdae12d508" version="null" installurl="null" updateurl="null">
+	<Script basedir="onlinetvrecorder_-_direk" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="onlinetvrecorder_-_direk.user.js" installTime="1404226433916" modified="1335185551000" name="OnlineTVRecorder - Direkt Download Links" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5bb35a56-b9d3-418b-8827-41fdae12d508" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
 		<Grant>GM_openInTab</Grant>
@@ -694,7 +694,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*</Include>
 	</Script>
-	<Script basedir="sprichwortrekombinator" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="sprichwortrekombinator.user.js" installTime="1404226433920" modified="1335185551000" name="Sprichwortrekombinator" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="65585c1b-771c-4cac-8dd4-81991bd7f358" version="null" installurl="null" updateurl="null">
+	<Script basedir="sprichwortrekombinator" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="sprichwortrekombinator.user.js" installTime="1404226433920" modified="1335185551000" name="Sprichwortrekombinator" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="65585c1b-771c-4cac-8dd4-81991bd7f358" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -705,11 +705,11 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://sprichwortrekombinator.de/*</Include>
 	</Script>
-	<Script basedir="brettspiele" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="brettspiele.user.js" installTime="1404226434078" modified="1412165636000" name="Brettspiele" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="df8cbac9-36e0-4a97-bb45-2e50d702b96e" version="null" installurl="null" updateurl="null">
+	<Script basedir="brettspiele" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="brettspiele.user.js" installTime="1404226434078" modified="1412165636000" name="Brettspiele" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="df8cbac9-36e0-4a97-bb45-2e50d702b96e" version="null" installurl="null" updateurl="null">
 		<Grant>none</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="kinopolis_-_uebersichtli" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="kinopolis_-_uebersichtli.user.js" installTime="1404226434174" modified="1386588347000" name="Kinopolis - uebersichtlicher" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="f033fa6e-2f07-4112-ba71-1fffd838b756" version="null" installurl="null" updateurl="null">
+	<Script basedir="kinopolis_-_uebersichtli" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="kinopolis_-_uebersichtli.user.js" installTime="1404226434174" modified="1386588347000" name="Kinopolis - uebersichtlicher" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="f033fa6e-2f07-4112-ba71-1fffd838b756" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -718,7 +718,7 @@
 		<Include>http://www.kinopolis.de/bn/programm_wochenansicht*</Include>
 		<Include>http://www.kinopolis.de/bn/showtimes/week/*.php</Include>
 	</Script>
-	<Script basedir="boardgamegeek" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="boardgamegeek.user.js" installTime="1404226434312" modified="1389542103000" name="BoardGameGeek" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5d0f6ec4-10b8-4d20-8974-c66ad3389f0e" version="null" installurl="null" updateurl="null">
+	<Script basedir="boardgamegeek" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="boardgamegeek.user.js" installTime="1404226434312" modified="1389542103000" name="BoardGameGeek" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5d0f6ec4-10b8-4d20-8974-c66ad3389f0e" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -726,7 +726,7 @@
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://*boardgamegeek.com*</Include>
 	</Script>
-	<Script basedir="antigame" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Extends Ogame with many functions." enabled="true" filename="antigame.user.js" installTime="1404226434340" modified="1335185551000" name="AntiGame" namespace="antikiller" runAt="document-end" updateMetaStatus="unknown" uuid="296677a2-5293-4669-952d-f9ee50d44f17" version="2.02.8" installurl="null" updateurl="null">
+	<Script basedir="antigame" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Extends Ogame with many functions." enabled="true" noframes="false" filename="antigame.user.js" installTime="1404226434340" modified="1335185551000" name="AntiGame" namespace="antikiller" runAt="document-end" updateMetaStatus="unknown" uuid="296677a2-5293-4669-952d-f9ee50d44f17" version="2.02.8" installurl="null" updateurl="null">
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getResourceURL</Grant>
 		<Grant>GM_getValue</Grant>
@@ -748,17 +748,17 @@
 		<Include>http://ood.giftsua.com/tool/*</Include>
 		<Include>http://shahterov.net/tool/*</Include>
 	</Script>
-	<Script basedir="ogame_redesign__short_he" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Minimize the header when is possible." enabled="true" filename="ogame_redesign__short_he.user.js" installTime="1404226434363" modified="1335185551000" name="OGame Redesign : Short Header (V. 1.03)" namespace="Gollaoum" runAt="document-end" updateMetaStatus="unknown" uuid="6b630135-a830-457d-a1e2-6df040b24198" version="1.03" installurl="null" updateurl="null">
+	<Script basedir="ogame_redesign__short_he" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Minimize the header when is possible." enabled="true" noframes="false" filename="ogame_redesign__short_he.user.js" installTime="1404226434363" modified="1335185551000" name="OGame Redesign : Short Header (V. 1.03)" namespace="Gollaoum" runAt="document-end" updateMetaStatus="unknown" uuid="6b630135-a830-457d-a1e2-6df040b24198" version="1.03" installurl="null" updateurl="null">
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*.ogame.*/game/index.php?page=*</Include>
 	</Script>
-	<Script basedir="BilderGalerie" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nach drücken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert." enabled="true" filename="bildergalerie.user.js" installTime="1404226434539" modified="1412251068000" name="BilderGalerie" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="09b10a3a-ce6d-4d77-8cd1-942c4e9b1e4e" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js">
+	<Script basedir="BilderGalerie" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nach drücken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert." enabled="true" noframes="false" filename="bildergalerie.user.js" installTime="1404226434539" modified="1412251068000" name="BilderGalerie" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="09b10a3a-ce6d-4d77-8cd1-942c4e9b1e4e" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_addStyle</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="Fritz!Box" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="fritzbox.user.js" installTime="1404226434610" modified="1344593223000" name="Fritz!Box" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="bd2f8e40-5295-483e-b452-8fe92eb55117" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/fritzbox/fritzbox.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/fritzbox/fritzbox.user.js">
+	<Script basedir="Fritz!Box" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="fritzbox.user.js" installTime="1404226434610" modified="1344593223000" name="Fritz!Box" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="bd2f8e40-5295-483e-b452-8fe92eb55117" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/fritzbox/fritzbox.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/fritzbox/fritzbox.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_log</Grant>
@@ -766,18 +766,12 @@
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>http://fritz.box*</Include>
 	</Script>
-	<Script basedir="kgforum" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen" enabled="true" filename="kgforum.user.js" installTime="1404226434722" modified="1403508963000" name="kgforum" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="f23994a9-6123-4974-bcc9-010366eacb47" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js">
-		<Grant>GM_addStyle</Grant>
-		<Grant>GM_deleteValue</Grant>
+	<Script basedir="kgforum" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen" enabled="true" noframes="false" filename="kgforum.user.js" installTime="1404226434722" modified="1423326151000" name="kgforum" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="f23994a9-6123-4974-bcc9-010366eacb47" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/kgforum/kgforum.user.js">
 		<Grant>GM_getValue</Grant>
-		<Grant>GM_log</Grant>
-		<Grant>GM_registerMenuCommand</Grant>
 		<Grant>GM_setValue</Grant>
-		<Grant>GM_xmlhttpRequest</Grant>
-		<Grant>unsafeWindow</Grant>
 		<Include>http://www.kgforum.org*</Include>
 	</Script>
-	<Script basedir="ogame_fast_login" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="with this script the login form will show up after ogame loaded. this will let your browser fill the login data (if login data is saved)." enabled="true" filename="ogame_fast_login.user.js" installTime="1404226434772" modified="1335185551000" name="ogame fast login" namespace="ogamefl" runAt="document-end" updateMetaStatus="unknown" uuid="095eb4d7-3262-4570-ae40-3b74365b21c1" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js">
+	<Script basedir="ogame_fast_login" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="with this script the login form will show up after ogame loaded. this will let your browser fill the login data (if login data is saved)." enabled="true" noframes="false" filename="ogame_fast_login.user.js" installTime="1404226434772" modified="1335185551000" name="ogame fast login" namespace="ogamefl" runAt="document-end" updateMetaStatus="unknown" uuid="095eb4d7-3262-4570-ae40-3b74365b21c1" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/ogame_fast_login/ogame_fast_login.user.js">
 		<Exclude>http://*ogame.*/game/*</Exclude>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -786,7 +780,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*ogame.*/*</Include>
 	</Script>
-	<Script basedir="Wiedervorlage" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" filename="wiedervorlage.user.js" installTime="1404226434840" modified="1401638144000" name="Wiedervorlage" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="6c5ed458-845c-4a2c-a6d5-89c04eca746c" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
+	<Script basedir="Wiedervorlage" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" noframes="false" filename="wiedervorlage.user.js" installTime="1404226434840" modified="1401638144000" name="Wiedervorlage" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="6c5ed458-845c-4a2c-a6d5-89c04eca746c" version="null" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -798,7 +792,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="German_Bash" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="German_Bash.user.js" installTime="1404226434910" modified="1337612346000" name="German Bash" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="8816166d-25d4-4976-b6e5-83a2596952c4" version="null" installurl="null" updateurl="null">
+	<Script basedir="German_Bash" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="German_Bash.user.js" installTime="1404226434910" modified="1337612346000" name="German Bash" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="8816166d-25d4-4976-b6e5-83a2596952c4" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -809,7 +803,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://german-bash.org/*</Include>
 	</Script>
-	<Script basedir="YouTube" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" filename="YouTube.user.js" installTime="1404226434981" modified="1405270138000" name="YouTube" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="99e7f433-81f7-4a81-a772-6c5cec866baf" version="null" installurl="null" updateurl="null">
+	<Script basedir="YouTube" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Youtube" enabled="true" noframes="false" filename="YouTube.user.js" installTime="1404226434981" modified="1405270138000" name="YouTube" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="99e7f433-81f7-4a81-a772-6c5cec866baf" version="null" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_deleteValue</Grant>
@@ -821,7 +815,7 @@
 		<Include>https://*youtube.com*</Include>
 		<Include>about:blank#YouTube*</Include>
 	</Script>
-	<Script basedir="Bimmelbahn-Forum" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Bimmelbahn-Forum.user.js" installTime="1404226435099" modified="1371741874000" name="Bimmelbahn-Forum" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="95881d89-a51b-43a2-9afd-86c45e1da808" version="null" installurl="null" updateurl="null">
+	<Script basedir="Bimmelbahn-Forum" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="Bimmelbahn-Forum.user.js" installTime="1404226435099" modified="1371741874000" name="Bimmelbahn-Forum" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="95881d89-a51b-43a2-9afd-86c45e1da808" version="null" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -832,7 +826,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.boards-4you.de/wbb13/60/*</Include>
 	</Script>
-	<Script basedir="funktionssammlung" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="funktionssammlung.user.js" installTime="1404226435170" modified="1412251173000" name="Funktionssammlung" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="35a02945-06d2-4011-98b5-5ece750d7b48" version="0.1" installurl="null" updateurl="null">
+	<Script basedir="funktionssammlung" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="funktionssammlung.user.js" installTime="1404226435170" modified="1412251173000" name="Funktionssammlung" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="35a02945-06d2-4011-98b5-5ece750d7b48" version="0.1" installurl="null" updateurl="null">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_deleteValue</Grant>
@@ -841,7 +835,7 @@
 		<Grant>GM_log</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="videostore-bonn-beuel_(vs-bn.de)" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Bewerten und sortieren der Filme" enabled="true" filename="videostore-bonn-beuel_(vs-bn.de).user.js" installTime="1404226435309" modified="1362134344000" name="videostore-bonn-beuel (vs-bn.de)" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="cd4c6876-d9e1-47b4-bea3-a272a26b9a02" version="1" installurl="null" updateurl="null">
+	<Script basedir="videostore-bonn-beuel_(vs-bn.de)" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Bewerten und sortieren der Filme" enabled="true" noframes="false" filename="videostore-bonn-beuel_(vs-bn.de).user.js" installTime="1404226435309" modified="1362134344000" name="videostore-bonn-beuel (vs-bn.de)" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="cd4c6876-d9e1-47b4-bea3-a272a26b9a02" version="1" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -852,7 +846,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.videostore-bonn-beuel.de*</Include>
 	</Script>
-	<Script basedir="commandlinefu" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zugriff auf die commandlinefu API" enabled="true" filename="commandlinefu.user.js" installTime="1404226435426" modified="1342534251000" name="commandlinefu" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="10da8f0f-b082-468a-9985-e810f50553e3" version="1" installurl="null" updateurl="null">
+	<Script basedir="commandlinefu" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Zugriff auf die commandlinefu API" enabled="true" noframes="false" filename="commandlinefu.user.js" installTime="1404226435426" modified="1342534251000" name="commandlinefu" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="10da8f0f-b082-468a-9985-e810f50553e3" version="1" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -864,14 +858,14 @@
 		<Include>http://www.commandlinefu.com*</Include>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="Youtube_Thumbs_Preview_on_hover" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="mouseover to animate thumbs" enabled="true" filename="108740.user.js" installTime="1404226435511" modified="1342432504000" name="Youtube Thumbs Preview on hover" namespace="vfede" runAt="document-end" updateMetaStatus="unknown" uuid="2865dd4a-3afa-477d-adcb-670d9a669769" version="1.1" installurl="https://userscripts.org/scripts/source/108740.user.js" updateurl="https://userscripts.org/scripts/source/108740.meta.js">
+	<Script basedir="Youtube_Thumbs_Preview_on_hover" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="mouseover to animate thumbs" enabled="true" noframes="false" filename="108740.user.js" installTime="1404226435511" modified="1342432504000" name="Youtube Thumbs Preview on hover" namespace="vfede" runAt="document-end" updateMetaStatus="unknown" uuid="2865dd4a-3afa-477d-adcb-670d9a669769" version="1.1" installurl="https://userscripts.org/scripts/source/108740.user.js" updateurl="https://userscripts.org/scripts/source/108740.meta.js">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_registerMenuCommand</Grant>
 		<Grant>GM_setValue</Grant>
 		<Include>http://*youtube.com*</Include>
 		<Include>https://*youtube.com*</Include>
 	</Script>
-	<Script basedir="schmalspur-modell.at" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Beiträge markieren (gelesen, gut, schlecht)" enabled="true" filename="schmalspur-modell.at.user.js" installTime="1404226435783" modified="1342711653000" name="schmalspur-modell.at" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="2306a77b-1f84-49fe-be1d-0b61210be45c" version="1" installurl="null" updateurl="null">
+	<Script basedir="schmalspur-modell.at" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Beiträge markieren (gelesen, gut, schlecht)" enabled="true" noframes="false" filename="schmalspur-modell.at.user.js" installTime="1404226435783" modified="1342711653000" name="schmalspur-modell.at" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="2306a77b-1f84-49fe-be1d-0b61210be45c" version="1" installurl="null" updateurl="null">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -882,7 +876,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.schmalspur-modell.at*</Include>
 	</Script>
-	<Script basedir="H0_Modelbahnforum" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserung von http://www.nexusboard.net/forumdisplay.php?siteid=2408&amp;forumid=54887" enabled="true" filename="H0_Modelbahnforum.user.js" installTime="1404226436036" modified="1383138462000" name="H0 Modelbahnforum" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="66875925-8434-4991-ac37-09e01b935206" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/H0_Modelbahnforum/H0_Modelbahnforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/H0_Modelbahnforum/H0_Modelbahnforum.user.js">
+	<Script basedir="H0_Modelbahnforum" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserung von http://www.nexusboard.net/forumdisplay.php?siteid=2408&amp;forumid=54887" enabled="true" noframes="false" filename="H0_Modelbahnforum.user.js" installTime="1404226436036" modified="1383138462000" name="H0 Modelbahnforum" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="66875925-8434-4991-ac37-09e01b935206" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/H0_Modelbahnforum/H0_Modelbahnforum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/H0_Modelbahnforum/H0_Modelbahnforum.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -893,7 +887,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.nexusboard.net/*siteid=2408*</Include>
 	</Script>
-	<Script basedir="Kinkywear" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Bugfixes + Verbesserungen" enabled="true" filename="Kinkywear.user.js" installTime="1404226436159" modified="1346669235000" name="Kinkywear" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="925a147f-9efb-48d4-8133-7c58359e1176" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Kinkywear/Kinkywear.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Kinkywear/Kinkywear.user.js">
+	<Script basedir="Kinkywear" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Bugfixes + Verbesserungen" enabled="true" noframes="false" filename="Kinkywear.user.js" installTime="1404226436159" modified="1346669235000" name="Kinkywear" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="925a147f-9efb-48d4-8133-7c58359e1176" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Kinkywear/Kinkywear.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Kinkywear/Kinkywear.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -904,7 +898,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.kinkywear.de*</Include>
 	</Script>
-	<Script basedir="deviantArt" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen der Seite deviantart.com" enabled="true" filename="deviantArt.user.js" installTime="1404226436311" modified="1397401538000" name="deviantArt" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="44cbae35-ec2d-4686-8cbf-b464ca15fd7b" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js">
+	<Script basedir="deviantArt" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Verbesserungen der Seite deviantart.com" enabled="true" noframes="false" filename="deviantArt.user.js" installTime="1404226436311" modified="1397401538000" name="deviantArt" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="44cbae35-ec2d-4686-8cbf-b464ca15fd7b" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/deviantArt/deviantArt.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -916,7 +910,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*deviantart.com*</Include>
 	</Script>
-	<Script basedir="Rapidshare_-_Link_sammler" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Rapidshare_-_Link_sammler.user.js" installTime="1404226436489" modified="1351607411000" name="Rapidshare - Link sammler" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="145024a2-62f3-46a4-9a1f-8cbddf5a703e" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js">
+	<Script basedir="Rapidshare_-_Link_sammler" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="Rapidshare_-_Link_sammler.user.js" installTime="1404226436489" modified="1351607411000" name="Rapidshare - Link sammler" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="145024a2-62f3-46a4-9a1f-8cbddf5a703e" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -927,7 +921,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="sweet-sin" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="sweet-sin.user.js" installTime="1404226436705" modified="1360054184000" name="sweet-sin" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5a967a88-7702-4162-9186-8414770dd883" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/sweet-sin/sweet-sin.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/sweet-sin/sweet-sin.user.js">
+	<Script basedir="sweet-sin" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="sweet-sin.user.js" installTime="1404226436705" modified="1360054184000" name="sweet-sin" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="5a967a88-7702-4162-9186-8414770dd883" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/sweet-sin/sweet-sin.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/sweet-sin/sweet-sin.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -938,7 +932,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.sweet-sin.de*</Include>
 	</Script>
-	<Script basedir="Mobile" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Mobile.user.js" installTime="1404226437078" modified="1360250998000" name="Mobile" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="9d3aabe2-5f66-40e9-ba73-a567d46f3f04" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Mobile/Mobile.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Mobile/Mobile.user.js">
+	<Script basedir="Mobile" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="Mobile.user.js" installTime="1404226437078" modified="1360250998000" name="Mobile" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="9d3aabe2-5f66-40e9-ba73-a567d46f3f04" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Mobile/Mobile.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Mobile/Mobile.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -949,7 +943,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://suchen.mobile.de*</Include>
 	</Script>
-	<Script basedir="Buntbahn" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Forum Steuerung" enabled="true" filename="Buntbahn.user.js" installTime="1404226437348" modified="1367048383000" name="Buntbahn" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="530fac7a-9984-4f96-ab4e-95918600f2cb" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Buntbahn/Buntbahn.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Buntbahn/Buntbahn.user.js">
+	<Script basedir="Buntbahn" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Forum Steuerung" enabled="true" noframes="false" filename="Buntbahn.user.js" installTime="1404226437348" modified="1367048383000" name="Buntbahn" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="530fac7a-9984-4f96-ab4e-95918600f2cb" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Buntbahn/Buntbahn.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Buntbahn/Buntbahn.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -960,7 +954,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.buntbahn.de*</Include>
 	</Script>
-	<Script basedir="Keenmedia_Forum" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Keenmedia_Forum.user.js" installTime="1404226437572" modified="1364473811000" name="Keenmedia Forum" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="bbade9c4-bdae-4b10-a94b-c07a7a6322da" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Keenmedia_Forum/Keenmedia_Forum.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Keenmedia_Forum/Keenmedia_Forum.user.js">
+	<Script basedir="Keenmedia_Forum" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="Keenmedia_Forum.user.js" installTime="1404226437572" modified="1364473811000" name="Keenmedia Forum" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="bbade9c4-bdae-4b10-a94b-c07a7a6322da" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Keenmedia_Forum/Keenmedia_Forum.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Keenmedia_Forum/Keenmedia_Forum.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -971,7 +965,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://board.keenmedia.de*</Include>
 	</Script>
-	<Script basedir="Wurzelimperium" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="34110.user.js" installTime="1404226437852" modified="1364480873000" name="Wurzelimperium" namespace="http://userscripts.org/scripts/show/34110" runAt="document-end" updateMetaStatus="fail" uuid="1c9a9cc6-7288-43ee-896a-73f53c1430cd" version="1.0.1" installurl="https://userscripts.org/scripts/source/34110.user.js" updateurl="http://userscripts.org.nyud.net/scripts/source/34110.meta.js">
+	<Script basedir="Wurzelimperium" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="34110.user.js" installTime="1404226437852" modified="1364480873000" name="Wurzelimperium" namespace="http://userscripts.org/scripts/show/34110" runAt="document-end" updateMetaStatus="fail" uuid="1c9a9cc6-7288-43ee-896a-73f53c1430cd" version="1.0.1" installurl="https://userscripts.org/scripts/source/34110.user.js" updateurl="http://userscripts.org.nyud.net/scripts/source/34110.meta.js">
 		<Exclude>http://forum.bg.molehillempire.com/*</Exclude>
 		<Exclude>http://forum.zeleneimperium.cz/*</Exclude>
 		<Exclude>http://wurzelforum.wurzelimperium.de/*</Exclude>
@@ -1006,7 +1000,7 @@
 		<Include>http://*bahcivanlardiyari.com/*</Include>
 		<Include>http://*molehillempire.com/*</Include>
 	</Script>
-	<Script basedir="pyLoad" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="pyLoad.user.js" installTime="1404226438045" modified="1365406533000" name="pyLoad" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="c4e7b0a9-c68e-4128-b00b-72f94b13db9f" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/pyLoad/pyLoad.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/pyLoad/pyLoad.user.js">
+	<Script basedir="pyLoad" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="pyLoad.user.js" installTime="1404226438045" modified="1365406533000" name="pyLoad" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="c4e7b0a9-c68e-4128-b00b-72f94b13db9f" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/pyLoad/pyLoad.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/pyLoad/pyLoad.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -1018,7 +1012,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="9kw.eu" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="9kw.eu.user.js" installTime="1404226438261" modified="1379780599000" name="9kw.eu" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="2def3e8e-15bf-453c-a877-3f69a1647d10" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/9kw.eu/9kw.eu.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/9kw.eu/9kw.eu.user.js">
+	<Script basedir="9kw.eu" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="9kw.eu.user.js" installTime="1404226438261" modified="1379780599000" name="9kw.eu" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="2def3e8e-15bf-453c-a877-3f69a1647d10" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/9kw.eu/9kw.eu.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/9kw.eu/9kw.eu.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -1029,7 +1023,7 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.9kw.eu*</Include>
 	</Script>
-	<Script basedir="SCR1" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="SCR1.user.js" installTime="1404226438684" modified="1396030088000" name="SCR1" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="1b35d37b-8d11-4963-8112-63a169a61ee9" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/SCR1/SCR1.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/SCR1/SCR1.user.js">
+	<Script basedir="SCR1" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="SCR1.user.js" installTime="1404226438684" modified="1396030088000" name="SCR1" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="1b35d37b-8d11-4963-8112-63a169a61ee9" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/SCR1/SCR1.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/SCR1/SCR1.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -1042,13 +1036,13 @@
 		<Include>http://www.scr1.de*</Include>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="Greased_Lightbox" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhances browsing on websites that link to images such as Google Image Search, Flickr, Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs. Use left and right arrow keys to cycle through images on page." enabled="false" filename="greasedlightbox.user.js" installTime="1404226439043" modified="1369321661000" name="Greased Lightbox" namespace="http://shiftingpixel.com" runAt="document-end" updateMetaStatus="fail" uuid="2d1e90dd-cc90-48a4-b0ed-eb877850471e" version="null" installurl="http://shiftingpixel.com/downloads/greasedlightbox.user.js" updateurl="http://shiftingpixel.com/downloads/greasedlightbox.user.js">
+	<Script basedir="Greased_Lightbox" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Enhances browsing on websites that link to images such as Google Image Search, Flickr, Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs. Use left and right arrow keys to cycle through images on page." enabled="false" noframes="false" filename="greasedlightbox.user.js" installTime="1404226439043" modified="1369321661000" name="Greased Lightbox" namespace="http://shiftingpixel.com" runAt="document-end" updateMetaStatus="fail" uuid="2d1e90dd-cc90-48a4-b0ed-eb877850471e" version="null" installurl="http://shiftingpixel.com/downloads/greasedlightbox.user.js" updateurl="http://shiftingpixel.com/downloads/greasedlightbox.user.js">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_xmlhttpRequest</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="Hacker.org" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Hacker.org.user.js" installTime="1404226439393" modified="1369736550000" name="Hacker.org" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="3fee5cc7-e1ed-443b-85b5-c0b7a960d777" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Hacker.org/Hacker.org.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Hacker.org/Hacker.org.user.js">
+	<Script basedir="Hacker.org" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="Hacker.org.user.js" installTime="1404226439393" modified="1369736550000" name="Hacker.org" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="3fee5cc7-e1ed-443b-85b5-c0b7a960d777" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Hacker.org/Hacker.org.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Hacker.org/Hacker.org.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -1059,11 +1053,11 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.hacker.org*</Include>
 	</Script>
-	<Script basedir="Test" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="Test.user.js" installTime="1404226439672" modified="1388074967000" name="Test" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="52f17f83-bf11-473b-bcab-40a25d83b886" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
+	<Script basedir="Test" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="Test.user.js" installTime="1404226439672" modified="1388074967000" name="Test" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="52f17f83-bf11-473b-bcab-40a25d83b886" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Test/Test.user.js">
 		<Grant>none</Grant>
 		<Include>http://de.selfhtml.org*</Include>
 	</Script>
-	<Script basedir="WeeWar_-_Reminder" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="WeeWar_-_Reminder.user.js" installTime="1404226439906" modified="1392387137000" name="WeeWar - Reminder" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="eb2b0f4a-a7c1-49b4-ad87-441362011155" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js">
+	<Script basedir="WeeWar_-_Reminder" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" noframes="false" filename="WeeWar_-_Reminder.user.js" installTime="1404226439906" modified="1392387137000" name="WeeWar - Reminder" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="eb2b0f4a-a7c1-49b4-ad87-441362011155" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/WeeWar_-_Reminder/WeeWar_-_Reminder.user.js">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_log</Grant>
@@ -1071,7 +1065,7 @@
 		<Grant>GM_openInTab</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="Weewar_Stats" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Shows the # of each type of unit on the map for each player in the game as well as each player's relative army strength (based on unit costs). Click the word STATS on the left of the table to expand the table and show all unit counts." enabled="true" filename="47008.user.js" installTime="1404226440004" modified="1392374655000" name="Weewar Stats" namespace="http://userscripts.org/" runAt="document-end" updateMetaStatus="unknown" uuid="de3ae997-46d4-4f70-b7fb-12fcf037e8d9" version="1.9.1" installurl="https://userscripts.org/scripts/source/47008.user.js" updateurl="https://userscripts.org/scripts/source/47008.user.js">
+	<Script basedir="Weewar_Stats" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Shows the # of each type of unit on the map for each player in the game as well as each player's relative army strength (based on unit costs). Click the word STATS on the left of the table to expand the table and show all unit counts." enabled="true" noframes="false" filename="47008.user.js" installTime="1404226440004" modified="1392374655000" name="Weewar Stats" namespace="http://userscripts.org/" runAt="document-end" updateMetaStatus="unknown" uuid="de3ae997-46d4-4f70-b7fb-12fcf037e8d9" version="1.9.1" installurl="https://userscripts.org/scripts/source/47008.user.js" updateurl="https://userscripts.org/scripts/source/47008.user.js">
 		<Exclude>http://*weewar.com/game/new*</Exclude>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
@@ -1079,13 +1073,13 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://*weewar.com/game*</Include>
 	</Script>
-	<Script basedir="Weewar_Resize" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="This script resizes the map to use the full space of your screen" enabled="true" filename="62262.user.js" installTime="1404226440054" modified="1392374943000" name="Weewar Resize" namespace="weewar-resize" runAt="document-end" updateMetaStatus="unknown" uuid="cdaf3ce4-06c8-4606-a289-1520bbb48e7f" version="null" installurl="https://userscripts.org/scripts/source/62262.user.js" updateurl="https://userscripts.org/scripts/source/62262.user.js">
+	<Script basedir="Weewar_Resize" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="This script resizes the map to use the full space of your screen" enabled="true" noframes="false" filename="62262.user.js" installTime="1404226440054" modified="1392374943000" name="Weewar Resize" namespace="weewar-resize" runAt="document-end" updateMetaStatus="unknown" uuid="cdaf3ce4-06c8-4606-a289-1520bbb48e7f" version="null" installurl="https://userscripts.org/scripts/source/62262.user.js" updateurl="https://userscripts.org/scripts/source/62262.user.js">
 		<Exclude>http://*weewar.com/game/new</Exclude>
 		<Grant>none</Grant>
 		<Include>http://*weewar.com/game*</Include>
 		<Include>http://*weewar.com/maps/edit/*</Include>
 	</Script>
-	<Script basedir="IMDB" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="IMDB.user.js" installTime="1404226440152" modified="1401638144000" name="IMDB" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="82b351a7-7d11-43be-8ce2-15b938d23467" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/IMDB/IMDB.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/IMDB/IMDB.user.js">
+	<Script basedir="IMDB" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="IMDB.user.js" installTime="1404226440152" modified="1401638144000" name="IMDB" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="82b351a7-7d11-43be-8ce2-15b938d23467" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/IMDB/IMDB.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/IMDB/IMDB.user.js">
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
 		<Grant>GM_deleteValue</Grant>
@@ -1094,7 +1088,7 @@
 		<Grant>GM_log</Grant>
 		<Include>http://www.imdb.com*</Include>
 	</Script>
-	<Script basedir="Forum_Manager" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Forum_Manager.user.js" installTime="1404226440220" modified="1403510857000" name="Forum Manager" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="bbeeee59-2651-45ba-a295-55eb6692c817" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Forum_Manager/Forum_Manager.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Forum_Manager/Forum_Manager.user.js">
+	<Script basedir="Forum_Manager" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="Forum_Manager.user.js" installTime="1404226440220" modified="1403510857000" name="Forum Manager" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="bbeeee59-2651-45ba-a295-55eb6692c817" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Forum_Manager/Forum_Manager.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Forum_Manager/Forum_Manager.user.js">
 		<Grant>GM_addStyle</Grant>
 		<Grant>GM_deleteValue</Grant>
 		<Grant>GM_getValue</Grant>
@@ -1105,11 +1099,11 @@
 		<Grant>unsafeWindow</Grant>
 		<Include>http://www.h0-modellbahnforum.de*</Include>
 	</Script>
-	<Script basedir="Woems_Functions" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Woems_Functions.user.js" installTime="1412165317000" modified="1412167729000" name="Woems Functions" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="7af7c532-7909-4f35-87e3-41b2fba7ac0e" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Woems_Functions/Woems_Functions.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Woems_Functions/Woems_Functions.user.js">
+	<Script basedir="Woems_Functions" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="Woems_Functions.user.js" installTime="1412165317000" modified="1412167729000" name="Woems Functions" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="7af7c532-7909-4f35-87e3-41b2fba7ac0e" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Woems_Functions/Woems_Functions.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Woems_Functions/Woems_Functions.user.js">
 		<Grant>none</Grant>
 		<Include>*</Include>
 	</Script>
-	<Script basedir="Microjs" checkRemoteUpdates="1" dependhash="9e5e7ad34016f4e2735390be4da498c201f0aa7c" description="" enabled="true" filename="Microjs.user.js" installTime="1412250556000" modified="1412840244000" name="Microjs" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="a68969e8-9059-40f8-b18e-076e402eda64" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Microjs/Microjs.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Microjs/Microjs.user.js">
+	<Script basedir="Microjs" checkRemoteUpdates="1" dependhash="9e5e7ad34016f4e2735390be4da498c201f0aa7c" description="" enabled="true" noframes="false" filename="Microjs.user.js" installTime="1412250556000" modified="1413217470000" name="Microjs" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="a68969e8-9059-40f8-b18e-076e402eda64" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Microjs/Microjs.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Microjs/Microjs.user.js">
 		<Grant>GM_log</Grant>
 		<Grant>GM_getValue</Grant>
 		<Grant>GM_setValue</Grant>
@@ -1118,5 +1112,11 @@
 		<Include>*</Include>
 		<Require filename="funktionssammlung.user.js"/>
 		<Require filename="ifvisible.js"/>
+	</Script>
+	<Script basedir="Hamster_Fotos" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" noframes="false" filename="Hamster_Fotos.user.js" installTime="1418300699000" modified="1422875071000" name="Hamster Fotos" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" uuid="ca10457a-dcee-4266-af41-c6f5abb82360" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js">
+		<Grant>GM_openInTab</Grant>
+		<Grant>GM_getValue</Grant>
+		<Grant>GM_setValue</Grant>
+		<Include>http://de.xhamster.com/photos/*</Include>
 	</Script>
 </UserScriptConfig>
