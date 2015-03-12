@@ -3,12 +3,8 @@
 // @namespace      Woems
 // @description    Verbesserungen
 // @include        http://www.kgforum.org*
-// ==/UserScript==
-
-// ==UserScript==
-// @name           Funktionssammlung
-// @namespace      Woems
-// @include        *
+// @grant          GM_getValue
+// @grant          GM_setValue
 // ==/UserScript==
 
 /******** BASE FUNCTIONS ********/
@@ -210,6 +206,139 @@ function createHover(elem,text)
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
+/********************************/
+
+function dimarray(init)
+{
+  this.data=init||{};
+  this.set = function ()
+  {
+    var tmp=this.data;
+    for (i=0; i<arguments.length-1; i++)
+    {
+      if (typeof tmp[arguments[i]]=="undefined") tmp[arguments[i]]={};
+      if (i==arguments.length-2) tmp[arguments[i]]=arguments[arguments.length-1]
+      else {
+      if (typeof tmp[arguments[i]]!="object") { tmp[arguments[i]]={} }
+      tmp=tmp[arguments[i]];
+      }
+    }
+    return this;
+  }
+  this.get = function ()
+  {
+    var tmp=this.data;
+    for (i=0; i<arguments.length; i++)
+    {
+      if (typeof tmp!="object") return;      
+      tmp=tmp[arguments[i]];
+    }
+    return tmp;  
+  }
+  this.alert = function ()
+  {
+    alert("Content: "+uneval(this.data));
+    return this;
+  }
+  this.save = function (name)
+  {
+    serialize(name,this.data);
+    return this;
+  }
+  this.load = function (name)
+  {
+    this.data=deserialize(name,this.data);
+    return this;
+  }
+}
+
+//new dimarray().load("test").alert().set(2,1,4,"12414").alert().save("test");
+
+/*alert(uneval(new dimarray()
+  .set(2,1,"Short")
+  .set(1,1,1,"Dies ist ein Test")
+  .set(2,2,"Short2")
+  .set(1,2,2,"Lol")
+  .set(1,1,2,"Auch ein Test")
+  .set(1,2,3,"Ahmen")
+  .set(2,2,"Short3")
+  .save("test")
+  .alert()
+  .get(1,2,4)));*/
+
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+
+function Forum()
+{
+  this.__noSuchMethod__=function () { alert("lol"); }
+  this.url=location.pathname.substr(1).split("_");
+  this.site={ typ: this.url[0], id:parseInt(this.url[1]), bereich:parseInt(this.url[2]), thread:parseInt(this.url[3]), maxartikel:parseInt(this.url[4]), artikel:parseInt(this.url[5]) };
+  this.getsite = function ()
+  {
+    var tmp=location.pathname.substr(1).split("_");
+    var out=[tmp[0]];
+    for (i=1; i<tmp.length; i++)
+    {
+      if (isNaN(parseInt(tmp[i]))) return out;
+      out.push(parseInt(tmp[i]));
+    }
+    return out;
+  }
+}
+function au()
+{
+  var out=[];
+  for (i=0; i<arguments.length; i++)
+    out.push(uneval(arguments[i]));
+  alert(out.join("\n\n"));
+}
+
+var site=new Forum().getsite();
+var data=new dimarray().load("data");
+switch(site[0])
+{
+  case 'threads': alert('t'); break;
+  case 'display': au(site,data.get.apply(data,site.slice(1,4))); break;
+}
+
+
+var obj={ "a":1 };
+Object.defineProperties(obj, {
+  "property1": {
+    value: true,
+    writable: true
+  },
+  "property2": {
+    value: function () { alert("123"); },
+    writable: false
+  }
+  // etc. etc.
+});
+
+au(obj, obj.property1, obj.property2);
+obj.property1=1;
+obj.property2=2;
+au(obj, obj.property1, obj.property2);
+obj.property2();
+//alert(uneval(new Forum()));
+//alert(uneval(location.pathname.substr(1).split("_")));
+
+
+
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+/********************************/
+/********************************/
 /********************************/
 
 var param=location.pathname.match(/\/([a-z]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+))?)?)?)?)?/);
