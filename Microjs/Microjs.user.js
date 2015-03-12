@@ -3965,7 +3965,10 @@ function check(url)
   }
 };
 
-new Activity(function () { next(); }).every(60000).repeat(2).start();
+if (alleXTage(1))
+  next();
+//new Activity(function () { next(); }).every(10*60*1000).repeat(1).start();
 check(location.href);
 //ifvisible.on("blur", next);
+
 
