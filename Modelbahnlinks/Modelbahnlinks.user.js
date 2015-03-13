@@ -1,16 +1,16 @@
 // ==UserScript==
-// @name           kgforum
-// @namespace      Woems
-// @description    Verbesserungen
-// @include        http://www.kgforum.org*
-// @version        1
-// @grant          GM_log
+// @name        Modelbahnlinks
+// @namespace   Woems
+// @include     http://www.modellbahn-links.de*
+// @version     1
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @require        https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js
-// @require        https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js
-// @require        https://raw.githubusercontent.com/needim/noty/master/js/noty/packaged/jquery.noty.packaged.min.js
+// @grant          GM_deleteValue
+// @grant          GM_addStyle
+// @grant          GM_xmlhttpRequest
+// @grant          GM_log
 // ==/UserScript==
+
 
 /******** BASE FUNCTIONS ********/
 function $(ID) { return (typeof ID === 'string' ? document.getElementById(ID) : ID) }
@@ -85,6 +85,7 @@ function onKey(func) { on('keydown',window,function (e) {
   var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
   var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
   if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
+function Key(key,func) { document.addEventListener('keypress', function (e) { k=e.keyCode||e.which; k=(e.metaKey?'META+':'')+(e.ctrlKey?'STRG+':'')+(e.altKey?'ALT+':'')+(String.fromCharCode(k)||k); if (key==k) func(); }, true);  }
 function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
 function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
 function getAccesskeys() { return $x('//*[@accesskey]').map(function (e) { return e.getAttribute("accesskey"); }).sort().join(", "); }
@@ -95,6 +96,7 @@ function css(code) { GM_addStyle(code); }
 function PosX(element) { var e=element; var i=0; while(e) { i+=e.offsetLeft; e=e.offsetParent; } return i; }
 function PosY(element) { var e=element; var i=0; while(e) { i+=e.offsetTop; e=e.offsetParent; } return i; }
 function PosXY(obj) { var p = { x:0, y:0 }; do { p.x += obj.offsetLeft; p.y += obj.offsetTop; } while (obj = obj.offsetParent); return p; }
+function WindowCenter(Obj) { window.scrollTo( 0, PosY(Obj) - ( window.innerHeight / 2 )); }
 // ** Timer **
 function Interval(func, interval) { func(); window.setInterval(func,interval); }
 function Timeout(func, interval) { window.setTimeout(func,interval); }  // Timeout(function () {},1000);
@@ -124,6 +126,7 @@ Date.prototype.diff = function(date) { var tmp="in "; var diff=this.getTime()-da
 function Now(d) { return (d||new Date()).getTime()/1000; }
 function NowOut(d) { return new Date(d*1000).getShortDate(); }
 function ParseDate(d) { var sp=d.match(/(([0-9]{2})\.([0-9]{2})\.([0-9]{2,4}))? ?(([0-9]{1,2}):([0-9]{2}))?/); return new Date(sp[4]||1970,(sp[3]||1)-1,sp[2]||1,sp[6]||0,sp[7]||0,0); }
+function ShowDateDiff(sec) { var teile={ MSec:1000, Sec:60, Min:60, H:24, Tage:7, Wochen:99999 }; var tmp=''; for (i in teile) { if (Math.floor(sec%teile[i])!=0) tmp=Math.floor(sec%teile[i])+' '+i+' '+tmp; sec=sec/teile[i]; } return tmp; }
 // ** Text **
 String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,""); }
 String.prototype.ltrim = function() { return this.replace(/^\s+/,""); }
@@ -135,6 +138,8 @@ function trim(text) { return text.replace(/(^\s*|\s*$)/g,""); }
 function pad(text,anz,chr) { return text.replace(/(^\s*|\s*$)/g,""); }
 function fill(text,fillchar,anz) { var f=""; for (; anz>text.toString().length; anz--) f+=fillchar; return f+text; }
 // ** Array **
+function isArray(obj) { return typeof obj == "object" && obj instanceof Array; }
+function isObject(obj) { return typeof obj == "object" && !obj instanceof Array; }
 function uniq(array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
 function Object2HTMLTable(obj) { var rows=""; for (var i in obj) rows+="<tr><td><b>"+i+":</b></td><td>"+obj[i]+"</td></tr>"; return "<table>"+rows+"</table>"; }
 function arrayTrim(a) { return a.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
@@ -157,14 +162,32 @@ function ga(obj) { GM_log(uneval(obj)); }
 function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
 function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
 // ** HTML-Code
-function div(text) { return '<div>'+text+'</div>'; }
-function row(cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; }
-// ** REST **
+var HTML={
+  div: function (text) { return '<div>'+text+'</div>'; },
+  row: function (cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; },
+  table: function (rows) { return '<table>' + rows.join('') +'</table>'; },
+  elem: function (name,param,inhalt) { return '<'+name+(param?' '+param.join(" "):"")+'>'+(inhalt||'')+'</'+name+'>'; },
+  br: function () { return '<br>'; },
+  divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
+  form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
+  input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
+  button: function (name,value) { return this.input("button",name,value); },
+  submitbutton: function (name,value) { return this.input("submit",name,value); },
+  resetbutton:function (name,value) { return this.input("reset",name,value); },
+  textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
+  selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
+  selectboxplus:function (height,name,lines, def) { var l=""; for (var i in lines) { l+="<option value='"+i+"'"+(def==i?" selected":"")+">"+lines[i]+"</option>" }; return '<select size="'+height+'" name="'+name+'">'+l+'</select>';},
+  dropdownbox:function (name,lines) { return this.selectbox(1,name,lines); },
+  link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
+  checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
+  radio: function (name,checked) { return '<input type="radio" name="'+(name||'')+'"'+(checked?" checked":"")+'">'; },
+};
+// ** REST ** 
 function inFrame() { return self!=top; }
+function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
 //var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
 function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
-function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
 function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) { window[key] = GM_getValue(key, defaultValue); GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() { GM_setValue(key, !window[key]); location.reload(); }); }
 function showmsg(data)
 {
@@ -172,15 +195,19 @@ function showmsg(data)
   data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
   if ($(data.id)) remove($(data.id));
   if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center; z-index:9999;";
+  if (data.onCancelTimeout) { data.onCancel=data.onCancelTimeout; data.onTimeout=data.onCancelTimeout; }
+  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center;";
+  style+=" font:normal medium sans-serif; z-index:9999;"; // Schönheitskorrekturen
   if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
   if (data.top) style+=" position: absolute; top:0px; width: 100%;";
-  data.box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+  data.box=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
+    $x(".//*[@name]",data.box).forEach(function (e) { if (!data[e.name]) data[e.name]=e; });
   if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
   if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
-  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
+  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { data.onTimeout(data); remove($(data.id)); } },(data.Timeout||60)*1000);
   return data;
 } // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
+//data.box.elements.namedItem('').value;
 // $xs('id("default_msg")/input[@value="OK"]').setAttribute("accesskey","o");
 // $xs('id("default_msg")/input[@value="Cancel"]').setAttribute("accesskey","c");
 // $('default_msg_ok').setAttribute("accesskey","o");
@@ -211,396 +238,27 @@ function createHover(elem,text)
 //if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
 //GM_log=function (){}
 //GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
+// ** Infos **
+// location.hash, host, hostname, href, pathname, port, protocol, search
 /********************************/
 
-function dimarray(init)
-{
-  this.data=init||{};
-  this.set = function ()
-  {
-    var tmp=this.data;
-    for (i=0; i<arguments.length-1; i++)
-    {
-      if (typeof tmp[arguments[i]]=="undefined") tmp[arguments[i]]={};
-      if (i==arguments.length-2) tmp[arguments[i]]=arguments[arguments.length-1]
-      else {
-      if (typeof tmp[arguments[i]]!="object") { tmp[arguments[i]]={} }
-      tmp=tmp[arguments[i]];
-      }
-    }
-    return this;
-  }
-  this.get = function ()
-  {
-    var tmp=this.data;
-    for (i=0; i<arguments.length; i++)
-    {
-      if (typeof tmp!="object") return;      
-      tmp=tmp[arguments[i]];
-    }
-    return tmp;  
-  }
-  this.alert = function ()
-  {
-    alert("Content: "+uneval(this.data));
-    return this;
-  }
-  this.save = function (name)
-  {
-    serialize(name,this.data);
-    return this;
-  }
-  this.load = function (name)
-  {
-    this.data=deserialize(name,this.data);
-    return this;
-  }
-}
 
-//new dimarray().load("test").alert().set(2,1,4,"12414").alert().save("test");
+//alert(location.search);
+//alert(location.pathname);
+//alert(location.href);
+var LinkZurAktuallenSeite=$xs("//a[@href='"+location.href+"']");
+LinkZurAktuallenSeite.style.color="red";
 
-/*alert(uneval(new dimarray()
-  .set(2,1,"Short")
-  .set(1,1,1,"Dies ist ein Test")
-  .set(2,2,"Short2")
-  .set(1,2,2,"Lol")
-  .set(1,1,2,"Auch ein Test")
-  .set(1,2,3,"Ahmen")
-  .set(2,2,"Short3")
-  .save("test")
-  .alert()
-  .get(1,2,4)));*/
+//var allLinks=$xs("id('sidebar')//a");
 
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-
-function Forum()
-{
-  this.__noSuchMethod__=function () { alert("lol"); }
-  this.url=location.pathname.substr(1).split("_");
-  this.site={ typ: this.url[0], id:parseInt(this.url[1]), bereich:parseInt(this.url[2]), thread:parseInt(this.url[3]), maxartikel:parseInt(this.url[4]), artikel:parseInt(this.url[5]) };
-  this.getsite = function ()
-  {
-    var tmp=location.pathname.substr(1).split("_");
-    var out=[tmp[0]];
-    for (i=1; i<tmp.length; i++)
-    {
-      if (isNaN(parseInt(tmp[i]))) return out;
-      out.push(parseInt(tmp[i]));
-    }
-    return out;
-  }
-}
-function au()
-{
-  var out=[];
-  for (i=0; i<arguments.length; i++)
-    out.push(uneval(arguments[i]));
-  alert(out.join("\n\n"));
-}
-
-var site=new Forum().getsite();
-var data=new dimarray().load("data");
-switch(site[0])
-{
-  case 'threads': alert('t'); break;
-  case 'display': au(site,data.get.apply(data,site.slice(1,4))); break;
-}
+var Next=$xs("//a[@href='"+location.href+"']/following::a[1]");
+var Previous=$xs("//a[@href='"+location.href+"']/preceding::a[1]");
+var div=createElement('div',{ style:"position:fixed; padding: 5px; bottom:5px; right:5px; background-color:lightgray; border: 1px solid black" }, document.body);
+div.appendChild(Text("Previous: "));
+createElement('a',{ href:Previous.href, innerHTML:Previous.innerHTML }, div);
+createElement('br',{  }, div);
+div.appendChild(Text("Next: "));
+createElement('a',{ href:Next.href, innerHTML:Next.innerHTML }, div);
 
 
-var obj={ "a":1 };
-Object.defineProperties(obj, {
-  "property1": {
-    value: true,
-    writable: true
-  },
-  "property2": {
-    value: function () { alert("123"); },
-    writable: false
-  }
-  // etc. etc.
-});
-
-au(obj, obj.property1, obj.property2);
-obj.property1=1;
-obj.property2=2;
-au(obj, obj.property1, obj.property2);
-obj.property2();
-//alert(uneval(new Forum()));
-//alert(uneval(location.pathname.substr(1).split("_")));
-
-
-
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-/********************************/
-
-var param=location.pathname.match(/\/([a-z]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+))?)?)?)?)?/);
-// Typ    , ForumsID, Bereich, Thread, MaxArtikel, Artikel
-// display, 5       , 2407   , 85377 , 42     , 52
-// http://www.kgforum.org/display_5_2407_85377_42_52.html
-// http://www.kgforum.org/threads_5_2407.html
-if (param && param[1])
-switch(param[1])
-{
-  case 'threads': threads(param[2], param[3], param[4]); break;
-  case 'display': display(param[2], param[3], param[4], param[5]||0, param[6]||0); break;
-  case 'index': break;
-  default: alert('KGForum: Parameter 1 unbekannt: '+uneval(param)); break;
-} // switch(param[1])
-
-// ***** HILFSFUNKTIONEN *****
-function SetData(ForumsID, Bereich, Thread, Artikel, Key, Value) {
-  var data=deserialize('data',{});
-  if (!data[ForumsID]) data[ForumsID]={};
-  if (!data[ForumsID][Bereich]) data[ForumsID][Bereich]={};
-  if (!data[ForumsID][Bereich][Thread]) data[ForumsID][Bereich][Thread]={};
-  if (!data[ForumsID][Bereich][Thread][Artikel]) data[ForumsID][Bereich][Thread][Artikel]={};
-  data[ForumsID][Bereich][Thread][Artikel][Key]=Value;
-  serialize('data',data);
-}
-function GetData(ForumsID, Bereich, Thread, Artikel, Key, DefValue) {
-  var data=deserialize('data',{});
-  try {
-    return data[ForumsID][Bereich][Thread][Artikel][Key];
-  } catch(e) {
-    return DefValue;
-  }
-}
-function AddData(ForumsID, Bereich, Thread, Key, Artikel) {
-  var data=deserialize('data',{});
-  if (!data[ForumsID]) data[ForumsID]={};
-  if (!data[ForumsID][Bereich]) data[ForumsID][Bereich]={};
-  if (!data[ForumsID][Bereich][Thread]) data[ForumsID][Bereich][Thread]={};
-  if (!data[ForumsID][Bereich][Thread][Key]) data[ForumsID][Bereich][Thread][Key]=[];
-  if (data[ForumsID][Bereich][Thread][Key].indexOf(Artikel)==-1)
-    data[ForumsID][Bereich][Thread][Key].push(Artikel);
-  serialize('data',data);
-}
-function RemoveData(ForumsID, Bereich, Thread, Key, Artikel) {
-  var data=deserialize('data',{});
-  if (!data[ForumsID]) data[ForumsID]={};
-  if (!data[ForumsID][Bereich]) data[ForumsID][Bereich]={};
-  if (!data[ForumsID][Bereich][Thread]) data[ForumsID][Bereich][Thread]={};
-  if (!data[ForumsID][Bereich][Thread][Key]) data[ForumsID][Bereich][Thread][Key]=[];
-  if (data[ForumsID][Bereich][Thread][Key].indexOf(Artikel)!=-1)
-    data[ForumsID][Bereich][Thread][Key].splice(data[ForumsID][Bereich][Thread][Key].indexOf(Artikel), 1);
-  serialize('data',data);
-}
-function IfData(ForumsID, Bereich, Thread, Key, Artikel, DefValue) {
-  var data=deserialize('data',{});
-  try {
-    return data[ForumsID][Bereich][Thread][Key].indexOf(Artikel)!=-1
-  } catch(e) {
-    return DefValue;
-  }
-}
-
-function ArtikelDisplay(Artikel, Display)
-{
-  var ErsterArtikel=location.pathname.match(/\/([a-z]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+))?)?)?)?)?/)[6] || 0;
-  var Position=Artikel*1-ErsterArtikel*1;
-  $('wThread').rows[Position*3+1].style.display=Display;
-  $('wThread').rows[Position*3+2].style.display=Display;
-  $('wThread').rows[Position*3+3].style.display=Display;
-}
-
-function ArtikelAusblenden(ForumsID, Bereich, Thread, Artikel) {
-  //SetData(ForumsID, Bereich, Thread, Artikel, "hide", true);
-  AddData(ForumsID, Bereich, Thread, "hide", Artikel);
-  ArtikelDisplay(Artikel, "none");
-}
-function ArtikelEinblenden(ForumsID, Bereich, Thread, Artikel) {
-  //SetData(ForumsID, Bereich, Thread, Artikel, "hide", false);
-  RemoveData(ForumsID, Bereich, Thread, "hide", Artikel);
-  ArtikelDisplay(Artikel, "");
-}
-function ArtikelAusgeblendet(ForumsID, Bereich, Thread, Artikel) {
-  //return GetData(ForumsID, Bereich, Thread, Artikel, "hide", false);
-  return IfData(ForumsID, Bereich, Thread, "hide", Artikel, false);
-}
-
-// ***** HAUPTFUNKTIONEN *****
-function threads(ForumsID, Bereich, Thread) // Uebersicht über alle Treads
-{
-  $xs("/html/body/center[2]").id="wContent";
-  $xs("id('wContent')/table/tbody/tr/td/table[2]").id='wThreads';
-  $x("id('wThreads')/tbody/tr/td[3]/font/a").forEach(function (a) {
-    var param=a.href.match(/\/([a-z]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+)(?:_([0-9]+))?)?)?)?)?.html$/);
-    var data=deserialize('data',{});
-    if (data[param[2]][param[3]][param[4]])
-    {
-      a.style.color="green";
-      //$xs("./ancestor::tr/td[5]",a).bgColor="red";
-      var Beitraege=$xs("./ancestor::tr/td[5]/font",a).textContent*1;
-      var Hidden=data[param[2]][param[3]][param[4]].hide.sort(function (a,b) { return a*1-b*1 });
-      var HighestHidden=Hidden.pop()*1;
-      
-      var Color="#dbdbdb";
-      if (HighestHidden == Beitraege) Color="lightgreen";
-      if (HighestHidden < Beitraege) Color="green";
-      if (HighestHidden < Beitraege-5) Color="yellow";
-      if (HighestHidden < Beitraege-10) Color="red";
-      $xs("./ancestor::tr/td[5]",a).bgColor=Color;
-      $xs("./ancestor::tr/td[5]/font",a).textContent=HighestHidden+" / "+Beitraege;
-      a.href="/display_"+param[2]+"_"+param[3]+"_"+param[4]+"_"+Beitraege+"_"+HighestHidden+".html";
-    }
-  })
-} // threads()
-
-function display(ForumsID, Bereich, Thread, MaxArtikel, Artikel) // Einzelner Tread mit den Beitraegen der User
-{
-  $xs("/html/body/center[2]").id="wContent";
-  $xs("id('wContent')/table/tbody/tr/td/table[2]").id='wThread';
-
-  var Titel=$xs("//font[img[@src='http://www2.forennet.org/images/theme1/folder-3.gif']]").lastChild.textContent;
-  document.title="Forum - "+Titel.replace(/^\s*|\s*$/g,"");
-
-  if (location.hash=="") $("wContent").scrollIntoView()
-  $x("id('wThread')/tbody/tr/td[@rowspan=3]").forEach(function (ZelleAutor,i) {
-    var Name=ZelleAutor.firstChild.name;
-    var AktuellerArtikel=Artikel*1+i;
-    var Links=createElement('font', { size:1 }, ZelleAutor);
-
-    createElement('br', {  }, Links);
-    createElement('a', { href:["display", ForumsID, Bereich, Thread, Math.max(MaxArtikel, AktuellerArtikel+1), AktuellerArtikel].join('_')+".html#"+Name, innerHTML:"[ Beitrag nach Oben ]" }, Links);
-
-    createElement('br', {  }, Links);
-    createElement('a', { href:["display", ForumsID, Bereich, Thread, Math.max(MaxArtikel, AktuellerArtikel-1), AktuellerArtikel-1].join('_')+".html", innerHTML:"[ zurück ]" }, Links);
-    createElement('a', { href:["display", ForumsID, Bereich, Thread, Math.max(MaxArtikel, AktuellerArtikel+1), AktuellerArtikel+1].join('_')+".html", innerHTML:"[ weiter ]" }, Links);
-
-    createElement('br', {  }, Links);
-    createElement('br', {  }, Links);
-    var next=createElement('a', { href:'#'+Name, innerHTML:"[ Darüber Sichtbar ]" }, Links);
-    next.addEventListener("click",function(event){
-      ArtikelEinblenden(ForumsID, Bereich, Thread, AktuellerArtikel-1);
-      event.stopPropagation();
-      event.preventDefault();
-    }, true);
-    createElement('br', {  }, Links);
-    var prev=createElement('a', { href:'#'+Name, innerHTML:"[ Darunter Sichtbar ]" }, Links);
-    prev.addEventListener("click",function(event){
-      ArtikelEinblenden(ForumsID, Bereich, Thread, AktuellerArtikel+1);
-      event.stopPropagation();
-      event.preventDefault();
-    }, true);
-    /*/
-    createElement('br', {  }, Links);
-    var prev=createElement('a', { href:'#'+Name, innerHTML:"[ ALLE Sichtbar ]" }, Links);
-    prev.addEventListener("click",function(event){
-      var data=deserialize('data',{});
-      data[ForumsID][Bereich][Thread]={};
-      serialize('data',data);
-      location.reload();
-      event.stopPropagation();
-      event.preventDefault();
-    }, true);
-    /**/
-
-    createElement('br', {  }, Links);
-    createElement('br', {  }, Links);
-    var hide=createElement('a', { href:'#'+Name, innerHTML:"[ ausblenden ]" }, Links);
-    hide.addEventListener("click",function(event){
-      ArtikelAusblenden(ForumsID, Bereich, Thread, AktuellerArtikel);
-      event.stopPropagation();
-      event.preventDefault();
-    }, true);
-
-    // Artikel ausblenden
-    if (ArtikelAusgeblendet(ForumsID, Bereich, Thread, AktuellerArtikel))
-      $x('.. | ../following-sibling::tr[1] | ../following-sibling::tr[2]',ZelleAutor).forEach(function (e) {
-        e.style.display="none"
-      });
-    
-  });
-  
-    /**/  // Überflüssiges per Tastenkombination ausblenden
-    onKey(function (key, code, e) {
-      switch(key)
-      {
-        case 'ALT+SHIFT+D':
-          var Text=$x("id('wThread')/tbody/tr/td[@rowspan=3]").map(function (ZelleAutor,i) {
-            var AktuellerArtikel=Artikel*1+i;
-            if (!ArtikelAusgeblendet(ForumsID, Bereich, Thread, AktuellerArtikel))
-              return $xs('../following-sibling::tr[1]/td',ZelleAutor).innerHTML;
-            else
-              return "";
-          }).filter(function (e) { return e!=""; });
-          //GM_log(uneval(Text));
-          Text.unshift(location.href);
-          Text.push($xs("//font[@size=1][font[@size=2]]").innerHTML);
-          document.body.innerHTML=Text.join("<br>---------- ---------- ---------- ---------- ----------<br>");
-          document.body.scrollIntoView(false);
-
-          var range = document.createRange();
-          range.selectNode(document.body);
-          var selection = window.getSelection();
-          selection.removeAllRanges();
-          selection.addRange(range);
-
-          return true;
-          break;
-        //default: GM_log([key, uneval(code), e].join("\n")); break;
-      }
-    });
-    /**/
-} // display()
-
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-/***************************************************************************************************************/
-
-function Forum()
-{
-  var param=location.pathname.substr(1).split('.')[0].split("_");
-
-  this.display = function (type, forum, subforum, thema, maxa, articel)
-  {
-    //au(forum,subforum,thema,maxa, articel);
-    noty({ text: "lol", type:"confirm", layout:"bottomRight", timeout:60000, buttons: [
-		{addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
-				$noty.close();
-				noty({text: 'You clicked "Ok" button', type: 'success', layout:"bottomRight"});
-			}
-		},
-		{addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {
-				$noty.close();
-				noty({text: 'You clicked "Cancel" button', type: 'error', layout:"bottomRight"});
-			}
-		}
-	] });
-  }
-  this.threads = function (type, forum, subforum)
-  {
-    au(forum,subforum);
-  }
-  if (this[param[0]])
-    this[param[0]].apply(this,param);
-  else
-    au(param);
-}
-
-function au() { var t=[]; for (var i=0; i<arguments.length; i++) t.push(uneval(arguments[i])); alert(t.join("\n\n")); }
-
-new Forum();
 

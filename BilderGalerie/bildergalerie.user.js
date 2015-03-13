@@ -868,7 +868,7 @@ function Management()
     {
       if (def)
       {
-        if (confirm("Ist diese Seite Porn?"))
+        if (confirm("Ist diese Seite?"))
         {
           Plugin.Sites.setkey(Plugin.Host, "Porn", true).setkey("Default", "Porn", true).save();
           s.Porn=true;
@@ -930,7 +930,7 @@ function Menu()
   this.ShowMenu = function ()
   {
     if (!this.Menu)
-      this.Menu=createElement('div',{ id:'BilderGalerie_Menu', innerHTML: "<h1>PornMen&uuml; (STRG+ALT+UMSCH+T)</h1>" }, document.body);
+      this.Menu=createElement('div',{ id:'BilderGalerie_Menu', innerHTML: "<h1>Men&uuml; (STRG+ALT+UMSCH+T)</h1>" }, document.body);
     this.Menu.style.display='block';
     Plugin.run("CreateButton", this);
   }
