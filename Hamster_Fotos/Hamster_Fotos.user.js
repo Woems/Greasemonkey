@@ -6,6 +6,7 @@
 // @grant       GM_openInTab
 // @grant       GM_getValue
 // @grant       GM_setValue
+// @grant       GM_log
 // ==/UserScript==
 
 
@@ -256,7 +257,13 @@ function xhamster()
   }
   var elems = {
     recentLinks: $x("id('listRecent')/div/a[img]"),
-    recentImages: $x("id('listRecent')/div/a/img")
+    recentImages: $x("id('listRecent')/div/a/img"),
+    smallLinks: $x("id('listSmall')/div/a[img]"),
+    smallImages: $x("id('listSmall')/div/a/img")
+  }
+  this.withLinksDo = function (f)
+  {
+    elems.smallImages.forEach(function (img) { var a=img.parentNode; f(img, a, a.href.match(/\/photos\/view\/([0-9]*)-([0-9]*)\.html/)); });
   }
   this.src = function ()
   {
@@ -428,12 +435,19 @@ var x=new xhamster();
 x.setThumpnailWidth(250);
 x.slideViewRight();
 
+var g=new galerie();
+x.withLinksDo(function (img, a, ids) {
+  g.load().id(ids[1],ids[2]);
+  a.style.background='url("") no-repeat scroll center center #EAEAEA';
+  if (g.checkiid()) img.style.opacity="0.3";
+  //GM_log(img.src+"\n"+a.href+"\n"+uneval(ids)+"\n"+g.getgid()+"\n"+g.getiid()+"\n"+g.checkgid()+"\n"+g.checkiid());
+});
 
 
 
 
 //au(x.src().next);
-preload(x.src().next);
+//preload(x.src().next);
 
 function au(x) { alert(uneval(x)); }
 var g=new galerie();
