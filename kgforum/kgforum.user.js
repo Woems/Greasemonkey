@@ -279,7 +279,7 @@ function dimarray(init)
 /********************************/
 /********************************/
 /********************************/
-
+/*
 function kgForum()
 {
   this.__noSuchMethod__=function () { alert("lol"); }
@@ -335,7 +335,7 @@ obj.property2();
 //alert(uneval(new Forum()));
 //alert(uneval(location.pathname.substr(1).split("_")));
 
-
+*/
 
 /********************************/
 /********************************/
@@ -569,14 +569,14 @@ function display(ForumsID, Bereich, Thread, MaxArtikel, Artikel) // Einzelner Tr
 /***************************************************************************************************************/
 /***************************************************************************************************************/
 /***************************************************************************************************************/
-
+/*
 function Forum()
 {
   var param=location.pathname.substr(1).split('.')[0].split("_");
 
   this.display = function (type, forum, subforum, thema, maxa, articel)
   {
-    //au(forum,subforum,thema,maxa, articel);
+    au(forum,subforum,thema,maxa, articel);
     noty({ text: "lol", type:"confirm", layout:"bottomRight", timeout:60000, buttons: [
 		{addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
 				$noty.close();
@@ -603,4 +603,4 @@ function Forum()
 function au() { var t=[]; for (var i=0; i<arguments.length; i++) t.push(uneval(arguments[i])); alert(t.join("\n\n")); }
 
 new Forum();
-
+*/
