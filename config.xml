@@ -1128,7 +1128,7 @@
     <Grant>GM_log</Grant>
     <Include>http://de.xhamster.com/photos/*</Include>
   </Script>
-  <Script basedir="Amazon" checkRemoteUpdates="1" dependhash="ed927057944a9950df14b6b21268cf5788f03912" description="" enabled="true" noframes="false" filename="Amazon.user.js" name="Amazon" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Amazon/Amazon.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Amazon/Amazon.user.js">
+  <Script basedir="Amazon" checkRemoteUpdates="1" description="" enabled="true" noframes="false" filename="Amazon.user.js" name="Amazon" namespace="Woems" runAt="document-end" updateMetaStatus="unknown" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Amazon/Amazon.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Amazon/Amazon.user.js">
     <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
     <Grant>GM_log</Grant>
@@ -1140,5 +1140,13 @@
     <Require filename="jquery.noty.packaged.min.js"/>
     <Resource name="BootstrapCSS" filename="bootstrap.min.css" mimetype="text/css"/>
     <Resource name="BootstrapThemeCSS" filename="bootstrap-theme.min.css" mimetype="text/css"/>
+  </Script>
+  <Script basedir="Forum" checkRemoteUpdates="1" dependhash="74809a3110d12bb50d835faa9ff2f6c76b682346" description="" enabled="true" filename="Forum.user.js" name="Forum" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Forum/Forum.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/Forum/Forum.user.js">
+    <Grant>GM_addStyle</Grant>
+    <Include>http://www.amazon.de/*</Include>
+    <Require filename="jquery-1.11.3.min.js"/>
+    <Require filename="bootstrap.min.js"/>
+    <Require filename="jquery.noty.packaged.min.js"/>
+    <Require filename="funktionssammlung.user.js"/>
   </Script>
 </UserScriptConfig>

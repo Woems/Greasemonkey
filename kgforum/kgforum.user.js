@@ -279,8 +279,8 @@ function dimarray(init)
 /********************************/
 /********************************/
 /********************************/
-
-function cForum()
+/*
+function kgForum()
 {
   this.__noSuchMethod__=function () { alert("lol"); }
   this.url=location.pathname.substr(1).split("_");
@@ -304,9 +304,8 @@ function au()
     out.push(uneval(arguments[i]));
   alert(out.join("\n\n"));
 }
-//alert(uneval(new cForum()));
-//alert(new cForum().getsite);
-var site=new cForum().getsite();
+
+var site=new kgForum().getsite();
 var data=new dimarray().load("data");
 switch(site[0])
 {
@@ -571,7 +570,7 @@ function display(ForumsID, Bereich, Thread, MaxArtikel, Artikel) // Einzelner Tr
 /***************************************************************************************************************/
 /***************************************************************************************************************/
 /***************************************************************************************************************/
-
+/*
 function Forum()
 {
   var param=location.pathname.substr(1).split('.')[0].split("_");
@@ -605,4 +604,4 @@ function Forum()
 function au() { var t=[]; for (var i=0; i<arguments.length; i++) t.push(uneval(arguments[i])); alert(t.join("\n\n")); }
 
 new Forum();
-
+*/

@@ -37,7 +37,7 @@
   </snippet>
   <snippet>
     <text><![CDATA[window.setInterval(function () { $0 },${1:1000});]]></text>
-    <tag>interval</tag>
+    <tag>Interval</tag>
     <description>Interval</description>
   </snippet>
   <snippet>
