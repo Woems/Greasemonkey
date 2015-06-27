@@ -297,6 +297,8 @@ function guthaben9kw()
   });
 }
 
+if (FrameBuster())
+{
 if (alleXTage(0.5) || ( GM_getValue("Guthaben",0)<1000 && alleXTage(1/24/60) )) guthaben9kw();
   
 var guthaben=GM_getValue("Guthaben",0);
@@ -305,4 +307,4 @@ if (guthaben<1000)
 else if (guthaben<1500)
   cfm("9kw Guthaben ist noch "+guthaben, guthaben9kw);
   //msg("9kw Guthaben ist noch "+guthaben);
-
+}
