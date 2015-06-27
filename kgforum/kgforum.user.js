@@ -280,7 +280,7 @@ function dimarray(init)
 /********************************/
 /********************************/
 
-function Forum()
+function cForum()
 {
   this.__noSuchMethod__=function () { alert("lol"); }
   this.url=location.pathname.substr(1).split("_");
@@ -304,16 +304,17 @@ function au()
     out.push(uneval(arguments[i]));
   alert(out.join("\n\n"));
 }
-
-var site=new Forum().getsite();
+//alert(uneval(new cForum()));
+//alert(new cForum().getsite);
+var site=new cForum().getsite();
 var data=new dimarray().load("data");
 switch(site[0])
 {
-  case 'threads': alert('t'); break;
-  case 'display': au(site,data.get.apply(data,site.slice(1,4))); break;
+  //case 'threads': alert('t'); break;
+  //case 'display': au(site,data.get.apply(data,site.slice(1,4))); break;
 }
 
-
+/*
 var obj={ "a":1 };
 Object.defineProperties(obj, {
   "property1": {
@@ -332,8 +333,9 @@ obj.property1=1;
 obj.property2=2;
 au(obj, obj.property1, obj.property2);
 obj.property2();
-//alert(uneval(new Forum()));
-//alert(uneval(location.pathname.substr(1).split("_")));
+alert(uneval(new Forum()));
+alert(uneval(location.pathname.substr(1).split("_")));
+*/
 
 
 
@@ -592,12 +594,12 @@ function Forum()
   }
   this.threads = function (type, forum, subforum)
   {
-    au(forum,subforum);
+    //au(forum,subforum);
   }
   if (this[param[0]])
     this[param[0]].apply(this,param);
-  else
-    au(param);
+  //else
+    //au(param);
 }
 
 function au() { var t=[]; for (var i=0; i<arguments.length; i++) t.push(uneval(arguments[i])); alert(t.join("\n\n")); }
