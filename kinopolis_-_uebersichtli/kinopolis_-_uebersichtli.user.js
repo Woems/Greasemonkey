@@ -58,6 +58,8 @@ css=GM_addStyle;
 //GM_log=function (){}
 /********************************/
 
+alert("Hello");
+
 //css("#wUebersicht { background-color:red; }");
 //css("#wUebersicht div.buttons { opacity: 0.7; background-color:white; position:relative; top:-140px; left:-100px; width:112px; }");
 //css("#wUebersicht div { display:inline; }");
