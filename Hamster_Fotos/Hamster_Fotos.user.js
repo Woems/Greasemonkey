@@ -33,7 +33,10 @@ function createToggle(toggle, elems, name)
     if (name) GM_setValue(name,!GM_getValue(name,false))
     for (i in elems) if (elems[i].style)
       shElem(elems[i],GM_getValue(name,false));
-    event.defaultPrevented();
+      if (e.defaultPrevented)
+        e.defaultPrevented();
+      else
+        e.preventDefault();
   }, true);
 }
 function createToggleVal(toggle, elems, name)
@@ -45,7 +48,10 @@ function createToggleVal(toggle, elems, name)
     if (name) GM_setValue(name,!GM_getValue(name,false))
     for (i in elems) if (elems[i].style)
       shElem(elems[i],GM_getValue(name,false));
-    event.defaultPrevented();
+      if (e.defaultPrevented)
+        e.defaultPrevented();
+      else
+        e.preventDefault();
   }, true);
 }
 function preload(page)
@@ -159,9 +165,13 @@ function xhamster()
   }
   this.scrollToImage = function ()
   {
-    window.setTimeout(function () {
-      that.elem.image.scrollIntoView(true);
-    }, 100);
+    var img=that.elem.image;
+    if (img.complete)
+      img.scrollIntoView(true);
+    else
+      img.addEventListener("load",function () {
+        img.scrollIntoView(true);
+      });
   }
   this.gid = function ()
   {
@@ -243,7 +253,15 @@ function dimmobject(newdata)
   }
 }
 
-
+function cache()
+{
+  var conf={
+    name:"cache",
+  };
+  var data={};
+  this.load = function () { data=eval(GM_getValue("cache",uneval(data))); }
+  this.save = function () { data=eval(GM_getValue("cache",uneval(data))); }
+}
 
 // **********************
 //      ANWENDUNG
@@ -258,22 +276,19 @@ var colors={
 if (window.top == window.self)
 {
 
+// #### Toggle ####
 var Head=$xs("id('listRecent')/preceding::h2[1]");
 GM_setValue("BeliebteBilder",false);
 createToggle(Head,[$("listRecent"), $("related")], "BeliebteBilder");
 //hideElem($("listRecent"));
 //hideElem($("related"));
 
-//jsonphp="https://woems.selfhost.eu:23882/my/wGreasemonkey/json.php";
-jsonphp="https://woems.ddns.net:23882/my/wGreasemonkey/json.php";
-
-GM_log("xhamster");
+jsonphp="https://woems.selfhost.eu:23882/my/wGreasemonkey/json.php";
+//jsonphp="https://woems.ddns.net:23882/my/wGreasemonkey/json.php";
 
 var x=new xhamster();
 x.scrollToImage();
-/*window.setTimeout(function () {
-  x.elem.image.scrollIntoView(true);
-}, 100);*/
+
 x.onNextHover(function (e) { x.next(); });
 x.onPrevHover(function (e) { x.prev(); });
 //if (Math.random()>0.1) x.hideBeliebteBilder();
@@ -282,12 +297,13 @@ x.slideViewRight();
 
 GM_log("Links einfärben");
 
-// Links einfärben (opacity 0.3) wenn sie angeklicked werden
+// #### Links einfärben (opacity 0.3) wenn angeklicked ####
 function linker(a) {
   var j=false;
   if (j=a.href.match("/photos/view/([0-9]+)-([0-9]+)\.html"))
   {
     a.addEventListener("click",function (e) {
+      GM_log(jsonphp+"?a=xhamster&gid="+j[1]+"&iid="+j[2]);
       get(jsonphp+"?a=xhamster&gid="+j[1]+"&iid="+j[2], function (url, text, header, xhr) {
         json=eval(text);
        message("Bild "+j[1]+"-"+j[2]+": "+json[0].seen);
