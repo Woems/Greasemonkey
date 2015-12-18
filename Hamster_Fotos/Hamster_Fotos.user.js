@@ -1,294 +1,122 @@
 // ==UserScript==
 // @name        Hamster Fotos
 // @namespace   Woems
-// @include     http://de.xhamster.com/photos/*
+// @include     http://de.xhamster.com/*
 // @version     1
 // @grant       GM_openInTab
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_log
+// @grant          GM_xmlhttpRequest
+// @require        https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js
+// @require        https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js
+// @require        https://raw.githubusercontent.com/needim/noty/master/js/noty/packaged/jquery.noty.packaged.min.js
+// @require        https://github.com/Woems/Greasemonkey/raw/master/funktionssammlung/funktionssammlung.user.js
 // ==/UserScript==
 
 
-/******** BASE FUNCTIONS ********/
-function $(ID) { return (typeof ID === 'string' ? document.getElementById(ID) : ID) }
-// ** XPath **
-function $xs(xpath, rootdir) {return document.evaluate(xpath, rootdir || document, null, 9, null).singleNodeValue;}
-function $x(p, context) {
-  p=p.replace(/([^.])\.(\w+)/g,'$1[@class="$2"]').replace(/#(\w+)/g,'[@id="$1"]').replace(/\/\[/g,'/*[');  // '//.class' '//#id' '//[...]'
-  var i, arr = [], xpr = document.evaluate(p, context || document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-  for (i = 0; item = xpr.snapshotItem(i); i++) arr.push(item);
-  return arr;
-}
-function loop(xpath, func, rootdir) {
-	xpath = document.evaluate(xpath, rootdir || document, null, 6, null);
-	var I = xpath.snapshotLength;
-	while(--I>=0) func(xpath.snapshotItem(I));
-}
-// ** Messageboxen **
-function topmessage(data) // id, text, onOK/onCancel/onTimeout, Timeout, color
+// **********************
+//      FUNCTIONS
+// **********************
+function objelem(name) { return function (obj) { return obj[name]; }; }
+function doNothing() {}
+function hideElem(e) { if (e) e.style.display="none" }
+function showElem(e) { if (e) e.style.display="" }
+function shElem(e,show) { if (e) e.style.display=show?"":"none" }
+function toggleElem(e) { e.style.display=e.style.display=="none"?"":"none"; }
+function createToggle(toggle, elems, name)
 {
-  if (!data.id) data.id="topmessage";
-  if ($(data.id)) remove($(data.id));
-  var Box=insertBefore(createElement("div",{ id:data.id, innerHTML: data.text, style:"padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center" }),document.body);
-  if (data.onOK) createElement("input",{ type:"button", value:"OK", style:"margin:0px 0px 0px 15px;" }, Box, function () { remove($(data.id)); data.onOK(); });
-  if (data.onCancel) createElement("input",{ type:"button", value:"Cancel", style:"margin:0px 0px 0px 4px;" }, Box,function () { remove($(data.id)); data.onCancel(); });
-  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { remove($(data.id)); data.onTimeout(); } },(data.Timeout||60)*1000);
-}
-// ** Edit Nodes **
-function createElement(type, attributes, append){
-  var node = document.createElement(type);
-  if (attributes) for (var attr in attributes) if (attributes.hasOwnProperty(attr))
-    if (attr.indexOf("on")==0) node.addEventListener(attr.substr(2).toLowerCase(),function(event){ if (attributes[attr](event.target,event)) { event.stopPropagation(); event.preventDefault(); } }, true); else
-    if (['style'].indexOf(attr)!=-1) node.setAttribute(attr, attributes[attr]); else
-    if (attr=="append") node.appendChild(attributes[attr]); else
-    if (attr=="childs") { for (var child in attributes[attr]) if (attributes[attr].hasOwnProperty(child)) node.appendChild(attributes[attr][child]); } else
-    try { node[attr]=attributes[attr]; } catch(e) { node.setAttribute(attr, attributes[attr]); }
-  if (append) append.appendChild(node);
-  return node;
-} // Example usage: var styles = createElement('link', {rel: 'stylesheet', type: 'text/css', href: basedir + 'style.css'});
-// var test=createElement("div",{ innerHTML:"LOL", textContent:"123", onClick: function () { alert("test"); },  append:createElement("span",{ innerHTML:"Text"}) }, document.body);
-function fade(node, speed, to, endfunc) {
-  if (node.style.opacity=="") node.style.opacity=(node.style.display=='none')?0:1;
-  node.style.display="";
-  counter={slow : 0.01, medium : 0.05, fast: 0.15}[(speed||'').toLowerCase()]||.05;
-  richtung=(parseFloat(node.style.opacity)>to)?-1:1;
-  node.style.display='';
-  var intv = setInterval(function(){
-    if((parseFloat(node.style.opacity)-to)*richtung<=0) node.style.opacity = (parseFloat(node.style.opacity)+counter*richtung).toString();
-    else {
-      clearInterval(intv);
-      node.style.display=(parseFloat(node.style.opacity)<=0)?'none':'';
-      if (parseFloat(node.style.opacity)>=1) node.style.opacity="";
-      if (endfunc) endfunc();
-    }
-  }, 50);
-}
-function Text(txt) { return document.createTextNode(txt); }
-function remove(node) {if(node)node.parentNode.removeChild(node);return remove;}
-function insertAfter(newNode, node) { return node.parentNode.insertBefore(newNode, node.nextSibling); }
-function insertBefore(newNode, node) { return node.parentNode.insertBefore(newNode, node); }
-function insertFirstChild(newNode, node) { return node.insertBefore(newNode, node.firstChild); }
-function hide(node,hideshow) { $(node).style.display=(hideshow=='hide')?'none': (hideshow=='show')?'': ($(node).style.display=='none')?'':'none'; }
-function selectsort(obj) { var list=[]; for (var i=0; node=obj.options[i]; i++) list.push(node); list.sort(function (a,b) { return a.textContent>b.textContent?1:a.textContent<b.textContent?-1:0; }); list.forEach(function (e) { obj.appendChild(e); }); }
-// ** Events **
-function onClick(button,func,type) { button.addEventListener(type || "click",function(event){ func(event.target,event); event.stopPropagation(); event.preventDefault(); }, true); }
-function on(type, elm, func) {
-  if (!elm) GM_log("ERROR: Elm undefined!!!\non("+type+", "+elm+", "+func+");");
-  if (type instanceof Array) type.forEach(function (t) { on(t, elm, func); })
-  else if (elm instanceof Array) elm.forEach(function (e) { on(type, e, func); })
-  else (typeof elm === 'string' ? document.getElementById(elm) : elm).addEventListener(type, func, false);
-} // on(['click','dblclick'],['input',document.body],function (e) { alert(e); }); 
-function onKey(func) { on('keydown',window,function (e) { 
-  var key=(e.ctrlKey?'CTRL+':'') + (e.altKey?'ALT+':'') + (e.shiftKey?'SHIFT+':'') + (e.metaKey?'META+':'') + String.fromCharCode(e.keyCode);
-  var code={ SHIFT:e.shiftKey, CTRL:e.ctrlKey, ALT:e.altKey, META:e.metaKey, KEY:e.keyCode, CHAR:String.fromCharCode(e.keyCode) };
-  if (func(key, code, e)) { e.stopPropagation(); e.preventDefault(); } }); }
-function Key(key,func) { document.addEventListener('keypress', function (e) { k=e.keyCode||e.which; k=(e.metaKey?'META+':'')+(e.ctrlKey?'STRG+':'')+(e.altKey?'ALT+':'')+(String.fromCharCode(k)||k); if (key==k) func(); }, true);  }
-function onAccesskey(func,debug) { window.addEventListener('keydown',function (e) { if (!e.shiftKey || !e.altKey) return; var key=String.fromCharCode({222:50,0:51,191:55,55:54,57:56,48:57,61:48}[e.keyCode]||e.keyCode).toLowerCase(); var node=$xs("//*[@accesskey='"+key+"']"); if (debug) GM_log("\nKey: "+key+"\nCode: "+e.keyCode+"\nWhich: "+e.which+"\nNode: "+node.innerHTML); if (node && func(key,node,e)) { e.stopPropagation(); e.preventDefault(); }; }, false); }
-function click(elm) { var evt = document.createEvent('MouseEvents'); evt.initEvent('click', true, true); elm.dispatchEvent(evt); } // geht nur bei "//input"
-function getAccesskeys() { return $x('//*[@accesskey]').map(function (e) { return e.getAttribute("accesskey"); }).sort().join(", "); }
-function getFreeAccesskeys() { var keys=getAccesskeys(); return "abcdefghijklmnopqrstuvwxyz1234567890+-#<".split("").filter(function (e) { return keys.indexOf(e)==-1; }).sort().join(", "); }
-//GM_log("\nKeys: "+getAccesskeys()+"\nFree: "+getFreeAccesskeys());
-function css(code) { GM_addStyle(code); }
-// ** Position **
-function PosX(element) { var e=element; var i=0; while(e) { i+=e.offsetLeft; e=e.offsetParent; } return i; }
-function PosY(element) { var e=element; var i=0; while(e) { i+=e.offsetTop; e=e.offsetParent; } return i; }
-function PosXY(obj) { var p = { x:0, y:0 }; do { p.x += obj.offsetLeft; p.y += obj.offsetTop; } while (obj = obj.offsetParent); return p; }
-function WindowCenter(Obj) { window.scrollTo( 0, PosY(Obj) - ( window.innerHeight / 2 )); }
-// ** Timer **
-function Interval(func, interval) { func(); window.setInterval(func,interval); }
-function Timeout(func, interval) { window.setTimeout(func,interval); }  // Timeout(function () {},1000);
-function alleXTage(tage, key) { key=key||"alleXTage"; if (GM_getValue(key,0) == 0 || new Date().getTime() > (+GM_getValue(key, 0) + (1000*60*60*24*tage))) { GM_setValue(key,new Date().getTime()+""); return true; } return false; }
-// if (alleXTage(10)) alert("alle 10 Tage");
-// ** Save **
-function deserialize(name, def) { return eval(GM_getValue(name, (def || '({})'))); }
-function serialize(name, val) { GM_setValue(name, uneval(val)); }
-function aset(name, key, val) { var tmp=deserialize(name); tmp[key]=val; serialize(name,tmp);}
-function aget(name, key) { return deserialize(name)[key]; }
-         // GM_deleteValue("pwd");
-// ** XHTML **
-function get(url, cb) { GM_xmlhttpRequest({ method: "GET", url: url, onload: function(xhr) { cb(xhr.finalUrl, xhr.responseText, xhr.responseHeaders, xhr); } });}
-// get("",function (url, text, header, xhr) { var div=text2div(text); });
-function head(url, cb) { GM_xmlhttpRequest({ method: "HEAD", url: url, onload: function(xhr) { cb(xhr.finalUrl, xhr.responseText, xhr.responseHeaders, xhr); } }); }
-// head("",function (url, text, header, xhr) { var div=text2div(text); });
-function post(url, data, cb) { GM_xmlhttpRequest({ method: "POST", url: url, headers:{'Content-type':'application/x-www-form-urlencoded'}, data:encodeURI(data), onload:function(xhr) { cb(xhr.finalUrl, xhr.responseText, xhr.responseHeaders, xhr); } }); }
-// post("",{},function (url, text, header, xhr) { var div=text2div(text); });
-function text2div(text) { var div=document.createElement("div"); div.innerHTML=text; return div; }
-// ** Date **
-Date.prototype.format = function(format) { var returnStr = ''; var replace = Date.replaceChars; for (var i = 0; i < format.length; i++) { var curChar = format.charAt(i); if (i - 1 >= 0 && format.charAt(i - 1) == "\\") { returnStr += curChar; } else if (replace[curChar]) { returnStr += replace[curChar].call(this); } else if (curChar != "\\"){ returnStr += curChar; } } return returnStr; }; Date.replaceChars = { shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], longMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], longDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], d: function() { return (this.getDate() < 10 ? '0' : '') + this.getDate(); }, D: function() { return Date.replaceChars.shortDays[this.getDay()]; }, j: function() { return this.getDate(); }, l: function() { return Date.replaceChars.longDays[this.getDay()]; }, N: function() { return this.getDay() + 1; }, S: function() { return (this.getDate() % 10 == 1 && this.getDate() != 11 ? 'st' : (this.getDate() % 10 == 2 && this.getDate() != 12 ? 'nd' : (this.getDate() % 10 == 3 && this.getDate() != 13 ? 'rd' : 'th'))); }, w: function() { return this.getDay(); }, z: function() { var d = new Date(this.getFullYear(),0,1); return Math.ceil((this - d) / 86400000); }, W: function() { var d = new Date(this.getFullYear(), 0, 1); return Math.ceil((((this - d) / 86400000) + d.getDay() + 1) / 7); }, F: function() { return Date.replaceChars.longMonths[this.getMonth()]; }, m: function() { return (this.getMonth() < 9 ? '0' : '') + (this.getMonth() + 1); }, M: function() { return Date.replaceChars.shortMonths[this.getMonth()]; }, n: function() { return this.getMonth() + 1; }, t: function() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 0).getDate() }, L: function() { var year = this.getFullYear(); return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)); }, o: function() { var d  = new Date(this.valueOf());  d.setDate(d.getDate() - ((this.getDay() + 6) % 7) + 3); return d.getFullYear();}, Y: function() { return this.getFullYear(); }, y: function() { return ('' + this.getFullYear()).substr(2); }, a: function() { return this.getHours() < 12 ? 'am' : 'pm'; }, A: function() { return this.getHours() < 12 ? 'AM' : 'PM'; }, B: function() { return Math.floor((((this.getUTCHours() + 1) % 24) + this.getUTCMinutes() / 60 + this.getUTCSeconds() / 3600) * 1000 / 24); }, g: function() { return this.getHours() % 12 || 12; }, G: function() { return this.getHours(); }, h: function() { return ((this.getHours() % 12 || 12) < 10 ? '0' : '') + (this.getHours() % 12 || 12); }, H: function() { return (this.getHours() < 10 ? '0' : '') + this.getHours(); }, i: function() { return (this.getMinutes() < 10 ? '0' : '') + this.getMinutes(); }, s: function() { return (this.getSeconds() < 10 ? '0' : '') + this.getSeconds(); },    u: function() { var m = this.getMilliseconds(); return (m < 10 ? '00' : (m < 100 ? '0' : '')) + m; }, e: function() { return "Not Yet Supported"; }, I: function() { return "Not Yet Supported"; }, O: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + '00'; }, P: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + ':00'; }, T: function() { var m = this.getMonth(); this.setMonth(0); var result = this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/, '$1'); this.setMonth(m); return result;}, Z: function() { return -this.getTimezoneOffset() * 60; }, c: function() { return this.format("Y-m-d\\TH:i:sP"); }, r: function() { return this.toString(); }, U: function() { return this.getTime() / 1000; } };
-Date.prototype.getDayString = function() { return ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"][this.getDay()]; }
-Date.prototype.getMonthString = function() { return ["Januar","Februar","März","April","May","Juni","Juli","August","September","Oktober","November","Dezember"][this.getMonth()]; }
-Date.prototype.getShortDate = function() { return this.getDate().pad(2)+"."+["Jan","Feb","Mär","Apr","May","Jun","Jul","Aug","Sep","Okt","Nov","Dez"][this.getMonth()]+"."+this.getFullYear()+" "+this.getHours().pad(2)+":"+this.getMinutes().pad(2)+"."+this.getSeconds().pad(2); }
-Date.prototype.getShortDate2 = function() { return this.getDate().pad(2)+"."+(this.getMonth()+1).pad(2)+"."+this.getFullYear()+" "+this.getHours().pad(2)+":"+this.getMinutes().pad(2)+"."+this.getSeconds().pad(2); }
-Date.prototype.diff = function(date) { var tmp="in "; var diff=this.getTime()-date.getTime(); if (diff<0) { diff*=-1; tmp="vor "; } return (tmp+Math.floor(diff/1000/60/60/24/7)+"w "+Math.floor(diff/1000/60/60/24%7)+"d "+Math.floor(diff/1000/60/60%24)+"h "+Math.floor(diff/1000/60%60)+"m "+Math.floor(diff/1000%60)+"s").replace(/ 0[wdhms]/g,''); }
-function Now(d) { return (d||new Date()).getTime()/1000; }
-function NowOut(d) { return new Date(d*1000).getShortDate(); }
-function ParseDate(d) { var sp=d.match(/(([0-9]{2})\.([0-9]{2})\.([0-9]{2,4}))? ?(([0-9]{1,2}):([0-9]{2}))?/); return new Date(sp[4]||1970,(sp[3]||1)-1,sp[2]||1,sp[6]||0,sp[7]||0,0); }
-function ShowDateDiff(sec) { var teile={ MSec:1000, Sec:60, Min:60, H:24, Tage:7, Wochen:99999 }; var tmp=''; for (i in teile) { if (Math.floor(sec%teile[i])!=0) tmp=Math.floor(sec%teile[i])+' '+i+' '+tmp; sec=sec/teile[i]; } return tmp; }
-// ** Text **
-String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g,""); }
-String.prototype.ltrim = function() { return this.replace(/^\s+/,""); }
-String.prototype.rtrim = function() { return this.replace(/\s+$/,""); }
-String.prototype.lpad = function(len, chr) { return (len-this.length+1<0)?this:Array(len-this.length+1).join(chr||' ') + this; }
-String.prototype.rpad = function(len, chr) { return (len-this.length+1<0)?this:this + Array(len-this.length+1).join(chr||' '); }
-Number.prototype.pad = function(len) { return (len-this.toString().length+1<0)?this:Array(len-this.toString().length+1).join('0') + this.toString(); }
-function trim(text) { return text.replace(/(^\s*|\s*$)/g,""); }
-function pad(text,anz,chr) { return text.replace(/(^\s*|\s*$)/g,""); }
-function fill(text,fillchar,anz) { var f=""; for (; anz>text.toString().length; anz--) f+=fillchar; return f+text; }
-// ** Array **
-function isArray(obj) { return typeof obj == "object" && obj instanceof Array; }
-function isObject(obj) { return typeof obj == "object" && !obj instanceof Array; }
-function uniq(array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
-function Object2HTMLTable(obj) { var rows=""; for (var i in obj) rows+="<tr><td><b>"+i+":</b></td><td>"+obj[i]+"</td></tr>"; return "<table>"+rows+"</table>"; }
-function arrayTrim(a) { return a.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
-function arrayClean(a) { return a.filter(function (e) { return e!=""; }); };
-function arrayRand(array) { if (!array || array.length==0) GM_log("ArrayGetRand Error: Array ist undefined or 0\nArray: "+array+"\nType: "+typeof array+"\nUneval: "+uneval(array)); return array[Math.floor(Math.random()*(array.length-1))]; }
-Array.prototype.trim = function () { return this.map(function (e) { return e.replace(/[^\S|\S$]/,""); }); };
-Array.prototype.clean = function () { return this.filter(function (e) { return e!=""; }); };
-Array.prototype.uniq = function (array) { var last=""; return array.filter(function (e) { if (e!=last && e!='') { last=e; return true; } else { last=e; return false; } }); }
-// ** Objekte **
-function ObjKeys(Obj) { var t=[]; for (i in Obj) t.push(i); return t; }
-function ObjValues(Obj) { var t=[]; for (i in Obj) t.push(Obj[i]); return t; }
-function ObjKeysAndValues(Obj,sep) { var t=[]; for (i in Obj) t.push(i+(sep||": ")+Obj[i]); return t; }
-function ForEachObj(Obj,func) { for (i in Obj) func(i, Obj[i]); }
-function MapObj(Obj,func) { var t=[]; for (i in Obj) t.push(func(i, Obj[i])); return t; }
-function Obj2String(Obj, sep) { var t=[]; for (i in Obj) t.push(i+": "+Obj[i]); return t.sort().join(sep||"\n"); }
-// ** Parameter **
-function urlParse(url) { var a = urlParse.a = urlParse.a || document.createElement('a'); a.href = url; return { scheme: /^[^:]+/.exec(a.protocol)[0], host: a.host, hostname: a.hostname, pathname: a.pathname, search: a.search, hash: a.hash }; } //alert(mdump(urlParse(location.href)));
-function aa(obj) { alert(uneval(obj)); }
-function ga(obj) { GM_log(uneval(obj)); }
-function getParam(key, def) { var a=location.search.match(/([^?=&]+)=([^?=&]+)/g); var r={}; for (var i in a) if (a.hasOwnProperty(i)) { var m=a[i].match(/([^?=&]+)=([^?=&]+)/); r[m[1]]=m[2]; } return ((key)?r[key]:r)||def; }
-function getHost() { return location.host; } // hash, host, hostname, href, pathname, port, protocol, search
-// ** HTML-Code
-var HTML={
-  div: function (text) { return '<div>'+text+'</div>'; },
-  row: function (cells) { return '<tr><td>' + cells.join('</td><td>') +'</td></tr>'; },
-  table: function (rows) { return '<table>' + rows.join('') +'</table>'; },
-  elem: function (name,param,inhalt) { return '<'+name+(param?' '+param.join(" "):"")+'>'+(inhalt||'')+'</'+name+'>'; },
-  br: function () { return '<br>'; },
-  divright: function (content) { return '<div style="text-align:right;">'+(content||"")+'</div>'; },
-  form: function (uri,name,content,get) { return '<form action="'+uri+'" name="'+name+'" method="'+(get?'get':'post')+'">'+(content||"")+'</form>'; },
-  input: function (type,name,value,content) { return '<input type="'+type+'" name="'+(name||"")+'" value="'+(value||"")+'">'+(content||"")+'</input>'; },
-  button: function (name,value) { return this.input("button",name,value); },
-  submitbutton: function (name,value) { return this.input("submit",name,value); },
-  resetbutton:function (name,value) { return this.input("reset",name,value); },
-  textarea:function (cols,rows,name,content) { return '<textarea cols="'+cols+'" rows="'+rows+'" name="'+(name||"")+'">'+(content||"")+'</textarea>'; },
-  selectbox:function (height,name,lines) { return '<select size="'+height+'" name="'+name+'"><option>'+lines.join("</option><option>")+'</option></select>';},
-  selectboxplus:function (height,name,lines, def) { var l=""; for (var i in lines) { l+="<option value='"+i+"'"+(def==i?" selected":"")+">"+lines[i]+"</option>" }; return '<select size="'+height+'" name="'+name+'">'+l+'</select>';},
-  dropdownbox:function (name,lines) { return this.selectbox(1,name,lines); },
-  link: function (url,content) { return '<a href="'+url+'">'+(content||url)+'</a>'; },
-  checkbox: function (name,checked) { return '<input type="checkbox" name="'+(name||'')+'"'+(checked?" checked":"")+'>'; },
-  radio: function (name,checked) { return '<input type="radio" name="'+(name||'')+'"'+(checked?" checked":"")+'">'; },
-};
-// ** REST ** 
-function inFrame() { return self!=top; }
-function FrameBuster() { return window === parent; } // TopWindow=true, IFrame=False, Frame=False
-function dump(obj, deep) { if (typeof obj=="object") if (obj instanceof Array) { var tmp=[]; for (j in obj) tmp.push(dump(obj[j], deep)); return "[ "+tmp.join(", ")+" ]"; } else { var tmp=[]; deep=(deep||'')+'   '; for (j in obj) tmp.push(deep+j+" = "+dump(obj[j], deep)); return "{\n"+tmp.join(",\n")+"\n"+deep+"}"; } return (typeof obj=="string")?"'"+obj+"'":obj; }
-//var a=["öpö","lol"]; for (i in a) if (a.hasOwnProperty(i)) GM_log(i+": "+a[i]);
-function iframe(url,className,w,h,noframetext) { var iframe=document.createElement("iframe"); iframe.src=url; iframe.className=className||"test"; iframe.width=w||100; iframe.height=h||100; iframe.innerHTML=noframetext||""; return iframe; }
-function makeMenuToggle(key, defaultValue, toggleOn, toggleOff, prefix) { window[key] = GM_getValue(key, defaultValue); GM_registerMenuCommand((prefix ? prefix+": " : "") + (window[key] ? toggleOff : toggleOn), function() { GM_setValue(key, !window[key]); location.reload(); }); }
-function showmsg(data)
-{
-  if (!data.id) data.id="default_msg_{rand}";
-  data.id=data.id.replace("{rand}",Math.floor(Math.random()*1000));
-  if ($(data.id)) remove($(data.id));
-  if (data.onOKTimeout) { data.onOK=data.onOKTimeout; data.onTimeout=data.onOKTimeout; }
-  if (data.onCancelTimeout) { data.onCancel=data.onCancelTimeout; data.onTimeout=data.onCancelTimeout; }
-  var style="padding:2px 0px 2px 7px; border-bottom:1px solid black; background-color:"+(data.color||"lightgray")+"; text-align:center;";
-  style+=" font:normal medium sans-serif; z-index:9999;"; // Schönheitskorrekturen
-  if (data.fixed) style+=" position: fixed; top:0px; width: 100%;";
-  if (data.top) style+=" position: absolute; top:0px; width: 100%;";
-  data.box=insertBefore(createElement("form",{ id:data.id, innerHTML: data.text, style:data.style||style }),document.body);
-    $x(".//*[@name]",data.box).forEach(function (e) { if (!data[e.name]) data[e.name]=e; });
-  if (data.onOK) data.okbtn=createElement("input",{ type:"button", value:data.OK||"OK", style:"margin:0px 0px 0px 15px;", onClick:function () { data.onOK(data); remove($(data.id));  } }, data.box);
-  if (data.onCancel) data.cancelbtn=createElement("input",{ type:"button", value:data.Cancel||"Cancel", style:"margin:0px 0px 0px 4px;", onClick:function () { data.onCancel(data); remove($(data.id));  } }, data.box);
-  if (data.onTimeout) window.setTimeout(function () { if ($(data.id)) { data.onTimeout(data); remove($(data.id)); } },(data.Timeout||60)*1000);
-  return data;
-} // id, text, color, OK, onOK, Cancel, onCancel, Timeout, onTimeout, onOKTimeout // ** Log **
-//data.box.elements.namedItem('').value;
-// $xs('id("default_msg")/input[@value="OK"]').setAttribute("accesskey","o");
-// $xs('id("default_msg")/input[@value="Cancel"]').setAttribute("accesskey","c");
-// $('default_msg_ok').setAttribute("accesskey","o");
-// $('default_msg_cancel').setAttribute("accesskey","c");
-function createHover(elem,text)
-{
-  if (!$("wPopup")) createElement('div', { id:"wPopup", style:"display:none; padding: 3px; background:lightgray; border:1px solid black; position:absolute;" }, document.body);
-  elem.addEventListener("mouseover",function(event){
-    if (event.target.title) { text="<b>"+event.target.title+"</b><br><br>"+text; event.target.title=""; }
-    $("wPopup").innerHTML=text;
-    $("wPopup").style.top=(PosY(event.target)+20)+"px";
-    $("wPopup").style.left=PosX(event.target)+"px";
-    $("wPopup").style.display="";
-   window.setTimeout(function () {
-     if ($("wPopup").clientWidth > window.innerWidth)
-       $("wPopup").style.left="1px";
-     else if ($("wPopup").clientWidth > window.innerWidth-PosX(event.target))
-       $("wPopup").style.left=(window.innerWidth-$("wPopup").clientWidth)+"px";
-     else
-       $("wPopup").style.left=PosX(event.target)+"px";
-   },100);
-  }, true);
-  elem.addEventListener("mouseout",function(event){
-    if ($("wPopup")) $("wPopup").style.display="none";
+  if (!name) return;
+    for (i in elems) if (elems[i].style)
+      shElem(elems[i],GM_getValue(name,false));
+  toggle.addEventListener("click",function(event){
+    if (name) GM_setValue(name,!GM_getValue(name,false))
+    for (i in elems) if (elems[i].style)
+      shElem(elems[i],GM_getValue(name,false));
+      if (e.defaultPrevented)
+        e.defaultPrevented();
+      else
+        e.preventDefault();
   }, true);
 }
-// ** Log **
-//if(unsafeWindow.console) var GM_log = unsafeWindow.console.log; // Loggt in Firefox Console
-//GM_log=function (){}
-//GM_log=function (Text) { showmsg({ text: Text.replace(/\n/g,"<br>"), color:"yellow", fixed:true, Timeout:10, onTimeout: function (data) {}, }); };
-// ** Infos **
-// location.hash, host, hostname, href, pathname, port, protocol, search
-/********************************/ 
+function createToggleVal(toggle, elems, name)
+{
+  if (!name) return;
+    for (i in elems) if (elems[i].style)
+      shElem(elems[i],GM_getValue(name,false));
+  toggle.addEventListener("click",function(event){
+    if (name) GM_setValue(name,!GM_getValue(name,false))
+    for (i in elems) if (elems[i].style)
+      shElem(elems[i],GM_getValue(name,false));
+      if (e.defaultPrevented)
+        e.defaultPrevented();
+      else
+        e.preventDefault();
+  }, true);
+}
+function preload(page)
+{
+  if (window.top != window.self)  //-- Don't run on frames or iframes.
+    return;
+  createElement('iframe', { style:"display:none", src:page }, document.body);
+}
 
-  function objelem(name)
-  {
-    return function (obj) { return obj[name]; };
-  }
+// **********************
+//      OBJECTS
+// **********************
 
-
+//// XHAMSTER ////
 function xhamster()
 {
-  var elem = {
+  this.elem = {
     next: $xs('//a[@class="next"]'), //  //a[@title="Klicke zum nächsten Bild >>"]
     prev: $xs('//a[@class="prev"]'),
     play: $xs('//a[@class="play"]'),
     imageContainer: $("imgTop"),
     image: $("imgSized")
   }
-  var elems = {
+  this.elems = {
+    smallLinks: $x("id('listSmall')/div/a[img]"),
+    smallImages: $x("id('listSmall')/div/a/img"),
     recentLinks: $x("id('listRecent')/div/a[img]"),
     recentImages: $x("id('listRecent')/div/a/img"),
-    smallLinks: $x("id('listSmall')/div/a[img]"),
-    smallImages: $x("id('listSmall')/div/a/img")
+    relatedLinks: $x("id('relatedGalList')/div/a[div/div/img]"),
+    relatedImages: $x("id('relatedGalList')/div/a/div/div/img"),
+    galeriepages: $x("id('listSmall')/div[2]/*")
   }
+  var that=this;
   this.withLinksDo = function (f)
   {
-    elems.smallImages.forEach(function (img) { var a=img.parentNode; f(img, a, a.href.match(/\/photos\/view\/([0-9]*)-([0-9]*)\.html/)); });
+    this.elems.smallImages.forEach(function (img) { var a=img.parentNode; f(img, a, a.href.match(/\/photos\/view\/([0-9]*)-([0-9]*)\.html/)); });
+  }
+  this.countpages = function ()
+  {
+    return this.elems.galeriepages.length;
   }
   this.src = function ()
   {
     return {
-      image: elem.image.src,
-      recent: elems.recentImages.map(objelem("src")),
-      next: elem.next.href,
-      previous: elem.prev.href
+      image: this.elem.image.src,
+      recent: this.elems.recentImages.map(objelem("src")),
+      next: this.elem.next.href,
+      previous: this.elem.prev.href
     };
   }
   this.next = function ()
   {
-    if (elem.next.style.color!="green")
+    if (this.elem.next.style.color!="green")
     {
-      elem.next.style.color="green";
-      elem.next.click();
+      this.elem.next.style.color="green";
+      this.elem.next.click();
     }
     return this;
   }
   this.prev = function ()
   {
-    if (elem.prev.style.color!="red")
+    if (this.elem.prev.style.color!="red")
     {
-      elem.prev.style.color="red";
-      elem.prev.click();
+      this.elem.prev.style.color="red";
+      this.elem.prev.click();
     }
     return this;
   }
@@ -299,17 +127,17 @@ function xhamster()
   }
   this.onNextHover = function (func)
   {
-    elem.next.addEventListener("mouseover",func, true);
+    this.elem.next.addEventListener("mouseover",func, true);
     return this;
   }
   this.onPrevHover = function (func)
   {
-    elem.prev.addEventListener("mouseover",func, true);
+    this.elem.prev.addEventListener("mouseover",func, true);
     return this;
   }
   this.openGalerienInTab = function ()
   {
-    elems.recentLinks.forEach(function (a) {
+    this.elems.recentLinks.forEach(function (a) {
       a.addEventListener("click",function(event){
         GM_openInTab(event.target.href);
         //event.stopPropagation();
@@ -335,6 +163,16 @@ function xhamster()
     createElement("div", { className:"box", childs:[$("slideVew")] }, $("recent"));
     return this;
   }
+  this.scrollToImage = function ()
+  {
+    var img=that.elem.image;
+    if (img.complete)
+      img.scrollIntoView(true);
+    else
+      img.addEventListener("load",function () {
+        img.scrollIntoView(true);
+      });
+  }
   this.gid = function ()
   {
     return location.pathname.match(/\/photos\/view\/([0-9]*)-([0-9]*)\.html/)[1];
@@ -345,6 +183,8 @@ function xhamster()
   }
 }
 
+
+//// TRAY ////
 function tray()
 {
   var data={ id: "tray", elem:false, style:"position:fixed; bottom:30px; right:20px" };
@@ -354,122 +194,229 @@ function tray()
 }
 //new tray().show().add(createElement("a",{ href:"#", innerHTML:"123" })).add($("slideVew"));
 
-function galerie()
+
+//// DIMMOBJECT ////
+function dimmobject(newdata)
 {
-  var data={}, cfg={ gid:false, iid:false };
-  this.load = function () { data=deserialize('galerie',data); cfg.loaded=true; return this; }
-  this.lod = function () {  if (!cfg.loaded) this.load(); }
-  this.save = function () { serialize('galerie', data); return this; }
- 
-  this.chk = function (x,y) { this.lod(); return !!data[x] && !!data[x][y]; }
-  this.get = function (x,y,def) { this.lod(); return this.chk(x,y)? data[x][y] : def; }
-  this.set = function (x,y,value) { this.lod(); if (!data[x]) data[x]={}; data[x][y]=value; return this; }
-    
-
-  this.id = function (gid,iid) { return this.config("gid",gid).config("iid",iid); }
-  this.crt = function () { if (!data[cfg.gid]) data[cfg.gid]={}; if (!data[cfg.gid][cfg.iid]) data[cfg.gid][cfg.iid]={}; return this; }
-  
-  this.checkgid = function () { return typeof this.getgid()=="object" }
-  this.creategid = function () { if (!this.checkgid()) data[cfg.gid]={}; return this; }
-  this.getgid = function () { return data[cfg.gid]; }
-
-  this.checkiid = function () { return typeof this.getiid()=="object"; }
-  this.createiid = function () { if (this.checkgid() && !this.checkiid()) data[cfg.gid][cfg.iid]={}; }
-  this.getiid = function () { if (this.checkgid()) return data[cfg.gid][cfg.iid]; else return undefined; }
-  this.check = function (gid, iid)
+  var data=newdata||{};
+  this.load = function (name) { data=deserialize(name,{}); return this; }
+  this.save = function (name) { serialize(name,data); return this; }
+  this.alert = function () { alert(uneval(data)); }
+  this.getdata = function () { return data; }
+  this.copy = function () { return data.slice(); }
+  this.foreach = function (func)
   {
-    this.load().id(gid, iid);
-    if (this.getiid()==1) this.createiid();
-    this.option("galnew",!this.checkgid()).option("picnew",!this.checkiid()).creategid().createiid();
-    this.getgid()['gal']=+new Date();
-    return this.save();
+    for (i in data)
+    {
+      func(i, data[i]);
+    }
   }
-  this.config = function (key, value) { if (typeof value=="undefined" ) return cfg[key]; cfg[key]=value; return this; }
-  this.option = function (key, value) { if (typeof value=="undefined" ) return cfg[key]; this[key]=cfg[key]=value; return this; }
-  this.debug = function () { alert([uneval(cfg), uneval(this.getiid()), uneval(this.getgid()), uneval(data)].join("\n\n")); return this; }
+  this.del = function (func, stopafter)
+  {
+    for (i in data)
+    {
+      if (func(i, data[i]))
+      {
+        delete data[i];
+      }
+      if (stopafter!=-1)
+      {
+        stopafter--;
+        if (stopafter<=0) break;
+      }
+    }
+  }
+  this.set = function ()
+  {
+    if (arguments.length<2) return this;
+    var tmp=data;
+    for (var i=0;i<arguments.length-2; i++)
+    {
+      if (typeof tmp[arguments[i]]=="undefined")
+        tmp[arguments[i]]={};
+      if (typeof tmp[arguments[i]]!="object")
+        tmp[arguments[i]]={ value:tmp[arguments[i]] };
+      tmp=tmp[arguments[i]];
+    }
+    tmp[arguments[arguments.length-2]]=arguments[arguments.length-1];
+    return this;
+  }
+  this.get = function ()
+  {
+    var tmp=data;
+    for (var i=0;i<arguments.length-1; i++)
+    {
+      if (typeof tmp[arguments[i]]!="object") return false;
+      tmp=tmp[arguments[i]];
+    }
+    return tmp[arguments[arguments.length-1]];
+  }
 }
+
+function cache()
+{
+  var conf={
+    name:"cache",
+  };
+  var data={};
+  this.load = function () { data=eval(GM_getValue("cache",uneval(data))); }
+  this.save = function () { data=eval(GM_getValue("cache",uneval(data))); }
+}
+
+// **********************
+//      ANWENDUNG
+// **********************
 
 var colors={
   lightred:"#FCB",
   lightgreen:"#CFC",
 }
-function doNothing() {}
-function hideElem(e) { e.style.display="none" }
-function showElem(e) { e.style.display="" }
-function toggleElem(e) { e.style.display=e.style.display=="none"?"":"none"; }
-function createToggle(toggle, elems, name)
-{
-  if (name && GM_getValue(name,false))
-    for (i in elems) if (elems[i].style)
-      toggleElem(elems[i]);
-  toggle.addEventListener("click",function(event){
-    if (name) GM_setValue(name,!GM_getValue(name,false))
-    for (i in elems) if (elems[i].style)
-      toggleElem(elems[i]);
-    event.defaultPrevented();
-  }, true);
-}
-function preload(page)
-{
-  if (window.top != window.self)  //-- Don't run on frames or iframes.
-    return;
-  createElement('iframe', { style:"display:none", src:page }, document.body);
-}
-
-// ANWENDUNG
 
 
 if (window.top == window.self)
 {
 
+// #### Toggle ####
 var Head=$xs("id('listRecent')/preceding::h2[1]");
+GM_setValue("BeliebteBilder",false);
 createToggle(Head,[$("listRecent"), $("related")], "BeliebteBilder");
+//hideElem($("listRecent"));
+//hideElem($("related"));
+
+jsonphp="https://woems.selfhost.eu:23882/my/wGreasemonkey/json.php";
+//jsonphp="https://woems.ddns.net:23882/my/wGreasemonkey/json.php";
 
 var x=new xhamster();
-//window.setTimeout(function () {
-  x.onNextHover(function (e) { x.next(); });
-  x.onPrevHover(function (e) { x.prev(); });
-//},3000);
-//if (Math.random()>0.1)
-  //x.hideBeliebteBilder();
+x.scrollToImage();
+
+x.onNextHover(function (e) { x.next(); });
+x.onPrevHover(function (e) { x.prev(); });
+//if (Math.random()>0.1) x.hideBeliebteBilder();
 x.setThumpnailWidth(250);
 x.slideViewRight();
 
-var g=new galerie();
+GM_log("Links einfärben");
+
+// #### Links einfärben (opacity 0.3) wenn angeklicked ####
+function linker(a) {
+  var j=false;
+  if (j=a.href.match("/photos/view/([0-9]+)-([0-9]+)\.html"))
+  {
+    a.addEventListener("click",function (e) {
+      GM_log(jsonphp+"?a=xhamster&gid="+j[1]+"&iid="+j[2]);
+      get(jsonphp+"?a=xhamster&gid="+j[1]+"&iid="+j[2], function (url, text, header, xhr) {
+        json=eval(text);
+       message("Bild "+j[1]+"-"+j[2]+": "+json[0].seen);
+        a.style.opacity="0.3";
+      });
+      //e.preventDefault();
+      if (e.defaultPrevented)
+        e.defaultPrevented();
+      else
+        e.preventDefault();
+    }, true);
+    //a.href="#"+j[1]+"-"+j[2];
+    a.href.hash="OK";
+  }
+}
+x.elems.recentLinks.forEach(linker);
+x.elems.relatedLinks.forEach(linker);
+
+function message(text)
+{
+  noty({ text: text, layout: "topRight", timeout: 10*1000 });
+}
+
+
+// aktuelles als gesehen markieren
+get(jsonphp+"?a=xhamster&f=add&gid="+x.gid()+"&iid="+x.iid()+"&seen=1", function (url, text, header, xhr) { message(url); });
+
+// count ausgeben
+window.setTimeout(function () {
+get(jsonphp+"?a=xhamster&f=countseen", function (url, text, header, xhr) {
+  var json=eval(text);
+  seen=json.reduce(function (a,b) { a[b.seen]=b.anz; return a; }, {});
+  old=deserialize("seenold",{ 0:0, 1:0});
+  serialize("seenold",seen);
+  noty({ text: [ 'Gesehen: '+seen[1]+" ("+(seen[1]-old[1])+")", 'Ungesehen: '+seen[0]+" ("+(seen[0]-old[0])+")" ].join("<br>"), layout: "topRight", timeout: 60*1000 });
+});
+},2000);
+
+
+// Besuchte Links grau
 x.withLinksDo(function (img, a, ids) {
-  g.load().id(ids[1],ids[2]);
   a.style.background='url("") no-repeat scroll center center #EAEAEA';
-  if (g.checkiid()) img.style.opacity="0.3";
-  //GM_log(img.src+"\n"+a.href+"\n"+uneval(ids)+"\n"+g.getgid()+"\n"+g.getiid()+"\n"+g.checkgid()+"\n"+g.checkiid());
+  get(jsonphp+"?a=xhamster&gid="+ids[1]+"&iid="+ids[2], function (url, text, header, xhr) {
+    json=eval(text);
+    if (json[0].seen==1)
+      img.style.opacity="0.3";
+  });
 });
 
 
-
-
-//au(x.src().next);
-//preload(x.src().next);
-
-function au(x) { alert(uneval(x)); }
-var g=new galerie();
-//au(g.chk(x.gid(), x.iid()));
-//au(g.get(x.gid(), x.iid(), "???"));
-g.check(x.gid(), x.iid());
-if (g.galnew) x.color(colors.lightgreen);
-if (!g.picnew) x.color(colors.lightred);
 /*
-var gid=x.gid();
-var iid=x.iid();
-var newgal=newpic=false;
-var galerie=deserialize('galerie',{});
-if (!galerie[gid]) { x.color(colors.lightgreen); newgal=true; galerie[gid]={}; }
-if (!galerie[gid][iid]) { newpic=true; } else { x.color(colors.lightred); }
-galerie[gid]['gal']=+new Date();
-galerie[gid][iid]=1;
-//alert(uneval(galerie));
-serialize('galerie',galerie);
-//alert(newgal+"-"+newpic);
+var cache = new dimmobject().load('cache');
 
+get(jsonphp+"?a=xhamster&gid="+x.gid(), function (url, text, header, xhr) {
+    json=eval(text);
+    cache.load('cache');
+    json.forEach(function (a) {
+      cache.set(a["galerieid"],a["imageid"],a["seen"]).set(a["galerieid"],"date",+new Date());
+    });
+    cache.save('cache').alert();
+});
+*/
+//var galerie = new dimmobject().load('galerie');
+/*
+x.withLinksDo(function (img, a, ids) {
+  a.style.background='url("") no-repeat scroll center center #EAEAEA';
+  if (galerie.get(ids[1],ids[2])) img.style.opacity="0.3";
+});
+*/
+//if (!galerie.get( x.gid() )) x.color(colors.lightgreen);
+//if (galerie.get( x.gid(), x.iid() )) x.color(colors.lightred);
+
+//galerie.set(x.gid(), "pages", x.countpages());
+//galerie.set(x.gid(), "Last", x.gid()+"-"+x.iid());
+//galerie.set(x.gid(), x.iid(), true);
+/*
+galerie.del(function (gid, value) {
+  GM_log(gid+": "+uneval(value));
+  for (iid in value)
+  {
+    if (iid=="gal" || iid=="pages" || iid=="Last") continue;
+    GM_log("?a=xhamster&f=add&gid="+gid+"&iid="+iid+"&seen="+(value[iid]?1:0));
+    get(jsonphp+"?a=xhamster&f=add&gid="+gid+"&iid="+iid+"&seen="+value[iid], function (url, text, header, xhr) {});
+  }
+  return true;
+},5);
+
+galerie.save('galerie');
 */
 
+noty({
+    text: [
+      'Random element öffnen?',
+    ].join("<br>"),
+    type: "alert",
+    timeout: 60*1000,
+    layout: "topRight",
+    buttons: [
+		  { addClass: 'btn btn-primary', text: 'hier', onClick: function($noty) {
+				  $noty.close();
+				  get(jsonphp+"?a=xhamster&f=random", function (url, text, header, xhr) {
+            json=eval("("+text+")");
+            location.href = "http://de.xhamster.com/photos/view/"+json["galerieid"]+"-"+json["imageid"]+".html";
+          });
+			} },
+		  { addClass: 'btn btn-primary', text: 'im Tab', onClick: function($noty) {
+				  $noty.close();
+				  get(jsonphp+"?a=xhamster&f=random", function (url, text, header, xhr) {
+            json=eval("("+text+")");
+            GM_openInTab("http://de.xhamster.com/photos/view/"+json["galerieid"]+"-"+json["imageid"]+".html");
+          });
+			} }
+	  ]
+  });
 
-}
+} // if (window.top == window.self)
