@@ -1184,4 +1184,15 @@
     <Resource name="BootstrapCSS" filename="bootstrap.min.css" mimetype="text/css"/>
     <Resource name="BootstrapThemeCSS" filename="bootstrap-theme.min.css" mimetype="text/css"/>
   </Script>
+  <Script basedir="IITC_Ingress_intel_map_total_conversion" checkRemoteUpdates="1" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="[jonatkins-2015-09-17-154202] Total conversion for the ingress intel map." enabled="true" filename="total-conversion-build.user.js" name="IITC: Ingress intel map total conversion" namespace="https://github.com/jonatkins/ingress-intel-total-conversion" runAt="document-end" version="0.25.1.20150917.154202" installurl="https://secure.jonatkins.com/iitc/release/total-conversion-build.user.js" updateurl="https://secure.jonatkins.com/iitc/release/total-conversion-build.meta.js">
+    <Grant>none</Grant>
+    <Include>https://www.ingress.com/intel*</Include>
+    <Include>http://www.ingress.com/intel*</Include>
+    <Include>https://www.ingress.com/mission/*</Include>
+    <Include>http://www.ingress.com/mission/*</Include>
+    <Match>https://www.ingress.com/intel*</Match>
+    <Match>http://www.ingress.com/intel*</Match>
+    <Match>https://www.ingress.com/mission/*</Match>
+    <Match>http://www.ingress.com/mission/*</Match>
+  </Script>
 </UserScriptConfig>
