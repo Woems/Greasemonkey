@@ -706,7 +706,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://sprichwortrekombinator.de/*</Include>
   </Script>
-  <Script basedir="brettspiele" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="brettspiele.user.js" name="Brettspiele" namespace="Woems" runAt="document-end" version="" installurl="null" updateurl="null">
+  <Script basedir="brettspiele" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="brettspiele.user.js" name="Brettspiele" namespace="Woems" runAt="document-end" version="" installurl="null" updateurl="null">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -760,7 +760,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*.ogame.*/game/index.php?page=*</Include>
   </Script>
-  <Script basedir="BilderGalerie" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nach dr&#xFC;cken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert." enabled="true" filename="bildergalerie.user.js" name="BilderGalerie" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js">
+  <Script basedir="BilderGalerie" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Nach dr&#xFC;cken von STRG+ALT+Z (Gross Z) wird die Galerie aktiviert." enabled="false" filename="bildergalerie.user.js" name="BilderGalerie" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/bildergalerie/bildergalerie.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -802,16 +802,12 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*ogame.*/*</Include>
   </Script>
-  <Script basedir="Wiedervorlage" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="true" filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
+  <Script basedir="Wiedervorlage" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="false" filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
     <Grant>GM_log</Grant>
-    <Grant>GM_openInTab</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
-    <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
+    <Grant>GM_xhtmlrequest</Grant>
+    <Grant>GM_openInTab</Grant>
     <Include>*</Include>
   </Script>
   <Script basedir="German_Bash" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="German_Bash.user.js" name="German Bash" namespace="Woems" runAt="document-end" version="" installurl="null" updateurl="null">
@@ -849,17 +845,6 @@
     <Grant>GM_xmlhttpRequest</Grant>
     <Grant>unsafeWindow</Grant>
     <Include>http://www.boards-4you.de/wbb13/60/*</Include>
-  </Script>
-  <Script basedir="funktionssammlung" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="funktionssammlung.user.js" name="Funktionssammlung" namespace="Woems" runAt="document-end" version="0.1" installurl="null" updateurl="null">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
-    <Grant>GM_setValue</Grant>
-    <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
-    <Include>*</Include>
   </Script>
   <Script basedir="videostore-bonn-beuel_(vs-bn.de)" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Bewerten und sortieren der Filme" enabled="true" filename="videostore-bonn-beuel_(vs-bn.de).user.js" name="videostore-bonn-beuel (vs-bn.de)" namespace="Woems" runAt="document-end" version="1" installurl="null" updateurl="null">
     <Grant>GM_addStyle</Grant>
@@ -936,7 +921,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*deviantart.com*</Include>
   </Script>
-  <Script basedir="Rapidshare_-_Link_sammler" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Rapidshare_-_Link_sammler.user.js" name="Rapidshare - Link sammler" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js">
+  <Script basedir="Rapidshare_-_Link_sammler" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="Rapidshare_-_Link_sammler.user.js" name="Rapidshare - Link sammler" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Rapidshare_-_Link_sammler/Rapidshare_-_Link_sammler.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -1026,7 +1011,7 @@
     <Include>http://*bahcivanlardiyari.com/*</Include>
     <Include>http://*molehillempire.com/*</Include>
   </Script>
-  <Script basedir="pyLoad" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="pyLoad.user.js" name="pyLoad" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/pyLoad/pyLoad.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/pyLoad/pyLoad.user.js">
+  <Script basedir="pyLoad" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="pyLoad.user.js" name="pyLoad" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/pyLoad/pyLoad.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/pyLoad/pyLoad.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -1134,7 +1119,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://www.h0-modellbahnforum.de*</Include>
   </Script>
-  <Script basedir="Woems_Functions" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Woems_Functions.user.js" name="Woems Functions" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Woems_Functions/Woems_Functions.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Woems_Functions/Woems_Functions.user.js">
+  <Script basedir="Woems_Functions" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="false" filename="Woems_Functions.user.js" name="Woems Functions" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Woems_Functions/Woems_Functions.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Woems_Functions/Woems_Functions.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -1145,7 +1130,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>*</Include>
   </Script>
-  <Script basedir="Microjs" checkRemoteUpdates="NaN" dependhash="9e5e7ad34016f4e2735390be4da498c201f0aa7c" description="" enabled="true" filename="Microjs.user.js" name="Microjs" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Microjs/Microjs.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Microjs/Microjs.user.js">
+  <Script basedir="Microjs" checkRemoteUpdates="NaN" dependhash="9e5e7ad34016f4e2735390be4da498c201f0aa7c" description="" enabled="false" filename="Microjs.user.js" name="Microjs" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Microjs/Microjs.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Microjs/Microjs.user.js">
     <Grant>GM_addStyle</Grant>
     <Grant>GM_deleteValue</Grant>
     <Grant>GM_getValue</Grant>
@@ -1160,16 +1145,12 @@
     <Require filename="ifvisible.js"/>
   </Script>
   <Script basedir="Hamster_Fotos" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Hamster_Fotos.user.js" name="Hamster Fotos" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js">
-    <Grant>GM_addStyle</Grant>
-    <Grant>GM_deleteValue</Grant>
-    <Grant>GM_getValue</Grant>
-    <Grant>GM_log</Grant>
     <Grant>GM_openInTab</Grant>
-    <Grant>GM_registerMenuCommand</Grant>
+    <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
+    <Grant>GM_log</Grant>
     <Grant>GM_xmlhttpRequest</Grant>
-    <Grant>unsafeWindow</Grant>
-    <Include>http://de.xhamster.com/photos/*</Include>
+    <Include>http://de.xhamster.com/*</Include>
   </Script>
   <Script basedir="Amazon" checkRemoteUpdates="NaN" dependhash="93b1f1e8eeda421197b267e3239f4284e452c09c" description="" enabled="true" filename="Amazon.user.js" name="Amazon" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Amazon/Amazon.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Amazon/Amazon.user.js">
     <Grant>GM_addStyle</Grant>
@@ -1194,5 +1175,15 @@
     <Match>http://www.ingress.com/intel*</Match>
     <Match>https://www.ingress.com/mission/*</Match>
     <Match>http://www.ingress.com/mission/*</Match>
+  </Script>
+  <Script basedir="milovana" checkRemoteUpdates="1" dependhash="212bbc0496177af6b093d7999da35089c025ae2c" description="" enabled="true" filename="milovana.user.js" name="milovana" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/milovana/milovana.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts/milovana/milovana.user.js">
+    <Grant>GM_log</Grant>
+    <Grant>GM_getValue</Grant>
+    <Grant>GM_setValue</Grant>
+    <Grant>GM_addStyle</Grant>
+    <Grant>GM_openInTab</Grant>
+    <Include>https://milovana.com*</Include>
+    <Require filename="funktionssammlung.user.js"/>
+    <Require filename="ifvisible.js"/>
   </Script>
 </UserScriptConfig>
