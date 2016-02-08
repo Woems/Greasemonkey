@@ -11,10 +11,10 @@
 // @require        https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js
 // @require        https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js
 // @require        https://raw.githubusercontent.com/needim/noty/master/js/noty/packaged/jquery.noty.packaged.min.js
-// @require        https://github.com/Woems/Greasemonkey/raw/master/funktionssammlung/funktionssammlung.user.js
+// @require        https://github.com/Woems/Greasemonkey/raw/master/Funktionssammlung/funktionssammlung.user.js
 // ==/UserScript==
 
-
+alert("lol");
 // **********************
 //      FUNCTIONS
 // **********************
