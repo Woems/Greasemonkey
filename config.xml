@@ -802,7 +802,7 @@
     <Grant>unsafeWindow</Grant>
     <Include>http://*ogame.*/*</Include>
   </Script>
-  <Script basedir="Wiedervorlage" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="Seite auf wiedervorlage legen" enabled="false" filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
+  <Script basedir="Wiedervorlage" checkRemoteUpdates="NaN" dependhash="74809a3110d12bb50d835faa9ff2f6c76b682346" description="Seite auf wiedervorlage legen" enabled="false" filename="wiedervorlage.user.js" name="Wiedervorlage" namespace="Woems" runAt="document-end" version="" installurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js" updateurl="file:///home/woems/.mozilla/firefox/vkuuxfit.default/gm_scripts_old/wiedervorlage/wiedervorlage.user.js">
     <Grant>GM_log</Grant>
     <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
@@ -1144,7 +1144,7 @@
     <Require filename="funktionssammlung.user.js"/>
     <Require filename="ifvisible.js"/>
   </Script>
-  <Script basedir="Hamster_Fotos" checkRemoteUpdates="NaN" dependhash="da39a3ee5e6b4b0d3255bfef95601890afd80709" description="" enabled="true" filename="Hamster_Fotos.user.js" name="Hamster Fotos" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js">
+  <Script basedir="Hamster_Fotos" checkRemoteUpdates="NaN" dependhash="74809a3110d12bb50d835faa9ff2f6c76b682346" description="" enabled="true" filename="Hamster_Fotos.user.js" name="Hamster Fotos" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js">
     <Grant>GM_openInTab</Grant>
     <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
