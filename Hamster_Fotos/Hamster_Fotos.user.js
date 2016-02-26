@@ -14,7 +14,7 @@
 // @require        https://github.com/Woems/Greasemonkey/raw/master/Funktionssammlung/funktionssammlung.user.js
 // ==/UserScript==
 
-alert("lol");
+//alert("lol");
 // **********************
 //      FUNCTIONS
 // **********************
