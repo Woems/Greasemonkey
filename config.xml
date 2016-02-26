@@ -1144,7 +1144,7 @@
     <Require filename="funktionssammlung.user.js"/>
     <Require filename="ifvisible.js"/>
   </Script>
-  <Script basedir="Hamster_Fotos" checkRemoteUpdates="NaN" dependhash="74809a3110d12bb50d835faa9ff2f6c76b682346" description="" enabled="true" filename="Hamster_Fotos.user.js" name="Hamster Fotos" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js">
+  <Script basedir="Hamster_Fotos" checkRemoteUpdates="NaN" dependhash="b6da36e92d819a01ce1f2c9c0300f1d6d5731edf" description="" enabled="true" filename="Hamster_Fotos.user.js" name="Hamster Fotos" namespace="Woems" runAt="document-end" version="1" installurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js" updateurl="file:///home/woems/.mozilla/firefox/azua9l03.default/gm_scripts/Hamster_Fotos/Hamster_Fotos.user.js">
     <Grant>GM_openInTab</Grant>
     <Grant>GM_getValue</Grant>
     <Grant>GM_setValue</Grant>
