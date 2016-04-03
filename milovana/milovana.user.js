@@ -20,11 +20,32 @@ switch(location.pathname)
   case "/id/": break; // Login
   case "/webteases/": break; // Übersicht
   case "/webteases/viewtopic.php": break; // Forum
+  case "/webteases/showtag.php": break; // Suche
   case "/webteases/showtease.php":
     if ($('continue'))
-      setTimeout(function () { $('continue').click(); },5000);
+      document.body.addEventListener("click",function(event){ $('continue').click();  }, true); 
+    //if ($('continue'))
+      //setTimeout(function () { $('continue').click(); },5000);
     break;
   case "/webteases/voteblack.php": break; // flash
   case "/webteases/showflash.php": break; // flash
   default: alert("milovana Path: "+location.pathname); break;
 }
+
+//String.prototype.trim = function (e) { return this.replace(new RegExp("^"+(e||" ")+"*"),""); }
+function main()
+{
+  
+  this.init = function ()
+  {
+    var run=location.pathname.split("/").splice(1).join("_").replace(/.php/g,"");
+    if (typeof this[run]=="function") this[run]();
+  }
+  this.webteases_showtag = function ()
+  {
+    //alert("showtag");
+  }
+  this.init();
+}
+
+new main();
